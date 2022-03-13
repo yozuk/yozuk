@@ -73,7 +73,7 @@ impl<'a> TerminalPrinter<'a> {
                             serde_json::from_slice::<serde_json::Value>(&section.data)
                         {
                             if let Ok(yaml) = serde_yaml::to_string(&value) {
-                                stdout.write_str(&yaml.trim_start_matches("---\n"))?;
+                                stdout.write_str(yaml.trim_start_matches("---\n"))?;
                                 return Ok(());
                             }
                         }

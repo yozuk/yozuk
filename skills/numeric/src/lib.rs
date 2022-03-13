@@ -13,7 +13,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 
 fn label_numeric(token: &Token) -> impl Iterator<Item = Feature> {
     let mut features = Vec::new();
-    if let Ok(n) = BigDecimal::from_str(&token.as_utf8()) {
+    if let Ok(n) = BigDecimal::from_str(token.as_utf8()) {
         features.push(Feature {
             name: "numeric".into(),
             ..Default::default()
