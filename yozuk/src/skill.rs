@@ -6,6 +6,8 @@ pub struct NamedSkillEntry {
     pub entry: SkillEntry,
 }
 
+const MODEL_ROOT_ID: &[u8] = b"ufLSnkQZO-YYvDMUesfTX";
+
 #[macro_export]
 macro_rules! skills {
     ( $([ $x:ident, $y:literal ],)* ) => {
@@ -21,7 +23,7 @@ macro_rules! skills {
 
         pub const fn skills_digest() -> [u8; 20] {
             use const_sha1::ConstBuffer;
-            let sha_sum = ConstBuffer::new();
+            let sha_sum = ConstBuffer::from_slice(MODEL_ROOT_ID);
             $(
                 let sha = ConstBuffer::new();
                 #[cfg(feature = $y)]
