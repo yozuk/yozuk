@@ -34,4 +34,8 @@ fn multi_uuid() {
         cmd(tk!(["generate", "10", "uuids."])),
         CommandArgs::new().add_args(["yozuk-skill-uuid", "-n", "10"])
     );
+    assert_eq!(
+        cmd(tk!(["Hi", "yozuk,", "generate", "10", "uuids."])),
+        CommandArgs::new().add_args(["yozuk-skill-uuid", "-n", "10"])
+    );
 }

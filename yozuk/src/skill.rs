@@ -6,7 +6,7 @@ pub struct NamedSkillEntry {
     pub entry: SkillEntry,
 }
 
-const MODEL_ROOT_ID: &[u8] = b"ufLSnkQZO-YYvDMUesfTX";
+const MODEL_ROOT_ID: &[u8] = b"aL4VfASLUAfin02RB-jjO";
 
 #[macro_export]
 macro_rules! skills {

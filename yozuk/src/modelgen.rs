@@ -7,9 +7,11 @@ use crfsuite::{Algorithm, Attribute, GraphicalModel, Trainer};
 use nanoid::nanoid;
 use rayon::prelude::*;
 use std::{
+    collections::VecDeque,
     env,
     fs::{File, OpenOptions},
     io::{Read, Write},
+    iter,
 };
 use yozuk_sdk::prelude::*;
 
@@ -74,6 +76,7 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
         .iter()
         .flat_map(|skill| &skill.corpora)
         .flat_map(|corpus| corpus.training_data())
+        .flat_map(|tokens| generate_wordiness(tokens))
         .map(|data| {
             let (words, yseq): (Vec<_>, Vec<_>) = data
                 .into_iter()
@@ -104,6 +107,7 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
         .iter()
         .flat_map(|skill| &skill.corpora)
         .flat_map(|corpus| corpus.training_data())
+        .flat_map(|tokens| generate_wordiness(tokens))
         .map(|data| {
             let (words, yseq): (Vec<_>, Vec<_>) = data
                 .into_iter()
@@ -151,4 +155,24 @@ struct TrainingData {
     key: String,
     skills: Vec<Skill>,
     negative_skills: Vec<Skill>,
+}
+
+fn generate_wordiness(data: Vec<Token>) -> impl Iterator<Item = Vec<Token>> {
+    generate_wordiness_greetings(&data).chain(iter::once(data))
+}
+
+fn generate_wordiness_greetings(tokens: &[Token]) -> impl Iterator<Item = Vec<Token>> {
+    let original = tokens.iter().cloned().collect::<VecDeque<_>>();
+    let mut greetings = Vec::new();
+
+    let mut data = original.clone();
+    data.push_front(tk!("Yozuk,"));
+    greetings.push(data.into_iter().collect::<Vec<_>>());
+
+    let mut data = original;
+    data.push_front(tk!("Yozuk,"));
+    data.push_front(tk!("Hi"));
+    greetings.push(data.into_iter().collect::<Vec<_>>());
+
+    greetings.into_iter()
 }
