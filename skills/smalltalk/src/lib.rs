@@ -100,7 +100,7 @@ impl Command for SmalltalkCommand {
     }
 
     fn priority(&self) -> i32 {
-        -100
+        -50
     }
 }
 
