@@ -65,6 +65,24 @@ async fn render_section(
                 .send()
                 .await?;
         }
+        _ if section.media_type.suffix() == Some(JSON) => {
+            if let Ok(value) = serde_json::from_slice::<serde_json::Value>(&section.data) {
+                if let Ok(yaml) = serde_yaml::to_string(&value) {
+                    bot.send_message(
+                        msg.chat.id,
+                        format!("<pre>{}</pre>", yaml.trim_start_matches("---\n")),
+                    )
+                    .parse_mode(ParseMode::Html)
+                    .send()
+                    .await?;
+                    return Ok(());
+                }
+            }
+            bot.send_message(msg.chat.id, format!("<pre>{}</pre>", section.as_utf8()))
+                .parse_mode(ParseMode::Html)
+                .send()
+                .await?;
+        }
         _ => {
             let ext = new_mime_guess::get_extensions(essence.ty.as_str(), essence.subty.as_str())
                 .and_then(|list| list.first())
