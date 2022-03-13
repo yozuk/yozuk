@@ -6,6 +6,7 @@ use content_inspector::ContentType;
 use copypasta::ClipboardContext;
 use copypasta::ClipboardProvider;
 use hexyl::{BorderStyle, Printer};
+use mediatype::names::JSON;
 use std::io::Write;
 use yozuk_sdk::prelude::*;
 
@@ -67,6 +68,16 @@ impl<'a> TerminalPrinter<'a> {
                     writeln!(&mut stderr, "{}", style.apply_to(section.as_utf8()))?;
                 }
                 SectionKind::Value => {
+                    if section.media_type.suffix() == Some(JSON) {
+                        if let Ok(value) =
+                            serde_json::from_slice::<serde_json::Value>(&section.data)
+                        {
+                            if let Ok(yaml) = serde_yaml::to_string(&value) {
+                                stdout.write_str(&yaml.trim_start_matches("---\n"))?;
+                                return Ok(());
+                            }
+                        }
+                    }
                     let printable = content_inspector::inspect(&section.data) == ContentType::UTF_8;
                     if printable {
                         stdout.write_all(&section.data)?;

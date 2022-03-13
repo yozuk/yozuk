@@ -23,6 +23,8 @@ yozuk-bundle = { path = "../../yozuk-bundle" }
 shell-words = "1.1.0"
 copypasta = "0.7.1"
 toml = "0.5.8"
+mediatype = "0.19.1"
+serde_yaml = "0.8.23"
 
 [features]
 default = []
