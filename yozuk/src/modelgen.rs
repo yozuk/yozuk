@@ -78,9 +78,9 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
         .flat_map(|corpus| corpus.training_data())
         .flat_map(|tokens| generate_wordiness(tokens))
         .map(|data| {
-            let (words, yseq): (Vec<_>, Vec<_>) = data
+            let (yseq, words): (Vec<_>, Vec<_>) = data
                 .into_iter()
-                .map(|token| (token.clone(), token.tag))
+                .map(|token| (token.tag.clone(), token))
                 .unzip();
 
             let xseq = labeler
@@ -109,9 +109,18 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
         .flat_map(|corpus| corpus.training_data())
         .flat_map(|tokens| generate_wordiness(tokens))
         .map(|data| {
-            let (words, yseq): (Vec<_>, Vec<_>) = data
+            let (yseq, words): (Vec<_>, Vec<_>) = data
                 .into_iter()
-                .map(|token| (token, "*".to_string()))
+                .map(|token| {
+                    (
+                        if token.tag == "-" {
+                            "-".to_string()
+                        } else {
+                            "*".to_string()
+                        },
+                        token,
+                    )
+                })
                 .unzip();
 
             let xseq = labeler
