@@ -1,6 +1,15 @@
 FROM rust:latest as builder
 RUN apt-get update && apt-get install -y cmake
 WORKDIR /usr/src/app
+
+RUN git clone https://github.com/yozuk/yozuk.git
+WORKDIR /usr/src/app/yozuk/adapters/telegram
+RUN git checkout 5558c53cb6ae4bb47b38980ca75bd32c07c4eb8d
+RUN cargo build --release
+WORKDIR /usr/src/app
+RUN mv yozuk/target .
+RUN rm -rf yozuk
+
 COPY . .
 WORKDIR /usr/src/app/adapters/telegram
 RUN cargo install --path .
