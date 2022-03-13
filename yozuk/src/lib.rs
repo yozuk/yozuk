@@ -149,9 +149,9 @@ impl YozukBuilder {
     pub fn build(self, model: ModelSet) -> Yozuk {
         let build_info = build_info::format!(
             r#"{{"version": "{}", "compiler": "{}", "timestamp": "{}", "git": "{}"}}"#, 
-            $.crate_info.version, 
-            $.compiler, 
-            $.timestamp, 
+            $.crate_info.version,
+            $.compiler,
+            $.timestamp,
             $.version_control);
 
         let env = Environment::new()
