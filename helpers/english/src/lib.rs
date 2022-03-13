@@ -16,6 +16,7 @@ pub fn pluralize(word: &str, n: usize) -> Cow<'_, str> {
 }
 
 pub fn normalize(text: &str) -> String {
+    let text = text.trim_end_matches(|c: char| c.is_ascii_punctuation());
     let text = singularize(&text.to_lowercase());
     snakecase::to_snake_case(&text)
 }
