@@ -1,0 +1,26 @@
+[package]
+name = "yozuk-telegram"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.56"
+clap = { version = "3.1.6", features = ["derive"] }
+futures = "0.3.21"
+log = "0.4.14"
+mediatype = "0.19.1"
+new_mime_guess = "4.0.1"
+pretty_env_logger = "0.4.0"
+reqwest = "0.11.9"
+shell-words = "1.1.0"
+slog = "2.7.0"
+sloggers = "2.1.1"
+teloxide = "0.7.1"
+tokio = { version = "1.17.0", features = ["rt-multi-thread", "macros"] }
+tokio-stream = "0.1.8"
+toml = "0.5.8"
+tree_magic = "0.2.3"
+warp = "0.3.2"
+yozuk = { path = "../../yozuk" }
+yozuk-bundle = { path = "../../yozuk-bundle" }
+yozuk-sdk = { path = "../../yozuk-sdk" }

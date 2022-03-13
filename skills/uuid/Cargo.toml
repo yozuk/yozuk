@@ -1,0 +1,12 @@
+[package]
+name = "yozuk-skill-uuid"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "3.1.6", features = ["derive"] }
+itertools = "0.10.3"
+mediatype = "0.19.1"
+uuid = { version = "0.8.2", features = ["v4"] }
+yozuk-helper-english = { path = "../../helpers/english" }
+yozuk-sdk = { path = "../../yozuk-sdk" }

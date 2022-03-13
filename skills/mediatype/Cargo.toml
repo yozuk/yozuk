@@ -1,0 +1,8 @@
+[package]
+name = "yozuk-skill-mediatype"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+mediatype = "0.19.1"
+yozuk-sdk = { path = "../../yozuk-sdk" }

@@ -1,0 +1,9 @@
+[package]
+name = "yozuk-skill-english"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rayon = "1.5.1"
+yozuk-helper-english = { path = "../../helpers/english" }
+yozuk-sdk = { path = "../../yozuk-sdk" }

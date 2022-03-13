@@ -1,0 +1,28 @@
+[package]
+name = "yozuk-shell"
+version = "0.1.0"
+edition = "2021"
+default-run = "zuk"
+
+[[bin]]
+name = "zuk"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.56"
+clap = { version = "3.1.6", features = ["derive"] }
+console = "0.15.0"
+content_inspector = "0.2.4"
+hexyl = "0.9.0"
+serde_json = "1.0.79"
+sloggers = "2.1.1"
+termimad = "0.20.0"
+yozuk = { path = "../../yozuk" }
+yozuk-sdk = { path = "../../yozuk-sdk" }
+yozuk-bundle = { path = "../../yozuk-bundle" }
+shell-words = "1.1.0"
+copypasta = "0.7.1"
+toml = "0.5.8"
+
+[features]
+default = []

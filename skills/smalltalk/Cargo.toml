@@ -1,0 +1,10 @@
+[package]
+name = "yozuk-skill-smalltalk"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "3.1.6", features = ["derive"] }
+mediatype = "0.19.1"
+yozuk-helper-english = { path = "../../helpers/english" }
+yozuk-sdk = { path = "../../yozuk-sdk" }

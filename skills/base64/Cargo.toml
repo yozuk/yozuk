@@ -1,0 +1,14 @@
+[package]
+name = "yozuk-skill-base64"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+base64 = "0.13.0"
+chardetng = "0.1.17"
+clap = { version = "3.1.6", features = ["derive"] }
+itertools = "0.10.3"
+mediatype = "0.19.1"
+tree_magic = "0.2.3"
+yozuk-helper-english = { path = "../../helpers/english" }
+yozuk-sdk = { path = "../../yozuk-sdk" }

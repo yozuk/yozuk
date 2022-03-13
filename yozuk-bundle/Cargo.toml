@@ -1,0 +1,9 @@
+[package]
+name = "yozuk-bundle"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+anyhow = "1.0.56"
+yozuk = { path = "../yozuk", features = ["modelgen"] }
+yozuk-sdk = { path = "../yozuk-sdk", features = ["modelgen"] }
