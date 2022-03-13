@@ -66,12 +66,11 @@ pub struct VersionCommand(Environment);
 impl Command for VersionCommand {
     fn run(&self, args: CommandArgs) -> Result<Output, Output> {
         let _args = Args::try_parse_from(args.args).unwrap();
-        let value: serde_json::Value = serde_json::from_str(&self.0.build_info).unwrap();
         Ok(Output {
             module: "Version Info".into(),
             sections: vec![Section::new(
-                serde_yaml::to_string(&value).unwrap(),
-                MediaType::parse("text/yaml").unwrap(),
+                self.0.build_info.to_string(),
+                MediaType::parse("application/vnd.yozuk.version+json").unwrap(),
             )],
         })
     }

@@ -33,8 +33,6 @@ pub struct Yozuk {
     logger: Logger,
 }
 
-build_info::build_info!(fn build_info);
-
 impl Yozuk {
     pub fn builder() -> YozukBuilder {
         Default::default()
@@ -149,9 +147,16 @@ impl YozukBuilder {
     }
 
     pub fn build(self, model: ModelSet) -> Yozuk {
+        let build_info = build_info::format!(
+            r#"{{"version": "{}", "compiler": "{}", "timestamp": "{}", "git": "{}"}}"#, 
+            $.crate_info.version, 
+            $.compiler, 
+            $.timestamp, 
+            $.version_control);
+
         let env = Environment::new()
             .logger(self.logger.clone())
-            .build_info(serde_json::to_string(&build_info()).unwrap());
+            .build_info(build_info);
 
         let (mut skills, errors): (Vec<_>, Vec<(&'static NamedSkillEntry, Error)>) = skill::SKILLS
             .par_iter()

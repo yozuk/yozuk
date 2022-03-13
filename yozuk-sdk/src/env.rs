@@ -9,14 +9,14 @@ use std::collections::HashMap;
 
 #[derive(Debug, Clone)]
 pub struct Environment {
-    pub build_info: String,
+    pub build_info: &'static str,
     pub logger: Logger,
 }
 
 impl Default for Environment {
     fn default() -> Self {
         Self {
-            build_info: String::new(),
+            build_info: "",
             logger: NullLoggerBuilder.build().unwrap(),
         }
     }
@@ -27,7 +27,7 @@ impl Environment {
         Default::default()
     }
 
-    pub fn build_info(mut self, build_info: String) -> Self {
+    pub fn build_info(mut self, build_info: &'static str) -> Self {
         self.build_info = build_info;
         self
     }
