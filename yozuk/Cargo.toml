@@ -36,6 +36,7 @@ yozuk-skill-smalltalk = { path = "../skills/smalltalk", optional = true }
 yozuk-skill-uuid = { path = "../skills/uuid", optional = true }
 yozuk-skill-version = { path = "../skills/version", optional = true }
 yozuk-skill-lipsum = { path = "../skills/lipsum", optional = true }
+yozuk-skill-nanoid = { path = "../skills/nanoid", optional = true }
 thiserror = "1.0.30"
 
 [features]
@@ -52,7 +53,8 @@ default-skills = [
     "yozuk-skill-numeric", 
     "yozuk-skill-calc",
     "yozuk-skill-uuid",
-    "yozuk-skill-lipsum"
+    "yozuk-skill-lipsum",
+    "yozuk-skill-nanoid"
 ]
 
 [build-dependencies]
