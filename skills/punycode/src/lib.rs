@@ -62,11 +62,13 @@ impl Command for PunycodeCommand {
                 let s = s
                     .to_ascii_lowercase()
                     .split('.')
-                    .map(|section| {
-                        if let Ok(decoded) = punycode::decode(section.trim_start_matches("xn--")) {
-                            decoded
+                    .map(|part| {
+                        if part.starts_with("xn--") {
+                            punycode::decode(part.trim_start_matches("xn--"))
+                                .ok()
+                                .unwrap_or_default()
                         } else {
-                            section.to_string()
+                            part.to_string()
                         }
                     })
                     .collect::<Vec<_>>();
