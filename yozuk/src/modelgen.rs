@@ -76,7 +76,7 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
         .iter()
         .flat_map(|skill| &skill.corpora)
         .flat_map(|corpus| corpus.training_data())
-        .flat_map(|tokens| generate_wordiness(tokens))
+        .flat_map(generate_wordiness)
         .map(|data| {
             let (yseq, words): (Vec<_>, Vec<_>) = data
                 .into_iter()
@@ -107,7 +107,7 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
         .iter()
         .flat_map(|skill| &skill.corpora)
         .flat_map(|corpus| corpus.training_data())
-        .flat_map(|tokens| generate_wordiness(tokens))
+        .flat_map(generate_wordiness)
         .map(|data| {
             let (yseq, words): (Vec<_>, Vec<_>) = data
                 .into_iter()
