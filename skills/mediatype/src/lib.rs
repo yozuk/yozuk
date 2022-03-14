@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![deny(clippy::all)]
 
 use mediatype::ReadParams;
 use yozuk_sdk::prelude::*;

@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![deny(clippy::all)]
 
 use inflector::cases::snakecase;
 use std::borrow::Cow;

@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![deny(clippy::all)]
 
 use chardetng::EncodingDetector;
 use clap::{ArgEnum, Parser};

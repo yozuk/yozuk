@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![deny(clippy::all)]
 
 pub use bytes::Bytes;
 

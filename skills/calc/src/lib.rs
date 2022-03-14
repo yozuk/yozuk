@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![deny(clippy::all)]
 
 use bigdecimal::BigDecimal;
 use bigdecimal::Zero;

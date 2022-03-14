@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![deny(clippy::all)]
 
 use rayon::prelude::*;
 use yozuk_helper_english::singularize;

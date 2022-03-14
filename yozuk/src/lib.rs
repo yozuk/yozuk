@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![deny(clippy::all)]
 
 use anyhow::Error;
 use rayon::{iter::Either, prelude::*};
