@@ -3,6 +3,10 @@ name: Rust
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+    - '**.md'
+    - '**/Dockerfile'
+    - 'images/**'
   pull_request:
     branches: [ main ]
 
