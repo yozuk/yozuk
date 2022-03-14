@@ -3,6 +3,9 @@
 
 use anyhow::Result;
 use clap::Parser;
+use console::Style;
+use rustyline::error::ReadlineError;
+use rustyline::Editor;
 use sloggers::{
     terminal::{Destination, TerminalLoggerBuilder},
     types::Severity,
@@ -27,15 +30,12 @@ fn main() -> Result<()> {
 
 struct App {
     args: Args,
+    zuk: Yozuk,
 }
 
 impl App {
     fn new(args: Args) -> Result<Self> {
-        Ok(Self { args })
-    }
-
-    fn run(&self) -> Result<()> {
-        let config: Config = if let Some(config) = &self.args.config {
+        let config: Config = if let Some(config) = &args.config {
             let mut file = File::open(config)?;
             let mut data = Vec::new();
             file.read_to_end(&mut data)?;
@@ -50,7 +50,8 @@ impl App {
             Severity::Debug,
             Severity::Trace,
         ];
-        let level = self.args.verbose.min(levels.len() - 1);
+
+        let level = args.verbose.min(levels.len() - 1);
         let mut builder = TerminalLoggerBuilder::new();
         builder.level(levels[level]);
         builder.destination(Destination::Stderr);
@@ -61,19 +62,31 @@ impl App {
             .logger(logger)
             .build(ModelSet::from_data(yozuk_bundle::MODEL_DATA)?);
 
-        let tokens = self
-            .args
-            .query
-            .iter()
-            .map(|token| tk!(token.clone()))
-            .collect::<Vec<_>>();
+        Ok(Self { args, zuk })
+    }
 
+    fn run(&self) -> Result<()> {
+        if self.args.output == OutputFormat::Term && self.args.query.is_empty() {
+            self.start_repl()
+        } else {
+            let tokens = self
+                .args
+                .query
+                .iter()
+                .map(|token| tk!(token.clone()))
+                .collect::<Vec<_>>();
+
+            self.exec_command(&tokens)
+        }
+    }
+
+    fn exec_command(&self, tokens: &[Token]) -> Result<()> {
         let printer = TerminalPrinter::new(&self.args);
 
         let commands = if self.args.run {
             Ok(vec![CommandArgs::new().add_args_iter(&self.args.query)])
         } else {
-            zuk.get_commands(&tokens)
+            self.zuk.get_commands(tokens)
         };
 
         match commands {
@@ -83,7 +96,7 @@ impl App {
                     return Ok(());
                 }
 
-                let result = zuk.run_commands(commands);
+                let result = self.zuk.run_commands(commands);
 
                 match result {
                     Ok(output) => printer.print_result(&output)?,
@@ -100,6 +113,46 @@ impl App {
                 }
             }
             _ => (),
+        }
+
+        Ok(())
+    }
+
+    fn start_repl(&self) -> Result<()> {
+        println!("Hi. I'm Yozuk. How may I assist you?");
+        let mut rl = Editor::<()>::new();
+
+        let style = if console::colors_enabled() {
+            Style::new().bold().blue()
+        } else {
+            Style::new()
+        };
+
+        loop {
+            let readline = rl.readline(&format!("{} ", style.apply_to(">>")));
+            match readline {
+                Ok(line) => {
+                    rl.add_history_entry(line.as_str());
+
+                    let tokens = shell_words::split(&line)
+                        .unwrap_or_default()
+                        .into_iter()
+                        .map(|token| tk!(token))
+                        .collect::<Vec<_>>();
+
+                    if !tokens.is_empty() {
+                        self.exec_command(&tokens)?;
+                    }
+                }
+                Err(ReadlineError::Interrupted | ReadlineError::Eof) => {
+                    println!("Bye.");
+                    break;
+                }
+                Err(err) => {
+                    eprintln!("Error: {}", err);
+                    break;
+                }
+            }
         }
 
         Ok(())

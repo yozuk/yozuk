@@ -25,6 +25,7 @@ copypasta = "0.7.1"
 toml = "0.5.8"
 mediatype = "0.19.1"
 serde_yaml = "0.8.23"
+rustyline = "9.1.2"
 
 [features]
 default = []
