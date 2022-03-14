@@ -24,6 +24,7 @@ serde_json = "1.0.79"
 shell-words = "1.1.0"
 slog = "2.7.0"
 sloggers = "2.1.1"
+thiserror = "1.0.30"
 yozuk-helper-english = { path = "../helpers/english" }
 yozuk-sdk = { path = "../yozuk-sdk" }
 
@@ -37,7 +38,7 @@ yozuk-skill-uuid = { path = "../skills/uuid", optional = true }
 yozuk-skill-version = { path = "../skills/version", optional = true }
 yozuk-skill-lipsum = { path = "../skills/lipsum", optional = true }
 yozuk-skill-nanoid = { path = "../skills/nanoid", optional = true }
-thiserror = "1.0.30"
+yozuk-skill-punycode = { path = "../skills/punycode", optional = true }
 
 [features]
 default = [
@@ -54,7 +55,8 @@ default-skills = [
     "yozuk-skill-calc",
     "yozuk-skill-uuid",
     "yozuk-skill-lipsum",
-    "yozuk-skill-nanoid"
+    "yozuk-skill-nanoid",
+    "yozuk-skill-punycode"
 ]
 
 [build-dependencies]
