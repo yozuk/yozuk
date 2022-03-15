@@ -26,3 +26,21 @@ fn decode_punycode() {
         ])
     );
 }
+
+#[test]
+fn encode_punycode() {
+    assert_eq!(
+        cmd(tk!(["🦊.org"])),
+        CommandArgs::new().add_args(["yozuk-skill-punycode", "--mode", "encode", "🦊.org",])
+    );
+    assert_eq!(
+        cmd(tk!(["🍪.com", "cookie.テスト"])),
+        CommandArgs::new().add_args([
+            "yozuk-skill-punycode",
+            "--mode",
+            "encode",
+            "🍪.com",
+            "cookie.テスト"
+        ])
+    );
+}

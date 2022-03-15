@@ -5,6 +5,8 @@ use clap::{ArgEnum, Parser};
 use mediatype::media_type;
 use yozuk_sdk::prelude::*;
 
+mod tld;
+
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"9Kr7qeDGzvzR8ph-ZyuQm",
     config_schema: None,
@@ -31,6 +33,19 @@ impl Translator for PunycodeTranslator {
             );
         }
 
+        let encode = !args.is_empty()
+            && args
+                .iter()
+                .all(|token| is_non_ascii_domain(token.as_utf8()));
+
+        if encode {
+            return Some(
+                CommandArgs::new()
+                    .add_args(["--mode", "encode"])
+                    .add_args_iter(args.iter().map(|token| token.as_utf8())),
+            );
+        }
+
         None
     }
 }
@@ -42,20 +57,43 @@ impl Command for PunycodeCommand {
     fn run(&self, args: CommandArgs) -> Result<Output, Output> {
         let args = Args::try_parse_from(args.args).unwrap();
 
-        let output = args
-            .inputs
-            .iter()
-            .map(|s| encode_to_punycode(s))
-            .collect::<Vec<_>>();
+        match args.mode {
+            Mode::Decode => {
+                let output = args
+                    .inputs
+                    .iter()
+                    .map(|s| decode_punycode(s))
+                    .collect::<Vec<_>>();
 
-        Ok(Output {
-            module: "Punycode Decoder".into(),
-            sections: vec![
-                Section::new("Decoding punycode".to_string(), media_type!(TEXT / PLAIN))
-                    .kind(SectionKind::Comment),
-                Section::new(output.join("\n"), media_type!(TEXT / PLAIN)),
-            ],
-        })
+                Ok(Output {
+                    module: "Punycode Decoder".into(),
+                    sections: vec![
+                        Section::new("Decoding punycode".to_string(), media_type!(TEXT / PLAIN))
+                            .kind(SectionKind::Comment),
+                        Section::new(output.join("\n"), media_type!(TEXT / PLAIN)),
+                    ],
+                })
+            }
+            Mode::Encode => {
+                let output = args
+                    .inputs
+                    .iter()
+                    .map(|s| encode_punycode(s))
+                    .collect::<Vec<_>>();
+
+                Ok(Output {
+                    module: "Punycode Encoder".into(),
+                    sections: vec![
+                        Section::new(
+                            "Encoding into punycode".to_string(),
+                            media_type!(TEXT / PLAIN),
+                        )
+                        .kind(SectionKind::Comment),
+                        Section::new(output.join("\n"), media_type!(TEXT / PLAIN)),
+                    ],
+                })
+            }
+        }
     }
 }
 
@@ -72,6 +110,7 @@ struct Args {
 #[derive(ArgEnum, Clone)]
 enum Mode {
     Decode,
+    Encode,
 }
 
 fn is_punycode(s: &str) -> bool {
@@ -86,7 +125,7 @@ fn is_punycode(s: &str) -> bool {
             > 0
 }
 
-fn encode_to_punycode(s: &str) -> String {
+fn decode_punycode(s: &str) -> String {
     let s = s
         .to_ascii_lowercase()
         .split('.')
@@ -103,6 +142,27 @@ fn encode_to_punycode(s: &str) -> String {
     s.join(".")
 }
 
+fn encode_punycode(s: &str) -> String {
+    let s = s
+        .to_ascii_lowercase()
+        .split('.')
+        .map(|part| {
+            if part.is_ascii() {
+                part.to_string()
+            } else if let Ok(encoded) = punycode::encode(part) {
+                format!("xn--{}", encoded)
+            } else {
+                part.to_string()
+            }
+        })
+        .collect::<Vec<_>>();
+    s.join(".")
+}
+
+fn is_non_ascii_domain(s: &str) -> bool {
+    !s.is_ascii() && tld::DOMAINS.iter().any(|domain| s.ends_with(domain))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -117,11 +177,28 @@ mod tests {
     }
 
     #[test]
-    fn test_encode_to_punycode() {
-        assert_eq!(encode_to_punycode("xn--cookie!-1d84f"), "cookie🍪!");
-        assert_eq!(encode_to_punycode("XN--COOKIE!-1D84F"), "cookie🍪!");
-        assert_eq!(encode_to_punycode("xn--mushroom-bd25gia"), "🍄mushroom🍄");
-        assert_eq!(encode_to_punycode("xn--li8h.and.xn--ri8h"), "🍋.and.🍑");
-        assert_eq!(encode_to_punycode("example.com"), "example.com");
+    fn test_is_non_ascii_domain() {
+        assert!(is_non_ascii_domain("🍪.com"));
+        assert!(is_non_ascii_domain("cookie.テスト"));
+        assert!(!is_non_ascii_domain("xn--cookie!-1d84f.com"));
+        assert!(!is_non_ascii_domain("🍋.yozuk"));
+    }
+
+    #[test]
+    fn test_decode_punycode() {
+        assert_eq!(decode_punycode("xn--cookie!-1d84f"), "cookie🍪!");
+        assert_eq!(decode_punycode("XN--COOKIE!-1D84F"), "cookie🍪!");
+        assert_eq!(decode_punycode("xn--mushroom-bd25gia"), "🍄mushroom🍄");
+        assert_eq!(decode_punycode("xn--li8h.and.xn--ri8h"), "🍋.and.🍑");
+        assert_eq!(decode_punycode("example.com"), "example.com");
+    }
+
+    #[test]
+    fn test_encode_punycode() {
+        assert_eq!(encode_punycode("cookie🍪!"), "xn--cookie!-1d84f");
+        assert_eq!(encode_punycode("COOKIE🍪!"), "xn--cookie!-1d84f");
+        assert_eq!(encode_punycode("🍄mushroom🍄"), "xn--mushroom-bd25gia");
+        assert_eq!(encode_punycode("🍋.and.🍑"), "xn--li8h.and.xn--ri8h");
+        assert_eq!(encode_punycode("example.com"), "example.com");
     }
 }
