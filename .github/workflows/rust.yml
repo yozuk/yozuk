@@ -27,13 +27,8 @@ jobs:
           ~/.cargo/git
           target
         key: ${{ runner.os }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - uses: extractions/setup-just@v1
     - name: Install depenedencies
       run: sudo apt-get install -y libxcb-shape0-dev libxcb-xfixes0-dev
-    - name: Run fmt
-      run: cargo fmt --check
-    - name: Run clippy
-      run: cargo clippy --all-features --no-deps
-    - name: Build
-      run: cargo build --all-features
-    - name: Run tests
-      run: cargo test --all-features
+    - name: Run checks
+      run: just check
