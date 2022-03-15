@@ -16,6 +16,23 @@ Unlike normal command-line tools, it uses a simple NLP approach to infer the mea
 - 🚀 **Fast:** Written in Rust, compiles to native code.
 - 🛠️ **Customizable:** Enabling / disabling specific commands with feature flags.
 
+## Skills
+
+Yozuk manages its commands by modules called [skills](./skills).
+
+### Skill examples
+
+| crate | description | example qury |
+| - | - | - |
+| `yozuk-skill-calc` | Simple calculator | `1 + 2` `(0.1 + 0.2) / 0.3` |
+| `yozuk-skill-uuid` | UUID generator | `uuid` `generate 5 UUIDs` |
+| `yozuk-skill-nanoid` | NanoID generator | `nanoid` `generate 5 NanoIDs` |
+| `yozuk-skill-base64` | Base64 encoder/decoder | `"Hello 世界" to base64` `cXVpY2sgYnJvd24g8J+mig==` |
+| `yozuk-skill-punycode` | Punycode encoder/decoder | `🥺👉👈.example.com` `xn--hj8h.com` |
+| `yozuk-skill-lipsum` | Dummy text generator | `lipsum` `Lorem ipsum dolor sit amet,` |
+
+You can enable or disable each skill at build time. Disabling unneeded skills is helpful in reducing build time, startup time, executable size and command misrecognitions.
+
 ## Adapters
 
 Following adapters are officially supported.
@@ -26,12 +43,6 @@ Following adapters are officially supported.
 <div align="center">
 <img alt="Telegram screenshot" src="images/chat.png" />
 </div>
-
-## Skills
-
-Yozuk manages its commands by modules called [skills](./skills).
-
-You can enable or disable each skill at build time. Disabling unneeded skills is helpful in reducing build time, startup time, executable size and command misrecognitions.
 
 ## Build Requirements
 
