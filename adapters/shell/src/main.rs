@@ -4,6 +4,7 @@
 use anyhow::Result;
 use clap::Parser;
 use console::Style;
+use crossterm::tty::IsTty;
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
 use sloggers::{
@@ -77,8 +78,13 @@ impl App {
                 .map(|token| tk!(token.clone()))
                 .collect::<Vec<_>>();
 
-            let mut streams = [InputStream::new(io::stdin())?];
-            self.exec_command(&tokens, &mut streams[..])
+            let stdin = io::stdin();
+            let mut streams = if stdin.is_tty() {
+                vec![]
+            } else {
+                vec![InputStream::new(io::stdin())?]
+            };
+            self.exec_command(&tokens, &mut streams)
         }
     }
 
