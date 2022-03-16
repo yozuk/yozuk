@@ -137,7 +137,7 @@ const MAX_COUNT: usize = 30;
 pub struct UuidCommand;
 
 impl Command for UuidCommand {
-    fn run(&self, args: CommandArgs) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
         let args = Args::try_parse_from(args.args).unwrap();
         if args.n > MAX_COUNT {
             return Err(Output {

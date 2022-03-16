@@ -79,7 +79,7 @@ impl Translator for SmalltalkTranslator {
 pub struct SmalltalkCommand;
 
 impl Command for SmalltalkCommand {
-    fn run(&self, args: CommandArgs) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
         let args = Args::try_parse_from(args.args).unwrap();
         if args.life_universe_everything {
             Err(Output {

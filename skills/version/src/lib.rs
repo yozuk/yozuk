@@ -65,7 +65,7 @@ impl Translator for VersionTranslator {
 pub struct VersionCommand(Environment);
 
 impl Command for VersionCommand {
-    fn run(&self, args: CommandArgs) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
         let _args = Args::try_parse_from(args.args).unwrap();
         Ok(Output {
             module: "Version Info".into(),

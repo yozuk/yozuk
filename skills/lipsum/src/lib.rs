@@ -75,7 +75,7 @@ impl Translator for LipsumTranslator {
 pub struct LipsumCommand;
 
 impl Command for LipsumCommand {
-    fn run(&self, args: CommandArgs) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
         let args = Args::try_parse_from(args.args).unwrap();
         Ok(Output {
             sections: vec![

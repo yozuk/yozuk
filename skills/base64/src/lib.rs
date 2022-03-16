@@ -138,7 +138,7 @@ impl Translator for Base64Translator {
 pub struct Base64Command;
 
 impl Command for Base64Command {
-    fn run(&self, args: CommandArgs) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
         let options = Options::try_parse_from(args.args).unwrap();
         match options.mode {
             Mode::Decode => {

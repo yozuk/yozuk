@@ -182,7 +182,7 @@ impl Translator for DiceTranslator {
 pub struct DiceCommand;
 
 impl Command for DiceCommand {
-    fn run(&self, args: CommandArgs) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
         let rule = DiceParser::parse(Rule::calculation, &args.args[1]).unwrap();
         eval(rule)
             .map(|result| Output {

@@ -93,7 +93,11 @@ impl Yozuk {
         })
     }
 
-    pub fn run_commands(&self, commands: Vec<CommandArgs>) -> Result<Output, YozukError> {
+    pub fn run_commands(
+        &self,
+        commands: Vec<CommandArgs>,
+        streams: &mut [InputStream],
+    ) -> Result<Output, YozukError> {
         let commands = commands.into_iter().filter_map(|args| {
             self.model
                 .get_index(&args.args[0])
@@ -103,7 +107,7 @@ impl Yozuk {
 
         let mut errors = Vec::new();
         for (args, command) in commands {
-            match command.run(args) {
+            match command.run(args, streams) {
                 Ok(result) => return Ok(result),
                 Err(err) => errors.push(err),
             }

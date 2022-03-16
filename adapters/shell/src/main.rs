@@ -96,7 +96,7 @@ impl App {
                     return Ok(());
                 }
 
-                let result = self.zuk.run_commands(commands);
+                let result = self.zuk.run_commands(commands, streams);
 
                 match result {
                     Ok(output) => printer.print_result(&output)?,
