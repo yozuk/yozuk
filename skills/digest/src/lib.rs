@@ -19,6 +19,8 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
+mod algorithm;
+
 #[derive(Debug)]
 pub struct DigestCorpus;
 
