@@ -40,6 +40,7 @@ yozuk-skill-lipsum = { path = "../skills/lipsum", optional = true }
 yozuk-skill-nanoid = { path = "../skills/nanoid", optional = true }
 yozuk-skill-punycode = { path = "../skills/punycode", optional = true }
 yozuk-skill-dice = { path = "../skills/dice", optional = true }
+yozuk-skill-digest = { path = "../skills/digest", optional = true }
 
 [features]
 default = [
@@ -58,7 +59,8 @@ default-skills = [
     "yozuk-skill-lipsum",
     "yozuk-skill-nanoid",
     "yozuk-skill-punycode",
-    "yozuk-skill-dice"
+    "yozuk-skill-dice",
+    "yozuk-skill-digest"
 ]
 
 [build-dependencies]

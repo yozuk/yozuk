@@ -1,0 +1,16 @@
+[package]
+name = "yozuk-skill-digest"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "3.1.6", features = ["derive"] }
+digest = "0.10.3"
+hex = "0.4.3"
+md-5 = "0.10.1"
+mediatype = "0.19.1"
+sha1 = "0.10.1"
+sha2 = "0.10.2"
+thiserror = "1.0.30"
+yozuk-helper-english = { path = "../../helpers/english" }
+yozuk-sdk = { path = "../../yozuk-sdk" }

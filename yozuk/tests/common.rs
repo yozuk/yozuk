@@ -1,5 +1,6 @@
 #![cfg(feature = "modelgen")]
 
+use std::io;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
@@ -11,5 +12,6 @@ lazy_static::lazy_static! {
 }
 
 pub fn cmd(tokens: Vec<Token>) -> CommandArgs {
-    YOZUK.get_commands(&tokens, &[]).unwrap().remove(0)
+    let stream = InputStream::new(io::empty()).unwrap();
+    YOZUK.get_commands(&tokens, &[stream]).unwrap().remove(0)
 }
