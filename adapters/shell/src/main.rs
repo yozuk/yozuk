@@ -12,6 +12,7 @@ use sloggers::{
     Build,
 };
 use std::fs::File;
+use std::io;
 use std::io::Read;
 use yozuk::{ModelSet, Yozuk, YozukError};
 use yozuk_sdk::prelude::*;
@@ -76,7 +77,8 @@ impl App {
                 .map(|token| tk!(token.clone()))
                 .collect::<Vec<_>>();
 
-            self.exec_command(&tokens, &mut [])
+            let mut streams = [InputStream::new(io::stdin())?];
+            self.exec_command(&tokens, &mut streams[..])
         }
     }
 
