@@ -69,6 +69,7 @@ impl App {
         if self.args.output == OutputFormat::Term && self.args.query.is_empty() {
             self.start_repl()
         } else {
+            let _stream = InputStream::new(std::io::stdin());
             let tokens = self
                 .args
                 .query
