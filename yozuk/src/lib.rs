@@ -39,7 +39,11 @@ impl Yozuk {
         Default::default()
     }
 
-    pub fn get_commands(&self, tokens: &[Token]) -> Result<Vec<CommandArgs>, YozukError> {
+    pub fn get_commands(
+        &self,
+        tokens: &[Token],
+        streams: &[InputStream],
+    ) -> Result<Vec<CommandArgs>, YozukError> {
         debug!(self.logger, "{:?}", tokens);
 
         let labeler = FeatureLabeler::new(&self.labelers);
@@ -64,7 +68,7 @@ impl Yozuk {
                     cache
                         .translators
                         .par_iter()
-                        .find_map_first(|tr| tr.parse(&args))
+                        .find_map_first(|tr| tr.parse(&args, streams))
                         .map(|args| {
                             (
                                 cache.command.priority(),

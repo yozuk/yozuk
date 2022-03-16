@@ -62,7 +62,7 @@ impl Suggests for NanoIdSuggests {
 pub struct NanoIdTranslator;
 
 impl Translator for NanoIdTranslator {
-    fn parse(&self, args: &[Token]) -> Option<CommandArgs> {
+    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         if !args
             .iter()
             .any(|arg| arg.tag == "command:nanoid" && normalized_eq(arg.as_utf8(), &["NanoID"], 0))

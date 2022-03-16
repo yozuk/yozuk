@@ -84,7 +84,7 @@ async fn send_output(
     logger: Logger,
 ) -> Result<(), RequestError> {
     let result = zuk
-        .get_commands(&tokens)
+        .get_commands(&tokens, &[])
         .and_then(|commands| zuk.run_commands(commands));
 
     debug!(logger, "result: {:?}", result);

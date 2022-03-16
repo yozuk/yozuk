@@ -76,17 +76,17 @@ impl App {
                 .map(|token| tk!(token.clone()))
                 .collect::<Vec<_>>();
 
-            self.exec_command(&tokens)
+            self.exec_command(&tokens, &mut [])
         }
     }
 
-    fn exec_command(&self, tokens: &[Token]) -> Result<()> {
+    fn exec_command(&self, tokens: &[Token], streams: &mut [InputStream]) -> Result<()> {
         let printer = TerminalPrinter::new(&self.args);
 
         let commands = if self.args.run {
             Ok(vec![CommandArgs::new().add_args_iter(&self.args.query)])
         } else {
-            self.zuk.get_commands(tokens)
+            self.zuk.get_commands(tokens, streams)
         };
 
         match commands {
@@ -141,7 +141,7 @@ impl App {
                         .collect::<Vec<_>>();
 
                     if !tokens.is_empty() {
-                        self.exec_command(&tokens)?;
+                        self.exec_command(&tokens, &mut [])?;
                     }
                 }
                 Err(ReadlineError::Interrupted | ReadlineError::Eof) => {

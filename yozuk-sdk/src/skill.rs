@@ -29,7 +29,7 @@ pub trait Preprocessor: fmt::Debug + Send + Sync + 'static {
 }
 
 pub trait Translator: fmt::Debug + Send + Sync + 'static {
-    fn parse(&self, args: &[Token]) -> Option<CommandArgs>;
+    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs>;
 }
 
 pub trait Command: fmt::Debug + Send + Sync + 'static {

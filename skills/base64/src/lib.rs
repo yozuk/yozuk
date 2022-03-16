@@ -82,7 +82,7 @@ impl Labeler for Base64Labeler {
 pub struct Base64Translator;
 
 impl Translator for Base64Translator {
-    fn parse(&self, args: &[Token]) -> Option<CommandArgs> {
+    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let inputs = args
             .iter()
             .filter(|arg| arg.tag == "input:base64")

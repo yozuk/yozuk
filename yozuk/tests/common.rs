@@ -11,5 +11,5 @@ lazy_static::lazy_static! {
 }
 
 pub fn cmd(tokens: Vec<Token>) -> CommandArgs {
-    YOZUK.get_commands(&tokens).unwrap().remove(0)
+    YOZUK.get_commands(&tokens, &[]).unwrap().remove(0)
 }

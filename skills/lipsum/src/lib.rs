@@ -47,7 +47,7 @@ impl Corpus for LipsumCorpus {
 pub struct LipsumTranslator;
 
 impl Translator for LipsumTranslator {
-    fn parse(&self, args: &[Token]) -> Option<CommandArgs> {
+    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
             .filter(|arg| arg.tag == "lipsum:keyword")

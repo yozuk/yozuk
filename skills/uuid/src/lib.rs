@@ -116,7 +116,7 @@ impl Labeler for UuidLabeler {
 pub struct UuidTranslator;
 
 impl Translator for UuidTranslator {
-    fn parse(&self, args: &[Token]) -> Option<CommandArgs> {
+    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         if !args.iter().any(|arg| {
             arg.tag == "command:uuid" && normalized_eq(arg.as_utf8(), &["UUID", "GUID"], 0)
         }) {
