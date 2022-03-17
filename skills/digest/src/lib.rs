@@ -4,7 +4,7 @@
 use clap::Parser;
 use mediatype::media_type;
 use std::collections::BTreeMap;
-use std::io::Read;
+use std::io::{BufReader, Read};
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
@@ -102,8 +102,9 @@ impl Command for DigestCommand {
         }
 
         if let [stream, ..] = streams {
+            let mut reader = BufReader::new(stream);
             let mut data = vec![0; 1024];
-            while let Ok(len) = stream.read(&mut data) {
+            while let Ok(len) = reader.read(&mut data) {
                 if len > 0 {
                     for hash in entries.values_mut() {
                         hash.update(&data[..len]);
