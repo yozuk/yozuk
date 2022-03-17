@@ -7,8 +7,8 @@ edition = "2021"
 clap = { version = "3.1.6", features = ["derive"] }
 digest = "0.10.3"
 hex = "0.4.3"
-lipsum = "0.8.0"
 md-5 = "0.10.1"
 mediatype = "0.19.1"
+thiserror = "1.0.30"
 yozuk-helper-english = { path = "../../helpers/english" }
 yozuk-sdk = { path = "../../yozuk-sdk" }

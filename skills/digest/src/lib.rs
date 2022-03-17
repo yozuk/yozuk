@@ -2,8 +2,9 @@
 #![deny(clippy::all)]
 
 use clap::Parser;
-use lipsum::lipsum;
 use mediatype::media_type;
+use std::collections::HashMap;
+use std::io::Read;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
@@ -67,22 +68,66 @@ impl Translator for DigestTranslator {
 pub struct DigestCommand;
 
 impl Command for DigestCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, streams: &mut [InputStream]) -> Result<Output, Output> {
         let args = Args::try_parse_from(args.args).unwrap();
-        Ok(Output {
-            sections: vec![
-                Section::new(lipsum(args.n), media_type!(TEXT / PLAIN)).kind(SectionKind::Value)
-            ],
-            ..Default::default()
+
+        let mut entries = HashMap::new();
+        for name in &args.algorithm {
+            let matched = ENTRIES
+                .iter()
+                .filter(|entry| entry.keywords.iter().any(|key| key == name))
+                .collect::<Vec<_>>();
+
+            if matched.is_empty() {
+                return Err(Output {
+                    module: "Digest".into(),
+                    sections: vec![Section::new(
+                        format!("Unsupprted algorithm: {}", name),
+                        media_type!(TEXT / PLAIN),
+                    )
+                    .kind(SectionKind::Comment)],
+                });
+            }
+
+            for entry in matched {
+                entries.entry(entry.name).or_insert_with(|| (entry.init)());
+            }
+        }
+
+        if let [stream, ..] = streams {
+            let mut data = vec![0; 1024];
+            while let Ok(len) = stream.read(&mut data) {
+                if len > 0 {
+                    for hash in entries.values_mut() {
+                        hash.update(&data);
+                    }
+                } else {
+                    let result = entries
+                        .iter_mut()
+                        .map(|(name, hash)| format!("{}: {}", name, hex::encode(hash.finalize())))
+                        .collect::<Vec<_>>();
+                    return Ok(Output {
+                        module: "Digest".into(),
+                        sections: vec![Section::new(result.join("\n"), media_type!(TEXT / PLAIN))
+                            .kind(SectionKind::Value)],
+                    });
+                }
+            }
+        }
+
+        Err(Output {
+            module: "Digest".into(),
+            sections: vec![Section::new(
+                "Invalid input source".to_string(),
+                media_type!(TEXT / PLAIN),
+            )
+            .kind(SectionKind::Comment)],
         })
     }
 }
 
 #[derive(Parser)]
 pub struct Args {
-    #[clap(short, default_value_t = 30)]
-    pub n: usize,
-
     #[clap(short, multiple_occurrences(true))]
     pub algorithm: Vec<String>,
 }
