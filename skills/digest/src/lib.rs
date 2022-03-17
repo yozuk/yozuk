@@ -20,28 +20,18 @@ pub const ENTRY: SkillEntry = SkillEntry {
 };
 
 mod algorithm;
+use algorithm::*;
 
 #[derive(Debug)]
 pub struct DigestCorpus;
 
 impl Corpus for DigestCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        vec![
-            tk!([
-                "Lorem"; "lipsum:keyword",
-                "ipsum"; "lipsum:keyword",
-                "dolor",
-                "sit",
-                "amet"
-            ]),
-            tk!([
-                "lorem"; "lipsum:keyword",
-                "ipsum"; "lipsum:keyword"
-            ]),
-            tk!(["lipsum,"; "lipsum:keyword"]),
-        ]
-        .into_iter()
-        .collect()
+        ENTRIES
+            .iter()
+            .flat_map(|entry| entry.keywords)
+            .map(|key| tk!([key.to_string(); "digest:keyword"]))
+            .collect()
     }
 }
 
@@ -92,4 +82,7 @@ impl Command for DigestCommand {
 pub struct Args {
     #[clap(short, default_value_t = 30)]
     pub n: usize,
+
+    #[clap(short, multiple_occurrences(true))]
+    pub algorithm: Vec<String>,
 }
