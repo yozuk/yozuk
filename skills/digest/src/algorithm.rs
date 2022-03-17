@@ -41,6 +41,46 @@ pub const ENTRIES: &[AlgorithmEntry] = &[
         keywords: &["sha-512/256", "sha512-256", "sha2", "sha-2"],
         init: || Box::new(DigestEntry::<sha2::Sha512_256>::new()),
     },
+    AlgorithmEntry {
+        name: "SHA-3-224",
+        keywords: &["sha3-224", "sha3", "sha-3"],
+        init: || Box::new(DigestEntry::<sha3::Sha3_224>::new()),
+    },
+    AlgorithmEntry {
+        name: "SHA-3-256",
+        keywords: &["sha3-256", "sha3", "sha-3"],
+        init: || Box::new(DigestEntry::<sha3::Sha3_256>::new()),
+    },
+    AlgorithmEntry {
+        name: "SHA-3-384",
+        keywords: &["sha3-384", "sha3", "sha-3"],
+        init: || Box::new(DigestEntry::<sha3::Sha3_384>::new()),
+    },
+    AlgorithmEntry {
+        name: "SHA-3-512",
+        keywords: &["sha3-512", "sha3", "sha-3"],
+        init: || Box::new(DigestEntry::<sha3::Sha3_512>::new()),
+    },
+    AlgorithmEntry {
+        name: "Keccak-224",
+        keywords: &["keccak-224", "sha3", "sha-3"],
+        init: || Box::new(DigestEntry::<sha3::Keccak224>::new()),
+    },
+    AlgorithmEntry {
+        name: "Keccak-256",
+        keywords: &["keccak-256", "sha3", "sha-3"],
+        init: || Box::new(DigestEntry::<sha3::Keccak256>::new()),
+    },
+    AlgorithmEntry {
+        name: "Keccak-384",
+        keywords: &["keccak-384", "sha3", "sha-3"],
+        init: || Box::new(DigestEntry::<sha3::Keccak384>::new()),
+    },
+    AlgorithmEntry {
+        name: "Keccak-512",
+        keywords: &["keccak-512", "sha3", "sha-3"],
+        init: || Box::new(DigestEntry::<sha3::Keccak512>::new()),
+    },
 ];
 
 pub struct AlgorithmEntry {
