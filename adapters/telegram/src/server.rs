@@ -1,11 +1,13 @@
 use crate::message;
+use futures::future::try_join_all;
 use reqwest::StatusCode;
+use slog::debug;
 use slog::Logger;
-use slog::{debug, error};
 use std::convert::Infallible;
 use std::env;
 use std::net::SocketAddr;
 use std::sync::Arc;
+use teloxide::net::Download;
 use teloxide::{
     dispatching::{
         stop_token::AsyncStopToken,
@@ -13,8 +15,8 @@ use teloxide::{
     },
     prelude2::*,
     types::{MediaKind, MessageKind, ParseMode, Update},
-    RequestError,
 };
+use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use tokio_stream::wrappers::UnboundedReceiverStream;
 use warp::Filter;
@@ -46,16 +48,63 @@ impl Server {
                                     .into_iter()
                                     .map(|token| tk!(token))
                                     .collect::<Vec<_>>();
-                                if let Err(err) =
-                                    send_output(bot, msg, &zuk, tokens, logger.clone()).await
-                                {
-                                    error!(logger, "{}", err);
-                                }
+                                send_output(bot, msg, &zuk, tokens, vec![], logger.clone()).await?;
+                            }
+                            MediaKind::Photo(photo) => {
+                                let mut photos = photo.photo.clone();
+                                photos.sort_unstable_by_key(|image| image.width * image.height);
+                                let streams = try_join_all(
+                                    photos
+                                        .iter()
+                                        .find(|image| image.width * image.height >= 100_000)
+                                        .or_else(|| photos.last())
+                                        .map(|image| file_stream(&bot, &image.file_id)),
+                                )
+                                .await?;
+                                let words =
+                                    shell_words::split(&photo.caption.clone().unwrap_or_default())
+                                        .ok()
+                                        .unwrap_or_default();
+                                let tokens = words.into_iter().map(|token| tk!(token)).collect();
+                                send_output(bot, msg, &zuk, tokens, streams, logger.clone())
+                                    .await?;
+                            }
+                            MediaKind::Audio(audio) => {
+                                let streams = vec![file_stream(&bot, &audio.audio.file_id).await?];
+                                let words =
+                                    shell_words::split(&audio.caption.clone().unwrap_or_default())
+                                        .ok()
+                                        .unwrap_or_default();
+                                let tokens = words.into_iter().map(|token| tk!(token)).collect();
+                                send_output(bot, msg, &zuk, tokens, streams, logger.clone())
+                                    .await?;
+                            }
+                            MediaKind::Video(video) => {
+                                let streams = vec![file_stream(&bot, &video.video.file_id).await?];
+                                let words =
+                                    shell_words::split(&video.caption.clone().unwrap_or_default())
+                                        .ok()
+                                        .unwrap_or_default();
+                                let tokens = words.into_iter().map(|token| tk!(token)).collect();
+                                send_output(bot, msg, &zuk, tokens, streams, logger.clone())
+                                    .await?;
+                            }
+                            MediaKind::Document(document) => {
+                                let streams =
+                                    vec![file_stream(&bot, &document.document.file_id).await?];
+                                let words = shell_words::split(
+                                    &document.caption.clone().unwrap_or_default(),
+                                )
+                                .ok()
+                                .unwrap_or_default();
+                                let tokens = words.into_iter().map(|token| tk!(token)).collect();
+                                send_output(bot, msg, &zuk, tokens, streams, logger.clone())
+                                    .await?;
                             }
                             _ => (),
                         }
                     }
-                    respond(())
+                    respond(()).map_err(anyhow::Error::from)
                 }
             },
             webhook(bot).await,
@@ -64,7 +113,16 @@ impl Server {
     }
 }
 
-async fn send_hello(bot: AutoSend<Bot>, msg: Message) -> Result<(), RequestError> {
+async fn file_stream(bot: &AutoSend<Bot>, file_id: &str) -> anyhow::Result<InputStream> {
+    let file = bot.get_file(file_id).send().await?;
+    let tmpfile = NamedTempFile::new()?;
+    let filepath = tmpfile.into_temp_path();
+    let mut tmpfile = tokio::fs::File::create(&filepath).await?;
+    bot.download_file(&file.file_path, &mut tmpfile).await?;
+    Ok(InputStream::new(std::fs::File::open(filepath)?)?)
+}
+
+async fn send_hello(bot: AutoSend<Bot>, msg: Message) -> anyhow::Result<()> {
     bot.send_message(
         msg.chat.id,
         "Hi. I'm <b>Yozuk</b>.\nHow may I assist you?".to_string(),
@@ -81,11 +139,12 @@ async fn send_output(
     msg: Message,
     zuk: &Yozuk,
     tokens: Vec<Token>,
+    mut streams: Vec<InputStream>,
     logger: Logger,
-) -> Result<(), RequestError> {
+) -> anyhow::Result<()> {
     let result = zuk
         .get_commands(&tokens, &[])
-        .and_then(|commands| zuk.run_commands(commands, &mut []));
+        .and_then(|commands| zuk.run_commands(commands, &mut streams));
 
     debug!(logger, "result: {:?}", result);
 
