@@ -23,9 +23,6 @@ pub trait Suggests: fmt::Debug + Send + Sync + 'static {
 
 pub trait Preprocessor: fmt::Debug + Send + Sync + 'static {
     fn preprocess(&self, input: Vec<Token>) -> Vec<Token>;
-    fn priority(&self) -> i32 {
-        0
-    }
 }
 
 pub trait Translator: fmt::Debug + Send + Sync + 'static {

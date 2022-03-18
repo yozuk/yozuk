@@ -59,10 +59,6 @@ impl Preprocessor for DicePreprocessor {
         }
         output
     }
-
-    fn priority(&self) -> i32 {
-        -10
-    }
 }
 
 #[derive(pest_derive::Parser)]

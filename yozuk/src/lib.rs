@@ -6,7 +6,7 @@ use rayon::{iter::Either, prelude::*};
 use slog::{debug, error, Logger};
 use sloggers::null::NullLoggerBuilder;
 use sloggers::Build;
-use std::iter;
+use std::{iter, mem};
 use thiserror::Error;
 use yozuk_sdk::prelude::*;
 
@@ -28,7 +28,6 @@ pub use modelgen::*;
 pub struct Yozuk {
     model: ModelSet,
     skills: Vec<SkillCache>,
-    preprocessors: Vec<Box<dyn Preprocessor>>,
     labelers: Vec<Box<dyn Labeler>>,
     commands: Vec<Option<CommandCache>>,
     logger: Logger,
@@ -48,11 +47,6 @@ impl Yozuk {
 
         let labeler = FeatureLabeler::new(&self.labelers);
 
-        let tokens = self
-            .preprocessors
-            .iter()
-            .fold(tokens.to_vec(), |tokens, prep| prep.preprocess(tokens));
-
         let pool = rayon::ThreadPoolBuilder::new()
             .num_threads(num_cpus::get().max(2))
             .build()
@@ -63,7 +57,16 @@ impl Yozuk {
                 .commands
                 .par_iter()
                 .filter_map(|cache| cache.as_ref())
-                .map(|cache| (cache, cache.model.tag_tokens(&labeler, &tokens)))
+                .map(|cache| {
+                    (
+                        cache,
+                        cache
+                            .preprocessors
+                            .iter()
+                            .fold(tokens.to_vec(), |tokens, prep| prep.preprocess(tokens)),
+                    )
+                })
+                .map(|(cache, tokens)| (cache, cache.model.tag_tokens(&labeler, &tokens)))
                 .filter_map(|(cache, args)| {
                     cache
                         .translators
@@ -84,7 +87,7 @@ impl Yozuk {
                 .collect::<Vec<_>>();
 
             if commands.is_empty() {
-                let suggest = self.suggest(&tokens);
+                let suggest = self.suggest(tokens);
                 return Err(YozukError::UnintelligibleRequest { suggest });
             }
 
@@ -192,12 +195,6 @@ impl YozukBuilder {
             error!(self.logger, "Failed to initialize {}: {}", entry.key, err);
         }
 
-        let mut preprocessors = skills
-            .iter_mut()
-            .flat_map(|cache| std::mem::take(&mut cache.skill.preprocessors))
-            .collect::<Vec<_>>();
-        preprocessors.par_sort_by_key(|prep| -prep.priority());
-
         let labelers = skills
             .iter_mut()
             .flat_map(|cache| std::mem::take(&mut cache.skill.labelers))
@@ -213,7 +210,8 @@ impl YozukBuilder {
                     commands[index] = Some(CommandCache {
                         name: skill.entry.key,
                         model: model.get(skill.entry.key).unwrap(),
-                        translators: std::mem::take(&mut skill.skill.translators),
+                        translators: mem::take(&mut skill.skill.translators),
+                        preprocessors: mem::take(&mut skill.skill.preprocessors),
                         command,
                     });
                 }
@@ -223,7 +221,6 @@ impl YozukBuilder {
         Yozuk {
             model,
             skills,
-            preprocessors,
             labelers,
             commands,
             logger: self.logger,
@@ -257,6 +254,7 @@ struct SkillCache {
 struct CommandCache {
     name: &'static str,
     model: ModelEntry,
+    preprocessors: Vec<Box<dyn Preprocessor>>,
     translators: Vec<Box<dyn Translator>>,
     command: Box<dyn Command>,
 }
