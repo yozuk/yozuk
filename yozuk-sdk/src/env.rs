@@ -67,10 +67,10 @@ impl SkillConfig {
         })
     }
 
-    pub fn get<'a, T>(&'a self) -> serde_json::Result<T>
+    pub fn get<'a, T>(&'a self) -> T
     where
-        T: serde::de::Deserialize<'a>,
+        T: serde::de::Deserialize<'a> + Default,
     {
-        serde_json::from_str(&self.data)
+        serde_json::from_str(&self.data).unwrap_or_default()
     }
 }

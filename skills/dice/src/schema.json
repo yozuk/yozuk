@@ -1,0 +1,12 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+        "secure": {
+            "title": "Secure PRNG",
+            "description": "Use a cryptographically-secure PRNG for dice rolls.",
+            "type": "boolean",
+            "default": false
+        }
+    }
+}
