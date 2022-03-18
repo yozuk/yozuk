@@ -1,4 +1,5 @@
 use crate::message;
+use futures::future::try_join_all;
 use reqwest::StatusCode;
 use slog::Logger;
 use slog::{debug, error};
@@ -6,6 +7,8 @@ use std::convert::Infallible;
 use std::env;
 use std::net::SocketAddr;
 use std::sync::Arc;
+use teloxide::net::Download;
+use teloxide::DownloadError;
 use teloxide::{
     dispatching::{
         stop_token::AsyncStopToken,
@@ -15,6 +18,7 @@ use teloxide::{
     types::{MediaKind, MessageKind, ParseMode, Update},
     RequestError,
 };
+use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use tokio_stream::wrappers::UnboundedReceiverStream;
 use warp::Filter;
@@ -47,7 +51,42 @@ impl Server {
                                     .map(|token| tk!(token))
                                     .collect::<Vec<_>>();
                                 if let Err(err) =
-                                    send_output(bot, msg, &zuk, tokens, logger.clone()).await
+                                    send_output(bot, msg, &zuk, tokens, vec![], logger.clone())
+                                        .await
+                                {
+                                    error!(logger, "{}", err);
+                                }
+                            }
+                            MediaKind::Photo(photo) => {
+                                let mut photos = photo.photo.clone();
+                                photos.sort_unstable_by_key(|image| image.width * image.height);
+                                let paths = try_join_all(
+                                    photos
+                                        .iter()
+                                        .find(|image| image.width * image.height >= 100_000)
+                                        .or_else(|| photos.last())
+                                        .map(|image| bot.get_file(image.file_id.clone()).send()),
+                                )
+                                .await?;
+                                let files = try_join_all(
+                                    paths
+                                        .into_iter()
+                                        .map(|file| download_file(&bot, file.file_path)),
+                                )
+                                .await
+                                .unwrap();
+                                let streams = files
+                                    .into_iter()
+                                    .filter_map(|file| InputStream::new(file).ok())
+                                    .collect();
+                                let words =
+                                    shell_words::split(&photo.caption.clone().unwrap_or_default())
+                                        .ok()
+                                        .unwrap_or_default();
+                                let tokens = words.into_iter().map(|token| tk!(token)).collect();
+                                if let Err(err) =
+                                    send_output(bot, msg, &zuk, tokens, streams, logger.clone())
+                                        .await
                                 {
                                     error!(logger, "{}", err);
                                 }
@@ -62,6 +101,14 @@ impl Server {
         )
         .await;
     }
+}
+
+async fn download_file(bot: &AutoSend<Bot>, path: String) -> Result<std::fs::File, DownloadError> {
+    let tmpfile = NamedTempFile::new().unwrap();
+    let filepath = tmpfile.into_temp_path();
+    let mut tmpfile = tokio::fs::File::create(&filepath).await.unwrap();
+    bot.download_file(&path, &mut tmpfile).await?;
+    Ok(std::fs::File::open(filepath).unwrap())
 }
 
 async fn send_hello(bot: AutoSend<Bot>, msg: Message) -> Result<(), RequestError> {
@@ -81,11 +128,12 @@ async fn send_output(
     msg: Message,
     zuk: &Yozuk,
     tokens: Vec<Token>,
+    mut streams: Vec<InputStream>,
     logger: Logger,
 ) -> Result<(), RequestError> {
     let result = zuk
         .get_commands(&tokens, &[])
-        .and_then(|commands| zuk.run_commands(commands, &mut []));
+        .and_then(|commands| zuk.run_commands(commands, &mut streams));
 
     debug!(logger, "result: {:?}", result);
 
