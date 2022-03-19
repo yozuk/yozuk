@@ -19,3 +19,19 @@ fn lipsum() {
         CommandArgs::new().add_args(["yozuk-skill-lipsum"])
     );
 }
+
+#[test]
+fn lipsum_with_words() {
+    assert_eq!(
+        cmd(tk!(["Lorem", "ipsum", "300", "words"])),
+        CommandArgs::new().add_args(["yozuk-skill-lipsum", "-n", "300"])
+    );
+    assert_eq!(
+        cmd(tk!(["Lorem", "ipsum", "dolor", "sit", "amet,", "100"])),
+        CommandArgs::new().add_args(["yozuk-skill-lipsum", "-n", "100"])
+    );
+    assert_eq!(
+        cmd(tk!(["lipsum", "30"])),
+        CommandArgs::new().add_args(["yozuk-skill-lipsum", "-n", "30"])
+    );
+}

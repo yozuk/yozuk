@@ -8,7 +8,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"CI5cJBeuNmRj5mMRVAC_X",
+    model_id: b"QNkuE1DgDYJsRXrKxlPbO",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -33,10 +33,47 @@ impl Corpus for LipsumCorpus {
                 "amet"
             ]),
             tk!([
+                "Lorem"; "lipsum:keyword",
+                "ipsum"; "lipsum:keyword",
+                "dolor",
+                "sit",
+                "amet",
+                "100"; "input:count"
+            ]),
+            tk!([
+                "Lorem"; "lipsum:keyword",
+                "ipsum"; "lipsum:keyword",
+                "dolor",
+                "sit",
+                "amet",
+                "100"; "input:count",
+                "words"
+            ]),
+            tk!([
                 "lorem"; "lipsum:keyword",
                 "ipsum"; "lipsum:keyword"
             ]),
+            tk!([
+                "lorem"; "lipsum:keyword",
+                "ipsum"; "lipsum:keyword",
+                "100"; "input:count"
+            ]),
+            tk!([
+                "lorem"; "lipsum:keyword",
+                "ipsum"; "lipsum:keyword",
+                "100"; "input:count",
+                "words"
+            ]),
             tk!(["lipsum,"; "lipsum:keyword"]),
+            tk!([
+                "lipsum,"; "lipsum:keyword",
+                "100"; "input:count"
+            ]),
+            tk!([
+                "lipsum,"; "lipsum:keyword",
+                "100"; "input:count",
+                "words"
+            ]),
         ]
         .into_iter()
         .collect()
@@ -48,6 +85,12 @@ pub struct LipsumTranslator;
 
 impl Translator for LipsumTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+        let count = args
+            .iter()
+            .find(|arg| arg.tag == "input:count")
+            .and_then(|arg| arg.as_utf8().parse::<usize>().ok())
+            .map(|n| ["-n".to_string(), n.to_string()]);
+
         let keywords = args
             .iter()
             .filter(|arg| arg.tag == "lipsum:keyword")
@@ -57,13 +100,13 @@ impl Translator for LipsumTranslator {
             if normalized_eq(lorem.as_utf8(), &["lorem"], 1)
                 && normalized_eq(ipsum.as_utf8(), &["ipsum"], 1)
             {
-                return Some(CommandArgs::new());
+                return Some(CommandArgs::new().add_args(count));
             }
         }
 
         if let [lipsum] = keywords[..] {
             if normalized_eq(lipsum.as_utf8(), &["lipsum"], 1) {
-                return Some(CommandArgs::new());
+                return Some(CommandArgs::new().add_args(count));
             }
         }
 
@@ -71,12 +114,27 @@ impl Translator for LipsumTranslator {
     }
 }
 
+const MAX_COUNT: usize = 300;
+
 #[derive(Debug)]
 pub struct LipsumCommand;
 
 impl Command for LipsumCommand {
     fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
         let args = Args::try_parse_from(args.args).unwrap();
+        if args.n > MAX_COUNT {
+            return Err(Output {
+                module: "Lorem ipsum".into(),
+                sections: vec![Section::new(
+                    format!(
+                        "Too large number of the requested words (Limit: {}).",
+                        MAX_COUNT
+                    ),
+                    media_type!(TEXT / PLAIN),
+                )
+                .kind(SectionKind::Comment)],
+            });
+        }
         Ok(Output {
             sections: vec![
                 Section::new(lipsum(args.n), media_type!(TEXT / PLAIN)).kind(SectionKind::Value)
