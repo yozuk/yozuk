@@ -46,7 +46,7 @@ yozuk-skill-digest = { path = "../skills/digest", optional = true }
 default = [
     "default-skills"
 ]
-modelgen = ["crfsuite", "yozuk-sdk/modelgen"]
+modelgen = ["crfsuite"]
 default-skills = [
     "yozuk-skill-mediatype", 
     "yozuk-skill-version",
