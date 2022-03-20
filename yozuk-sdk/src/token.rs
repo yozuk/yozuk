@@ -54,15 +54,22 @@ pub struct Token {
     )]
     pub data: Bytes,
 
+    #[serde(default = "media_type_default")]
     pub media_type: MediaTypeBuf,
+
+    #[serde(default = "String::new")]
     pub tag: String,
+}
+
+fn media_type_default() -> MediaTypeBuf {
+    media_type!(TEXT / PLAIN).into()
 }
 
 impl Default for Token {
     fn default() -> Self {
         Self {
             data: Bytes::new(),
-            media_type: media_type!(TEXT / PLAIN).into(),
+            media_type: media_type_default(),
             tag: String::new(),
         }
     }

@@ -91,16 +91,17 @@ impl<'a> TerminalPrinter<'a> {
         Ok(())
     }
 
-    pub fn print_error(&self, output: &Output) -> Result<()> {
+    pub fn print_error(&self, outputs: &[Output]) -> Result<()> {
         let mut stdout = Term::stdout();
         let mut stderr = Term::stderr();
 
         if self.args.output == OutputFormat::Json {
-            serde_json::to_writer(&mut stdout, &JsonResult::Fail { output })?;
+            serde_json::to_writer(&mut stdout, &JsonResult::Fail { outputs })?;
             writeln!(&mut stdout)?;
             return Ok(());
         }
 
+        let output = &outputs[0];
         for section in &output.sections {
             if !output.module.is_empty() {
                 let style = if console::colors_enabled() {

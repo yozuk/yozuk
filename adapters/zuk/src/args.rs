@@ -32,6 +32,11 @@ pub struct Args {
     /// Load config from a TOML file
     #[clap(long)]
     pub config: Option<PathBuf>,
+
+    /// Start as a REST server
+    #[cfg(feature = "server")]
+    #[clap(long)]
+    pub server: Option<std::net::SocketAddr>,
 }
 
 #[derive(ArgEnum, Clone, PartialEq, Eq)]

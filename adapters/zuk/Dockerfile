@@ -1,0 +1,21 @@
+FROM rust:latest as builder
+RUN apt-get update && apt-get install -y cmake
+WORKDIR /usr/src/app
+
+# Use the old snapshot to enable caching.
+RUN git clone https://github.com/yozuk/yozuk.git && \
+    cd yozuk/adapters/telegram && \
+    git checkout 8961865de2adb25dff0ac3d6f1e3bd026a2b2d88 && \
+    cargo build --release && \
+    cd /usr/src/app && \
+    mv yozuk/target . && \
+    rm -rf yozuk
+
+COPY . .
+WORKDIR /usr/src/app/adapters/zuk
+RUN cargo install --features server --path .
+
+FROM debian:bullseye-slim
+COPY --from=builder /usr/local/cargo/bin/zuk /usr/local/bin/zuk
+ENV PORT 8080
+CMD ["zuk", "--server", "0.0.0.0:8080"]

@@ -21,6 +21,7 @@ use yozuk_sdk::prelude::*;
 mod args;
 mod json;
 mod printer;
+mod server;
 
 use args::*;
 use printer::*;
@@ -68,7 +69,12 @@ impl App {
         Ok(Self { args, zuk })
     }
 
-    fn run(&self) -> Result<()> {
+    fn run(self) -> Result<()> {
+        #[cfg(feature = "server")]
+        if let Some(addr) = self.args.server {
+            return server::start(addr, self.zuk);
+        }
+
         let stdin = io::stdin();
         let mut streams = vec![];
         if !stdin.is_tty() {
@@ -116,7 +122,7 @@ impl App {
                 match result {
                     Ok(output) => printer.print_result(&output)?,
                     Err(YozukError::CommandError { errors }) => {
-                        printer.print_error(&errors[0])?;
+                        printer.print_error(&errors)?;
                     }
                     _ => (),
                 }
