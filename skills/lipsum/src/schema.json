@@ -1,0 +1,11 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+        "custom_text": {
+            "title": "Custom Text",
+            "description": "Custom placeholder text used for the Markov chain input.",
+            "type": "string"
+        }
+    }
+}

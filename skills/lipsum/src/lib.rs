@@ -3,18 +3,20 @@
 
 use clap::Parser;
 use lipsum::lipsum;
+use lipsum::MarkovChain;
 use mediatype::media_type;
+use serde_derive::Deserialize;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"QNkuE1DgDYJsRXrKxlPbO",
-    config_schema: None,
-    init: |_, _| {
+    config_schema: Some(include_str!("./schema.json")),
+    init: |_, config| {
         Skill::builder()
             .add_corpus(LipsumCorpus)
             .add_translator(LipsumTranslator)
-            .set_command(LipsumCommand)
+            .set_command(LipsumCommand(config.get()))
             .build()
     },
 };
@@ -117,10 +119,16 @@ impl Translator for LipsumTranslator {
 const MAX_COUNT: usize = 300;
 
 #[derive(Debug)]
-pub struct LipsumCommand;
+pub struct LipsumCommand(LipsumConfig);
 
 impl Command for LipsumCommand {
     fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
+        let chain = self.0.custom_text.as_ref().map(|text| {
+            let mut chain = MarkovChain::new();
+            chain.learn(text);
+            chain
+        });
+
         let args = Args::try_parse_from(args.args).unwrap();
         if args.n > MAX_COUNT {
             return Err(Output {
@@ -136,9 +144,15 @@ impl Command for LipsumCommand {
             });
         }
         Ok(Output {
-            sections: vec![
-                Section::new(lipsum(args.n), media_type!(TEXT / PLAIN)).kind(SectionKind::Value)
-            ],
+            sections: vec![Section::new(
+                if let Some(chain) = chain {
+                    chain.generate(args.n)
+                } else {
+                    lipsum(args.n)
+                },
+                media_type!(TEXT / PLAIN),
+            )
+            .kind(SectionKind::Value)],
             ..Default::default()
         })
     }
@@ -148,4 +162,10 @@ impl Command for LipsumCommand {
 pub struct Args {
     #[clap(short, default_value_t = 30)]
     pub n: usize,
+}
+
+#[derive(Debug, Default, Clone, Deserialize)]
+struct LipsumConfig {
+    #[serde(default)]
+    custom_text: Option<String>,
 }

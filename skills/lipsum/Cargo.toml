@@ -9,3 +9,5 @@ lipsum = "0.8.0"
 mediatype = "0.19.1"
 yozuk-helper-english = { path = "../../helpers/english" }
 yozuk-sdk = { path = "../../yozuk-sdk" }
+serde = "1.0.136"
+serde_derive = "1.0.136"
