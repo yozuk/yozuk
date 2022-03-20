@@ -21,6 +21,8 @@ Unlike normal command-line tools, it uses a simple NLP approach to infer the mea
 - 🚀 **Fast:** Written in Rust, compiles to native code.
 - 🛠️ **Customizable:** Enabling / disabling specific commands with feature flags.
 
+[![xkcd: tar](https://imgs.xkcd.com/comics/tar.png)](https://xkcd.com/1168/)
+
 ## Skills
 
 Yozuk manages its commands by modules called [skills](./skills).
