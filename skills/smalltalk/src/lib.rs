@@ -53,7 +53,7 @@ impl Corpus for SmalltalkCorpus {
 pub struct SmalltalkTranslator;
 
 impl Translator for SmalltalkTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn parse(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
             .filter(|arg| arg.tag == "smalltalk:keyword")
@@ -67,7 +67,7 @@ impl Translator for SmalltalkTranslator {
             }
         }
 
-        if args.is_empty() {
+        if args.is_empty() && streams.is_empty() {
             return Some(CommandArgs::new());
         }
 
