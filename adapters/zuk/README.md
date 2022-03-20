@@ -1,13 +1,11 @@
-# yozuk-shell
+# zuk
 
 Yozuk command-line interface.
-
-To reduce typing, the command will be installed as `zuk`.
 
 ## Installation
 
 ```bash
-cd yozuk/adapters/shell
+cd yozuk/adapters/zuk
 cargo install --path .
 ```
 

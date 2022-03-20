@@ -1,12 +1,8 @@
 [package]
-name = "yozuk-shell"
+name = "zuk"
 version = "0.1.0"
 edition = "2021"
 default-run = "zuk"
-
-[[bin]]
-name = "zuk"
-path = "src/main.rs"
 
 [dependencies]
 anyhow = "1.0.56"

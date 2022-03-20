@@ -40,7 +40,7 @@ You can enable or disable each skill at build time. Disabling unneeded skills is
 
 Following adapters are officially supported.
 
-- [Shell](./adapters/shell)
+- [zuk](./adapters/zuk) (Command-line interface)
 - [Telegram](./adapters/telegram) (Try Live Demo: https://t.me/YozukBot)
 
 <div align="center">
