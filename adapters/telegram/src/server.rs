@@ -38,29 +38,27 @@ impl Server {
                 let logger = logger.clone();
                 async move {
                     if let MessageKind::Common(common) = &msg.kind {
+                        let mut streams = get_streams_from_message(&bot, &msg).await?;
                         match &common.media_kind {
                             MediaKind::Text(text) if text.text == "/start" => {
                                 send_hello(bot, msg).await?;
                             }
                             MediaKind::Text(text) => {
                                 let words = shell_words::split(&text.text).ok().unwrap_or_default();
+                                let mut merged_streams = vec![];
+                                if let Some(reply) = &common.reply_to_message {
+                                    merged_streams
+                                        .append(&mut get_streams_from_message(&bot, reply).await?);
+                                }
+                                merged_streams.append(&mut streams);
                                 let tokens = words
                                     .into_iter()
                                     .map(|token| tk!(token))
                                     .collect::<Vec<_>>();
-                                send_output(bot, msg, &zuk, tokens, vec![], logger.clone()).await?;
+                                send_output(bot, msg, &zuk, tokens, merged_streams, logger.clone())
+                                    .await?;
                             }
                             MediaKind::Photo(photo) => {
-                                let mut photos = photo.photo.clone();
-                                photos.sort_unstable_by_key(|image| image.width * image.height);
-                                let streams = try_join_all(
-                                    photos
-                                        .iter()
-                                        .find(|image| image.width * image.height >= 100_000)
-                                        .or_else(|| photos.last())
-                                        .map(|image| file_stream(&bot, &image.file_id)),
-                                )
-                                .await?;
                                 let words =
                                     shell_words::split(&photo.caption.clone().unwrap_or_default())
                                         .ok()
@@ -70,7 +68,6 @@ impl Server {
                                     .await?;
                             }
                             MediaKind::Audio(audio) => {
-                                let streams = vec![file_stream(&bot, &audio.audio.file_id).await?];
                                 let words =
                                     shell_words::split(&audio.caption.clone().unwrap_or_default())
                                         .ok()
@@ -80,7 +77,6 @@ impl Server {
                                     .await?;
                             }
                             MediaKind::Video(video) => {
-                                let streams = vec![file_stream(&bot, &video.video.file_id).await?];
                                 let words =
                                     shell_words::split(&video.caption.clone().unwrap_or_default())
                                         .ok()
@@ -90,8 +86,6 @@ impl Server {
                                     .await?;
                             }
                             MediaKind::Document(document) => {
-                                let streams =
-                                    vec![file_stream(&bot, &document.document.file_id).await?];
                                 let words = shell_words::split(
                                     &document.caption.clone().unwrap_or_default(),
                                 )
@@ -111,6 +105,39 @@ impl Server {
         )
         .await;
     }
+}
+
+async fn get_streams_from_message(
+    bot: &AutoSend<Bot>,
+    msg: &Message,
+) -> anyhow::Result<Vec<InputStream>> {
+    if let MessageKind::Common(common) = &msg.kind {
+        match &common.media_kind {
+            MediaKind::Photo(photo) => {
+                let mut photos = photo.photo.clone();
+                photos.sort_unstable_by_key(|image| image.width * image.height);
+                return try_join_all(
+                    photos
+                        .iter()
+                        .find(|image| image.width * image.height >= 100_000)
+                        .or_else(|| photos.last())
+                        .map(|image| file_stream(bot, &image.file_id)),
+                )
+                .await;
+            }
+            MediaKind::Audio(audio) => {
+                return Ok(vec![file_stream(bot, &audio.audio.file_id).await?]);
+            }
+            MediaKind::Video(video) => {
+                return Ok(vec![file_stream(bot, &video.video.file_id).await?]);
+            }
+            MediaKind::Document(document) => {
+                return Ok(vec![file_stream(bot, &document.document.file_id).await?]);
+            }
+            _ => (),
+        }
+    }
+    Ok(vec![])
 }
 
 async fn file_stream(bot: &AutoSend<Bot>, file_id: &str) -> anyhow::Result<InputStream> {
