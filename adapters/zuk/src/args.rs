@@ -29,10 +29,6 @@ pub struct Args {
     #[clap(short, long, multiple_occurrences(true))]
     pub input: Vec<PathBuf>,
 
-    /// Copy output to the clipboard
-    #[clap(short, long)]
-    pub clipboard: bool,
-
     /// Load config from a TOML file
     #[clap(long)]
     pub config: Option<PathBuf>,

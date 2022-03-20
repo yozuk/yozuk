@@ -3,8 +3,6 @@ use anyhow::Result;
 use console::Style;
 use console::Term;
 use content_inspector::ContentType;
-use copypasta::ClipboardContext;
-use copypasta::ClipboardProvider;
 use hexyl::{BorderStyle, Printer};
 use mediatype::names::JSON;
 use std::io::Write;
@@ -82,11 +80,6 @@ impl<'a> TerminalPrinter<'a> {
                     if printable {
                         stdout.write_all(&section.data)?;
                         writeln!(&mut stdout)?;
-                        if self.args.clipboard {
-                            if let Ok(mut ctx) = ClipboardContext::new() {
-                                ctx.set_contents(section.as_utf8().to_string()).unwrap();
-                            }
-                        }
                     } else {
                         self.print_binary(&section.data)?;
                     }

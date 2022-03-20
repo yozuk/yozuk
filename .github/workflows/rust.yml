@@ -28,7 +28,5 @@ jobs:
           target
         key: ${{ runner.os }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
     - uses: extractions/setup-just@v1
-    - name: Install depenedencies
-      run: sudo apt-get install -y libxcb-shape0-dev libxcb-xfixes0-dev
     - name: Run checks
       run: just check
