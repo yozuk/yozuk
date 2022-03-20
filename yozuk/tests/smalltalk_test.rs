@@ -1,7 +1,7 @@
 #![cfg(all(feature = "modelgen", feature = "yozuk-skill-smalltalk"))]
 
 mod common;
-use common::cmd;
+use common::{cmd, YOZUK};
 use yozuk_sdk::prelude::*;
 
 #[test]
@@ -28,7 +28,7 @@ fn deep_thought() {
 #[test]
 fn empty() {
     assert_eq!(
-        cmd(vec![]),
+        YOZUK.get_commands(&[], &[]).unwrap().remove(0),
         CommandArgs::new().add_args(["yozuk-skill-smalltalk"])
     );
 }
