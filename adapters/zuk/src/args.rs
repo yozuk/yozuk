@@ -25,6 +25,10 @@ pub struct Args {
     #[clap(short, long)]
     pub run: bool,
 
+    /// Input files
+    #[clap(short, long, multiple_occurrences(true))]
+    pub input: Vec<PathBuf>,
+
     /// Copy output to the clipboard
     #[clap(short, long)]
     pub clipboard: bool,

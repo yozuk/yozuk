@@ -68,7 +68,19 @@ impl App {
     }
 
     fn run(&self) -> Result<()> {
-        if self.args.output == OutputFormat::Term && self.args.query.is_empty() {
+        let stdin = io::stdin();
+        let mut streams = vec![];
+        if !stdin.is_tty() {
+            streams.push(InputStream::new(io::stdin())?);
+        }
+        for file in &self.args.input {
+            streams.push(InputStream::new(File::open(file)?)?);
+        }
+
+        if streams.is_empty()
+            && self.args.output == OutputFormat::Term
+            && self.args.query.is_empty()
+        {
             self.start_repl()
         } else {
             let tokens = self
@@ -78,12 +90,6 @@ impl App {
                 .map(|token| tk!(token.clone()))
                 .collect::<Vec<_>>();
 
-            let stdin = io::stdin();
-            let mut streams = if stdin.is_tty() {
-                vec![]
-            } else {
-                vec![InputStream::new(io::stdin())?]
-            };
             self.exec_command(&tokens, &mut streams)
         }
     }
