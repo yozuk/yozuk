@@ -19,6 +19,7 @@ use yozuk::{ModelSet, Yozuk, YozukError};
 use yozuk_sdk::prelude::*;
 
 mod args;
+mod json;
 mod printer;
 
 use args::*;

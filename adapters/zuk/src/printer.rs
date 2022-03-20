@@ -1,4 +1,4 @@
-use super::{Args, OutputFormat};
+use super::{json::*, Args, OutputFormat};
 use anyhow::Result;
 use console::Style;
 use console::Term;
@@ -28,7 +28,7 @@ impl<'a> TerminalPrinter<'a> {
                 }
             }
             OutputFormat::Json => {
-                serde_json::to_writer(&mut stdout, &commands)?;
+                serde_json::to_writer(&mut stdout, &JsonResult::Commands { commands })?;
                 writeln!(&mut stdout)?;
             }
         }
@@ -40,7 +40,7 @@ impl<'a> TerminalPrinter<'a> {
         let mut stderr = Term::stderr();
 
         if self.args.output == OutputFormat::Json {
-            serde_json::to_writer(&mut stdout, &output)?;
+            serde_json::to_writer(&mut stdout, &JsonResult::Ok { output })?;
             writeln!(&mut stdout)?;
             return Ok(());
         }
@@ -103,7 +103,7 @@ impl<'a> TerminalPrinter<'a> {
         let mut stderr = Term::stderr();
 
         if self.args.output == OutputFormat::Json {
-            serde_json::to_writer(&mut stdout, &output)?;
+            serde_json::to_writer(&mut stdout, &JsonResult::Fail { output })?;
             writeln!(&mut stdout)?;
             return Ok(());
         }
@@ -128,7 +128,15 @@ impl<'a> TerminalPrinter<'a> {
     }
 
     pub fn print_error_str(&self, err: &str) -> Result<()> {
+        let mut stdout = Term::stdout();
         let mut stderr = Term::stderr();
+
+        if self.args.output == OutputFormat::Json {
+            serde_json::to_writer(&mut stdout, &JsonResult::Error { message: err })?;
+            writeln!(&mut stdout)?;
+            return Ok(());
+        }
+
         let style = if console::colors_enabled() {
             Style::new().red()
         } else {
@@ -139,7 +147,15 @@ impl<'a> TerminalPrinter<'a> {
     }
 
     pub fn print_suggest(&self, suggest: &str) -> Result<()> {
+        let mut stdout = Term::stdout();
         let mut stderr = Term::stderr();
+
+        if self.args.output == OutputFormat::Json {
+            serde_json::to_writer(&mut stdout, &JsonResult::Suggest { suggest })?;
+            writeln!(&mut stdout)?;
+            return Ok(());
+        }
+
         let style = if console::colors_enabled() {
             Style::new().italic()
         } else {
