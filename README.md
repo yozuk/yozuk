@@ -8,7 +8,7 @@
 
 ## Overview
 
-**Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation and Base64 encoding.
+**Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation or Base64 encoding / decoding.
 
 Unlike normal command-line tools, it uses a simple NLP approach to infer the meaning of your requests, so you don't have to remember the exact syntax of commands. This feature also makes Yozuk suitable for chatbots.
 
