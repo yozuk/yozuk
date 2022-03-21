@@ -33,10 +33,20 @@ pub struct Args {
     #[clap(long)]
     pub config: Option<PathBuf>,
 
-    /// Start as a REST server
+    /// [server] Start as a REST server
     #[cfg(feature = "server")]
-    #[clap(long)]
+    #[clap(long, display_order(1000))]
     pub server: Option<std::net::SocketAddr>,
+
+    /// [server] Add an allowed cors origin
+    #[cfg(feature = "server")]
+    #[clap(
+        long,
+        display_order(1001),
+        requires("server"),
+        multiple_occurrences(true)
+    )]
+    pub cors_origin: Vec<String>,
 }
 
 #[derive(ArgEnum, Clone, PartialEq, Eq)]

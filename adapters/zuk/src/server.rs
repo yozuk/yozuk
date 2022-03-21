@@ -10,15 +10,25 @@ use warp::Filter;
 use yozuk::{Yozuk, YozukError};
 use yozuk_sdk::prelude::*;
 
-pub fn start(addr: SocketAddr, zuk: Yozuk) -> anyhow::Result<()> {
+pub fn start(addr: SocketAddr, allow_origins: Vec<String>, zuk: Yozuk) -> anyhow::Result<()> {
     let rt = Runtime::new().unwrap();
     rt.block_on(async move {
         let zuk = Arc::new(zuk);
+
+        let mut cors = warp::cors()
+            .allow_methods(vec!["POST"])
+            .allow_headers(vec!["content-type"]);
+
+        for origin in allow_origins {
+            cors = cors.allow_origin(origin.as_str());
+        }
+
         let run = warp::post()
             .and(warp::path("run"))
             .and(warp::body::content_length_limit(1024 * 16))
             .and(warp::body::json())
-            .map(move |input: JsonInput| run_command(&zuk, &input.tokens));
+            .map(move |input: JsonInput| run_command(&zuk, &input.tokens))
+            .with(cors);
 
         warp::serve(run).run(addr).await;
         Ok(())

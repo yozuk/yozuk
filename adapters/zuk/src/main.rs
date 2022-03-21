@@ -72,7 +72,7 @@ impl App {
     fn run(self) -> Result<()> {
         #[cfg(feature = "server")]
         if let Some(addr) = self.args.server {
-            return server::start(addr, self.zuk);
+            return server::start(addr, self.args.cors_origin, self.zuk);
         }
 
         let stdin = io::stdin();

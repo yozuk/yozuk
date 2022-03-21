@@ -18,4 +18,4 @@ RUN cargo install --features server --path .
 FROM debian:bullseye-slim
 COPY --from=builder /usr/local/cargo/bin/zuk /usr/local/bin/zuk
 ENV PORT 8080
-CMD ["zuk", "--server", "0.0.0.0:8080"]
+CMD ["zuk", "--server", "0.0.0.0:8080", "--cors-origin", "https://yozuk.com"]
