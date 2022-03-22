@@ -12,6 +12,8 @@
 
 Unlike normal command-line tools, it uses a simple NLP approach to infer the meaning of your requests, so you don't have to remember the exact syntax of commands. This feature also makes Yozuk suitable for chatbots.
 
+### Live Demo: 👉 https://yozuk.com
+
 ### Yozuk is:
 
 - 📦 **Portable:** Runs as a single-file executable.
