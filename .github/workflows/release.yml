@@ -1,0 +1,51 @@
+on:
+  push:
+    tags:
+    - 'v*'
+
+name: Upload Release Asset
+
+env:
+  CARGO_TERM_COLOR: always
+    
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    name: Upload Release Asset
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.rustup/toolchains/stable-*
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Build project
+        run: cargo b --bin zuk --release
+      - name: Make archive
+        run: mv target/release/zuk . && tar -czvf zuk-${{ github.ref_name }}-${{ runner.arch }}-${{ runner.os }}.tar.gz zuk
+        if: ${{ matrix.os != 'windows-latest' }}
+      - name: Make archive
+        run: move target\release\zuk.exe . && tar -a -c -f zuk-${{ github.ref_name }}-${{ runner.arch }}-${{ runner.os }}.zip zuk.exe
+        if: ${{ matrix.os == 'windows-latest' }}
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ github.ref_name }} --generate-notes
+        continue-on-error: true
+      - name: Upload archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} zuk-*.tar.gz
+        if: ${{ matrix.os != 'windows-latest' }}
+      - name: Upload archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} zuk-${{ github.ref_name }}-${{ runner.arch }}-${{ runner.os }}.zip
+        if: ${{ matrix.os == 'windows-latest' }}
