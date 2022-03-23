@@ -25,6 +25,29 @@ Unlike normal command-line tools, it uses a simple NLP approach to infer the mea
 
 [![xkcd: tar](https://imgs.xkcd.com/comics/tar.png)](https://xkcd.com/1168/)
 
+## How to Use
+
+### Online Demo
+
+ - Website https://yozuk.com
+ - Telegram Bot (https://t.me/YozukBot)
+
+> Note that they are intended for demo purposes. Do not send sensitive data.
+
+### Pre-built binaries
+
+[Pre-built binaries](https://github.com/yozuk/yozuk/releases) for x64 Windows, Linux and macOS are available.
+
+### Build from Source
+
+- [zuk](./adapters/zuk) (Command-line interface)
+- [Telegram](./adapters/telegram)
+
+#### Build Requirements
+
+- **Rust toolchain**: 1.58.0 or later
+- **CMake**: 3.12 or later
+
 ## Skills
 
 Yozuk manages its commands by modules called [skills](./skills).
@@ -44,18 +67,3 @@ Yozuk manages its commands by modules called [skills](./skills).
 
 You can enable or disable each skill at build time. Disabling unneeded skills is helpful in reducing build time, startup time, executable size and command misrecognitions.
 
-## Adapters
-
-Following adapters are officially supported.
-
-- [zuk](./adapters/zuk) (Command-line interface)
-- [Telegram](./adapters/telegram) (Try Live Demo: https://t.me/YozukBot)
-
-<div align="center">
-<img alt="Telegram screenshot" src="images/chat.png" />
-</div>
-
-## Build Requirements
-
-- **Rust toolchain**: 1.58.0 or later
-- **CMake**: 3.12 or later
