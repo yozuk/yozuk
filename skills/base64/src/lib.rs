@@ -13,7 +13,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"sWcXxC5_nUnTSxGORB7vn",
+    model_id: b"pdO4mzqrP7B23K70ncwuZ",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -44,7 +44,12 @@ pub struct Base64Corpus;
 
 impl Corpus for Base64Corpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        iproduct!(["'Hello World'"], ["as", "to", "in", "into"])
+        let inputs = vec![
+            "Hello World",
+            "😍😗😋",
+            "quick brown fox jumps over the lazy dog",
+        ];
+        iproduct!(inputs.clone(), ["as", "to", "in", "into"])
             .map(|(data, prefix)| {
                 tk!([
                     data; "input:data",
@@ -53,7 +58,7 @@ impl Corpus for Base64Corpus {
                 ])
             })
             .chain(
-                iproduct!(["'Hello World'"], ["of", "of", "of", "of"]).map(|(data, suffix)| {
+                iproduct!(inputs, ["of", "of", "of", "of"]).map(|(data, suffix)| {
                     tk!([
                         "Base64"; "command:base64",
                         suffix,

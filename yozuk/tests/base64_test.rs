@@ -12,6 +12,22 @@ fn encode() {
             .add_args(["yozuk-skill-base64", "--mode", "encode"])
             .add_data([String::from("Hello World!")])
     );
+    assert_eq!(
+        cmd(tk!(["😍😗😋", "to", "Base64"])),
+        CommandArgs::new()
+            .add_args(["yozuk-skill-base64", "--mode", "encode"])
+            .add_data([String::from("😍😗😋")])
+    );
+    assert_eq!(
+        cmd(tk!([
+            "quick brown fox jumps over the lazy dog",
+            "to",
+            "Base64"
+        ])),
+        CommandArgs::new()
+            .add_args(["yozuk-skill-base64", "--mode", "encode"])
+            .add_data([String::from("quick brown fox jumps over the lazy dog")])
+    );
 }
 
 #[test]
