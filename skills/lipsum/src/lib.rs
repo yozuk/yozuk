@@ -10,7 +10,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"QNkuE1DgDYJsRXrKxlPbO",
+    model_id: b"WKQjgQTbySg0_NOxuUHBD",
     config_schema: Some(include_str!("./schema.json")),
     init: |_, config| {
         Skill::builder()
@@ -76,6 +76,33 @@ impl Corpus for LipsumCorpus {
                 "100"; "input:count",
                 "words"
             ]),
+            tk!([
+                "dummy"; "lipsum:keyword",
+                "text"; "lipsum:keyword"
+            ]),
+            tk!([
+                "Generate",
+                "dummy"; "lipsum:keyword",
+                "text"; "lipsum:keyword"
+            ]),
+            tk!([
+                "dummy"; "lipsum:keyword",
+                "text"; "lipsum:keyword",
+                "100"; "input:count"
+            ]),
+            tk!([
+                "dummy"; "lipsum:keyword",
+                "text"; "lipsum:keyword",
+                "100"; "input:count",
+                "words"
+            ]),
+            tk!([
+                "Generate",
+                "100"; "input:count",
+                "words",
+                "dummy"; "lipsum:keyword",
+                "text"; "lipsum:keyword"
+            ]),
         ]
         .into_iter()
         .collect()
@@ -101,6 +128,14 @@ impl Translator for LipsumTranslator {
         if let [lorem, ipsum] = keywords[..] {
             if normalized_eq(lorem.as_utf8(), &["lorem"], 1)
                 && normalized_eq(ipsum.as_utf8(), &["ipsum"], 1)
+            {
+                return Some(CommandArgs::new().add_args(count));
+            }
+        }
+
+        if let [dummy, text] = keywords[..] {
+            if normalized_eq(dummy.as_utf8(), &["dummy"], 1)
+                && normalized_eq(text.as_utf8(), &["text"], 1)
             {
                 return Some(CommandArgs::new().add_args(count));
             }
