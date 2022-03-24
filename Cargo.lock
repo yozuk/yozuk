@@ -4020,6 +4020,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "thiserror",
+ "yozuk-helper-english",
  "yozuk-sdk",
 ]
 

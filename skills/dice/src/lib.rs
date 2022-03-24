@@ -10,13 +10,15 @@ use serde_derive::Deserialize;
 use std::collections::VecDeque;
 use std::iter;
 use thiserror::Error;
+use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"SYENB86i4hYm38J2D27pT",
+    model_id: b"Szq9sPvc3_bTUeMJSGjnC",
     config_schema: Some(include_str!("./schema.json")),
     init: |_, config| {
         Skill::builder()
+            .add_corpus(DiceCorpus)
             .add_preprocessor(DicePreprocessor)
             .add_translator(DiceTranslator)
             .set_command(DiceCommand(config.get()))
@@ -25,6 +27,30 @@ pub const ENTRY: SkillEntry = SkillEntry {
 };
 
 const MAX_ROLLS: usize = 100;
+
+#[derive(Debug)]
+pub struct DiceCorpus;
+
+impl Corpus for DiceCorpus {
+    fn training_data(&self) -> Vec<Vec<Token>> {
+        vec![
+            tk!(["dice"; "command:dice"]),
+            tk!([
+                "roll",
+                "die"; "command:dice"
+            ]),
+            tk!([
+                "roll",
+                "dice"; "command:dice"
+            ]),
+            tk!([
+                "roll",
+                "3"; "input:count",
+                "dice"; "command:dice"
+            ]),
+        ]
+    }
+}
 
 #[derive(Debug)]
 struct DicePreprocessor;
@@ -165,6 +191,23 @@ pub struct DiceTranslator;
 
 impl Translator for DiceTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+        let count = args
+            .iter()
+            .find(|arg| arg.tag == "input:count")
+            .and_then(|arg| arg.as_utf8().parse::<usize>().ok())
+            .unwrap_or(1);
+
+        let commands = args
+            .iter()
+            .filter(|arg| arg.tag == "command:dice")
+            .collect::<Vec<_>>();
+
+        if let [dice] = commands[..] {
+            if normalized_eq(dice.as_utf8(), &["dice", "die"], 0) {
+                return Some(CommandArgs::new().add_args([format!("{}d6", count)]));
+            }
+        }
+
         let media_type = MediaType::parse("text/vnd.yozuk.dice").unwrap();
         if args.iter().any(|arg| arg.media_type != media_type) {
             return None;
