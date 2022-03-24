@@ -13,7 +13,7 @@ use warp::Filter;
 use yozuk::{Yozuk, YozukError};
 use yozuk_sdk::prelude::*;
 
-const CONTENT_LENGTH_LIMIT = 1024 * 1024 * 20;
+const CONTENT_LENGTH_LIMIT: u64 = 1024 * 1024 * 20;
 
 pub fn start(addr: SocketAddr, allow_origins: Vec<String>, zuk: Yozuk) -> anyhow::Result<()> {
     let rt = Runtime::new().unwrap();
