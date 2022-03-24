@@ -19,11 +19,10 @@ Unlike normal command-line tools, it uses a simple NLP approach to infer the mea
 - 📦 **Portable:** Runs as a single-file executable.
 - 🏝️ **Stand-alone:** No internet access or external database needed.
 - 🤖 **Smart:** Automagically construes your requests.
+- 📟 **Handy:** Provides simple text-based interface accessible from any device.
 - 🔒 **Privacy-first:** Never expose any data from your computer.
 - 🚀 **Fast:** Written in Rust, compiles to native code.
 - 🛠️ **Customizable:** Enabling / disabling specific commands with feature flags.
-
-[![xkcd: tar](https://imgs.xkcd.com/comics/tar.png)](https://xkcd.com/1168/)
 
 ## How to Use
 
@@ -67,3 +66,4 @@ Yozuk manages its commands by modules called [skills](./skills).
 
 You can enable or disable each skill at build time. Disabling unneeded skills is helpful in reducing build time, startup time, executable size and command misrecognitions.
 
+[![xkcd: tar](https://imgs.xkcd.com/comics/tar.png)](https://xkcd.com/1168/)
