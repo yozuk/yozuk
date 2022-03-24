@@ -13,6 +13,8 @@ use warp::Filter;
 use yozuk::{Yozuk, YozukError};
 use yozuk_sdk::prelude::*;
 
+const CONTENT_LENGTH_LIMIT = 1024 * 1024 * 20;
+
 pub fn start(addr: SocketAddr, allow_origins: Vec<String>, zuk: Yozuk) -> anyhow::Result<()> {
     let rt = Runtime::new().unwrap();
     rt.block_on(async move {
@@ -28,7 +30,7 @@ pub fn start(addr: SocketAddr, allow_origins: Vec<String>, zuk: Yozuk) -> anyhow
 
         let run = warp::post()
             .and(warp::path("run"))
-            .and(warp::body::content_length_limit(1024 * 16))
+            .and(warp::body::content_length_limit(CONTENT_LENGTH_LIMIT))
             .and(warp::multipart::form())
             .and_then(decode_form)
             .map(move |input| run_command(&zuk, input))
