@@ -9,11 +9,13 @@ use mediatype::{
     names::{CHARSET, OCTET_STREAM, PLAIN, TEXT},
     MediaType, Value, WriteParams,
 };
+use std::io::Read;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
+use yozuk_sdk::Bytes;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"pdO4mzqrP7B23K70ncwuZ",
+    model_id: b"jjIgHAp1Wx02sC3uPFQXu",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -66,6 +68,7 @@ impl Corpus for Base64Corpus {
                     ])
                 }),
             )
+            .chain(vec![tk!(["Base64"; "command:base64"]); 10])
             .chain(vec![tk!(["SGVsbG8gV29ybGQh"; "input:base64"]); 10])
             .collect()
     }
@@ -87,7 +90,7 @@ impl Labeler for Base64Labeler {
 pub struct Base64Translator;
 
 impl Translator for Base64Translator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn parse(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
         let inputs = args
             .iter()
             .filter(|arg| arg.tag == "input:base64")
@@ -108,7 +111,12 @@ impl Translator for Base64Translator {
             .map(|arg| arg.data.clone())
             .collect::<Vec<_>>();
 
-        if !input.is_empty() {
+        if !input.is_empty()
+            || (!streams.is_empty()
+                && streams
+                    .iter()
+                    .all(|stream| !stream.header().is_empty() && stream.header().is_ascii()))
+        {
             return Some(
                 CommandArgs::new()
                     .add_args(["--mode", "decode"])
@@ -126,7 +134,7 @@ impl Translator for Base64Translator {
                 .map(|arg| arg.data.clone())
                 .collect::<Vec<_>>();
 
-            if !input.is_empty() {
+            if !input.is_empty() || !streams.is_empty() {
                 return Some(
                     CommandArgs::new()
                         .add_args(["--mode", "encode"])
@@ -143,7 +151,13 @@ impl Translator for Base64Translator {
 pub struct Base64Command;
 
 impl Command for Base64Command {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, streams: &mut [InputStream]) -> Result<Output, Output> {
+        let streams = streams.iter_mut().map(|stream| {
+            stream
+                .bytes()
+                .map(|b| b.unwrap_or_default())
+                .collect::<Bytes>()
+        });
         let options = Options::try_parse_from(args.args).unwrap();
         match options.mode {
             Mode::Decode => {
@@ -157,6 +171,7 @@ impl Command for Base64Command {
                     &mut args
                         .data
                         .into_iter()
+                        .chain(streams)
                         .filter_map(|data| base64::decode(&data).ok())
                         .map(|data| {
                             let media_type = tree_magic::from_u8(&data);
@@ -191,6 +206,7 @@ impl Command for Base64Command {
                 sections: args
                     .data
                     .into_iter()
+                    .chain(streams)
                     .map(|data| Section::new(base64::encode(data), media_type!(TEXT / PLAIN)))
                     .collect(),
             }),
