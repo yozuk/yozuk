@@ -1,7 +1,7 @@
 #![cfg(feature = "modelgen")]
 
 use super::{skill, FeatureLabeler, ModelSet};
-use anyhow::Result;
+use anyhow::{bail, Result};
 use boomphf::Mphf;
 use crfsuite::{Algorithm, Attribute, GraphicalModel, Trainer};
 use nanoid::nanoid;
@@ -106,6 +106,10 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
             (xseq, yseq)
         })
         .collect::<Vec<_>>();
+
+    if seq.is_empty() {
+        bail!("no training data");
+    }
 
     for (xseq, yseq) in &seq {
         tr.append(xseq, yseq, 0)?;

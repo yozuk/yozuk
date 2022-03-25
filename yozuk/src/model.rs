@@ -43,6 +43,7 @@ impl ModelSet {
         self.mpfh
             .try_hash(key)
             .map(|index| self.ranges[index as usize].clone())
+            .filter(|range| !range.is_empty())
             .map(|range| {
                 self.data
                     .slice(range.start + self.header_len..range.end + self.header_len)

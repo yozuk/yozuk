@@ -66,7 +66,16 @@ impl Yozuk {
                             .fold(tokens.to_vec(), |tokens, prep| prep.preprocess(tokens)),
                     )
                 })
-                .map(|(cache, tokens)| (cache, cache.model.tag_tokens(&labeler, &tokens)))
+                .map(|(cache, tokens)| {
+                    (
+                        cache,
+                        if let Some(model) = &cache.model {
+                            model.tag_tokens(&labeler, &tokens)
+                        } else {
+                            tokens
+                        },
+                    )
+                })
                 .filter_map(|(cache, args)| {
                     cache
                         .translators
@@ -209,7 +218,7 @@ impl YozukBuilder {
                     }
                     commands[index] = Some(CommandCache {
                         name: skill.entry.key,
-                        model: model.get(skill.entry.key).unwrap(),
+                        model: model.get(skill.entry.key),
                         translators: mem::take(&mut skill.skill.translators),
                         preprocessors: mem::take(&mut skill.skill.preprocessors),
                         command,
@@ -253,7 +262,7 @@ struct SkillCache {
 
 struct CommandCache {
     name: &'static str,
-    model: ModelEntry,
+    model: Option<ModelEntry>,
     preprocessors: Vec<Box<dyn Preprocessor>>,
     translators: Vec<Box<dyn Translator>>,
     command: Box<dyn Command>,
