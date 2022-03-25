@@ -3770,6 +3770,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "whirlpool"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c72debd82fe039be0549a507b430075c64aa454882b90098fe97043f04110c21"
+dependencies = [
+ "digest 0.10.3",
+]
+
+[[package]]
 name = "widestring"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4087,6 +4096,7 @@ dependencies = [
  "shabal",
  "thiserror",
  "tiger",
+ "whirlpool",
  "yozuk-helper-english",
  "yozuk-sdk",
 ]

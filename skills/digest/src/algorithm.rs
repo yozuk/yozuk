@@ -67,6 +67,11 @@ pub const ENTRIES: &[AlgorithmEntry] = &[
         init: || Box::new(DigestEntry::<tiger::Tiger2>::new()),
     },
     AlgorithmEntry {
+        name: "Whirlpool",
+        keywords: &["whirlpool"],
+        init: || Box::new(DigestEntry::<whirlpool::Whirlpool>::new()),
+    },
+    AlgorithmEntry {
         name: "SHA-1",
         keywords: &["sha1", "sha-1"],
         init: || Box::new(DigestEntry::<sha1::Sha1>::new()),
