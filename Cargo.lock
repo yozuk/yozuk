@@ -1748,6 +1748,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "md2"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8848a2d533edb1bd24efdc5b292c0d69bb5648b08ec6ab244a66bcadede64203"
+dependencies = [
+ "digest 0.10.3",
+]
+
+[[package]]
+name = "md4"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "93a5f5240a3fa1cb324a28cb42b1934750a093d7ad200ba052deecf4aff7104b"
+dependencies = [
+ "digest 0.10.3",
+]
+
+[[package]]
 name = "mediatype"
 version = "0.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4032,6 +4050,8 @@ dependencies = [
  "digest 0.10.3",
  "hex",
  "md-5",
+ "md2",
+ "md4",
  "mediatype",
  "sha1",
  "sha2",
