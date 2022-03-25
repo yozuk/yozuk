@@ -2997,8 +2997,9 @@ dependencies = [
 
 [[package]]
 name = "slog-stdlog"
-version = "4.1.0"
-source = "git+https://github.com/yozuk/stdlog#8b025e62be6e6e6acdfc7eb4f1d7df75aa896ec8"
+version = "4.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6706b2ace5bbae7291d3f8d2473e2bfab073ccd7d03670946197aec98471fa3e"
 dependencies = [
  "log",
  "slog",
@@ -4225,7 +4226,7 @@ dependencies = [
 
 [[package]]
 name = "zuk"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "clap 3.1.6",
