@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 # Use the old snapshot to enable caching.
 RUN git clone https://github.com/yozuk/yozuk.git && \
     cd yozuk/adapters/telegram && \
-    git checkout 2291b38ae6b4d065f83535dab3644d0a9da5814e && \
+    git checkout 625fcccb740760c0384603d20b403463b6f8f1eb && \
     cargo build --release && \
     cd /usr/src/app && \
     mv yozuk/target . && \
