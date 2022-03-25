@@ -6,6 +6,14 @@
 [![Telegram: YozukBot](https://img.shields.io/badge/Telegram-@YozukBot-blue?logo=telegram)](https://t.me/YozukBot)
 </div>
 
+- [Overview](#overview)
+- [How to Use](#how-to-use)
+  - [Online Demo](#online-demo)
+  - [Pre-built binaries](#pre-built-binaries)
+  - [Build from Source](#build-from-source)
+- [Skills](#skills)
+- [Credits](#credits)
+
 ## Overview
 
 **Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation or Base64 encoding / decoding.
@@ -65,5 +73,11 @@ Yozuk manages its commands by modules called [skills](./skills).
 | [`digest`](./skills/digest) | Hash generator | `md5` `sha1 sha-256 Keccak-256` |
 
 You can enable or disable each skill at build time. Disabling unneeded skills is helpful in reducing build time, startup time, executable size and command misrecognitions.
+
+## Credits
+
+Yozuk was inspired by the following projects:
+
+- [DevToys](https://github.com/veler/DevToys)
 
 [![xkcd: tar](https://imgs.xkcd.com/comics/tar.png)](https://xkcd.com/1168/)
