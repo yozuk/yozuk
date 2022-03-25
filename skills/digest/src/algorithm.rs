@@ -17,6 +17,21 @@ pub const ENTRIES: &[AlgorithmEntry] = &[
         init: || Box::new(DigestEntry::<md5::Md5>::new()),
     },
     AlgorithmEntry {
+        name: "RIPEMD-160",
+        keywords: &["ripemd-160", "ripemd160", "ripemd"],
+        init: || Box::new(DigestEntry::<ripemd::Ripemd160>::new()),
+    },
+    AlgorithmEntry {
+        name: "RIPEMD-256",
+        keywords: &["ripemd-256", "ripemd256", "ripemd"],
+        init: || Box::new(DigestEntry::<ripemd::Ripemd256>::new()),
+    },
+    AlgorithmEntry {
+        name: "RIPEMD-320",
+        keywords: &["ripemd-320", "ripemd320", "ripemd"],
+        init: || Box::new(DigestEntry::<ripemd::Ripemd320>::new()),
+    },
+    AlgorithmEntry {
         name: "SHA-1",
         keywords: &["sha1", "sha-1"],
         init: || Box::new(DigestEntry::<sha1::Sha1>::new()),
