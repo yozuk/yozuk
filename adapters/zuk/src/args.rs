@@ -30,7 +30,7 @@ pub struct Args {
     pub input: Vec<PathBuf>,
 
     /// Load config from a TOML file
-    #[clap(long)]
+    #[clap(short, long)]
     pub config: Option<PathBuf>,
 
     /// [server] Start as a REST server
