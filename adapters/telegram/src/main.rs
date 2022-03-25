@@ -24,6 +24,7 @@ mod server;
 ///
 /// API token must be specified via the TELOXIDE_TOKEN environment variable.
 #[derive(Debug, Parser)]
+#[clap(author, version, about)]
 pub struct Args {
     /// Set the webhook URL
     #[clap(short, long)]
