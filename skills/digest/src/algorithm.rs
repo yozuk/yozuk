@@ -32,6 +32,31 @@ pub const ENTRIES: &[AlgorithmEntry] = &[
         init: || Box::new(DigestEntry::<ripemd::Ripemd320>::new()),
     },
     AlgorithmEntry {
+        name: "Shabal192",
+        keywords: &["shabal-192", "shabal192", "shabal"],
+        init: || Box::new(DigestEntry::<shabal::Shabal192>::new()),
+    },
+    AlgorithmEntry {
+        name: "Shabal224",
+        keywords: &["shabal-224", "shabal224", "shabal"],
+        init: || Box::new(DigestEntry::<shabal::Shabal224>::new()),
+    },
+    AlgorithmEntry {
+        name: "Shabal256",
+        keywords: &["shabal-256", "shabal256", "shabal"],
+        init: || Box::new(DigestEntry::<shabal::Shabal256>::new()),
+    },
+    AlgorithmEntry {
+        name: "Shabal384",
+        keywords: &["shabal-384", "shabal384", "shabal"],
+        init: || Box::new(DigestEntry::<shabal::Shabal384>::new()),
+    },
+    AlgorithmEntry {
+        name: "Shabal512",
+        keywords: &["shabal-512", "shabal512", "shabal"],
+        init: || Box::new(DigestEntry::<shabal::Shabal512>::new()),
+    },
+    AlgorithmEntry {
         name: "SHA-1",
         keywords: &["sha1", "sha-1"],
         init: || Box::new(DigestEntry::<sha1::Sha1>::new()),
