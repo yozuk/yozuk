@@ -15,7 +15,7 @@ use yozuk_sdk::prelude::*;
 use yozuk_sdk::Bytes;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"jjIgHAp1Wx02sC3uPFQXu",
+    model_id: b"-6zq-7vR7Ax6tHYBelhCl",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -50,6 +50,7 @@ impl Corpus for Base64Corpus {
             "Hello World",
             "😍😗😋",
             "quick brown fox jumps over the lazy dog",
+            "Veterinarian",
         ];
         iproduct!(inputs.clone(), ["as", "to", "in", "into"])
             .map(|(data, prefix)| {
@@ -91,6 +92,25 @@ pub struct Base64Translator;
 
 impl Translator for Base64Translator {
     fn parse(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
+        if args
+            .iter()
+            .any(|arg| arg.tag == "command:base64" && normalized_eq(arg.as_utf8(), &["Base64"], 0))
+        {
+            let input = args
+                .iter()
+                .filter(|arg| arg.tag == "input:data")
+                .map(|arg| arg.data.clone())
+                .collect::<Vec<_>>();
+
+            if !input.is_empty() || !streams.is_empty() {
+                return Some(
+                    CommandArgs::new()
+                        .add_args(["--mode", "encode"])
+                        .add_data_iter(input),
+                );
+            }
+        }
+
         let inputs = args
             .iter()
             .filter(|arg| arg.tag == "input:base64")
@@ -122,25 +142,6 @@ impl Translator for Base64Translator {
                     .add_args(["--mode", "decode"])
                     .add_data_iter(input),
             );
-        }
-
-        if args
-            .iter()
-            .any(|arg| arg.tag == "command:base64" && normalized_eq(arg.as_utf8(), &["Base64"], 0))
-        {
-            let input = args
-                .iter()
-                .filter(|arg| arg.tag == "input:data")
-                .map(|arg| arg.data.clone())
-                .collect::<Vec<_>>();
-
-            if !input.is_empty() || !streams.is_empty() {
-                return Some(
-                    CommandArgs::new()
-                        .add_args(["--mode", "encode"])
-                        .add_data_iter(input),
-                );
-            }
         }
 
         None
