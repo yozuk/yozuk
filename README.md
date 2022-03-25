@@ -12,11 +12,13 @@
   - [Pre-built binaries](#pre-built-binaries)
   - [Build from Source](#build-from-source)
 - [Skills](#skills)
+  - [Examples](#examples)
+  - [Config](#config)
 - [Credits](#credits)
 
 ## Overview
 
-**Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation or Base64 encoding / decoding.
+**Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation.
 
 Unlike normal command-line tools, it uses a simple NLP approach to infer the meaning of your requests, so you don't have to remember the exact syntax of commands. This feature also makes Yozuk suitable for chatbots.
 
@@ -59,7 +61,7 @@ Unlike normal command-line tools, it uses a simple NLP approach to infer the mea
 
 Yozuk manages its commands by modules called [skills](./skills).
 
-### Skill examples
+### Examples
 
 | skill | description | example queries |
 | - | - | - |
@@ -73,6 +75,22 @@ Yozuk manages its commands by modules called [skills](./skills).
 | [`digest`](./skills/digest) | Hash generator | `md5` `sha1 sha-256 Keccak-256` |
 
 You can enable or disable each skill at build time. Disabling unneeded skills is helpful in reducing build time, startup time, executable size and command misrecognitions.
+
+### Config
+
+Some skills have run-time options. You can configure them with a TOML file.
+
+```toml
+[skills.yozuk-skill-dice]
+secure = true
+
+[skills.yozuk-skill-lipsum]
+custom_text = "Fortune, good night: smile once more; turn thy wheel!"
+```
+
+```bash
+zuk -c config.toml roll dice
+```
 
 ## Credits
 
