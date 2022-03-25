@@ -146,7 +146,7 @@ async fn file_stream(bot: &AutoSend<Bot>, file_id: &str) -> anyhow::Result<Input
     let filepath = tmpfile.into_temp_path();
     let mut tmpfile = tokio::fs::File::create(&filepath).await?;
     bot.download_file(&file.file_path, &mut tmpfile).await?;
-    Ok(InputStream::new(std::fs::File::open(filepath)?)?)
+    Ok(InputStream::new(std::fs::File::open(filepath)?))
 }
 
 async fn send_hello(bot: AutoSend<Bot>, msg: Message) -> anyhow::Result<()> {
@@ -169,8 +169,11 @@ async fn send_output(
     mut streams: Vec<InputStream>,
     logger: Logger,
 ) -> anyhow::Result<()> {
+    for stream in &mut streams {
+        stream.read_header()?;
+    }
     let result = zuk
-        .get_commands(&tokens, &[])
+        .get_commands(&tokens, &streams)
         .and_then(|commands| zuk.run_commands(commands, &mut streams));
 
     debug!(logger, "result: {:?}", result);

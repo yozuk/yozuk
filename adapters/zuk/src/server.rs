@@ -51,8 +51,8 @@ async fn decode_form(
         if let Some(Ok(data)) = part.data().await {
             if input.is_none() && part.name() == "query.json" {
                 input = serde_json::from_reader(data.reader()).ok();
-            } else if let Ok(stream) = InputStream::new(data.reader()) {
-                streams.push(stream);
+            } else {
+                streams.push(InputStream::new(data.reader()));
             }
         }
     }
@@ -74,6 +74,16 @@ fn run_command(
             );
         }
     };
+    for stream in &mut streams {
+        if let Err(err) = stream.read_header() {
+            return warp::reply::with_status(
+                warp::reply::json(&JsonResult::Error {
+                    message: &err.to_string(),
+                }),
+                StatusCode::BAD_REQUEST,
+            );
+        }
+    }
     let commands = match zuk.get_commands(&input.tokens, &streams) {
         Ok(commands) => commands,
         Err(err) => {

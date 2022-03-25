@@ -12,6 +12,6 @@ lazy_static::lazy_static! {
 }
 
 pub fn cmd(tokens: Vec<Token>) -> CommandArgs {
-    let stream = InputStream::new(io::empty()).unwrap();
+    let stream = InputStream::new(io::empty());
     YOZUK.get_commands(&tokens, &[stream]).unwrap().remove(0)
 }

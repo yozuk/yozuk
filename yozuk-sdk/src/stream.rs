@@ -4,33 +4,44 @@ const HEADER_LENGTH: usize = 1024;
 
 pub struct InputStream {
     reader: Box<dyn Read + Send + Sync>,
-    header: Box<[u8]>,
+    header: Option<Box<[u8]>>,
     offset: usize,
 }
 
 impl InputStream {
-    pub fn new<T>(mut reader: T) -> Result<Self>
+    pub fn new<T>(reader: T) -> Self
     where
         T: 'static + Read + Send + Sync,
     {
-        let mut header = vec![0; HEADER_LENGTH];
-        let len = reader.read(&mut header)?;
-        header.resize(len, 0);
-        Ok(Self {
+        Self {
             reader: Box::new(reader),
-            header: header.into_boxed_slice(),
+            header: None,
             offset: 0,
-        })
+        }
+    }
+
+    pub fn read_header(&mut self) -> Result<&[u8]> {
+        if self.header.is_none() {
+            let mut header = vec![0; HEADER_LENGTH];
+            let len = self.reader.read(&mut header)?;
+            header.resize(len, 0);
+            self.header = Some(header.into_boxed_slice());
+        }
+        Ok(self.header())
     }
 
     pub fn header(&self) -> &[u8] {
-        &self.header
+        if let Some(header) = &self.header {
+            header
+        } else {
+            &[]
+        }
     }
 }
 
 impl Read for InputStream {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
-        let header_remain = &self.header[self.offset..];
+        let header_remain = &self.header()[self.offset..];
         if header_remain.is_empty() {
             self.reader.read(buf)
         } else {
@@ -73,9 +84,9 @@ mod tests {
         let mut stream = InputStream::new(DataReader {
             data: data.clone(),
             offset: 0,
-        })
-        .unwrap();
+        });
 
+        assert_eq!(stream.read_header().unwrap(), &data[..HEADER_LENGTH]);
         assert_eq!(stream.header(), &data[..HEADER_LENGTH]);
 
         let mut buf = Vec::new();
@@ -94,9 +105,9 @@ mod tests {
         let mut stream = InputStream::new(DataReader {
             data: data.clone(),
             offset: 0,
-        })
-        .unwrap();
+        });
 
+        assert_eq!(stream.read_header().unwrap(), &data);
         assert_eq!(stream.header(), &data);
 
         let mut buf = Vec::new();

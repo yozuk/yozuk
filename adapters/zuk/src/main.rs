@@ -78,10 +78,10 @@ impl App {
         let stdin = io::stdin();
         let mut streams = vec![];
         if !stdin.is_tty() {
-            streams.push(InputStream::new(io::stdin())?);
+            streams.push(InputStream::new(io::stdin()));
         }
         for file in &self.args.input {
-            streams.push(InputStream::new(File::open(file)?)?);
+            streams.push(InputStream::new(File::open(file)?));
         }
 
         if streams.is_empty()
@@ -102,6 +102,10 @@ impl App {
     }
 
     fn exec_command(&self, tokens: &[Token], streams: &mut [InputStream]) -> Result<()> {
+        for stream in streams.iter_mut() {
+            stream.read_header()?;
+        }
+
         let printer = TerminalPrinter::new(&self.args);
 
         let commands = if self.args.run {
