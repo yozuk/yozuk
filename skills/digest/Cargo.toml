@@ -17,5 +17,6 @@ sha2 = "0.10.2"
 sha3 = "0.10.1"
 shabal = "0.4.1"
 thiserror = "1.0.30"
+tiger = "0.2.1"
 yozuk-helper-english = { path = "../../helpers/english" }
 yozuk-sdk = { path = "../../yozuk-sdk" }

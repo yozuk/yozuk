@@ -3293,6 +3293,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "tiger"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "579abbce4ad73b04386dbeb34369c9873a8f9b749c7b99cbf479a2949ff715ed"
+dependencies = [
+ "digest 0.10.3",
+]
+
+[[package]]
 name = "time"
 version = "0.1.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4077,6 +4086,7 @@ dependencies = [
  "sha3",
  "shabal",
  "thiserror",
+ "tiger",
  "yozuk-helper-english",
  "yozuk-sdk",
 ]
