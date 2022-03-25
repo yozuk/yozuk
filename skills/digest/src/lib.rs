@@ -110,10 +110,17 @@ impl Command for DigestCommand {
                         hash.update(&data[..len]);
                     }
                 } else {
-                    let result = entries
-                        .iter_mut()
-                        .map(|(name, hash)| format!("{}: {}", name, hex::encode(hash.finalize())))
-                        .collect::<Vec<_>>();
+                    let mut entries = entries.into_iter().collect::<Vec<_>>();
+                    let result = if entries.len() == 1 {
+                        vec![hex::encode(entries[0].1.finalize())]
+                    } else {
+                        entries
+                            .into_iter()
+                            .map(|(name, mut hash)| {
+                                format!("{}: {}", name, hex::encode(hash.finalize()))
+                            })
+                            .collect::<Vec<_>>()
+                    };
                     return Ok(Output {
                         module: "Digest".into(),
                         sections: vec![Section::new(result.join("\n"), media_type!(TEXT / PLAIN))
