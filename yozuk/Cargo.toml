@@ -25,6 +25,7 @@ shell-words = "1.1.0"
 slog = "2.7.0"
 sloggers = "2.1.1"
 thiserror = "1.0.30"
+mediatype = "0.19.1"
 yozuk-helper-english = { path = "../helpers/english" }
 yozuk-sdk = { path = "../yozuk-sdk" }
 

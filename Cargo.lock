@@ -3967,6 +3967,7 @@ dependencies = [
  "getrandom",
  "globwalk",
  "lazy_static",
+ "mediatype",
  "nanoid",
  "num_cpus",
  "punycode",

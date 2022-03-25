@@ -1,5 +1,6 @@
 use crate::message;
 use futures::future::try_join_all;
+use mediatype::media_type;
 use reqwest::StatusCode;
 use slog::debug;
 use slog::Logger;
@@ -146,7 +147,10 @@ async fn file_stream(bot: &AutoSend<Bot>, file_id: &str) -> anyhow::Result<Input
     let filepath = tmpfile.into_temp_path();
     let mut tmpfile = tokio::fs::File::create(&filepath).await?;
     bot.download_file(&file.file_path, &mut tmpfile).await?;
-    Ok(InputStream::new(std::fs::File::open(filepath)?))
+    Ok(InputStream::new(
+        std::fs::File::open(filepath)?,
+        media_type!(APPLICATION / OCTET_STREAM),
+    ))
 }
 
 async fn send_hello(bot: AutoSend<Bot>, msg: Message) -> anyhow::Result<()> {

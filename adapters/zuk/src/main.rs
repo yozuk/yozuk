@@ -5,6 +5,7 @@ use anyhow::Result;
 use clap::Parser;
 use console::Style;
 use crossterm::tty::IsTty;
+use mediatype::media_type;
 use rustyline::error::ReadlineError;
 use rustyline::Editor;
 use sloggers::{
@@ -78,10 +79,16 @@ impl App {
         let stdin = io::stdin();
         let mut streams = vec![];
         if !stdin.is_tty() {
-            streams.push(InputStream::new(io::stdin()));
+            streams.push(InputStream::new(
+                io::stdin(),
+                media_type!(APPLICATION / OCTET_STREAM),
+            ));
         }
         for file in &self.args.input {
-            streams.push(InputStream::new(File::open(file)?));
+            streams.push(InputStream::new(
+                File::open(file)?,
+                media_type!(APPLICATION / OCTET_STREAM),
+            ));
         }
 
         if streams.is_empty()

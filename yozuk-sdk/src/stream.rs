@@ -1,3 +1,4 @@
+use mediatype::MediaTypeBuf;
 use std::io::{Read, Result};
 
 const HEADER_LENGTH: usize = 1024;
@@ -6,17 +7,20 @@ pub struct InputStream {
     reader: Box<dyn Read + Send + Sync>,
     header: Option<Box<[u8]>>,
     offset: usize,
+    media_type: MediaTypeBuf,
 }
 
 impl InputStream {
-    pub fn new<T>(reader: T) -> Self
+    pub fn new<T, M>(reader: T, media_type: M) -> Self
     where
         T: 'static + Read + Send + Sync,
+        M: Into<MediaTypeBuf>,
     {
         Self {
             reader: Box::new(reader),
             header: None,
             offset: 0,
+            media_type: media_type.into(),
         }
     }
 
@@ -37,6 +41,10 @@ impl InputStream {
             &[]
         }
     }
+
+    pub fn media_type(&self) -> &MediaTypeBuf {
+        &self.media_type
+    }
 }
 
 impl Read for InputStream {
@@ -56,6 +64,7 @@ impl Read for InputStream {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use mediatype::media_type;
     use std::iter;
 
     struct DataReader {
@@ -81,10 +90,13 @@ mod tests {
             .take(HEADER_LENGTH * 2)
             .collect::<Vec<_>>();
 
-        let mut stream = InputStream::new(DataReader {
-            data: data.clone(),
-            offset: 0,
-        });
+        let mut stream = InputStream::new(
+            DataReader {
+                data: data.clone(),
+                offset: 0,
+            },
+            media_type!(APPLICATION / OCTET_STREAM),
+        );
 
         assert_eq!(stream.read_header().unwrap(), &data[..HEADER_LENGTH]);
         assert_eq!(stream.header(), &data[..HEADER_LENGTH]);
@@ -102,10 +114,13 @@ mod tests {
             .take(HEADER_LENGTH / 2)
             .collect::<Vec<_>>();
 
-        let mut stream = InputStream::new(DataReader {
-            data: data.clone(),
-            offset: 0,
-        });
+        let mut stream = InputStream::new(
+            DataReader {
+                data: data.clone(),
+                offset: 0,
+            },
+            media_type!(APPLICATION / OCTET_STREAM),
+        );
 
         assert_eq!(stream.read_header().unwrap(), &data);
         assert_eq!(stream.header(), &data);

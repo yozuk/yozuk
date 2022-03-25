@@ -2,6 +2,7 @@
 
 use super::json::{JsonInput, JsonResult};
 use futures_util::StreamExt;
+use mediatype::{media_type, MediaType};
 use std::convert::Infallible;
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -52,7 +53,11 @@ async fn decode_form(
             if input.is_none() && part.name() == "query.json" {
                 input = serde_json::from_reader(data.reader()).ok();
             } else {
-                streams.push(InputStream::new(data.reader()));
+                let media_type = part
+                    .content_type()
+                    .and_then(|ty| MediaType::parse(ty).ok())
+                    .unwrap_or_else(|| media_type!(APPLICATION / OCTET_STREAM));
+                streams.push(InputStream::new(data.reader(), media_type));
             }
         }
     }
