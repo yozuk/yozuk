@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 /// Assistant Bot for Programmers
 #[derive(Parser)]
-#[clap(name = "zuk", trailing_var_arg = true)]
+#[clap(author, version, about, trailing_var_arg = true)]
 pub struct Args {
     /// Request query
     #[clap(multiple_occurrences(true))]
