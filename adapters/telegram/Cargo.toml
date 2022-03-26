@@ -24,6 +24,6 @@ tokio-stream = "0.1.8"
 toml = "0.5.8"
 tree_magic = "0.2.3"
 warp = "0.3.2"
-yozuk = { path = "../../yozuk" }
-yozuk-bundle = { path = "../../yozuk-bundle" }
+yozuk = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0" }
+yozuk-bundle = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0" }
 yozuk-sdk = "0.1.0"

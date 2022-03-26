@@ -26,22 +26,22 @@ slog = "2.7.0"
 sloggers = "2.1.1"
 thiserror = "1.0.30"
 mediatype = "0.19.1"
-yozuk-helper-english = { path = "../helpers/english" }
 yozuk-sdk = "0.1.0"
+yozuk-helper-english = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0" }
 
-yozuk-skill-base64 = { path = "../skills/base64", optional = true }
-yozuk-skill-calc = { path = "../skills/calc", optional = true }
-yozuk-skill-english = { path = "../skills/english", optional = true }
-yozuk-skill-mediatype = { path = "../skills/mediatype", optional = true }
-yozuk-skill-numeric = { path = "../skills/numeric", optional = true }
-yozuk-skill-smalltalk = { path = "../skills/smalltalk", optional = true }
-yozuk-skill-uuid = { path = "../skills/uuid", optional = true }
-yozuk-skill-version = { path = "../skills/version", optional = true }
-yozuk-skill-lipsum = { path = "../skills/lipsum", optional = true }
-yozuk-skill-nanoid = { path = "../skills/nanoid", optional = true }
-yozuk-skill-punycode = { path = "../skills/punycode", optional = true }
-yozuk-skill-dice = { path = "../skills/dice", optional = true }
-yozuk-skill-digest = { path = "../skills/digest", optional = true }
+yozuk-skill-base64 = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-calc = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-english = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-mediatype = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-numeric = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-smalltalk = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-uuid = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-version = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-lipsum = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-nanoid = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-punycode = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-dice = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
+yozuk-skill-digest = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", optional = true }
 
 [features]
 default = [
