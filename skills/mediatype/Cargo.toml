@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 mediatype = "0.19.1"
-yozuk-sdk = { path = "../../yozuk-sdk" }
+yozuk-sdk = "0.1.0"

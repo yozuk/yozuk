@@ -6,4 +6,4 @@ edition = "2021"
 [dependencies]
 rayon = "1.5.1"
 yozuk-helper-english = { path = "../../helpers/english" }
-yozuk-sdk = { path = "../../yozuk-sdk" }
+yozuk-sdk = "0.1.0"

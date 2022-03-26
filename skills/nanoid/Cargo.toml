@@ -9,4 +9,4 @@ itertools = "0.10.3"
 mediatype = "0.19.1"
 nanoid = "0.4.0"
 yozuk-helper-english = { path = "../../helpers/english" }
-yozuk-sdk = { path = "../../yozuk-sdk" }
+yozuk-sdk = "0.1.0"
