@@ -6,13 +6,19 @@ use clap::Parser;
 use console::Style;
 use crossterm::tty::IsTty;
 use mediatype::media_type;
+use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
-use rustyline::Editor;
+use rustyline::highlight::{Highlighter, MatchingBracketHighlighter};
+use rustyline::hint::{Hinter, HistoryHinter};
+use rustyline::validate::{self, MatchingBracketValidator, Validator};
+use rustyline::{Context, Editor};
+use rustyline_derive::Helper;
 use sloggers::{
     terminal::{Destination, TerminalLoggerBuilder},
     types::Severity,
     Build,
 };
+use std::borrow::Cow;
 use std::fs::File;
 use std::io;
 use std::io::Read;
@@ -151,8 +157,7 @@ impl App {
     }
 
     fn start_repl(&self) -> Result<()> {
-        println!("Hi. I'm Yozuk. How may I assist you?");
-        let mut rl = Editor::<()>::new();
+        let mut rl = Editor::new();
 
         let style = if console::colors_enabled() {
             Style::new().bold().blue()
@@ -160,8 +165,19 @@ impl App {
             Style::new()
         };
 
+        let prompt = "» ";
+        let helper = YozukHelper {
+            highlighter: MatchingBracketHighlighter::new(),
+            hinter: HistoryHinter {},
+            colored_prompt: "".to_owned(),
+            validator: MatchingBracketValidator::new(),
+        };
+        rl.set_helper(Some(helper));
+        rl.helper_mut().expect("No helper").colored_prompt = format!("{}", style.apply_to(&prompt));
+
+        println!("Hi. I'm Yozuk. How may I assist you?");
         loop {
-            let readline = rl.readline(&format!("{} ", style.apply_to(">>")));
+            let readline = rl.readline(prompt);
             match readline {
                 Ok(line) => {
                     rl.add_history_entry(line.as_str());
@@ -188,5 +204,64 @@ impl App {
         }
 
         Ok(())
+    }
+}
+
+#[derive(Helper)]
+struct YozukHelper {
+    highlighter: MatchingBracketHighlighter,
+    validator: MatchingBracketValidator,
+    hinter: HistoryHinter,
+    colored_prompt: String,
+}
+
+impl Completer for YozukHelper {
+    type Candidate = Pair;
+}
+
+impl Hinter for YozukHelper {
+    type Hint = String;
+
+    fn hint(&self, line: &str, pos: usize, ctx: &Context<'_>) -> Option<String> {
+        self.hinter.hint(line, pos, ctx)
+    }
+}
+
+impl Highlighter for YozukHelper {
+    fn highlight_prompt<'b, 's: 'b, 'p: 'b>(
+        &'s self,
+        prompt: &'p str,
+        default: bool,
+    ) -> Cow<'b, str> {
+        if default {
+            Cow::Borrowed(&self.colored_prompt)
+        } else {
+            Cow::Borrowed(prompt)
+        }
+    }
+
+    fn highlight_hint<'h>(&self, hint: &'h str) -> Cow<'h, str> {
+        Cow::Owned("\x1b[1m".to_owned() + hint + "\x1b[m")
+    }
+
+    fn highlight<'l>(&self, line: &'l str, pos: usize) -> Cow<'l, str> {
+        self.highlighter.highlight(line, pos)
+    }
+
+    fn highlight_char(&self, line: &str, pos: usize) -> bool {
+        self.highlighter.highlight_char(line, pos)
+    }
+}
+
+impl Validator for YozukHelper {
+    fn validate(
+        &self,
+        ctx: &mut validate::ValidationContext,
+    ) -> rustyline::Result<validate::ValidationResult> {
+        self.validator.validate(ctx)
+    }
+
+    fn validate_while_typing(&self) -> bool {
+        self.validator.validate_while_typing()
     }
 }
