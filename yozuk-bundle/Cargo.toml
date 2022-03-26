@@ -5,5 +5,5 @@ edition = "2021"
 
 [build-dependencies]
 anyhow = "1.0.56"
-yozuk = { git = "https://github.com/yozuk/yozuk", tag = "v0.2.0", features = ["modelgen"] }
+yozuk = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", features = ["modelgen"] }
 yozuk-sdk = "0.1.0"
