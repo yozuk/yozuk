@@ -1,5 +1,5 @@
 <div align="center">
-<img alt="yozuk" src="images/yozuk.png" height="180" />
+<img alt="yozuk" src="images/yozuk.png" width="280" />
   
 [![GitHub license](https://img.shields.io/github/license/yozuk/yozuk.svg)](https://github.com/yozuk/yozuk/blob/main/LICENSE)
 [![Rust](https://github.com/yozuk/yozuk/actions/workflows/rust.yml/badge.svg)](https://github.com/yozuk/yozuk/actions/workflows/rust.yml)
@@ -20,7 +20,7 @@
 
 **Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation.
 
-<img alt="Yozuk CLI demo animation" src="images/zuk.gif" />
+<img alt="Yozuk CLI demo animation" src="images/zuk.gif" width="520" />
 
 Unlike normal command-line tools, it uses a simple NLP approach to infer the meaning of your requests, so you don't have to remember the exact syntax of commands. This feature also makes Yozuk suitable for chatbots.
 
