@@ -13,7 +13,7 @@ RUN git clone https://github.com/yozuk/yozuk.git && \
 
 COPY . .
 WORKDIR /usr/src/app/adapters/zuk
-RUN cargo install --features server --path .
+RUN cargo install --features http-server --path .
 
 FROM debian:bullseye-slim
 COPY --from=builder /usr/local/cargo/bin/zuk /usr/local/bin/zuk

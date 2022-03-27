@@ -38,12 +38,12 @@ pub struct Args {
     pub config: Option<PathBuf>,
 
     /// [server] Start as a REST server
-    #[cfg(feature = "server")]
+    #[cfg(feature = "http-server")]
     #[clap(long, required_if_eq("mode", "server"), display_order(1000))]
     pub server_addr: Option<std::net::SocketAddr>,
 
     /// [server] Add an allowed cors origin
-    #[cfg(feature = "server")]
+    #[cfg(feature = "http-server")]
     #[clap(
         long,
         display_order(1001),
@@ -64,6 +64,6 @@ pub enum Mode {
     Auto,
     Direct,
     Repl,
-    #[cfg(feature = "server")]
+    #[cfg(feature = "http-server")]
     HttpServer,
 }

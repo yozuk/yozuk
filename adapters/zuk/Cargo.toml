@@ -31,4 +31,4 @@ rustyline-derive = "0.6.0"
 
 [features]
 default = []
-server = ["warp", "tokio", "futures-util"]
+http-server = ["warp", "tokio", "futures-util"]

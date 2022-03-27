@@ -77,7 +77,7 @@ impl App {
     }
 
     fn run(self) -> Result<()> {
-        #[cfg(feature = "server")]
+        #[cfg(feature = "http-server")]
         if let Some(addr) = self.args.server_addr {
             return server::start(addr, self.args.cors_origin, self.zuk);
         }

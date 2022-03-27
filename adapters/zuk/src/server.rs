@@ -1,4 +1,4 @@
-#![cfg(feature = "server")]
+#![cfg(feature = "http-server")]
 
 use super::json::{JsonInput, JsonResult};
 use futures_util::StreamExt;
