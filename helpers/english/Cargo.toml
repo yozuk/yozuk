@@ -2,8 +2,15 @@
 name = "yozuk-helper-english"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["picoHz <picoHz@outlook.com>"]
+description = "English NLP utilities for Yozuk"
+keywords = ["yozuk"]
+categories = ["text-processing"]
+repository = "https://github.com/yozuk/yozuk/helpers/english"
+homepage = "https://yozuk.com"
+documentation = "https://docs.rs/yozuk-helper-english"
+license = "MIT"
+readme = "README.md"
 
 [dependencies]
 Inflector = "0.11.4"
