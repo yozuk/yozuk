@@ -7,7 +7,7 @@
 </div>
 
 - [Overview](#overview)
-- [How to Use](#how-to-use)
+- [Getting Started](#getting-started)
   - [Online Demo](#online-demo)
   - [Pre-built binaries](#pre-built-binaries)
   - [Build from Source](#build-from-source)
@@ -36,7 +36,7 @@ Unlike normal command-line tools, it uses a simple NLP approach to infer the mea
 - 🚀 **Fast:** Written in Rust, compiles to native code.
 - 🛠️ **Customizable:** Enabling / disabling specific commands with feature flags.
 
-## How to Use
+## Getting Started
 
 ### Online Demo
 
