@@ -211,7 +211,7 @@ version = "0.5.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4e8fb7f38fef59c32549861151d63a6190865e60cf690340c13e3d7178b42a2f"
 dependencies = [
- "crossbeam-utils 0.8.8",
+ "crossbeam-utils 0.7.2",
  "log",
  "rayon",
  "serde",
@@ -1577,7 +1577,7 @@ dependencies = [
  "lazy_static",
  "memchr 2.4.1",
  "num-cmp",
- "parking_lot 0.12.0",
+ "parking_lot 0.11.2",
  "percent-encoding",
  "regex",
  "reqwest",
@@ -3962,7 +3962,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk"
-version = "0.1.0"
+version = "0.4.0"
 dependencies = [
  "anyhow",
  "bincode",
@@ -4208,7 +4208,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-telegram"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "anyhow",
  "clap 3.1.6",
@@ -4237,7 +4237,7 @@ dependencies = [
 
 [[package]]
 name = "zuk"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "anyhow",
  "clap 3.1.6",
