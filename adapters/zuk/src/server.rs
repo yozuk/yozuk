@@ -91,6 +91,14 @@ fn run_command(
     }
     let commands = match zuk.get_commands(&input.tokens, &streams) {
         Ok(commands) => commands,
+        Err(YozukError::UnintelligibleRequest { suggest }) => {
+            return warp::reply::with_status(
+                warp::reply::json(&JsonResult::NoCommand {
+                    suggest: suggest.as_ref().map(|suggest| suggest.into()),
+                }),
+                StatusCode::NOT_FOUND,
+            );
+        }
         Err(err) => {
             return warp::reply::with_status(
                 warp::reply::json(&JsonResult::Error {

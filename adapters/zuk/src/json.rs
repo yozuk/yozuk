@@ -1,4 +1,5 @@
 use serde_derive::{Deserialize, Serialize};
+use std::borrow::Cow;
 use yozuk_sdk::prelude::*;
 
 #[derive(Clone, Deserialize)]
@@ -12,6 +13,6 @@ pub enum JsonResult<'a> {
     Ok { output: &'a Output },
     Fail { outputs: &'a [Output] },
     Commands { commands: &'a [CommandArgs] },
-    Suggest { suggest: &'a str },
+    NoCommand { suggest: Option<Cow<'a, str>> },
     Error { message: &'a str },
 }

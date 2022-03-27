@@ -5,6 +5,7 @@ use console::Term;
 use content_inspector::ContentType;
 use hexyl::{BorderStyle, Printer};
 use mediatype::names::JSON;
+use std::borrow::Cow;
 use std::io::Write;
 use yozuk_sdk::prelude::*;
 
@@ -145,7 +146,12 @@ impl<'a> TerminalPrinter<'a> {
         let mut stderr = Term::stderr();
 
         if self.args.output == OutputFormat::Json {
-            serde_json::to_writer(&mut stdout, &JsonResult::Suggest { suggest })?;
+            serde_json::to_writer(
+                &mut stdout,
+                &JsonResult::NoCommand {
+                    suggest: Some(Cow::Borrowed(suggest)),
+                },
+            )?;
             writeln!(&mut stdout)?;
             return Ok(());
         }
