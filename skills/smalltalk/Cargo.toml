@@ -6,5 +6,5 @@ edition = "2021"
 [dependencies]
 clap = { version = "3.1.6", features = ["derive"] }
 mediatype = "0.19.1"
-yozuk-helper-english = { path = "../../helpers/english" }
+yozuk-helper-english = "0.1.0"
 yozuk-sdk = "0.1.0"

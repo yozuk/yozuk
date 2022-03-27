@@ -19,5 +19,5 @@ shabal = "0.4.1"
 thiserror = "1.0.30"
 tiger = "0.2.1"
 whirlpool = "0.10.1"
-yozuk-helper-english = { path = "../../helpers/english" }
+yozuk-helper-english = "0.1.0"
 yozuk-sdk = "0.1.0"
