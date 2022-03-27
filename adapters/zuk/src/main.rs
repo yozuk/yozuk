@@ -78,7 +78,7 @@ impl App {
 
     fn run(self) -> Result<()> {
         #[cfg(feature = "server")]
-        if let Some(addr) = self.args.server {
+        if let Some(addr) = self.args.server_addr {
             return server::start(addr, self.args.cors_origin, self.zuk);
         }
 
@@ -97,10 +97,13 @@ impl App {
             ));
         }
 
-        if streams.is_empty()
+        let repl = (self.args.mode == Mode::Auto
+            && streams.is_empty()
             && self.args.output == OutputFormat::Term
-            && self.args.query.is_empty()
-        {
+            && self.args.query.is_empty())
+            || self.args.mode == Mode::Repl;
+
+        if repl {
             self.start_repl()
         } else {
             let tokens = self

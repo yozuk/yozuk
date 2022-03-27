@@ -10,6 +10,10 @@ pub struct Args {
     pub query: Vec<String>,
 
     /// Specify the output format
+    #[clap(arg_enum, short, long, default_value_t = Mode::Auto)]
+    pub mode: Mode,
+
+    /// Specify the output format
     #[clap(arg_enum, short, long, default_value_t = OutputFormat::Term)]
     pub output: OutputFormat,
 
@@ -35,15 +39,15 @@ pub struct Args {
 
     /// [server] Start as a REST server
     #[cfg(feature = "server")]
-    #[clap(long, display_order(1000))]
-    pub server: Option<std::net::SocketAddr>,
+    #[clap(long, required_if_eq("mode", "server"), display_order(1000))]
+    pub server_addr: Option<std::net::SocketAddr>,
 
     /// [server] Add an allowed cors origin
     #[cfg(feature = "server")]
     #[clap(
         long,
         display_order(1001),
-        requires("server"),
+        requires("server-addr"),
         multiple_occurrences(true)
     )]
     pub cors_origin: Vec<String>,
@@ -53,4 +57,13 @@ pub struct Args {
 pub enum OutputFormat {
     Term,
     Json,
+}
+
+#[derive(ArgEnum, Clone, PartialEq, Eq)]
+pub enum Mode {
+    Auto,
+    Direct,
+    Repl,
+    #[cfg(feature = "server")]
+    HttpServer,
 }
