@@ -3,6 +3,15 @@ name = "zuk"
 version = "0.4.0"
 edition = "2021"
 default-run = "zuk"
+authors = ["picoHz <picoHz@outlook.com>"]
+description = "Yozuk command-line interface"
+keywords = ["yozuk"]
+categories = ["command-line-utilities", "development-tools", "text-processing"]
+repository = "https://github.com/yozuk/yozuk/adapters/zuk"
+homepage = "https://yozuk.com"
+documentation = "https://docs.rs/zuk"
+license = "MIT"
+readme = "../../README.md"
 
 [dependencies]
 anyhow = "1.0.56"
