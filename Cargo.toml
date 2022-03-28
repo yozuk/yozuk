@@ -16,7 +16,7 @@ strip = true
 yozuk-sdk = { path = "./yozuk-sdk" }
 yozuk-helper-english = { path = "./helpers/english" }
 yozuk-core-skillset = { path = "./skillset" }
+yozuk = { path = "./yozuk" }
 
 [patch."https://github.com/yozuk/yozuk"]
-yozuk = { path = "./yozuk" }
 yozuk-bundle = { path = "./yozuk-bundle" }
