@@ -2,6 +2,15 @@
 name = "yozuk"
 version = "0.4.0"
 edition = "2021"
+authors = ["picoHz <picoHz@outlook.com>"]
+description = "Assistant Bot for Programmers"
+keywords = ["yozuk"]
+categories = ["text-processing"]
+repository = "https://github.com/yozuk/yozuk"
+homepage = "https://yozuk.com"
+documentation = "https://docs.rs/yozuk"
+license = "MIT"
+readme = "../README.md"
 
 [dependencies]
 anyhow = "1.0.56"
