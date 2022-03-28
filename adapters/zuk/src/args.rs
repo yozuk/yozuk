@@ -13,10 +13,6 @@ pub struct Args {
     #[clap(arg_enum, short, long, default_value_t = Mode::Auto)]
     pub mode: Mode,
 
-    /// Specify the output format
-    #[clap(arg_enum, short, long, default_value_t = OutputFormat::Term)]
-    pub output: OutputFormat,
-
     /// Increase the logging verbosity
     #[clap(short, long, parse(from_occurrences))]
     pub verbose: usize,
@@ -51,12 +47,6 @@ pub struct Args {
         multiple_occurrences(true)
     )]
     pub cors_origin: Vec<String>,
-}
-
-#[derive(ArgEnum, Clone, PartialEq, Eq)]
-pub enum OutputFormat {
-    Term,
-    Json,
 }
 
 #[derive(ArgEnum, Clone, PartialEq, Eq)]

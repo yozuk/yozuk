@@ -26,7 +26,6 @@ use yozuk::{ModelSet, Yozuk, YozukError};
 use yozuk_sdk::prelude::*;
 
 mod args;
-mod json;
 mod printer;
 mod server;
 
@@ -97,11 +96,9 @@ impl App {
             ));
         }
 
-        let repl = (self.args.mode == Mode::Auto
-            && streams.is_empty()
-            && self.args.output == OutputFormat::Term
-            && self.args.query.is_empty())
-            || self.args.mode == Mode::Repl;
+        let repl =
+            (self.args.mode == Mode::Auto && streams.is_empty() && self.args.query.is_empty())
+                || self.args.mode == Mode::Repl;
 
         if repl {
             self.start_repl()
@@ -122,7 +119,7 @@ impl App {
             stream.read_header()?;
         }
 
-        let printer = TerminalPrinter::new(&self.args);
+        let printer = TerminalPrinter::new();
 
         let commands = if self.args.run {
             Ok(vec![CommandArgs::new().add_args_iter(&self.args.query)])

@@ -1,35 +1,23 @@
-use super::{json::*, Args, OutputFormat};
 use anyhow::Result;
 use console::Style;
 use console::Term;
 use content_inspector::ContentType;
 use hexyl::{BorderStyle, Printer};
 use mediatype::names::JSON;
-use std::borrow::Cow;
 use std::io::Write;
 use yozuk_sdk::prelude::*;
 
-pub struct TerminalPrinter<'a> {
-    args: &'a Args,
-}
+pub struct TerminalPrinter;
 
-impl<'a> TerminalPrinter<'a> {
-    pub fn new(args: &'a Args) -> Self {
-        Self { args }
+impl TerminalPrinter {
+    pub fn new() -> Self {
+        Self
     }
 
     pub fn print_commands(&self, commands: &[CommandArgs]) -> Result<()> {
         let mut stdout = Term::stdout();
-        match self.args.output {
-            OutputFormat::Term => {
-                for cmd in commands {
-                    writeln!(&mut stdout, "{}", shell_words::join(&cmd.args))?;
-                }
-            }
-            OutputFormat::Json => {
-                serde_json::to_writer(&mut stdout, &JsonResult::Commands { commands })?;
-                writeln!(&mut stdout)?;
-            }
+        for cmd in commands {
+            writeln!(&mut stdout, "{}", shell_words::join(&cmd.args))?;
         }
         Ok(())
     }
@@ -37,12 +25,6 @@ impl<'a> TerminalPrinter<'a> {
     pub fn print_result(&self, output: &Output) -> Result<()> {
         let mut stdout = Term::stdout();
         let mut stderr = Term::stderr();
-
-        if self.args.output == OutputFormat::Json {
-            serde_json::to_writer(&mut stdout, &JsonResult::Ok { output })?;
-            writeln!(&mut stdout)?;
-            return Ok(());
-        }
 
         for section in &output.sections {
             match section.kind {
@@ -93,14 +75,7 @@ impl<'a> TerminalPrinter<'a> {
     }
 
     pub fn print_error(&self, outputs: &[Output]) -> Result<()> {
-        let mut stdout = Term::stdout();
         let mut stderr = Term::stderr();
-
-        if self.args.output == OutputFormat::Json {
-            serde_json::to_writer(&mut stdout, &JsonResult::Fail { outputs })?;
-            writeln!(&mut stdout)?;
-            return Ok(());
-        }
 
         let output = &outputs[0];
         for section in &output.sections {
@@ -123,14 +98,7 @@ impl<'a> TerminalPrinter<'a> {
     }
 
     pub fn print_error_str(&self, err: &str) -> Result<()> {
-        let mut stdout = Term::stdout();
         let mut stderr = Term::stderr();
-
-        if self.args.output == OutputFormat::Json {
-            serde_json::to_writer(&mut stdout, &JsonResult::Error { message: err })?;
-            writeln!(&mut stdout)?;
-            return Ok(());
-        }
 
         let style = if console::colors_enabled() {
             Style::new().red()
@@ -142,19 +110,7 @@ impl<'a> TerminalPrinter<'a> {
     }
 
     pub fn print_suggest(&self, suggest: &str) -> Result<()> {
-        let mut stdout = Term::stdout();
         let mut stderr = Term::stderr();
-
-        if self.args.output == OutputFormat::Json {
-            serde_json::to_writer(
-                &mut stdout,
-                &JsonResult::NoCommand {
-                    suggest: Some(Cow::Borrowed(suggest)),
-                },
-            )?;
-            writeln!(&mut stdout)?;
-            return Ok(());
-        }
 
         let style = if console::colors_enabled() {
             Style::new().italic()

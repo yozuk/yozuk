@@ -1,8 +1,9 @@
 #![cfg(feature = "http-server")]
 
-use super::json::{JsonInput, JsonResult};
 use futures_util::StreamExt;
 use mediatype::{media_type, MediaType};
+use serde_derive::{Deserialize, Serialize};
+use std::borrow::Cow;
 use std::convert::Infallible;
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -124,4 +125,18 @@ fn run_command(
             StatusCode::BAD_REQUEST,
         ),
     }
+}
+
+#[derive(Clone, Deserialize)]
+pub struct JsonInput {
+    pub tokens: Vec<Token>,
+}
+
+#[derive(Clone, Serialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum JsonResult<'a> {
+    Ok { output: &'a Output },
+    Fail { outputs: &'a [Output] },
+    NoCommand { suggest: Option<Cow<'a, str>> },
+    Error { message: &'a str },
 }
