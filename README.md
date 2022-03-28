@@ -1,5 +1,5 @@
 <div align="center">
-<img alt="yozuk" src="images/yozuk.png" width="280" />
+<img alt="yozuk" src="https://github.com/yozuk/yozuk/blob/main/images/yozuk.png?raw=true" width="280" />
   
 [![GitHub license](https://img.shields.io/github/license/yozuk/yozuk.svg)](https://github.com/yozuk/yozuk/blob/main/LICENSE)
 [![Rust](https://github.com/yozuk/yozuk/actions/workflows/rust.yml/badge.svg)](https://github.com/yozuk/yozuk/actions/workflows/rust.yml)
@@ -10,6 +10,7 @@
 - [Getting Started](#getting-started)
   - [Online Demo](#online-demo)
   - [Pre-built binaries](#pre-built-binaries)
+  - [Cargo](#cargo)
   - [Build from Source](#build-from-source)
 - [Skills](#skills)
   - [Examples](#examples)
@@ -20,7 +21,7 @@
 
 **Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation.
 
-<img alt="Yozuk CLI demo animation" src="images/zuk.gif" width="520" />
+<img alt="Yozuk CLI demo animation" src="https://github.com/yozuk/yozuk/blob/main/images/zuk.gif?raw=true" width="520" />
 
 Unlike normal command-line tools, it uses a simple NLP approach to infer the meaning of your requests, so you don't have to remember the exact syntax of commands. This feature also makes Yozuk suitable for chatbots.
 
@@ -48,6 +49,12 @@ Unlike normal command-line tools, it uses a simple NLP approach to infer the mea
 ### Pre-built binaries
 
 [Pre-built binaries](https://github.com/yozuk/yozuk/releases) for x64 Windows, Linux and macOS are available.
+
+### Cargo
+
+```bash
+cargo install zuk
+```
 
 ### Build from Source
 
