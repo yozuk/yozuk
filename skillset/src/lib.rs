@@ -7,6 +7,7 @@ mod lipsum;
 mod mediatype;
 mod nanoid;
 mod numeric;
+mod punycode;
 mod smalltalk;
 mod uuid;
 mod version;
@@ -59,6 +60,8 @@ skills!(
     [nanoid, "yozuk-skill-nanoid"],
     [numeric, "yozuk-skill-numeric"],
     [smalltalk, "yozuk-skill-smalltalk"],
+    [mediatype, "yozuk-skill-mediatype"],
+    [punycode, "yozuk-skill-punycode"],
     [uuid, "yozuk-skill-uuid"],
     [version, "yozuk-skill-version"],
 );

@@ -4,7 +4,6 @@ members = [
     "yozuk-sdk", 
     "yozuk-bundle",
     "skillset",
-    "skills/*",
     "helpers/*",
     "adapters/*"
 ]
@@ -20,16 +19,3 @@ yozuk-helper-english = { path = "./helpers/english" }
 [patch."https://github.com/yozuk/yozuk"]
 yozuk = { path = "./yozuk" }
 yozuk-bundle = { path = "./yozuk-bundle" }
-yozuk-skill-base64 = { path = "./skills/base64" }
-yozuk-skill-calc = { path = "./skills/calc" }
-yozuk-skill-english = { path = "./skills/english" }
-yozuk-skill-mediatype =  { path = "./skills/mediatype" }
-yozuk-skill-numeric = { path = "./skills/numeric" }
-yozuk-skill-smalltalk = { path = "./skills/smalltalk" }
-yozuk-skill-uuid = { path = "./skills/uuid" }
-yozuk-skill-version = { path = "./skills/version" }
-yozuk-skill-lipsum = { path = "./skills/lipsum" }
-yozuk-skill-nanoid = { path = "./skills/nanoid" }
-yozuk-skill-punycode = { path = "./skills/punycode" }
-yozuk-skill-dice = { path = "./skills/dice" }
-yozuk-skill-digest = { path = "./skills/digest" }

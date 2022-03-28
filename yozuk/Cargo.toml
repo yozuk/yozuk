@@ -28,21 +28,6 @@ thiserror = "1.0.30"
 mediatype = "0.19.1"
 yozuk-sdk = "0.1.0"
 yozuk-helper-english = "0.1.0"
-
-yozuk-skill-base64 = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-calc = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-english = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-mediatype = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-numeric = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-smalltalk = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-uuid = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-version = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-lipsum = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-nanoid = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-punycode = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-dice = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-yozuk-skill-digest = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
-
 yozuk-core-skillset = { path = "../skillset" }
 
 [features]
@@ -65,13 +50,23 @@ default-skills = [
     "yozuk-skill-dice",
     "yozuk-skill-digest"
 ]
+yozuk-skill-mediatype = ["yozuk-core-skillset/yozuk-skill-mediatype"]
+yozuk-skill-version = ["yozuk-core-skillset/yozuk-skill-version"]
+yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]
+yozuk-skill-english = ["yozuk-core-skillset/yozuk-skill-english"]
+yozuk-skill-numeric = ["yozuk-core-skillset/yozuk-skill-numeric"]
+yozuk-skill-calc = ["yozuk-core-skillset/yozuk-skill-calc"]
+yozuk-skill-uuid = ["yozuk-core-skillset/yozuk-skill-uuid"]
+yozuk-skill-lipsum = ["yozuk-core-skillset/yozuk-skill-lipsum"]
+yozuk-skill-nanoid = ["yozuk-core-skillset/yozuk-skill-nanoid"]
+yozuk-skill-punycode = ["yozuk-core-skillset/yozuk-skill-punycode"]
+yozuk-skill-dice = ["yozuk-core-skillset/yozuk-skill-dice"]
+yozuk-skill-digest = ["yozuk-core-skillset/yozuk-skill-digest"]
+yozuk-skill-smalltalk = ["yozuk-core-skillset/yozuk-skill-smalltalk"]
+
 
 [build-dependencies]
 build-info-build = "0.0.26"
-globwalk = "0.8.1"
-serde = "1.0.136"
-serde_derive = "1.0.136"
-toml = "0.5.8"
 
 [dev-dependencies]
 lazy_static = "1.4.0"
