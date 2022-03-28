@@ -4025,6 +4025,7 @@ dependencies = [
  "bigdecimal",
  "chardetng",
  "clap 3.1.6",
+ "const-sha1",
  "digest 0.10.3",
  "hex",
  "itertools 0.10.3",

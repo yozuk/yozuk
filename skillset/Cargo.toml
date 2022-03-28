@@ -36,9 +36,9 @@ tiger = "0.2.1"
 tree_magic = "0.2.3"
 uuid = { version = "0.8.2", features = ["v4"] }
 whirlpool = "0.10.1"
+const-sha1 = "0.2.0"
 yozuk-helper-english = "0.1.0"
 yozuk-sdk = "0.1.0"
-
 
 [features]
 default = [

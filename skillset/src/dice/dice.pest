@@ -1,0 +1,15 @@
+int = @{ '1'..'9' ~ ASCII_DIGIT* }
+dice = @{ int ~ "d" ~ int? }
+
+operation = _{ add | subtract | multiply | divide }
+add       = { "+" }
+subtract  = { "-" }
+multiply  = { "*" }
+divide    = { "/" }
+
+expr = { term ~ (operation ~ term)* }
+term = _{ dice | int | "(" ~ expr ~ ")" }
+
+calculation = _{ SOI ~ expr ~ EOI }
+
+WHITESPACE = _{ " " | "\t" }
