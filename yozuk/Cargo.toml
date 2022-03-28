@@ -28,7 +28,7 @@ thiserror = "1.0.30"
 mediatype = "0.19.1"
 yozuk-sdk = "0.1.0"
 yozuk-helper-english = "0.1.0"
-yozuk-core-skillset = { path = "../skillset" }
+yozuk-core-skillset = "0.1.0"
 
 [features]
 default = [
