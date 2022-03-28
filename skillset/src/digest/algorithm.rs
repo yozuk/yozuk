@@ -2,74 +2,9 @@ use digest::{Digest, FixedOutputReset};
 
 pub const ENTRIES: &[AlgorithmEntry] = &[
     AlgorithmEntry {
-        name: "MD2",
-        keywords: &["md2"],
-        init: || Box::new(DigestEntry::<md2::Md2>::new()),
-    },
-    AlgorithmEntry {
-        name: "MD4",
-        keywords: &["md4"],
-        init: || Box::new(DigestEntry::<md4::Md4>::new()),
-    },
-    AlgorithmEntry {
         name: "MD5",
         keywords: &["md5"],
         init: || Box::new(DigestEntry::<md5::Md5>::new()),
-    },
-    AlgorithmEntry {
-        name: "RIPEMD-160",
-        keywords: &["ripemd-160", "ripemd160", "ripemd"],
-        init: || Box::new(DigestEntry::<ripemd::Ripemd160>::new()),
-    },
-    AlgorithmEntry {
-        name: "RIPEMD-256",
-        keywords: &["ripemd-256", "ripemd256", "ripemd"],
-        init: || Box::new(DigestEntry::<ripemd::Ripemd256>::new()),
-    },
-    AlgorithmEntry {
-        name: "RIPEMD-320",
-        keywords: &["ripemd-320", "ripemd320", "ripemd"],
-        init: || Box::new(DigestEntry::<ripemd::Ripemd320>::new()),
-    },
-    AlgorithmEntry {
-        name: "Shabal192",
-        keywords: &["shabal-192", "shabal192", "shabal"],
-        init: || Box::new(DigestEntry::<shabal::Shabal192>::new()),
-    },
-    AlgorithmEntry {
-        name: "Shabal224",
-        keywords: &["shabal-224", "shabal224", "shabal"],
-        init: || Box::new(DigestEntry::<shabal::Shabal224>::new()),
-    },
-    AlgorithmEntry {
-        name: "Shabal256",
-        keywords: &["shabal-256", "shabal256", "shabal"],
-        init: || Box::new(DigestEntry::<shabal::Shabal256>::new()),
-    },
-    AlgorithmEntry {
-        name: "Shabal384",
-        keywords: &["shabal-384", "shabal384", "shabal"],
-        init: || Box::new(DigestEntry::<shabal::Shabal384>::new()),
-    },
-    AlgorithmEntry {
-        name: "Shabal512",
-        keywords: &["shabal-512", "shabal512", "shabal"],
-        init: || Box::new(DigestEntry::<shabal::Shabal512>::new()),
-    },
-    AlgorithmEntry {
-        name: "Tiger",
-        keywords: &["tiger"],
-        init: || Box::new(DigestEntry::<tiger::Tiger>::new()),
-    },
-    AlgorithmEntry {
-        name: "Tiger2",
-        keywords: &["tiger2"],
-        init: || Box::new(DigestEntry::<tiger::Tiger2>::new()),
-    },
-    AlgorithmEntry {
-        name: "Whirlpool",
-        keywords: &["whirlpool"],
-        init: || Box::new(DigestEntry::<whirlpool::Whirlpool>::new()),
     },
     AlgorithmEntry {
         name: "SHA-1",

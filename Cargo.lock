@@ -1518,24 +1518,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "md2"
-version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8848a2d533edb1bd24efdc5b292c0d69bb5648b08ec6ab244a66bcadede64203"
-dependencies = [
- "digest 0.10.3",
-]
-
-[[package]]
-name = "md4"
-version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "93a5f5240a3fa1cb324a28cb42b1934750a093d7ad200ba052deecf4aff7104b"
-dependencies = [
- "digest 0.10.3",
-]
-
-[[package]]
 name = "mediatype"
 version = "0.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2338,15 +2320,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ripemd"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1facec54cb5e0dc08553501fa740091086d0259ad0067e0d4103448e4cb22ed3"
-dependencies = [
- "digest 0.10.3",
-]
-
-[[package]]
 name = "rle-decode-fast"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2638,15 +2611,6 @@ checksum = "881bf8156c87b6301fc5ca6b27f11eeb2761224c7081e69b409d5a1951a70c86"
 dependencies = [
  "digest 0.10.3",
  "keccak",
-]
-
-[[package]]
-name = "shabal"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "990a6c7ff96ecc5664129bbf1f7b46a5a7c13f297d05af75e702f861cea6f08a"
-dependencies = [
- "digest 0.10.3",
 ]
 
 [[package]]
@@ -3032,15 +2996,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5516c27b78311c50bf42c071425c560ac799b11c30b31f87e3081965fe5e0180"
 dependencies = [
  "once_cell",
-]
-
-[[package]]
-name = "tiger"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "579abbce4ad73b04386dbeb34369c9873a8f9b749c7b99cbf479a2949ff715ed"
-dependencies = [
- "digest 0.10.3",
 ]
 
 [[package]]
@@ -3501,15 +3456,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "whirlpool"
-version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c72debd82fe039be0549a507b430075c64aa454882b90098fe97043f04110c21"
-dependencies = [
- "digest 0.10.3",
-]
-
-[[package]]
 name = "widestring"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3726,8 +3672,6 @@ dependencies = [
  "lazy_static",
  "lipsum",
  "md-5",
- "md2",
- "md4",
  "mediatype",
  "nanoid",
  "pest",
@@ -3735,19 +3679,15 @@ dependencies = [
  "punycode",
  "rand",
  "rayon",
- "ripemd",
  "serde",
  "serde_derive",
  "serde_json",
  "sha1",
  "sha2",
  "sha3",
- "shabal",
  "thiserror",
- "tiger",
  "tree_magic",
  "uuid",
- "whirlpool",
  "yozuk-helper-english",
  "yozuk-sdk",
 ]

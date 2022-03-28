@@ -40,15 +40,9 @@ bigdecimal = { version = "0.3.0", optional = true }
 punycode = { version = "0.4.1", optional = true }
 hex = { version = "0.4.3", optional = true }
 md-5 = { version = "0.10.1", optional = true }
-md2 = { version = "0.10.1", optional = true }
-md4 = { version = "0.10.1", optional = true }
 sha1 = { version = "0.10.1", optional = true }
 sha2 = { version = "0.10.2", optional = true }
 sha3 = { version = "0.10.1", optional = true }
-shabal = { version = "0.4.1", optional = true }
-whirlpool = { version = "0.10.1", optional = true }
-tiger = { version = "0.2.1", optional = true }
-ripemd = { version = "0.1.1", optional = true }
 
 [features]
 default = [
@@ -82,13 +76,7 @@ yozuk-skill-digest = [
     "digest",
     "hex",
     "md-5",
-    "md2",
-    "md4",
     "sha1",
     "sha2",
     "sha3",
-    "shabal",
-    "whirlpool",
-    "tiger",
-    "ripemd"
 ]
