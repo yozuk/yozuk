@@ -43,6 +43,8 @@ yozuk-skill-punycode = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0",
 yozuk-skill-dice = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
 yozuk-skill-digest = { git = "https://github.com/yozuk/yozuk", tag = "v0.3.0", optional = true }
 
+yozuk-core-skillset = { path = "../skillset" }
+
 [features]
 default = [
     "default-skills"

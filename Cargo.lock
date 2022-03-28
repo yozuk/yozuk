@@ -3990,6 +3990,7 @@ dependencies = [
  "sloggers",
  "thiserror",
  "toml",
+ "yozuk-core-skillset",
  "yozuk-helper-english",
  "yozuk-sdk",
  "yozuk-skill-base64",
@@ -4013,6 +4014,46 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "yozuk",
+ "yozuk-sdk",
+]
+
+[[package]]
+name = "yozuk-core-skillset"
+version = "0.1.0"
+dependencies = [
+ "base64",
+ "bigdecimal",
+ "chardetng",
+ "clap 3.1.6",
+ "digest 0.10.3",
+ "hex",
+ "itertools 0.10.3",
+ "lazy_static",
+ "lipsum",
+ "md-5",
+ "md2",
+ "md4",
+ "mediatype",
+ "nanoid",
+ "pest",
+ "pest_derive",
+ "punycode",
+ "rand",
+ "rayon",
+ "ripemd",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "sha1",
+ "sha2",
+ "sha3",
+ "shabal",
+ "thiserror",
+ "tiger",
+ "tree_magic",
+ "uuid",
+ "whirlpool",
+ "yozuk-helper-english",
  "yozuk-sdk",
 ]
 

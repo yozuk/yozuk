@@ -1,0 +1,71 @@
+[package]
+name = "yozuk-core-skillset"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+base64 = "0.13.0"
+bigdecimal = "0.3.0"
+chardetng = "0.1.17"
+clap = { version = "3.1.6", features = ["derive"] }
+digest = "0.10.3"
+hex = "0.4.3"
+itertools = "0.10.3"
+lazy_static = "1.4.0"
+lipsum = "0.8.0"
+md-5 = "0.10.1"
+md2 = "0.10.1"
+md4 = "0.10.1"
+mediatype = "0.19.1"
+nanoid = "0.4.0"
+pest = "2.1.3"
+pest_derive = "2.1.0"
+punycode = "0.4.1"
+rand = { version = "0.8.5", features = ["small_rng"] }
+rayon = "1.5.1"
+ripemd = "0.1.1"
+serde = "1.0.136"
+serde_derive = "1.0.136"
+serde_json = "1.0.79"
+sha1 = "0.10.1"
+sha2 = "0.10.2"
+sha3 = "0.10.1"
+shabal = "0.4.1"
+thiserror = "1.0.30"
+tiger = "0.2.1"
+tree_magic = "0.2.3"
+uuid = { version = "0.8.2", features = ["v4"] }
+whirlpool = "0.10.1"
+yozuk-helper-english = "0.1.0"
+yozuk-sdk = "0.1.0"
+
+
+[features]
+default = [
+    "yozuk-skill-mediatype", 
+    "yozuk-skill-version",
+    "yozuk-skill-base64",
+    "yozuk-skill-english", 
+    "yozuk-skill-smalltalk",
+    "yozuk-skill-numeric", 
+    "yozuk-skill-calc",
+    "yozuk-skill-uuid",
+    "yozuk-skill-lipsum",
+    "yozuk-skill-nanoid",
+    "yozuk-skill-punycode",
+    "yozuk-skill-dice",
+    "yozuk-skill-digest"
+]
+yozuk-skill-mediatype = []
+yozuk-skill-version = []
+yozuk-skill-base64 = []
+yozuk-skill-english = []
+yozuk-skill-smalltalk = []
+yozuk-skill-numeric = []
+yozuk-skill-calc = []
+yozuk-skill-uuid = []
+yozuk-skill-lipsum = []
+yozuk-skill-nanoid = []
+yozuk-skill-punycode = []
+yozuk-skill-dice = []
+yozuk-skill-digest = []

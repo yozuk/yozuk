@@ -3,6 +3,7 @@ members = [
     "yozuk", 
     "yozuk-sdk", 
     "yozuk-bundle",
+    "skillset",
     "skills/*",
     "helpers/*",
     "adapters/*"
