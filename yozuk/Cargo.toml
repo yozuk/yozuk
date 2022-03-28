@@ -10,6 +10,7 @@ repository = "https://github.com/yozuk/yozuk"
 homepage = "https://yozuk.com"
 documentation = "https://docs.rs/yozuk"
 license = "MIT"
+readme = "../README.md"
 
 [dependencies]
 anyhow = "1.0.56"
