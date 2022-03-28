@@ -22,8 +22,6 @@ e4a13ac1-6c06-48ea-ab27-ef9d55cd11af
 ## HTTP Server Mode
 
 ```bash
-cd yozuk/adapters/zuk
-cargo install --features http-server --path .
 zuk --mode http-server --server-addr 127.0.0.1:8080
 
 curl --request POST 'http://127.0.0.1:8080/run' --form 'query.json="{\"tokens\":[{\"data\":\"uuid\"}]}"' | jq

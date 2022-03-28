@@ -39,5 +39,5 @@ futures-util = { version = "0.3.21", optional = true }
 rustyline-derive = "0.6.0"
 
 [features]
-default = []
+default = ["http-server"]
 http-server = ["warp", "tokio", "futures-util"]
