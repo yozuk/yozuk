@@ -1,7 +1,16 @@
 [package]
 name = "yozuk-bundle"
-version = "0.1.0"
+version = "0.4.0"
 edition = "2021"
+authors = ["picoHz <picoHz@outlook.com>"]
+description = "Prebuild NLP model for Yozuk"
+keywords = ["yozuk"]
+categories = ["text-processing"]
+repository = "https://github.com/yozuk/yozuk-bundle"
+homepage = "https://yozuk.com"
+documentation = "https://docs.rs/yozuk-bundle"
+license = "MIT"
+readme = "README.md"
 
 [build-dependencies]
 anyhow = "1.0.56"
