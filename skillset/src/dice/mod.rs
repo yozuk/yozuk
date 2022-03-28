@@ -89,7 +89,7 @@ impl Preprocessor for DicePreprocessor {
 }
 
 #[derive(pest_derive::Parser)]
-#[grammar = "dice.pest"]
+#[grammar = "dice/dice.pest"]
 pub struct DiceParser;
 
 lazy_static::lazy_static! {

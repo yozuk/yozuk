@@ -58,7 +58,7 @@ impl Preprocessor for CalcPreprocessor {
 }
 
 #[derive(pest_derive::Parser)]
-#[grammar = "calc.pest"]
+#[grammar = "calc/calc.pest"]
 pub struct CalcParser;
 
 lazy_static::lazy_static! {
