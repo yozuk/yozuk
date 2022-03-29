@@ -1369,7 +1369,7 @@ dependencies = [
  "lazy_static",
  "memchr 2.4.1",
  "num-cmp",
- "parking_lot 0.12.0",
+ "parking_lot 0.11.2",
  "percent-encoding",
  "regex",
  "reqwest",
@@ -3636,7 +3636,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-core-skillset"
-version = "0.1.0"
+version = "0.4.2"
 dependencies = [
  "base64",
  "bigdecimal",
