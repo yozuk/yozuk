@@ -1,6 +1,5 @@
 use super::{skill, FeatureLabeler, Tagger};
 use anyhow::{bail, Result};
-use boomphf::Mphf;
 use bytes::Bytes;
 use std::{
     io::{Cursor, Write},
@@ -11,7 +10,7 @@ use yozuk_sdk::prelude::*;
 
 pub struct ModelSet {
     pub(crate) data: Bytes,
-    pub(crate) mpfh: Mphf<String>,
+    pub(crate) keys: Vec<String>,
     pub(crate) ranges: Vec<Range<usize>>,
     pub(crate) header_len: usize,
 }
@@ -28,21 +27,20 @@ impl ModelSet {
         }
 
         let mut cursor = Cursor::new(&data);
-        let mpfh = bincode::deserialize_from(&mut cursor)?;
+        let keys = bincode::deserialize_from(&mut cursor)?;
         let ranges = bincode::deserialize_from(&mut cursor)?;
         let header_len = cursor.position() as _;
         Ok(Self {
             data,
-            mpfh,
+            keys,
             ranges,
             header_len,
         })
     }
 
     pub fn get(&self, key: &str) -> Option<ModelEntry> {
-        self.mpfh
-            .try_hash(key)
-            .map(|index| self.ranges[index as usize].clone())
+        self.get_index(key)
+            .map(|index| self.ranges[index].clone())
             .filter(|range| !range.is_empty())
             .map(|range| {
                 self.data
@@ -52,11 +50,13 @@ impl ModelSet {
     }
 
     pub fn get_index(&self, key: &str) -> Option<usize> {
-        self.mpfh.try_hash(key).map(|index| index as usize)
+        self.keys
+            .binary_search_by(|entry| entry.as_str().cmp(key))
+            .ok()
     }
 
     pub fn write<W: Write>(&self, mut dst: W) -> bincode::Result<()> {
-        bincode::serialize_into(&mut dst, &self.mpfh)?;
+        bincode::serialize_into(&mut dst, &self.keys)?;
         bincode::serialize_into(&mut dst, &self.ranges)?;
         dst.write_all(&self.data)?;
         dst.write_all(&skill::skills_digest())?;

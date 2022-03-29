@@ -2,7 +2,6 @@
 
 use super::{skill, FeatureLabeler, ModelSet};
 use anyhow::{bail, Result};
-use boomphf::Mphf;
 use crfsuite::{Algorithm, Attribute, GraphicalModel, Trainer};
 use nanoid::nanoid;
 use rayon::prelude::*;
@@ -16,11 +15,11 @@ use std::{
 use yozuk_sdk::prelude::*;
 
 pub fn modelgen(env: &Environment) -> Result<ModelSet> {
-    let keys = skill::SKILLS
+    let mut keys = skill::SKILLS
         .iter()
         .map(|item| item.key.to_string())
         .collect::<Vec<_>>();
-    let mpfh = Mphf::new_parallel(1.7, &keys, None);
+    keys.sort();
 
     let labelers = skill::SKILLS
         .par_iter()
@@ -47,21 +46,18 @@ pub fn modelgen(env: &Environment) -> Result<ModelSet> {
         .filter_map(|item| learn(item, &labeler).ok())
         .collect::<Vec<_>>();
 
-    let mut ranges = Vec::with_capacity(dataset.len());
+    let mut ranges = vec![0..0; keys.len()];
     let mut data = Vec::<u8>::new();
 
     for (key, mut item) in dataset {
-        let index = mpfh.hash(&key) as usize;
-        if ranges.len() <= index {
-            ranges.resize(index + 1, 0..0);
-        }
+        let index = keys.binary_search(&key).unwrap();
         ranges[index] = data.len()..data.len() + item.len();
         data.append(&mut item);
     }
 
     Ok(ModelSet {
         data: data.into(),
-        mpfh,
+        keys,
         ranges,
         header_len: 0,
     })

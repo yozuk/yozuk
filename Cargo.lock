@@ -206,19 +206,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "boomphf"
-version = "0.5.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e8fb7f38fef59c32549861151d63a6190865e60cf690340c13e3d7178b42a2f"
-dependencies = [
- "crossbeam-utils 0.8.8",
- "log",
- "rayon",
- "serde",
- "wyhash",
-]
-
-[[package]]
 name = "bstr"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3600,15 +3587,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "wyhash"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "baf6e163c25e3fac820b4b453185ea2dea3b6a3e0a721d4d23d75bd33734c295"
-dependencies = [
- "rand_core",
-]
-
-[[package]]
 name = "yaml-rust"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3623,7 +3601,6 @@ version = "0.4.1"
 dependencies = [
  "anyhow",
  "bincode",
- "boomphf",
  "bytes",
  "const-sha1",
  "crfs",
