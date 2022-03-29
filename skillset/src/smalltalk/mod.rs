@@ -82,7 +82,7 @@ impl Command for SmalltalkCommand {
     fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
         let args = Args::try_parse_from(args.args).unwrap();
         if args.life_universe_everything {
-            Err(Output {
+            Ok(Output {
                 module: "Deep Thought".into(),
                 sections: vec![Section::new(
                 "Computing the answer to your question will take a little while. Please ask me \
@@ -92,7 +92,7 @@ impl Command for SmalltalkCommand {
             .kind(SectionKind::Comment)],
             })
         } else {
-            Err(Output {
+            Ok(Output {
                 sections: vec![Section::new("Hi. I'm Yozuk.", media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Comment)],
                 ..Default::default()
