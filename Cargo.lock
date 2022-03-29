@@ -1369,7 +1369,7 @@ dependencies = [
  "lazy_static",
  "memchr 2.4.1",
  "num-cmp",
- "parking_lot 0.11.2",
+ "parking_lot 0.12.0",
  "percent-encoding",
  "regex",
  "reqwest",
@@ -3597,7 +3597,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk"
-version = "0.4.1"
+version = "0.4.2"
 dependencies = [
  "anyhow",
  "bincode",
