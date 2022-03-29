@@ -74,14 +74,14 @@ Yozuk manages its commands by modules called [skills](./skills).
 
 | skill | description | example queries |
 | - | - | - |
-| [`calc`](./skills/calc) | Simple calculator | `1 + 2` `(0.1 + 0.2) / 0.3` |
-| [`uuid`](./skills/uuid) | UUID generator | `uuid` `generate 5 UUIDs` |
-| [`nanoid`](./skills/nanoid) | NanoID generator | `nanoid` `generate 5 NanoIDs` |
-| [`base64`](./skills/base64) | Base64 encoder/decoder | `"Hello 世界" to base64` `cXVpY2sgYnJvd24g8J+mig==` |
-| [`punycode`](./skills/punycode) | Punycode encoder/decoder | `😻.example.com` `xn--hj8h.com` |
-| [`lipsum`](./skills/lipsum) | Dummy text generator | `lipsum` `Lorem ipsum 150 words` |
-| [`dice`](./skills/dice) | Dice roller | `2d6` `2d6 * 10 + 1d100` |
-| [`digest`](./skills/digest) | Hash generator | `md5` `sha1 sha-256 Keccak-256` |
+| [`calc`](./skillset/src/calc) | Simple calculator | `1 + 2` `(0.1 + 0.2) / 0.3` |
+| [`uuid`](./skillset/src/uuid) | UUID generator | `uuid` `generate 5 UUIDs` |
+| [`nanoid`](./skillset/src/nanoid) | NanoID generator | `nanoid` `generate 5 NanoIDs` |
+| [`base64`](./skillset/src/base64) | Base64 encoder/decoder | `"Hello 世界" to base64` `cXVpY2sgYnJvd24g8J+mig==` |
+| [`punycode`](./skillset/src/punycode) | Punycode encoder/decoder | `😻.example.com` `xn--hj8h.com` |
+| [`lipsum`](./skillset/src/lipsum) | Dummy text generator | `lipsum` `Lorem ipsum 150 words` |
+| [`dice`](./skillset/src/dice) | Dice roller | `2d6` `2d6 * 10 + 1d100` |
+| [`digest`](./skillset/src/digest) | Hash generator | `md5` `sha1 sha-256 Keccak-256` |
 
 You can enable or disable each skill at build time. Disabling unneeded skills is helpful in reducing build time, startup time, executable size and command misrecognitions.
 
