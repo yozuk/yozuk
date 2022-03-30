@@ -1,5 +1,6 @@
 mod base64;
 mod calc;
+mod color;
 mod dice;
 mod digest;
 mod english;
@@ -64,4 +65,5 @@ skills!(
     [punycode, "yozuk-skill-punycode"],
     [uuid, "yozuk-skill-uuid"],
     [version, "yozuk-skill-version"],
+    [color, "yozuk-skill-color"],
 );
