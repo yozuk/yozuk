@@ -55,7 +55,8 @@ default-skills = [
     "yozuk-skill-nanoid",
     "yozuk-skill-punycode",
     "yozuk-skill-dice",
-    "yozuk-skill-digest"
+    "yozuk-skill-digest",
+    "yozuk-skill-color"
 ]
 yozuk-skill-mediatype = ["yozuk-core-skillset/yozuk-skill-mediatype"]
 yozuk-skill-version = ["yozuk-core-skillset/yozuk-skill-version"]
@@ -70,6 +71,7 @@ yozuk-skill-punycode = ["yozuk-core-skillset/yozuk-skill-punycode"]
 yozuk-skill-dice = ["yozuk-core-skillset/yozuk-skill-dice"]
 yozuk-skill-digest = ["yozuk-core-skillset/yozuk-skill-digest"]
 yozuk-skill-smalltalk = ["yozuk-core-skillset/yozuk-skill-smalltalk"]
+yozuk-skill-color = ["yozuk-core-skillset/yozuk-skill-color"]
 
 [dev-dependencies]
 lazy_static = "1.4.0"
