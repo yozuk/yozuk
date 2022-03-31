@@ -54,8 +54,8 @@ impl Translator for PunycodeTranslator {
 pub struct PunycodeCommand;
 
 impl Command for PunycodeCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
-        let args = Args::try_parse_from(args.args).unwrap();
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+        let args = Args::try_parse_from(args.args)?;
 
         match args.mode {
             Mode::Decode => {

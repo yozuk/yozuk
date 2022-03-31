@@ -132,8 +132,8 @@ impl Translator for ColorTranslator {
 pub struct ColorCommand;
 
 impl Command for ColorCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
-        let args = Args::try_parse_from(args.args).unwrap();
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+        let args = Args::try_parse_from(args.args)?;
         let colors = args
             .inputs
             .iter()

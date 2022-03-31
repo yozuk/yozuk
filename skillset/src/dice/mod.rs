@@ -229,9 +229,9 @@ impl Translator for DiceTranslator {
 pub struct DiceCommand(DiceConfig);
 
 impl Command for DiceCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
-        let rule = DiceParser::parse(Rule::calculation, &args.args[1]).unwrap();
-        eval(rule, &self.0)
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+        let rule = DiceParser::parse(Rule::calculation, &args.args[1])?;
+        Ok(eval(rule, &self.0)
             .map(|result| Output {
                 module: "Dice".into(),
                 sections: vec![Section::new(result.to_string(), media_type!(TEXT / PLAIN))],
@@ -240,7 +240,7 @@ impl Command for DiceCommand {
                 module: "Dice".into(),
                 sections: vec![Section::new(format!("{}", err), media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Comment)],
-            })
+            })?)
     }
 }
 

@@ -128,9 +128,9 @@ impl Translator for CalcTranslator {
 pub struct CalcCommand;
 
 impl Command for CalcCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
-        let rule = CalcParser::parse(Rule::calculation, &args.args[1]).unwrap();
-        eval(rule)
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+        let rule = CalcParser::parse(Rule::calculation, &args.args[1])?;
+        Ok(eval(rule)
             .map(|result| Output {
                 module: "Calculator".into(),
                 sections: vec![Section::new(
@@ -142,6 +142,6 @@ impl Command for CalcCommand {
                 module: "Calculator".into(),
                 sections: vec![Section::new(format!("{}", err), media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Comment)],
-            })
+            })?)
     }
 }

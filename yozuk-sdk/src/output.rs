@@ -1,5 +1,6 @@
 use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
+use mediatype::media_type;
 use mediatype::MediaTypeBuf;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
@@ -73,5 +74,43 @@ pub enum SectionKind {
 impl Default for SectionKind {
     fn default() -> Self {
         Self::Value
+    }
+}
+
+#[non_exhaustive]
+#[derive(Debug)]
+pub enum CommandError {
+    Output(Output),
+    Error(anyhow::Error),
+}
+
+impl CommandError {
+    pub fn into_output<T>(self, module: T) -> Output
+    where
+        T: Into<String>,
+    {
+        match self {
+            Self::Output(output) => output,
+            Self::Error(err) => Output {
+                module: module.into(),
+                sections: vec![Section::new(format!("{}", err), media_type!(TEXT / PLAIN))
+                    .kind(SectionKind::Comment)],
+            },
+        }
+    }
+}
+
+impl From<Output> for CommandError {
+    fn from(output: Output) -> Self {
+        Self::Output(output)
+    }
+}
+
+impl<T> From<T> for CommandError
+where
+    T: Into<anyhow::Error>,
+{
+    fn from(err: T) -> Self {
+        Self::Error(err.into())
     }
 }

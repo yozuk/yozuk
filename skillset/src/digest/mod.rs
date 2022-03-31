@@ -75,8 +75,8 @@ impl Translator for DigestTranslator {
 pub struct DigestCommand;
 
 impl Command for DigestCommand {
-    fn run(&self, args: CommandArgs, streams: &mut [InputStream]) -> Result<Output, Output> {
-        let args = Args::try_parse_from(args.args).unwrap();
+    fn run(&self, args: CommandArgs, streams: &mut [InputStream]) -> Result<Output, CommandError> {
+        let args = Args::try_parse_from(args.args)?;
 
         let mut entries = BTreeMap::new();
         for name in &args.algorithm {
@@ -93,7 +93,8 @@ impl Command for DigestCommand {
                         media_type!(TEXT / PLAIN),
                     )
                     .kind(SectionKind::Comment)],
-                });
+                }
+                .into());
             }
 
             for entry in matched {
@@ -137,7 +138,8 @@ impl Command for DigestCommand {
                 media_type!(TEXT / PLAIN),
             )
             .kind(SectionKind::Comment)],
-        })
+        }
+        .into())
     }
 }
 

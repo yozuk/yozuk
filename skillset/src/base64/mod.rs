@@ -152,14 +152,14 @@ impl Translator for Base64Translator {
 pub struct Base64Command;
 
 impl Command for Base64Command {
-    fn run(&self, args: CommandArgs, streams: &mut [InputStream]) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, streams: &mut [InputStream]) -> Result<Output, CommandError> {
         let streams = streams.iter_mut().map(|stream| {
             stream
                 .bytes()
                 .map(|b| b.unwrap_or_default())
                 .collect::<Bytes>()
         });
-        let options = Options::try_parse_from(args.args).unwrap();
+        let options = Options::try_parse_from(args.args)?;
         match options.mode {
             Mode::Decode => {
                 let mut sections = vec![Section::new(

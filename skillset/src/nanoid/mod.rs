@@ -84,8 +84,8 @@ const MAX_COUNT: usize = 30;
 pub struct NanoIdCommand;
 
 impl Command for NanoIdCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
-        let args = Args::try_parse_from(args.args).unwrap();
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+        let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
             return Err(Output {
                 module: "NanoID Generator".into(),
@@ -97,7 +97,8 @@ impl Command for NanoIdCommand {
                     media_type!(TEXT / PLAIN),
                 )
                 .kind(SectionKind::Comment)],
-            });
+            }
+            .into());
         }
         let list = iter::repeat_with(|| nanoid::nanoid!())
             .take(args.n)

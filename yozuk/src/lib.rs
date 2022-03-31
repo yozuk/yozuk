@@ -119,9 +119,10 @@ impl Yozuk {
 
         let mut errors = Vec::new();
         for (args, command) in commands {
+            let name = args.args[0].clone();
             match command.run(args, streams) {
                 Ok(result) => return Ok(result),
-                Err(err) => errors.push(err),
+                Err(err) => errors.push(err.into_output(name)),
             }
         }
 

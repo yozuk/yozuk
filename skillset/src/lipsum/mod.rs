@@ -157,14 +157,14 @@ const MAX_COUNT: usize = 300;
 pub struct LipsumCommand(LipsumConfig);
 
 impl Command for LipsumCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, Output> {
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
         let chain = self.0.custom_text.as_ref().map(|text| {
             let mut chain = MarkovChain::new();
             chain.learn(text);
             chain
         });
 
-        let args = Args::try_parse_from(args.args).unwrap();
+        let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
             return Err(Output {
                 module: "Lorem ipsum".into(),
@@ -176,7 +176,8 @@ impl Command for LipsumCommand {
                     media_type!(TEXT / PLAIN),
                 )
                 .kind(SectionKind::Comment)],
-            });
+            }
+            .into());
         }
         Ok(Output {
             sections: vec![Section::new(
