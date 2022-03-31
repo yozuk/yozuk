@@ -140,19 +140,17 @@ impl Command for ColorCommand {
             .filter_map(|color| css_color::Srgb::from_str(color).ok())
             .map(|color| Srgba::new(color.red, color.green, color.blue, color.alpha));
         Ok(Output {
-            sections: colors
-                .map(|color| Section::new(render_color(&color), media_type!(TEXT / PLAIN)))
-                .collect(),
+            sections: colors.map(|color| render_color(&color)).collect(),
             ..Default::default()
         })
     }
 }
 
-fn render_color(color: &Srgba) -> String {
+fn render_color(color: &Srgba) -> Section {
     let mut colors = Vec::new();
     let rgba_u8: Srgba<u8> = (*color).into_format();
 
-    colors.push(if rgba_u8.alpha == 255 {
+    let hex = if rgba_u8.alpha == 255 {
         format!(
             "#{:02x}{:02x}{:02x}",
             rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue
@@ -162,7 +160,8 @@ fn render_color(color: &Srgba) -> String {
             "#{:02x}{:02x}{:02x}{:02x}",
             rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue, rgba_u8.alpha
         )
-    });
+    };
+    colors.push(hex.clone());
 
     colors.push(if color.alpha == 1.0 {
         format!(
@@ -230,7 +229,7 @@ fn render_color(color: &Srgba) -> String {
         )
     });
 
-    colors.join("\n")
+    Section::new(colors.join("\n"), media_type!(TEXT / PLAIN)).attr("com.yozuk.preview.color", hex)
 }
 
 #[derive(Parser)]

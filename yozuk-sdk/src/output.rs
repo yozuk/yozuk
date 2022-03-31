@@ -2,6 +2,8 @@ use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
 use mediatype::MediaTypeBuf;
 use serde_derive::{Deserialize, Serialize};
+use serde_json::Value;
+use std::collections::HashMap;
 use std::str;
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq, Eq)]
@@ -20,6 +22,7 @@ pub struct Section {
 
     pub media_type: MediaTypeBuf,
     pub kind: SectionKind,
+    pub attrs: HashMap<String, Value>,
 }
 
 impl Section {
@@ -32,11 +35,21 @@ impl Section {
             data: data.into(),
             media_type: media_type.into(),
             kind: SectionKind::Value,
+            attrs: HashMap::new(),
         }
     }
 
     pub fn kind(mut self, kind: SectionKind) -> Self {
         self.kind = kind;
+        self
+    }
+
+    pub fn attr<K, V>(mut self, key: K, value: V) -> Self
+    where
+        K: Into<String>,
+        V: Into<Value>,
+    {
+        self.attrs.insert(key.into(), value.into());
         self
     }
 
