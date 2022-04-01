@@ -166,12 +166,12 @@ fn render_color(color: &Srgba) -> Section {
     colors.push(if color.alpha == 1.0 {
         format!(
             "rgb({} {} {})",
-            color.color.red, color.color.green, color.color.blue
+            rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue
         )
     } else {
         format!(
             "rgb({} {} {} / {})",
-            color.color.red, color.color.green, color.color.blue, color.alpha
+            rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue, rgba_u8.alpha
         )
     });
 
