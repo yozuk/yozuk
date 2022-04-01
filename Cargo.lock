@@ -487,6 +487,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "crc_all"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a8870eaf25cadb929c663b7f85e76bf9e82ceca6ac51c72c2bd8f029271187d4"
+
+[[package]]
 name = "crfs"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3747,6 +3753,7 @@ dependencies = [
  "chardetng",
  "clap 3.1.6",
  "const-sha1",
+ "crc_all",
  "css-color",
  "digest 0.10.3",
  "hex",

@@ -81,6 +81,24 @@ pub const ENTRIES: &[AlgorithmEntry] = &[
         keywords: &["keccak-512", "sha3", "sha-3"],
         init: || Box::new(DigestEntry::<sha3::Keccak512>::new()),
     },
+    AlgorithmEntry {
+        name: "CRC-32/ISO-HDLC",
+        keywords: &[
+            "crc32",
+            "crc-32",
+            "crc32-iso",
+            "crc-32-iso",
+            "crc-32-iso-hdlc",
+            "crc-32/iso-hdlc",
+            "crc32/iso-hdlc",
+            "crc32/iso",
+        ],
+        init: || {
+            Box::new(Crc32Entry::new(crc_all::Crc::<u32>::new(
+                0x04c11db7, 32, 0xffffffff, 0xffffffff, true,
+            )))
+        },
+    },
 ];
 
 pub struct AlgorithmEntry {
@@ -115,5 +133,23 @@ where
 
     fn finalize(&mut self) -> Vec<u8> {
         self.0.finalize_reset().to_vec()
+    }
+}
+
+pub struct Crc32Entry(crc_all::Crc<u32>);
+
+impl Crc32Entry {
+    pub fn new(alg: crc_all::Crc<u32>) -> Self {
+        Self(alg)
+    }
+}
+
+impl Algorithm for Crc32Entry {
+    fn update(&mut self, data: &[u8]) {
+        self.0.update(data);
+    }
+
+    fn finalize(&mut self) -> Vec<u8> {
+        self.0.finish().to_be_bytes().to_vec()
     }
 }
