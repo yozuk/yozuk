@@ -46,6 +46,7 @@ sha3 = { version = "0.10.1", optional = true }
 css-color = { version = "0.2.4", optional = true }
 palette = { version = "0.6.0", optional = true }
 crc_all = { version = "0.2.0", optional = true }
+chrono = { version = "0.4.19", optional = true }
 
 [features]
 default = [
@@ -62,7 +63,8 @@ default = [
     "yozuk-skill-punycode",
     "yozuk-skill-dice",
     "yozuk-skill-digest",
-    "yozuk-skill-color"
+    "yozuk-skill-color",
+    "yozuk-skill-time"
 ]
 yozuk-skill-mediatype = []
 yozuk-skill-version = []
@@ -86,3 +88,4 @@ yozuk-skill-digest = [
     "crc_all"
 ]
 yozuk-skill-color = ["css-color", "palette"]
+yozuk-skill-time = ["chrono"]

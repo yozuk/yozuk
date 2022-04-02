@@ -3751,6 +3751,7 @@ dependencies = [
  "base64",
  "bigdecimal",
  "chardetng",
+ "chrono",
  "clap 3.1.6",
  "const-sha1",
  "crc_all",

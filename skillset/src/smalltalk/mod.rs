@@ -43,6 +43,13 @@ impl Corpus for SmalltalkCorpus {
                 "and",
                 "everything"; "smalltalk:keyword"
             ]),
+            tk!([
+                "The", "answer", "to",
+                "Life,"; "smalltalk:keyword",
+                "universe"; "smalltalk:keyword",
+                "and",
+                "everything"; "smalltalk:keyword"
+            ]),
         ]
         .into_iter()
         .collect()
