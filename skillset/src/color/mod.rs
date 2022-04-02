@@ -178,14 +178,14 @@ fn render_color(color: &Srgba) -> Section {
     let hsla: Hsla = (*color).into_color();
     colors.push(if hsla.alpha == 1.0 {
         format!(
-            "hsl({} {}% {}%)",
+            "hsl({:.0} {:.0}% {:.0}%)",
             hsla.color.hue.to_positive_degrees(),
             hsla.color.saturation * 100.0,
             hsla.color.lightness * 100.0,
         )
     } else {
         format!(
-            "hsl({} {}% {}% / {})",
+            "hsl({:.0} {:.0}% {:.0}% / {})",
             hsla.color.hue.to_positive_degrees(),
             hsla.color.saturation * 100.0,
             hsla.color.lightness * 100.0,
@@ -196,14 +196,14 @@ fn render_color(color: &Srgba) -> Section {
     let hwba: Hwba = (*color).into_color();
     colors.push(if hwba.alpha == 1.0 {
         format!(
-            "hwb({} {}% {}%)",
+            "hwb({:.0} {:.0}% {:.0}%)",
             hwba.color.hue.to_positive_degrees(),
             hwba.color.whiteness * 100.0,
             hwba.color.blackness * 100.0
         )
     } else {
         format!(
-            "hwb({} {}% {}% / {})",
+            "hwb({:.0} {:.0}% {:.0}% / {})",
             hwba.color.hue.to_positive_degrees(),
             hwba.color.whiteness * 100.0,
             hwba.color.blackness * 100.0,
@@ -214,14 +214,14 @@ fn render_color(color: &Srgba) -> Section {
     let hsva: Hsva = (*color).into_color();
     colors.push(if hsva.alpha == 1.0 {
         format!(
-            "hsv({} {}% {}%)",
+            "hsv({:.0} {:.0}% {:.0}%)",
             hsva.color.hue.to_positive_degrees(),
             hsva.color.saturation * 100.0,
             hsva.color.value * 100.0,
         )
     } else {
         format!(
-            "hsv({} {}% {}% / {})",
+            "hsv({:.0} {:.0}% {:.0}% / {})",
             hsva.color.hue.to_positive_degrees(),
             hsva.color.saturation * 100.0,
             hsva.color.value * 100.0,
