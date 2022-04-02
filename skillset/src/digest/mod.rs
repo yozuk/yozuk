@@ -2,6 +2,7 @@
 #![deny(clippy::all)]
 
 use clap::Parser;
+use itertools::iproduct;
 use mediatype::media_type;
 use std::collections::BTreeMap;
 use std::io::{BufReader, Read};
@@ -9,7 +10,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"eGOVxmmD3L-lZBYt5r6P1",
+    model_id: b"ZHvxjqf7uAilPbetXFrU-",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -28,16 +29,36 @@ pub struct DigestCorpus;
 
 impl Corpus for DigestCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        ENTRIES
-            .iter()
-            .flat_map(|entry| entry.keywords)
-            .flat_map(|key| {
-                [
-                    tk!([key.to_string(); "digest:keyword"]),
-                    tk!([key.to_string(); "digest:keyword", key.to_string(); "digest:keyword"]),
-                ]
-            })
-            .collect()
+        let inputs = vec![
+            "Hello World",
+            "😍😗😋",
+            "quick brown fox jumps over the lazy dog",
+            "Veterinarian",
+        ];
+        iproduct!(
+            inputs.clone(),
+            ["as", "to", "in", "into"],
+            ENTRIES.iter().flat_map(|entry| entry.keywords)
+        )
+        .map(|(data, prefix, alg)| {
+            tk!([
+                data; "input:data",
+                prefix,
+                *alg; "digest:keyword"
+            ])
+        })
+        .chain(
+            ENTRIES
+                .iter()
+                .flat_map(|entry| entry.keywords)
+                .flat_map(|key| {
+                    [
+                        tk!([key.to_string(); "digest:keyword"]),
+                        tk!([key.to_string(); "digest:keyword", key.to_string(); "digest:keyword"]),
+                    ]
+                }),
+        )
+        .collect()
     }
 }
 
@@ -46,6 +67,11 @@ pub struct DigestTranslator;
 
 impl Translator for DigestTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+        let input = args
+            .iter()
+            .filter(|arg| arg.tag == "input:data")
+            .flat_map(|arg| ["--input", arg.as_utf8()]);
+
         let keywords = args
             .iter()
             .filter(|arg| arg.tag == "digest:keyword")
@@ -59,7 +85,7 @@ impl Translator for DigestTranslator {
             })
         {
             return Some(
-                CommandArgs::new().add_args_iter(
+                CommandArgs::new().add_args_iter(input).add_args_iter(
                     keywords
                         .iter()
                         .flat_map(|arg| ["--algorithm", arg.as_utf8()]),
@@ -102,32 +128,15 @@ impl Command for DigestCommand {
             }
         }
 
-        if let [stream, ..] = streams {
+        if let [input, ..] = &args.input[..] {
+            let mut input = input.as_bytes();
+            if let Some(output) = compute_hash(&mut input, entries) {
+                return Ok(output);
+            }
+        } else if let [stream, ..] = streams {
             let mut reader = BufReader::new(stream);
-            let mut data = vec![0; 1024];
-            while let Ok(len) = reader.read(&mut data) {
-                if len > 0 {
-                    for hash in entries.values_mut() {
-                        hash.update(&data[..len]);
-                    }
-                } else {
-                    let mut entries = entries.into_iter().collect::<Vec<_>>();
-                    let result = if entries.len() == 1 {
-                        vec![hex::encode(entries[0].1.finalize())]
-                    } else {
-                        entries
-                            .into_iter()
-                            .map(|(name, mut hash)| {
-                                format!("{}: {}", name, hex::encode(hash.finalize()))
-                            })
-                            .collect::<Vec<_>>()
-                    };
-                    return Ok(Output {
-                        module: "Digest".into(),
-                        sections: vec![Section::new(result.join("\n"), media_type!(TEXT / PLAIN))
-                            .kind(SectionKind::Value)],
-                    });
-                }
+            if let Some(output) = compute_hash(&mut reader, entries) {
+                return Ok(output);
             }
         }
 
@@ -143,8 +152,40 @@ impl Command for DigestCommand {
     }
 }
 
+fn compute_hash(
+    reader: &mut dyn Read,
+    mut entries: BTreeMap<&'static str, Box<dyn Algorithm>>,
+) -> Option<Output> {
+    let mut data = vec![0; 1024];
+    while let Ok(len) = reader.read(&mut data) {
+        if len > 0 {
+            for hash in entries.values_mut() {
+                hash.update(&data[..len]);
+            }
+        } else {
+            let mut entries = entries.into_iter().collect::<Vec<_>>();
+            let result = if entries.len() == 1 {
+                vec![hex::encode(entries[0].1.finalize())]
+            } else {
+                entries
+                    .into_iter()
+                    .map(|(name, mut hash)| format!("{}: {}", name, hex::encode(hash.finalize())))
+                    .collect::<Vec<_>>()
+            };
+            return Some(Output {
+                module: "Digest".into(),
+                sections: vec![Section::new(result.join("\n"), media_type!(TEXT / PLAIN))
+                    .kind(SectionKind::Value)],
+            });
+        }
+    }
+    None
+}
+
 #[derive(Parser)]
 pub struct Args {
     #[clap(short, long, multiple_occurrences(true))]
     pub algorithm: Vec<String>,
+    #[clap(short, long, multiple_occurrences(true))]
+    pub input: Vec<String>,
 }
