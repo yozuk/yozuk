@@ -172,7 +172,6 @@ pub const STOPWORDS: &[&str] = &[
     "nor",
     "not",
     "nothing",
-    "now",
     "nowhere",
     "n‘t",
     "n’t",
