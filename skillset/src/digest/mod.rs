@@ -143,7 +143,7 @@ impl Command for DigestCommand {
         Err(Output {
             module: "Digest".into(),
             sections: vec![Section::new(
-                "Invalid input source".to_string(),
+                "No valid input source provided".to_string(),
                 media_type!(TEXT / PLAIN),
             )
             .kind(SectionKind::Comment)],
