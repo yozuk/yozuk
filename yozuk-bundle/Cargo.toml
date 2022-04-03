@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-bundle"
-version = "0.4.2"
+version = "0.5.0"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Prebuild NLP model for Yozuk"
@@ -14,5 +14,5 @@ readme = "README.md"
 
 [build-dependencies]
 anyhow = "1.0.56"
-yozuk = { version = "0.4.2", features = ["modelgen"] }
+yozuk = { version = "0.5.0", features = ["modelgen"] }
 yozuk-sdk = "0.2.0"
