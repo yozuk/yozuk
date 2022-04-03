@@ -45,54 +45,38 @@ impl Server {
                                 send_hello(bot, msg).await?;
                             }
                             MediaKind::Text(text) => {
-                                let words = shell_words::split(&text.text).ok().unwrap_or_default();
                                 let mut merged_streams = vec![];
                                 if let Some(reply) = &common.reply_to_message {
                                     merged_streams
                                         .append(&mut get_streams_from_message(&bot, reply).await?);
                                 }
                                 merged_streams.append(&mut streams);
-                                let tokens = words
-                                    .into_iter()
-                                    .map(|token| tk!(token))
-                                    .collect::<Vec<_>>();
+                                let tokens = Yozuk::parse_tokens(&text.text);
                                 send_output(bot, msg, &zuk, tokens, merged_streams, logger.clone())
                                     .await?;
                             }
                             MediaKind::Photo(photo) => {
-                                let words =
-                                    shell_words::split(&photo.caption.clone().unwrap_or_default())
-                                        .ok()
-                                        .unwrap_or_default();
-                                let tokens = words.into_iter().map(|token| tk!(token)).collect();
+                                let tokens =
+                                    Yozuk::parse_tokens(&photo.caption.clone().unwrap_or_default());
                                 send_output(bot, msg, &zuk, tokens, streams, logger.clone())
                                     .await?;
                             }
                             MediaKind::Audio(audio) => {
-                                let words =
-                                    shell_words::split(&audio.caption.clone().unwrap_or_default())
-                                        .ok()
-                                        .unwrap_or_default();
-                                let tokens = words.into_iter().map(|token| tk!(token)).collect();
+                                let tokens =
+                                    Yozuk::parse_tokens(&audio.caption.clone().unwrap_or_default());
                                 send_output(bot, msg, &zuk, tokens, streams, logger.clone())
                                     .await?;
                             }
                             MediaKind::Video(video) => {
-                                let words =
-                                    shell_words::split(&video.caption.clone().unwrap_or_default())
-                                        .ok()
-                                        .unwrap_or_default();
-                                let tokens = words.into_iter().map(|token| tk!(token)).collect();
+                                let tokens =
+                                    Yozuk::parse_tokens(&video.caption.clone().unwrap_or_default());
                                 send_output(bot, msg, &zuk, tokens, streams, logger.clone())
                                     .await?;
                             }
                             MediaKind::Document(document) => {
-                                let words = shell_words::split(
+                                let tokens = Yozuk::parse_tokens(
                                     &document.caption.clone().unwrap_or_default(),
-                                )
-                                .ok()
-                                .unwrap_or_default();
-                                let tokens = words.into_iter().map(|token| tk!(token)).collect();
+                                );
                                 send_output(bot, msg, &zuk, tokens, streams, logger.clone())
                                     .await?;
                             }

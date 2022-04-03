@@ -182,12 +182,7 @@ impl App {
                 Ok(line) => {
                     rl.add_history_entry(line.as_str());
 
-                    let tokens = shell_words::split(&line)
-                        .unwrap_or_default()
-                        .into_iter()
-                        .map(|token| tk!(token))
-                        .collect::<Vec<_>>();
-
+                    let tokens = Yozuk::parse_tokens(&line);
                     if !tokens.is_empty() {
                         self.exec_command(&tokens, &mut [])?;
                     }
