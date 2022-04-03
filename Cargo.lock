@@ -3814,7 +3814,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-telegram"
-version = "0.4.2"
+version = "0.5.0"
 dependencies = [
  "anyhow",
  "clap 3.1.6",
@@ -3842,7 +3842,7 @@ dependencies = [
 
 [[package]]
 name = "zuk"
-version = "0.4.2"
+version = "0.5.0"
 dependencies = [
  "anyhow",
  "clap 3.1.6",
