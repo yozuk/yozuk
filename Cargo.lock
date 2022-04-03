@@ -1399,7 +1399,7 @@ dependencies = [
  "lazy_static",
  "memchr 2.4.1",
  "num-cmp",
- "parking_lot 0.12.0",
+ "parking_lot 0.11.2",
  "percent-encoding",
  "regex",
  "reqwest",
@@ -3708,6 +3708,37 @@ dependencies = [
 [[package]]
 name = "yozuk"
 version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8406c13ceb630a02ac3d3d2272406c3bf8b64a891d3183b81bccb9f5f64a3b1b"
+dependencies = [
+ "anyhow",
+ "bincode",
+ "bytes",
+ "const-sha1",
+ "crfs",
+ "crfsuite",
+ "distance",
+ "getrandom",
+ "mediatype",
+ "nanoid",
+ "num_cpus",
+ "punycode",
+ "rayon",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "shell-words",
+ "slog",
+ "sloggers",
+ "thiserror",
+ "yozuk-core-skillset 0.4.2",
+ "yozuk-helper-english",
+ "yozuk-sdk 0.1.0",
+]
+
+[[package]]
+name = "yozuk"
+version = "0.5.0"
 dependencies = [
  "anyhow",
  "bincode",
@@ -3730,9 +3761,9 @@ dependencies = [
  "slog",
  "sloggers",
  "thiserror",
- "yozuk-core-skillset",
+ "yozuk-core-skillset 0.5.0",
  "yozuk-helper-english",
- "yozuk-sdk",
+ "yozuk-sdk 0.2.0",
 ]
 
 [[package]]
@@ -3740,8 +3771,45 @@ name = "yozuk-bundle"
 version = "0.4.2"
 dependencies = [
  "anyhow",
- "yozuk",
- "yozuk-sdk",
+ "yozuk 0.4.2",
+ "yozuk-sdk 0.2.0",
+]
+
+[[package]]
+name = "yozuk-core-skillset"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "434627d8071397c196637c1167bfe6039dc368b19f9f368e26992695c3ade04b"
+dependencies = [
+ "base64",
+ "bigdecimal",
+ "chardetng",
+ "clap 3.1.6",
+ "const-sha1",
+ "digest 0.10.3",
+ "hex",
+ "itertools 0.10.3",
+ "lazy_static",
+ "lipsum",
+ "md-5",
+ "mediatype",
+ "nanoid",
+ "pest",
+ "pest_derive",
+ "punycode",
+ "rand",
+ "rayon",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "sha1",
+ "sha2",
+ "sha3",
+ "thiserror",
+ "tree_magic",
+ "uuid",
+ "yozuk-helper-english",
+ "yozuk-sdk 0.1.0",
 ]
 
 [[package]]
@@ -3780,7 +3848,7 @@ dependencies = [
  "tree_magic",
  "uuid",
  "yozuk-helper-english",
- "yozuk-sdk",
+ "yozuk-sdk 0.2.0",
 ]
 
 [[package]]
@@ -3790,6 +3858,29 @@ dependencies = [
  "Inflector",
  "distance",
  "singularize",
+]
+
+[[package]]
+name = "yozuk-sdk"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3e0acb1afdc5fbc2b4260af40873fcc6b9b58c6532710942237d3e14ac321c3c"
+dependencies = [
+ "anyhow",
+ "ascii",
+ "base64",
+ "bytes",
+ "clap 3.1.6",
+ "entropy",
+ "itertools 0.10.3",
+ "jsonschema",
+ "mediatype",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "shell-words",
+ "slog",
+ "sloggers",
 ]
 
 [[package]]
@@ -3835,9 +3926,9 @@ dependencies = [
  "toml",
  "tree_magic",
  "warp",
- "yozuk",
+ "yozuk 0.5.0",
  "yozuk-bundle",
- "yozuk-sdk",
+ "yozuk-sdk 0.2.0",
 ]
 
 [[package]]
@@ -3864,7 +3955,7 @@ dependencies = [
  "tokio",
  "toml",
  "warp",
- "yozuk",
+ "yozuk 0.5.0",
  "yozuk-bundle",
- "yozuk-sdk",
+ "yozuk-sdk 0.2.0",
 ]
