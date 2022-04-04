@@ -58,8 +58,8 @@ cargo install zuk
 
 ### Build from Source
 
-- [zuk](./adapters/zuk) (Command-line interface)
-- [Telegram](./adapters/telegram)
+- [zuk](./zuk) (Command-line interface)
+- [Telegram](https://github.com/yozuk/yozuk-telegram)
 
 #### Build Requirements
 
