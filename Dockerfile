@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 # Use the old snapshot to enable caching.
 RUN git clone https://github.com/yozuk/yozuk.git && \
-    cd yozuk/adapters/telegram && \
+    cd yozuk/adapters/zuk && \
     git checkout 625fcccb740760c0384603d20b403463b6f8f1eb && \
     cargo build --release && \
     cd /usr/src/app && \
@@ -12,11 +12,9 @@ RUN git clone https://github.com/yozuk/yozuk.git && \
     rm -rf yozuk
 
 COPY . .
-WORKDIR /usr/src/app/adapters/telegram
-RUN cargo install --path .
+RUN cargo install --path zuk
 
 FROM debian:bullseye-slim
-RUN apt-get update && apt-get install -y ca-certificates libssl1.1 && rm -rf /var/lib/apt/lists/*
-COPY --from=builder /usr/local/cargo/bin/yozuk-telegram /usr/local/bin/yozuk-telegram
+COPY --from=builder /usr/local/cargo/bin/zuk /usr/local/bin/zuk
 ENV PORT 8080
-CMD ["yozuk-telegram"]
+CMD ["zuk", "--mode", "http-server", "--server-addr", "0.0.0.0:8080", "--cors-origin", "https://yozuk.com"]

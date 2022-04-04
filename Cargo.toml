@@ -4,8 +4,8 @@ members = [
     "yozuk-sdk", 
     "yozuk-bundle",
     "skillset",
-    "helpers/*",
-    "adapters/*"
+    "zuk",
+    "helpers/*"
 ]
 resolver = "2"
 
