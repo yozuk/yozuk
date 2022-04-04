@@ -11,6 +11,7 @@ mod numeric;
 mod punycode;
 mod smalltalk;
 mod time;
+mod unit;
 mod uuid;
 mod version;
 

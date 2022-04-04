@@ -64,7 +64,8 @@ default = [
     "yozuk-skill-dice",
     "yozuk-skill-digest",
     "yozuk-skill-color",
-    "yozuk-skill-time"
+    "yozuk-skill-time",
+    "yozuk-skill-unit"
 ]
 yozuk-skill-mediatype = []
 yozuk-skill-version = []
@@ -89,3 +90,4 @@ yozuk-skill-digest = [
 ]
 yozuk-skill-color = ["css-color", "palette"]
 yozuk-skill-time = ["chrono"]
+yozuk-skill-unit = ["bigdecimal"]
