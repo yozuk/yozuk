@@ -11,6 +11,7 @@ mod numeric;
 mod punycode;
 mod smalltalk;
 mod time;
+mod unit;
 mod uuid;
 mod version;
 
@@ -68,4 +69,5 @@ skills!(
     [version, "yozuk-skill-version"],
     [color, "yozuk-skill-color"],
     [time, "yozuk-skill-time"],
+    [unit, "yozuk-skill-unit"],
 );
