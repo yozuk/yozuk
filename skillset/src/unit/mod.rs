@@ -16,12 +16,40 @@ pub const ENTRY: SkillEntry = SkillEntry {
     config_schema: None,
     init: |_, _| {
         Skill::builder()
+            .add_preprocessor(UnitPreprocessor)
             .add_corpus(UnitCorpus)
             .add_translator(UnitTranslator)
             .set_command(UnitCommand)
             .build()
     },
 };
+
+#[derive(Debug)]
+struct UnitPreprocessor;
+
+impl Preprocessor for UnitPreprocessor {
+    fn preprocess(&self, input: Vec<Token>) -> Vec<Token> {
+        input
+            .into_iter()
+            .flat_map(|token| {
+                if let Some((num, unit)) = symbol::parse_num_symbol(token.as_utf8()) {
+                    vec![
+                        Token {
+                            data: num.to_string().into(),
+                            ..token.clone()
+                        },
+                        Token {
+                            data: unit.to_string().into(),
+                            ..token
+                        },
+                    ]
+                } else {
+                    vec![token]
+                }
+            })
+            .collect()
+    }
+}
 
 #[derive(Debug)]
 pub struct UnitCorpus;

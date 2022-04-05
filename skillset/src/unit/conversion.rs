@@ -3,6 +3,7 @@ use super::entry::*;
 use bigdecimal::BigDecimal;
 use lazy_static::lazy_static;
 use num_bigint::BigInt;
+use std::iter;
 
 pub fn convert(value: &BigDecimal, base: BaseUnit) -> Vec<Unit> {
     match base {
@@ -18,11 +19,6 @@ lazy_static! {
 
 pub fn convert_gram(value: &BigDecimal, base: BaseUnit) -> impl Iterator<Item = Unit> + '_ {
     vec![
-        Unit {
-            value: value.clone(),
-            base: BaseUnit::Gram,
-            prefix: None,
-        },
         Unit {
             value: value.clone() / GRAM_OUNCE.clone(),
             base: BaseUnit::Ounce,
@@ -43,13 +39,20 @@ fn convert_prefixes<'a>(
     base: BaseUnit,
     prefixes: &'a [UnitPrefix],
 ) -> impl Iterator<Item = Unit> + 'a {
-    prefixes.iter().map(move |prefix| {
-        let value = value.clone();
-        let scale = BigDecimal::new(BigInt::from(1), prefix.scale());
-        Unit {
-            prefix: Some(*prefix),
-            value: (value * scale),
+    prefixes
+        .iter()
+        .map(move |prefix| {
+            let value = value.clone();
+            let scale = BigDecimal::new(BigInt::from(1), prefix.scale());
+            Unit {
+                prefix: Some(*prefix),
+                value: (value * scale),
+                base,
+            }
+        })
+        .chain(iter::once(Unit {
+            value: value.clone(),
             base,
-        }
-    })
+            prefix: None,
+        }))
 }

@@ -39,8 +39,6 @@ impl ToString for Unit {
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum BaseUnit {
-    Hertz,
-    Meter,
     Gram,
     Ounce,
     Pound,
@@ -49,8 +47,6 @@ pub enum BaseUnit {
 impl ToString for BaseUnit {
     fn to_string(&self) -> String {
         match self {
-            Self::Hertz => "Hz",
-            Self::Meter => "m",
             Self::Gram => "g",
             Self::Ounce => "oz.",
             Self::Pound => "lb",
@@ -65,9 +61,6 @@ pub enum UnitPrefix {
     Micro,
     Milli,
     Kilo,
-    Mega,
-    Giga,
-    Tera,
 }
 
 pub trait Scale {
@@ -81,9 +74,6 @@ impl Scale for UnitPrefix {
             Self::Micro => -6,
             Self::Milli => -3,
             Self::Kilo => 3,
-            Self::Mega => 6,
-            Self::Giga => 9,
-            Self::Tera => 12,
         }
     }
 }
@@ -95,9 +85,6 @@ impl ToString for UnitPrefix {
             Self::Micro => "µ",
             Self::Milli => "m",
             Self::Kilo => "k",
-            Self::Mega => "M",
-            Self::Giga => "G",
-            Self::Tera => "T",
         }
         .to_string()
     }
