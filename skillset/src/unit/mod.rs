@@ -100,11 +100,12 @@ impl Command for UnitCommand {
             BigInt::from(1),
             prefix.map(|prefix| prefix.scale()).unwrap_or(0),
         );
-        let converted = conversion::convert(&(value / scale), base);
+        let mut converted = conversion::convert(&(value / scale), base);
+        converted.sort_unstable_by_key(|unit| (unit.base, unit.prefix));
         let converted = converted
             .into_iter()
             .filter(|unit| *unit != base_unit)
-            .map(|unit| unit.to_string())
+            .map(|unit| unit.normalized().to_string())
             .collect::<Vec<_>>();
         Ok(Output {
             module: "Unit Converter".into(),

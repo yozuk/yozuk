@@ -15,6 +15,15 @@ pub struct Unit {
     pub prefix: Option<UnitPrefix>,
 }
 
+impl Unit {
+    pub fn normalized(&self) -> Self {
+        Self {
+            value: self.value.with_prec(10).normalized(),
+            ..self.clone()
+        }
+    }
+}
+
 impl ToString for Unit {
     fn to_string(&self) -> String {
         format!(
@@ -28,12 +37,13 @@ impl ToString for Unit {
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum BaseUnit {
     Hertz,
     Meter,
     Gram,
     Ounce,
+    Pound,
 }
 
 impl ToString for BaseUnit {
@@ -43,6 +53,7 @@ impl ToString for BaseUnit {
             Self::Meter => "m",
             Self::Gram => "g",
             Self::Ounce => "oz.",
+            Self::Pound => "lb",
         }
         .to_string()
     }

@@ -22,6 +22,11 @@ pub fn convert_gram(value: &BigDecimal, base: BaseUnit) -> impl Iterator<Item = 
             base: BaseUnit::Ounce,
             prefix: None,
         },
+        Unit {
+            value: value.clone() / BigDecimal::from_f64(453.59237).unwrap(),
+            base: BaseUnit::Pound,
+            prefix: None,
+        },
     ]
     .into_iter()
     .chain(convert_prefixes(value, base, &[Nano, Micro, Milli, Kilo]))
