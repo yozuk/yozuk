@@ -6,10 +6,10 @@ use std::str::FromStr;
 use yozuk_sdk::prelude::*;
 
 mod conversion;
+mod entry;
 mod symbol;
-mod unit;
 
-use unit::*;
+use entry::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"86lRFe79o8JOiQCogjsXc",

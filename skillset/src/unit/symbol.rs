@@ -1,5 +1,5 @@
-use super::unit::UnitPrefix::*;
-use super::unit::*;
+use super::entry::UnitPrefix::*;
+use super::entry::*;
 use std::iter;
 
 pub const ENTRIES: &[UnitEntry] = &[
