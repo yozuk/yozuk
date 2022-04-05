@@ -42,17 +42,3 @@ fn convert_prefixes<'a>(
         }
     })
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_conversion() {
-        let v = convert(&BigDecimal::from_f32(0.0001).unwrap(), BaseUnit::Gram)
-            .into_iter()
-            .map(|u| u.to_string())
-            .collect::<Vec<String>>();
-        assert_eq!(v, Vec::<String>::new());
-    }
-}

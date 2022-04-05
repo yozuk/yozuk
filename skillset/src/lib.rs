@@ -69,4 +69,5 @@ skills!(
     [version, "yozuk-skill-version"],
     [color, "yozuk-skill-color"],
     [time, "yozuk-skill-time"],
+    [unit, "yozuk-skill-unit"],
 );
