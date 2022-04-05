@@ -61,6 +61,7 @@ impl Translator for UnitTranslator {
         let units = args
             .iter()
             .filter(|arg| arg.tag == "unit:keyword")
+            .filter(|arg| symbol::parse_symbol(arg.as_utf8()).is_some())
             .collect::<Vec<_>>();
 
         if let [value] = &values[..] {
