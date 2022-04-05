@@ -1,11 +1,15 @@
 use bigdecimal::BigDecimal;
+use clap::Parser;
 use mediatype::media_type;
+use num_bigint::BigInt;
 use std::str::FromStr;
 use yozuk_sdk::prelude::*;
 
 mod conversion;
 mod symbol;
 mod unit;
+
+use unit::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"86lRFe79o8JOiQCogjsXc",
@@ -66,7 +70,12 @@ impl Translator for UnitTranslator {
 
         if let [value] = &values[..] {
             if let [unit] = units[..] {
-                return Some(CommandArgs::new().add_args([format!("{}{}", value, unit.as_utf8())]));
+                return Some(CommandArgs::new().add_args([
+                    "--value".to_string(),
+                    value.to_string(),
+                    "--unit".to_string(),
+                    unit.as_utf8().to_string(),
+                ]));
             }
         }
 
@@ -78,18 +87,44 @@ impl Translator for UnitTranslator {
 pub struct UnitCommand;
 
 impl Command for UnitCommand {
-    fn run(
-        &self,
-        _args: CommandArgs,
-        _streams: &mut [InputStream],
-    ) -> Result<Output, CommandError> {
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+        let args = Args::try_parse_from(args.args)?;
+        let value = BigDecimal::from_str(&args.value)?;
+        let (prefix, base) = symbol::parse_symbol(&args.unit).unwrap();
+        let base_unit = Unit {
+            value: value.clone(),
+            base,
+            prefix,
+        };
+        let scale = BigDecimal::new(
+            BigInt::from(1),
+            prefix.map(|prefix| prefix.scale()).unwrap_or(0),
+        );
+        let converted = conversion::convert(&(value / scale), base);
+        let converted = converted
+            .into_iter()
+            .filter(|unit| *unit != base_unit)
+            .map(|unit| unit.to_string())
+            .collect::<Vec<_>>();
         Ok(Output {
             module: "Unit Converter".into(),
-            sections: vec![Section::new("unit", media_type!(TEXT / PLAIN))],
+            sections: vec![Section::new(
+                format!("{} =\n{}", base_unit.to_string(), converted.join("\n")),
+                media_type!(TEXT / PLAIN),
+            )],
         })
     }
 
     fn priority(&self) -> i32 {
         -10
     }
+}
+
+#[derive(Parser)]
+pub struct Args {
+    #[clap(short, long)]
+    pub value: String,
+
+    #[clap(short, long)]
+    pub unit: String,
 }
