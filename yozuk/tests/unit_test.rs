@@ -30,4 +30,12 @@ fn units() {
         cmd(tk!(["9999999.999ng"])),
         CommandArgs::new().add_args(["yozuk-skill-unit", "--value", "9999999.999", "--unit", "ng"])
     );
+    assert_eq!(
+        cmd(tk!(["1000ounce"])),
+        CommandArgs::new().add_args(["yozuk-skill-unit", "--value", "1000", "--unit", "ounce"])
+    );
+    assert_eq!(
+        cmd(tk!(["1000oz"])),
+        CommandArgs::new().add_args(["yozuk-skill-unit", "--value", "1000", "--unit", "oz"])
+    );
 }

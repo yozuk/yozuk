@@ -29,16 +29,18 @@ fn symbols() -> impl Iterator<Item = (Option<UnitPrefix>, BaseUnit, String)> {
     ENTRIES.iter().flat_map(|entry| {
         iter::once(None)
             .chain(entry.prefixes.iter().map(|prefix| Some(*prefix)))
-            .map(|prefix| {
-                (
-                    prefix,
-                    entry.base,
-                    format!(
-                        "{}{}",
-                        prefix.map(|p| p.to_string()).unwrap_or_default(),
-                        entry.base.to_string()
-                    ),
-                )
+            .flat_map(move |prefix| {
+                entry.symbols.iter().map(move |sym| {
+                    (
+                        prefix,
+                        entry.base,
+                        format!(
+                            "{}{}",
+                            prefix.map(|p| p.to_string()).unwrap_or_default(),
+                            sym
+                        ),
+                    )
+                })
             })
     })
 }

@@ -12,7 +12,7 @@ mod symbol;
 use entry::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"vjppfjzkC7PX30dO4jFnG",
+    model_id: b"tJWiIVftOl-feQvDbDv3G",
     config_schema: None,
     init: |_, _| {
         Skill::builder()

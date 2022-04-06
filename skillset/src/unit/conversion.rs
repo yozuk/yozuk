@@ -36,11 +36,11 @@ pub fn convert(value: BigDecimal, base: BaseUnit) -> Vec<Unit> {
         .collect()
 }
 
-fn convert_prefixes<'a>(
+fn convert_prefixes(
     value: BigDecimal,
     base: BaseUnit,
-    prefixes: &'a [UnitPrefix],
-) -> impl Iterator<Item = Unit> + 'a {
+    prefixes: &[UnitPrefix],
+) -> impl Iterator<Item = Unit> + '_ {
     let base_value = value.clone();
     prefixes
         .iter()
