@@ -5,78 +5,43 @@ use lazy_static::lazy_static;
 use num_bigint::BigInt;
 use std::iter;
 
-pub fn convert(value: &BigDecimal, base: BaseUnit) -> Vec<Unit> {
-    match base {
-        BaseUnit::Gram => convert_gram(value),
-        BaseUnit::Ounce => convert_ounce(value),
-        BaseUnit::Pound => convert_pound(value),
-    }
-}
-
 lazy_static! {
     static ref GRAM_OUNCE: BigDecimal = "28.349523125".parse().unwrap();
     static ref GRAM_POUND: BigDecimal = "453.59237".parse().unwrap();
 }
 
-pub fn convert_gram(value: &BigDecimal) -> Vec<Unit> {
-    vec![
-        Unit {
-            value: value.clone() / GRAM_OUNCE.clone(),
-            base: BaseUnit::Ounce,
-            prefix: None,
+const TABLES: &[ConversionTable] = &[ConversionTable {
+    base_unit: BaseUnit::Gram,
+    base_prefixes: &[Nano, Micro, Milli, Kilo],
+    entries: &[
+        ConversionEntry {
+            base_unit: BaseUnit::Ounce,
+            base_prefixes: &[],
+            convert_to_base: |value| value * GRAM_OUNCE.clone(),
+            convert_from_base: |value| value / GRAM_OUNCE.clone(),
         },
-        Unit {
-            value: value.clone() / GRAM_POUND.clone(),
-            base: BaseUnit::Pound,
-            prefix: None,
+        ConversionEntry {
+            base_unit: BaseUnit::Pound,
+            base_prefixes: &[],
+            convert_to_base: |value| value * GRAM_POUND.clone(),
+            convert_from_base: |value| value / GRAM_POUND.clone(),
         },
-    ]
-    .into_iter()
-    .chain(convert_prefixes(
-        value,
-        BaseUnit::Gram,
-        &[Nano, Micro, Milli, Kilo],
-    ))
-    .collect()
-}
+    ],
+}];
 
-pub fn convert_ounce(value: &BigDecimal) -> Vec<Unit> {
-    let gram = value.clone() * GRAM_OUNCE.clone();
-    vec![Unit {
-        value: gram.clone() / GRAM_POUND.clone(),
-        base: BaseUnit::Pound,
-        prefix: None,
-    }]
-    .into_iter()
-    .chain(convert_prefixes(
-        &gram,
-        BaseUnit::Gram,
-        &[Nano, Micro, Milli, Kilo],
-    ))
-    .collect()
-}
-
-pub fn convert_pound(value: &BigDecimal) -> Vec<Unit> {
-    let gram = value.clone() * GRAM_POUND.clone();
-    vec![Unit {
-        value: gram.clone() / GRAM_OUNCE.clone(),
-        base: BaseUnit::Ounce,
-        prefix: None,
-    }]
-    .into_iter()
-    .chain(convert_prefixes(
-        &gram,
-        BaseUnit::Gram,
-        &[Nano, Micro, Milli, Kilo],
-    ))
-    .collect()
+pub fn convert(value: BigDecimal, base: BaseUnit) -> Vec<Unit> {
+    TABLES
+        .iter()
+        .flat_map(|table| table.convert(value.clone(), base))
+        .collect()
 }
 
 fn convert_prefixes<'a>(
-    value: &'a BigDecimal,
+    value: BigDecimal,
     base: BaseUnit,
     prefixes: &'a [UnitPrefix],
 ) -> impl Iterator<Item = Unit> + 'a {
+    let base_value = value.clone();
     prefixes
         .iter()
         .map(move |prefix| {
@@ -89,8 +54,47 @@ fn convert_prefixes<'a>(
             }
         })
         .chain(iter::once(Unit {
-            value: value.clone(),
+            value: base_value,
             base,
             prefix: None,
         }))
+}
+
+pub struct ConversionTable {
+    pub base_unit: BaseUnit,
+    pub base_prefixes: &'static [UnitPrefix],
+    pub entries: &'static [ConversionEntry],
+}
+
+impl ConversionTable {
+    pub fn convert(&self, value: BigDecimal, base: BaseUnit) -> Vec<Unit> {
+        let base_value = if base == self.base_unit {
+            value
+        } else if let Some(value) = self
+            .entries
+            .iter()
+            .find(|entry| entry.base_unit == base)
+            .map(|entry| (entry.convert_to_base)(value))
+        {
+            value
+        } else {
+            return vec![];
+        };
+        let value = base_value.clone();
+        self.entries
+            .iter()
+            .flat_map(|entry| {
+                let value = (entry.convert_from_base)(base_value.clone());
+                convert_prefixes(value, entry.base_unit, entry.base_prefixes)
+            })
+            .chain(convert_prefixes(value, self.base_unit, self.base_prefixes))
+            .collect()
+    }
+}
+
+pub struct ConversionEntry {
+    pub base_unit: BaseUnit,
+    pub base_prefixes: &'static [UnitPrefix],
+    pub convert_to_base: fn(BigDecimal) -> BigDecimal,
+    pub convert_from_base: fn(BigDecimal) -> BigDecimal,
 }

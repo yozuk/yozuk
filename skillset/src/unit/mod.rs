@@ -12,7 +12,7 @@ mod symbol;
 use entry::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"86lRFe79o8JOiQCogjsXc",
+    model_id: b"vjppfjzkC7PX30dO4jFnG",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -128,7 +128,7 @@ impl Command for UnitCommand {
             BigInt::from(1),
             prefix.map(|prefix| prefix.scale()).unwrap_or(0),
         );
-        let mut converted = conversion::convert(&(value / scale), base);
+        let mut converted = conversion::convert(value / scale, base);
         converted.sort_unstable_by_key(|unit| (unit.base, unit.prefix));
         let converted = converted
             .into_iter()
