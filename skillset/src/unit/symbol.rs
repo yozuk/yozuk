@@ -1,29 +1,8 @@
-use super::entry::UnitPrefix::*;
 use super::entry::*;
+use super::table::*;
 use bigdecimal::BigDecimal;
 use std::iter;
 use std::str::FromStr;
-
-pub const ENTRIES: &[UnitEntry] = &[
-    UnitEntry {
-        symbols: &["g"],
-        scale: 0,
-        base: BaseUnit::Gram,
-        prefixes: &[Nano, Micro, Milli, Kilo],
-    },
-    UnitEntry {
-        symbols: &["oz.", "oz", "ounce"],
-        scale: 0,
-        base: BaseUnit::Ounce,
-        prefixes: &[],
-    },
-    UnitEntry {
-        symbols: &["lb"],
-        scale: 0,
-        base: BaseUnit::Pound,
-        prefixes: &[],
-    },
-];
 
 fn symbols() -> impl Iterator<Item = (Option<UnitPrefix>, BaseUnit, String)> {
     ENTRIES.iter().flat_map(|entry| {

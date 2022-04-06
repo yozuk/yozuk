@@ -1,9 +1,9 @@
+use super::table::*;
 use bigdecimal::BigDecimal;
 
 #[derive(Debug, Copy, Clone)]
 pub struct UnitEntry {
     pub symbols: &'static [&'static str],
-    pub scale: i64,
     pub base: BaseUnit,
     pub prefixes: &'static [UnitPrefix],
 }
@@ -34,24 +34,6 @@ impl ToString for Unit {
                 .unwrap_or_default(),
             self.base.to_string()
         )
-    }
-}
-
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub enum BaseUnit {
-    Gram,
-    Ounce,
-    Pound,
-}
-
-impl ToString for BaseUnit {
-    fn to_string(&self) -> String {
-        match self {
-            Self::Gram => "g",
-            Self::Ounce => "oz.",
-            Self::Pound => "lb",
-        }
-        .to_string()
     }
 }
 

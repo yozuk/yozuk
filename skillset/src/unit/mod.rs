@@ -8,11 +8,13 @@ use yozuk_sdk::prelude::*;
 mod conversion;
 mod entry;
 mod symbol;
+mod table;
 
 use entry::*;
+use table::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"tJWiIVftOl-feQvDbDv3G",
+    model_id: b"H5d67MLB9zNLVF8xANDtE",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -56,7 +58,7 @@ pub struct UnitCorpus;
 
 impl Corpus for UnitCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        symbol::ENTRIES
+        ENTRIES
             .iter()
             .flat_map(|entry| {
                 entry.symbols.iter().flat_map(|sym| {

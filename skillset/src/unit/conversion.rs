@@ -1,33 +1,8 @@
-use super::entry::UnitPrefix::*;
 use super::entry::*;
+use super::table::*;
 use bigdecimal::BigDecimal;
-use lazy_static::lazy_static;
 use num_bigint::BigInt;
 use std::iter;
-
-lazy_static! {
-    static ref GRAM_OUNCE: BigDecimal = "28.349523125".parse().unwrap();
-    static ref GRAM_POUND: BigDecimal = "453.59237".parse().unwrap();
-}
-
-const TABLES: &[ConversionTable] = &[ConversionTable {
-    base_unit: BaseUnit::Gram,
-    base_prefixes: &[Nano, Micro, Milli, Kilo],
-    entries: &[
-        ConversionEntry {
-            base_unit: BaseUnit::Ounce,
-            base_prefixes: &[],
-            convert_to_base: |value| value * GRAM_OUNCE.clone(),
-            convert_from_base: |value| value / GRAM_OUNCE.clone(),
-        },
-        ConversionEntry {
-            base_unit: BaseUnit::Pound,
-            base_prefixes: &[],
-            convert_to_base: |value| value * GRAM_POUND.clone(),
-            convert_from_base: |value| value / GRAM_POUND.clone(),
-        },
-    ],
-}];
 
 pub fn convert(value: BigDecimal, base: BaseUnit) -> Vec<Unit> {
     TABLES
