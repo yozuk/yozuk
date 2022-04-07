@@ -15,6 +15,8 @@ pub enum BaseUnit {
     Foot,
     Yard,
     Mile,
+
+    Byte,
 }
 
 impl ToString for BaseUnit {
@@ -28,6 +30,7 @@ impl ToString for BaseUnit {
             Self::Foot => "ft",
             Self::Yard => "yd",
             Self::Mile => "mi.",
+            Self::Byte => "B",
         }
         .to_string()
     }
@@ -73,6 +76,11 @@ pub const ENTRIES: &[UnitEntry] = &[
         symbols: &["mi.", "mi"],
         base: BaseUnit::Mile,
         prefixes: &[],
+    },
+    UnitEntry {
+        symbols: &["B", "byte", "bytes"],
+        base: BaseUnit::Byte,
+        prefixes: &[Kilo, Mega, Giga, Tera, Kibi, Mebi, Gibi, Tibi],
     },
 ];
 
@@ -133,5 +141,10 @@ pub const TABLES: &[ConversionTable] = &[
                 convert_from_base: |value| value / METER_MILE.clone(),
             },
         ],
+    },
+    ConversionTable {
+        base_unit: BaseUnit::Byte,
+        base_prefixes: &[Kilo, Mega, Giga, Tera, Kibi, Mebi, Gibi, Tibi],
+        entries: &[],
     },
 ];

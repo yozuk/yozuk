@@ -42,4 +42,8 @@ fn units() {
         cmd(tk!(["2.5ft"])),
         CommandArgs::new().add_args(["yozuk-skill-unit", "--value", "2.5", "--unit", "ft"])
     );
+    assert_eq!(
+        cmd(tk!(["10KiB"])),
+        CommandArgs::new().add_args(["yozuk-skill-unit", "--value", "10", "--unit", "KiB"])
+    );
 }

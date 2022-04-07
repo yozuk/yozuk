@@ -1,7 +1,7 @@
 use bigdecimal::BigDecimal;
+use bigdecimal::One;
 use clap::Parser;
 use mediatype::media_type;
-use num_bigint::BigInt;
 use std::str::FromStr;
 use yozuk_sdk::prelude::*;
 
@@ -14,7 +14,7 @@ use entry::*;
 use table::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"H5d67MLB9zNLVF8xANDtE",
+    model_id: b"1XaIhqiY8zJ0-ox_dJZbs",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -126,11 +126,10 @@ impl Command for UnitCommand {
             base,
             prefix,
         };
-        let scale = BigDecimal::new(
-            BigInt::from(1),
-            prefix.map(|prefix| prefix.scale()).unwrap_or(0),
-        );
-        let mut converted = conversion::convert(value / scale, base);
+        let scale = prefix
+            .map(|prefix| prefix.scale())
+            .unwrap_or_else(BigDecimal::one);
+        let mut converted = conversion::convert(value * scale, base);
         converted.sort_unstable_by_key(|unit| (unit.base, unit.prefix));
         let converted = converted
             .into_iter()

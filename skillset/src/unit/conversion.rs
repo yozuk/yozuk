@@ -1,7 +1,6 @@
 use super::entry::*;
 use super::table::*;
 use bigdecimal::BigDecimal;
-use num_bigint::BigInt;
 use std::iter;
 
 pub fn convert(value: BigDecimal, base: BaseUnit) -> Vec<Unit> {
@@ -21,10 +20,10 @@ fn convert_prefixes(
         .iter()
         .map(move |prefix| {
             let value = value.clone();
-            let scale = BigDecimal::new(BigInt::from(1), prefix.scale());
+            let scale = prefix.scale();
             Unit {
                 prefix: Some(*prefix),
-                value: (value * scale),
+                value: (value / scale),
                 base,
             }
         })

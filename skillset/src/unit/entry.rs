@@ -1,5 +1,6 @@
 use super::table::*;
 use bigdecimal::BigDecimal;
+use num_bigint::BigInt;
 
 #[derive(Debug, Copy, Clone)]
 pub struct UnitEntry {
@@ -43,19 +44,29 @@ pub enum UnitPrefix {
     Micro,
     Milli,
     Kilo,
+    Mega,
+    Giga,
+    Tera,
+    Kibi,
+    Mebi,
+    Gibi,
+    Tibi,
 }
 
-pub trait Scale {
-    fn scale(&self) -> i64;
-}
-
-impl Scale for UnitPrefix {
-    fn scale(&self) -> i64 {
+impl UnitPrefix {
+    pub fn scale(&self) -> BigDecimal {
         match self {
-            Self::Nano => -9,
-            Self::Micro => -6,
-            Self::Milli => -3,
-            Self::Kilo => 3,
+            Self::Nano => BigDecimal::new(BigInt::from(1), 9),
+            Self::Micro => BigDecimal::new(BigInt::from(1), 6),
+            Self::Milli => BigDecimal::new(BigInt::from(1), 3),
+            Self::Kilo => BigDecimal::new(BigInt::from(1), -3),
+            Self::Mega => BigDecimal::new(BigInt::from(1), -6),
+            Self::Giga => BigDecimal::new(BigInt::from(1), -9),
+            Self::Tera => BigDecimal::new(BigInt::from(1), -12),
+            Self::Kibi => BigDecimal::new(BigInt::from(1024), 0),
+            Self::Mebi => Self::Kibi.scale() * Self::Kibi.scale(),
+            Self::Gibi => Self::Mebi.scale() * Self::Kibi.scale(),
+            Self::Tibi => Self::Gibi.scale() * Self::Kibi.scale(),
         }
     }
 }
@@ -67,6 +78,13 @@ impl ToString for UnitPrefix {
             Self::Micro => "µ",
             Self::Milli => "m",
             Self::Kilo => "k",
+            Self::Mega => "M",
+            Self::Giga => "G",
+            Self::Tera => "T",
+            Self::Kibi => "Ki",
+            Self::Gibi => "Gi",
+            Self::Mebi => "Mi",
+            Self::Tibi => "Ti",
         }
         .to_string()
     }
