@@ -47,6 +47,10 @@ pub struct Args {
         multiple_occurrences(true)
     )]
     pub cors_origin: Vec<String>,
+
+    /// Dump embedded model data.
+    #[clap(long, display_order(1002))]
+    pub dump_model: Option<PathBuf>,
 }
 
 #[derive(ArgEnum, Clone, PartialEq, Eq)]

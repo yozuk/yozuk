@@ -21,7 +21,7 @@ use sloggers::{
 use std::borrow::Cow;
 use std::fs::File;
 use std::io;
-use std::io::Read;
+use std::io::{Read, Write};
 use yozuk::{ModelSet, Yozuk, YozukError};
 use yozuk_sdk::prelude::*;
 
@@ -76,6 +76,12 @@ impl App {
     }
 
     fn run(self) -> Result<()> {
+        if let Some(dump_dst) = self.args.dump_model {
+            let mut out = File::create(dump_dst)?;
+            out.write_all(yozuk_bundle::MODEL_DATA)?;
+            return Ok(());
+        }
+
         #[cfg(feature = "http-server")]
         if let Some(addr) = self.args.server_addr {
             return server::start(addr, self.args.cors_origin, self.zuk);
