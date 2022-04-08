@@ -102,7 +102,7 @@ impl Translator for UnitTranslator {
             if let [unit] = units[..] {
                 return Some(CommandArgs::new().add_args([
                     "--value".to_string(),
-                    value.to_string(),
+                    format!(" {}", value),
                     "--unit".to_string(),
                     unit.as_utf8().to_string(),
                 ]));
@@ -119,7 +119,7 @@ pub struct UnitCommand;
 impl Command for UnitCommand {
     fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
-        let value = BigDecimal::from_str(&args.value)?;
+        let value = BigDecimal::from_str(args.value.trim())?;
         let (prefix, base) = symbol::parse_symbol(&args.unit).unwrap();
         let base_unit = Unit {
             value: value.clone(),
