@@ -133,7 +133,7 @@ impl Command for UnitCommand {
         converted.sort_unstable_by_key(|unit| (unit.base, unit.prefix));
         let converted = converted
             .into_iter()
-            .filter(|unit| *unit != base_unit)
+            .filter(|unit| unit.base != base_unit.base || unit.prefix != base_unit.prefix)
             .map(|unit| unit.normalized().to_string())
             .collect::<Vec<_>>();
         Ok(Output {
