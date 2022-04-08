@@ -17,6 +17,10 @@ pub enum BaseUnit {
     Mile,
 
     Byte,
+
+    Celsius,
+    Fahrenheit,
+    Kelvin,
 }
 
 impl ToString for BaseUnit {
@@ -31,6 +35,9 @@ impl ToString for BaseUnit {
             Self::Yard => "yd",
             Self::Mile => "mi.",
             Self::Byte => "B",
+            Self::Celsius => "°C",
+            Self::Fahrenheit => "°F",
+            Self::Kelvin => "K",
         }
         .to_string()
     }
@@ -82,6 +89,21 @@ pub const ENTRIES: &[UnitEntry] = &[
         base: BaseUnit::Byte,
         prefixes: &[Kilo, Mega, Giga, Tera, Kibi, Mebi, Gibi, Tibi],
     },
+    UnitEntry {
+        symbols: &["°C"],
+        base: BaseUnit::Celsius,
+        prefixes: &[],
+    },
+    UnitEntry {
+        symbols: &["°F"],
+        base: BaseUnit::Fahrenheit,
+        prefixes: &[],
+    },
+    UnitEntry {
+        symbols: &["K"],
+        base: BaseUnit::Kelvin,
+        prefixes: &[],
+    },
 ];
 
 lazy_static! {
@@ -91,6 +113,9 @@ lazy_static! {
     static ref METER_FEET: BigDecimal = "0.3048".parse().unwrap();
     static ref METER_YARD: BigDecimal = "0.9144".parse().unwrap();
     static ref METER_MILE: BigDecimal = "1609.344".parse().unwrap();
+    static ref KELVIN_CELSIUS: BigDecimal = "273.15".parse().unwrap();
+    static ref KELVIN_FAHRENHEIT_0: BigDecimal = "1.8".parse().unwrap();
+    static ref KELVIN_FAHRENHEIT_1: BigDecimal = "459.67".parse().unwrap();
 }
 
 pub const TABLES: &[ConversionTable] = &[
@@ -146,5 +171,27 @@ pub const TABLES: &[ConversionTable] = &[
         base_unit: BaseUnit::Byte,
         base_prefixes: &[Kilo, Mega, Giga, Tera, Kibi, Mebi, Gibi, Tibi],
         entries: &[],
+    },
+    ConversionTable {
+        base_unit: BaseUnit::Kelvin,
+        base_prefixes: &[],
+        entries: &[
+            ConversionEntry {
+                base_unit: BaseUnit::Celsius,
+                base_prefixes: &[],
+                convert_to_base: |value| value + KELVIN_CELSIUS.clone(),
+                convert_from_base: |value| value - KELVIN_CELSIUS.clone(),
+            },
+            ConversionEntry {
+                base_unit: BaseUnit::Fahrenheit,
+                base_prefixes: &[],
+                convert_to_base: |value| {
+                    (value + KELVIN_FAHRENHEIT_1.clone()) / KELVIN_FAHRENHEIT_0.clone()
+                },
+                convert_from_base: |value| {
+                    (value * KELVIN_FAHRENHEIT_0.clone()) - KELVIN_FAHRENHEIT_1.clone()
+                },
+            },
+        ],
     },
 ];
