@@ -5,7 +5,7 @@ Yozuk command-line interface.
 ## Installation
 
 ```bash
-cd yozuk/adapters/zuk
+cd yozuk/zuk
 cargo install --path .
 ```
 
