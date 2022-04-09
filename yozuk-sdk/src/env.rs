@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use jsonschema::JSONSchema;
+use jsonschema_valid::schemas;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 use slog::Logger;
@@ -56,14 +56,21 @@ impl Default for SkillConfig {
 }
 
 impl SkillConfig {
-    pub fn new(value: &Value, schema: &str) -> Result<Self> {
+    pub fn new(data: &Value, schema: &str) -> Result<Self> {
         let schema: Value = serde_json::from_str(schema)?;
-        let schema = JSONSchema::compile(&schema).map_err(|err| anyhow!("{}", err))?;
-        schema
-            .validate(value)
-            .map_err(|err| anyhow!("{:?}", err.collect::<Vec<_>>()))?;
+        let cfg = jsonschema_valid::Config::from_schema(&schema, Some(schemas::Draft::Draft6))?;
+        cfg.validate_schema()
+            .and_then(|_| cfg.validate(data))
+            .map_err(|err| {
+                anyhow!(
+                    "{}",
+                    err.map(|err| err.to_string())
+                        .collect::<Vec<_>>()
+                        .join("\n")
+                )
+            })?;
         Ok(Self {
-            data: serde_json::to_string(value)?,
+            data: serde_json::to_string(data)?,
         })
     }
 
