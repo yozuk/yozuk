@@ -82,6 +82,8 @@ Yozuk manages its commands by modules called [skills](./skills).
 | [`lipsum`](./skillset/src/lipsum) | Dummy text generator | `lipsum` `Lorem ipsum 150 words` |
 | [`dice`](./skillset/src/dice) | Dice roller | `2d6` `2d6 * 10 + 1d100` |
 | [`digest`](./skillset/src/digest) | Hash generator | `md5` `sha1 sha-256 Keccak-256` |
+| [`time`](./skillset/src/time) | Datetime | `now` |
+| [`unit`](./skillset/src/unit) | Unit Converter | `10MiB` `15.5mph` |
 
 You can enable or disable each skill at build time. Disabling unneeded skills is helpful in reducing build time, startup time, executable size and command misrecognitions.
 
