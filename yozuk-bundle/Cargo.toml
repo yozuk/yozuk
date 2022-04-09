@@ -14,5 +14,5 @@ readme = "README.md"
 
 [build-dependencies]
 anyhow = "1.0.56"
-yozuk = { version = "0.5.0", features = ["modelgen"] }
+yozuk = { version = "0.6.0", features = ["modelgen"] }
 yozuk-sdk = "0.3.0"
