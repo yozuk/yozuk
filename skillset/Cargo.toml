@@ -25,7 +25,7 @@ serde_json = "1.0.79"
 thiserror = "1.0.30"
 const-sha1 = "0.2.0"
 yozuk-helper-english = "0.1.0"
-yozuk-sdk = "0.2.0"
+yozuk-sdk = "0.3.0"
 
 rand = { version = "0.8.5", features = ["small_rng"], optional = true }
 chardetng = { version = "0.1.17", optional = true }
