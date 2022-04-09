@@ -21,6 +21,11 @@ pub enum BaseUnit {
     Celsius,
     Fahrenheit,
     Kelvin,
+
+    KmsPerHour,
+    MsPerSec,
+    MilesPerHour,
+    Knot,
 }
 
 impl ToString for BaseUnit {
@@ -38,6 +43,10 @@ impl ToString for BaseUnit {
             Self::Celsius => "°C",
             Self::Fahrenheit => "°F",
             Self::Kelvin => "K",
+            Self::KmsPerHour => "km/h",
+            Self::MsPerSec => "m/s",
+            Self::MilesPerHour => "mph",
+            Self::Knot => "kn.",
         }
         .to_string()
     }
@@ -104,6 +113,26 @@ pub const ENTRIES: &[UnitEntry] = &[
         base: BaseUnit::Kelvin,
         prefixes: &[],
     },
+    UnitEntry {
+        symbols: &["km/h", "kph"],
+        base: BaseUnit::KmsPerHour,
+        prefixes: &[],
+    },
+    UnitEntry {
+        symbols: &["m/s"],
+        base: BaseUnit::MsPerSec,
+        prefixes: &[],
+    },
+    UnitEntry {
+        symbols: &["mph", "mi/h"],
+        base: BaseUnit::MilesPerHour,
+        prefixes: &[],
+    },
+    UnitEntry {
+        symbols: &["kn.", "kn", "kt"],
+        base: BaseUnit::Knot,
+        prefixes: &[],
+    },
 ];
 
 lazy_static! {
@@ -116,6 +145,9 @@ lazy_static! {
     static ref KELVIN_CELSIUS: BigDecimal = "273.15".parse().unwrap();
     static ref KELVIN_FAHRENHEIT_0: BigDecimal = "1.8".parse().unwrap();
     static ref KELVIN_FAHRENHEIT_1: BigDecimal = "459.67".parse().unwrap();
+    static ref KPH_MPS: BigDecimal = "3.6".parse().unwrap();
+    static ref KPH_MPH: BigDecimal = "1.609344".parse().unwrap();
+    static ref KPH_KNOT: BigDecimal = "1.852".parse().unwrap();
 }
 
 pub const TABLES: &[ConversionTable] = &[
@@ -191,6 +223,30 @@ pub const TABLES: &[ConversionTable] = &[
                 convert_from_base: |value| {
                     (value * KELVIN_FAHRENHEIT_0.clone()) - KELVIN_FAHRENHEIT_1.clone()
                 },
+            },
+        ],
+    },
+    ConversionTable {
+        base_unit: BaseUnit::KmsPerHour,
+        base_prefixes: &[],
+        entries: &[
+            ConversionEntry {
+                base_unit: BaseUnit::MsPerSec,
+                base_prefixes: &[],
+                convert_to_base: |value| value * KPH_MPS.clone(),
+                convert_from_base: |value| value / KPH_MPS.clone(),
+            },
+            ConversionEntry {
+                base_unit: BaseUnit::MilesPerHour,
+                base_prefixes: &[],
+                convert_to_base: |value| value * KPH_MPH.clone(),
+                convert_from_base: |value| value / KPH_MPH.clone(),
+            },
+            ConversionEntry {
+                base_unit: BaseUnit::Knot,
+                base_prefixes: &[],
+                convert_to_base: |value| value * KPH_KNOT.clone(),
+                convert_from_base: |value| value / KPH_KNOT.clone(),
             },
         ],
     },

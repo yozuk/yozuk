@@ -62,4 +62,8 @@ fn units() {
         cmd(tk!(["-100", "°F"])),
         CommandArgs::new().add_args(["yozuk-skill-unit", "--value", " -100", "--unit", "°F"])
     );
+    assert_eq!(
+        cmd(tk!(["100.0", "m/s"])),
+        CommandArgs::new().add_args(["yozuk-skill-unit", "--value", " 100.0", "--unit", "m/s"])
+    );
 }
