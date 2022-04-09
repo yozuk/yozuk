@@ -1,11 +1,12 @@
 use super::entry::*;
 use super::table::*;
 use bigdecimal::BigDecimal;
+use rayon::prelude::*;
 use std::iter;
 
 pub fn convert(value: BigDecimal, base: BaseUnit) -> Vec<Unit> {
     TABLES
-        .iter()
+        .par_iter()
         .flat_map(|table| table.convert(value.clone(), base))
         .collect()
 }
