@@ -66,4 +66,8 @@ fn units() {
         cmd(tk!(["100.0", "m/s"])),
         CommandArgs::new().add_args(["yozuk-skill-unit", "--value", " 100.0", "--unit", "m/s"])
     );
+    assert_eq!(
+        cmd(tk!(["1000mmHg"])),
+        CommandArgs::new().add_args(["yozuk-skill-unit", "--value", " 1000", "--unit", "mmHg"])
+    );
 }

@@ -26,6 +26,11 @@ pub enum BaseUnit {
     MsPerSec,
     MilesPerHour,
     Knot,
+
+    Pascal,
+    Bar,
+    Atmosphere,
+    MmHg,
 }
 
 impl ToString for BaseUnit {
@@ -47,6 +52,10 @@ impl ToString for BaseUnit {
             Self::MsPerSec => "m/s",
             Self::MilesPerHour => "mph",
             Self::Knot => "kn.",
+            Self::Pascal => "Pa",
+            Self::Bar => "bar",
+            Self::Atmosphere => "atm",
+            Self::MmHg => "mmHg",
         }
         .to_string()
     }
@@ -133,6 +142,26 @@ pub const ENTRIES: &[UnitEntry] = &[
         base: BaseUnit::Knot,
         prefixes: &[],
     },
+    UnitEntry {
+        symbols: &["Pa"],
+        base: BaseUnit::Pascal,
+        prefixes: &[Hecto],
+    },
+    UnitEntry {
+        symbols: &["bar"],
+        base: BaseUnit::Bar,
+        prefixes: &[Milli],
+    },
+    UnitEntry {
+        symbols: &["atm"],
+        base: BaseUnit::Atmosphere,
+        prefixes: &[],
+    },
+    UnitEntry {
+        symbols: &["mmHg", "mmhg"],
+        base: BaseUnit::MmHg,
+        prefixes: &[],
+    },
 ];
 
 lazy_static! {
@@ -148,6 +177,9 @@ lazy_static! {
     static ref KPH_MPS: BigDecimal = "3.6".parse().unwrap();
     static ref KPH_MPH: BigDecimal = "1.609344".parse().unwrap();
     static ref KPH_KNOT: BigDecimal = "1.852".parse().unwrap();
+    static ref PASCAL_BAR: BigDecimal = "100000".parse().unwrap();
+    static ref PASCAL_ATMOSPHERE: BigDecimal = "101325".parse().unwrap();
+    static ref PASCAL_MMHG: BigDecimal = "133.322387415".parse().unwrap();
 }
 
 pub const TABLES: &[ConversionTable] = &[
@@ -247,6 +279,30 @@ pub const TABLES: &[ConversionTable] = &[
                 base_prefixes: &[],
                 convert_to_base: |value| value * KPH_KNOT.clone(),
                 convert_from_base: |value| value / KPH_KNOT.clone(),
+            },
+        ],
+    },
+    ConversionTable {
+        base_unit: BaseUnit::Pascal,
+        base_prefixes: &[Hecto],
+        entries: &[
+            ConversionEntry {
+                base_unit: BaseUnit::Bar,
+                base_prefixes: &[],
+                convert_to_base: |value| value * PASCAL_BAR.clone(),
+                convert_from_base: |value| value / PASCAL_BAR.clone(),
+            },
+            ConversionEntry {
+                base_unit: BaseUnit::Atmosphere,
+                base_prefixes: &[],
+                convert_to_base: |value| value * PASCAL_ATMOSPHERE.clone(),
+                convert_from_base: |value| value / PASCAL_ATMOSPHERE.clone(),
+            },
+            ConversionEntry {
+                base_unit: BaseUnit::MmHg,
+                base_prefixes: &[],
+                convert_to_base: |value| value * PASCAL_MMHG.clone(),
+                convert_from_base: |value| value / PASCAL_MMHG.clone(),
             },
         ],
     },
