@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 # Use the old snapshot to enable caching.
 RUN git clone https://github.com/yozuk/yozuk.git && \
     cd yozuk/zuk && \
-    git checkout 625fcccb740760c0384603d20b403463b6f8f1eb && \
+    git checkout 2dc8f6879ead4a5b1a01f47e4af98756737c1f87 && \
     cargo build --release && \
     cd /usr/src/app && \
     mv yozuk/target . && \
