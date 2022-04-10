@@ -31,6 +31,8 @@ pub enum BaseUnit {
     Bar,
     Atmosphere,
     MmHg,
+
+    Hertz,
 }
 
 impl ToString for BaseUnit {
@@ -56,6 +58,7 @@ impl ToString for BaseUnit {
             Self::Bar => "bar",
             Self::Atmosphere => "atm",
             Self::MmHg => "mmHg",
+            Self::Hertz => "Hz",
         }
         .to_string()
     }
@@ -161,6 +164,11 @@ pub const ENTRIES: &[UnitEntry] = &[
         symbols: &["mmHg", "mmhg"],
         base: BaseUnit::MmHg,
         prefixes: &[],
+    },
+    UnitEntry {
+        symbols: &["Hz", "hz"],
+        base: BaseUnit::Hertz,
+        prefixes: &[Kilo, Mega, Giga, Tera],
     },
 ];
 
@@ -305,5 +313,10 @@ pub const TABLES: &[ConversionTable] = &[
                 convert_from_base: |value| value / PASCAL_MMHG.clone(),
             },
         ],
+    },
+    ConversionTable {
+        base_unit: BaseUnit::Hertz,
+        base_prefixes: &[Kilo, Mega, Giga],
+        entries: &[],
     },
 ];

@@ -14,7 +14,7 @@ use entry::*;
 use table::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"zhzPqalclX0wN-spQfJeI",
+    model_id: b"FiANsDlUf9OI5fc3LTFA_",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
