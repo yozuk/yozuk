@@ -39,7 +39,7 @@ impl ToString for Unit {
                 .flat_map(|chunks| {
                     let mut v = chunks.to_vec();
                     v.reverse();
-                    v.push(b' ');
+                    v.push(b',');
                     v
                 })
                 .rev()
@@ -48,7 +48,7 @@ impl ToString for Unit {
         .unwrap();
         let value = format!(
             "{}{}{}",
-            int.trim_start_matches(' '),
+            int.trim_start_matches(','),
             frac.map(|_| ".").unwrap_or_default(),
             frac.unwrap_or_default()
         );
