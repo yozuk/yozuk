@@ -27,9 +27,34 @@ impl Unit {
 
 impl ToString for Unit {
     fn to_string(&self) -> String {
+        let decimal = self.value.to_string();
+        let (int, frac) = if let Some((int, frac)) = decimal.split_once('.') {
+            (int, Some(frac))
+        } else {
+            (decimal.as_str(), None)
+        };
+        let int = String::from_utf8(
+            int.as_bytes()
+                .rchunks(3)
+                .flat_map(|chunks| {
+                    let mut v = chunks.to_vec();
+                    v.reverse();
+                    v.push(b' ');
+                    v
+                })
+                .rev()
+                .collect(),
+        )
+        .unwrap();
+        let value = format!(
+            "{}{}{}",
+            int.trim_start_matches(' '),
+            frac.map(|_| ".").unwrap_or_default(),
+            frac.unwrap_or_default()
+        );
         format!(
             "{} {}{}",
-            self.value,
+            value,
             self.prefix
                 .map(|prefix| prefix.to_string())
                 .unwrap_or_default(),
