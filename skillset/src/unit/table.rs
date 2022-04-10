@@ -33,6 +33,9 @@ pub enum BaseUnit {
     MmHg,
 
     Hertz,
+
+    Joule,
+    Calorie,
 }
 
 impl ToString for BaseUnit {
@@ -59,6 +62,8 @@ impl ToString for BaseUnit {
             Self::Atmosphere => "atm",
             Self::MmHg => "mmHg",
             Self::Hertz => "Hz",
+            Self::Joule => "J",
+            Self::Calorie => "Cal",
         }
         .to_string()
     }
@@ -170,6 +175,16 @@ pub const ENTRIES: &[UnitEntry] = &[
         base: BaseUnit::Hertz,
         prefixes: &[Kilo, Mega, Giga, Tera],
     },
+    UnitEntry {
+        symbols: &["J"],
+        base: BaseUnit::Joule,
+        prefixes: &[Kilo],
+    },
+    UnitEntry {
+        symbols: &["Cal", "cal"],
+        base: BaseUnit::Calorie,
+        prefixes: &[Kilo],
+    },
 ];
 
 lazy_static! {
@@ -188,6 +203,7 @@ lazy_static! {
     static ref PASCAL_BAR: BigDecimal = "100000".parse().unwrap();
     static ref PASCAL_ATMOSPHERE: BigDecimal = "101325".parse().unwrap();
     static ref PASCAL_MMHG: BigDecimal = "133.322387415".parse().unwrap();
+    static ref JOULE_CALORIE: BigDecimal = "4.1868".parse().unwrap();
 }
 
 pub const TABLES: &[ConversionTable] = &[
@@ -318,5 +334,15 @@ pub const TABLES: &[ConversionTable] = &[
         base_unit: BaseUnit::Hertz,
         base_prefixes: &[Kilo, Mega, Giga],
         entries: &[],
+    },
+    ConversionTable {
+        base_unit: BaseUnit::Joule,
+        base_prefixes: &[Kilo],
+        entries: &[ConversionEntry {
+            base_unit: BaseUnit::Calorie,
+            base_prefixes: &[Kilo],
+            convert_to_base: |value| value * JOULE_CALORIE.clone(),
+            convert_from_base: |value| value / JOULE_CALORIE.clone(),
+        }],
     },
 ];
