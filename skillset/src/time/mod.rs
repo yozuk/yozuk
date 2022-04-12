@@ -6,6 +6,7 @@ use chrono::SecondsFormat;
 use clap::Parser;
 use mediatype::media_type;
 use yozuk_helper_english::normalized_eq;
+use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
@@ -14,6 +15,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |env, _| {
         Skill::builder()
             .add_corpus(TimeCorpus)
+            .add_preprocessor(TokenMerger::new(TimeTokenParser))
             .add_translator(TimeTranslator)
             .set_command(TimeCommand(env.clone()))
             .build()
@@ -28,16 +30,6 @@ pub struct TimeCorpus;
 impl Corpus for TimeCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
         vec![
-            tk!(["now"; "time:keyword"]),
-            tk!(["now"; "time:keyword"]),
-            tk!(["now"; "time:keyword"]),
-            tk!(["now"; "time:keyword"]),
-            tk!(["now"; "time:keyword"]),
-            tk!(["now"; "time:keyword"]),
-            tk!(["now"; "time:keyword"]),
-            tk!(["now"; "time:keyword"]),
-            tk!(["now"; "time:keyword"]),
-            tk!(["now"; "time:keyword"]),
             tk!(["What", "time"; "time:keyword", "is", "it"]),
             tk!(["What's", "the", "time"; "time:keyword"]),
             tk!(["current", "time"; "time:keyword"]),
@@ -51,11 +43,36 @@ impl Corpus for TimeCorpus {
     }
 }
 
+struct TimeTokenParser;
+
+impl TokenParser for TimeTokenParser {
+    fn parse(&self, tokens: &[Token]) -> Option<Token> {
+        let exp = tokens
+            .iter()
+            .map(|token| token.as_utf8())
+            .collect::<Vec<_>>()
+            .join(" ");
+
+        fuzzydate::parse(&exp).ok().map(|_| tk!(exp; "input:exp"))
+    }
+}
+
 #[derive(Debug)]
 pub struct TimeTranslator;
 
 impl Translator for TimeTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+        let exps = args
+            .iter()
+            .filter(|arg| arg.tag == "input:exp")
+            .collect::<Vec<_>>();
+
+        if let [exp] = exps[..] {
+            if fuzzydate::parse(exp.as_utf8()).is_ok() {
+                return Some(CommandArgs::new().add_args(["--exp", exp.as_utf8()]));
+            }
+        }
+
         let keywords = args
             .iter()
             .filter(|arg| arg.tag == "time:keyword")
@@ -99,6 +116,16 @@ impl Command for TimeCommand {
         let time = if let Some(ts) = args.timestamp {
             let ts = Utc.timestamp_nanos(ts);
             vec![ts.to_rfc3339_opts(SecondsFormat::Millis, false)]
+        } else if let Some(ts) = args.exp {
+            let ts = fuzzydate::parse(&ts).unwrap_or_else(|_| Local::now().naive_local());
+            let ts = Local
+                .from_local_datetime(&ts)
+                .single()
+                .unwrap_or_else(Local::now);
+            vec![
+                ts.timestamp().to_string(),
+                ts.to_rfc3339_opts(SecondsFormat::Millis, false),
+            ]
         } else {
             let now = Local::now();
             vec![
@@ -117,4 +144,7 @@ impl Command for TimeCommand {
 pub struct Args {
     #[clap(short, long)]
     pub timestamp: Option<i64>,
+
+    #[clap(short, long)]
+    pub exp: Option<String>,
 }

@@ -7,10 +7,6 @@ use yozuk_sdk::prelude::*;
 #[test]
 fn current_time() {
     assert_eq!(
-        cmd(tk!(["now"])),
-        CommandArgs::new().add_args(["yozuk-skill-time"])
-    );
-    assert_eq!(
         cmd(tk!(["current", "time"])),
         CommandArgs::new().add_args(["yozuk-skill-time"])
     );
@@ -25,6 +21,26 @@ fn current_time() {
     assert_eq!(
         cmd(tk!(["What's", "the", "time?"])),
         CommandArgs::new().add_args(["yozuk-skill-time"])
+    );
+}
+
+#[test]
+fn fuzzy_time() {
+    assert_eq!(
+        cmd(tk!(["now"])),
+        CommandArgs::new().add_args(["yozuk-skill-time", "--exp", "now"])
+    );
+    assert_eq!(
+        cmd(tk!(["five days after this friday"])),
+        CommandArgs::new().add_args(["yozuk-skill-time", "--exp", "five days after this friday"])
+    );
+    assert_eq!(
+        cmd(tk!(["Two days after 2/12/22 5:00 AM"])),
+        CommandArgs::new().add_args([
+            "yozuk-skill-time",
+            "--exp",
+            "Two days after 2/12/22 5:00 AM"
+        ])
     );
 }
 
