@@ -7,8 +7,8 @@ use mediatype::{media_type, MediaType};
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
-use std::collections::VecDeque;
 use thiserror::Error;
+use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
@@ -16,44 +16,30 @@ pub const ENTRY: SkillEntry = SkillEntry {
     config_schema: None,
     init: |_, _| {
         Skill::builder()
-            .add_preprocessor(CalcPreprocessor)
+            .add_preprocessor(TokenMerger::new(CalcTokenParser))
             .add_translator(CalcTranslator)
             .set_command(CalcCommand)
             .build()
     },
 };
 
-#[derive(Debug)]
-struct CalcPreprocessor;
+struct CalcTokenParser;
 
-impl Preprocessor for CalcPreprocessor {
-    fn preprocess(&self, input: Vec<Token>) -> Vec<Token> {
-        let mut output = Vec::new();
-        let mut tokens = input.into_iter().collect::<VecDeque<_>>();
-        while !tokens.is_empty() {
-            for i in 1..=tokens.len() {
-                let len = tokens.len() + 1 - i;
-                let exp = tokens
-                    .iter()
-                    .take(len)
-                    .map(|token| token.as_utf8())
-                    .collect::<Vec<_>>();
-                let exp = exp.join("");
-                let is_exp = CalcParser::parse(Rule::calculation, &exp).is_ok()
-                    && (len >= 2 || CalcParser::parse(Rule::single_num, &exp).is_err());
-                if is_exp {
-                    for _ in 0..len {
-                        tokens.pop_front();
-                    }
-                    output.push(tk!(exp, "text/vnd.yozuk.calc"));
-                    break;
-                }
-            }
-            if let Some(front) = tokens.pop_front() {
-                output.push(front);
-            }
+impl TokenParser for CalcTokenParser {
+    fn parse(&self, tokens: &[Token]) -> Option<Token> {
+        let exp = tokens
+            .iter()
+            .map(|token| token.as_utf8())
+            .collect::<Vec<_>>()
+            .join("");
+
+        if CalcParser::parse(Rule::calculation, &exp).is_ok()
+            && (tokens.len() >= 2 || CalcParser::parse(Rule::single_num, &exp).is_err())
+        {
+            Some(tk!(exp, "text/vnd.yozuk.calc"))
+        } else {
+            None
         }
-        output
     }
 }
 

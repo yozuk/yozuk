@@ -1,0 +1,16 @@
+[package]
+name = "yozuk-helper-preprocessor"
+version = "0.1.0"
+edition = "2021"
+authors = ["picoHz <picoHz@outlook.com>"]
+description = "Preprocessor utilities for Yozuk"
+keywords = ["yozuk"]
+categories = ["text-processing"]
+repository = "https://github.com/yozuk/yozuk/helpers/preprocessor"
+homepage = "https://yozuk.com"
+documentation = "https://docs.rs/yozuk-helper-preprocessor"
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
+yozuk-sdk = "0.3.0"

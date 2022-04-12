@@ -7,10 +7,10 @@ use pest::prec_climber::*;
 use pest::Parser;
 use rand::{rngs::SmallRng, Rng, SeedableRng};
 use serde_derive::Deserialize;
-use std::collections::VecDeque;
 use std::iter;
 use thiserror::Error;
 use yozuk_helper_english::normalized_eq;
+use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
@@ -19,7 +19,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_, config| {
         Skill::builder()
             .add_corpus(DiceCorpus)
-            .add_preprocessor(DicePreprocessor)
+            .add_preprocessor(TokenMerger::new(DiceTokenParser))
             .add_translator(DiceTranslator)
             .set_command(DiceCommand(config.get()))
             .build()
@@ -52,39 +52,26 @@ impl Corpus for DiceCorpus {
     }
 }
 
-#[derive(Debug)]
-struct DicePreprocessor;
+struct DiceTokenParser;
 
-impl Preprocessor for DicePreprocessor {
-    fn preprocess(&self, input: Vec<Token>) -> Vec<Token> {
-        let mut output = Vec::new();
-        let mut tokens = input.into_iter().collect::<VecDeque<_>>();
-        while !tokens.is_empty() {
-            for i in 1..=tokens.len() {
-                let len = tokens.len() + 1 - i;
-                let exp = tokens
-                    .iter()
-                    .take(len)
-                    .map(|token| token.as_utf8())
-                    .collect::<Vec<_>>();
-                let exp = exp.join("");
-                let is_exp = match DiceParser::parse(Rule::calculation, &exp) {
-                    Ok(pairs) => pairs.flatten().any(|pair| pair.as_rule() == Rule::dice),
-                    _ => false,
-                };
-                if is_exp {
-                    for _ in 0..len {
-                        tokens.pop_front();
-                    }
-                    output.push(tk!(exp, "text/vnd.yozuk.dice"));
-                    break;
-                }
+impl TokenParser for DiceTokenParser {
+    fn parse(&self, tokens: &[Token]) -> Option<Token> {
+        let exp = tokens
+            .iter()
+            .map(|token| token.as_utf8())
+            .collect::<Vec<_>>()
+            .join("");
+        match DiceParser::parse(Rule::calculation, &exp) {
+            Ok(pairs)
+                if pairs
+                    .clone()
+                    .flatten()
+                    .any(|pair| pair.as_rule() == Rule::dice) =>
+            {
+                Some(tk!(exp, "text/vnd.yozuk.dice"))
             }
-            if let Some(front) = tokens.pop_front() {
-                output.push(front);
-            }
+            _ => None,
         }
-        output
     }
 }
 

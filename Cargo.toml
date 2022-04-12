@@ -15,6 +15,7 @@ strip = true
 [patch.crates-io]
 yozuk-sdk = { path = "./yozuk-sdk" }
 yozuk-helper-english = { path = "./helpers/english" }
+yozuk-helper-preprocessor = { path = "./helpers/preprocessor" }
 yozuk-core-skillset = { path = "./skillset" }
 yozuk = { path = "./yozuk" }
 yozuk-bundle = { path = "./yozuk-bundle" }

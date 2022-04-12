@@ -5,8 +5,8 @@ use clap::Parser;
 use itertools::iproduct;
 use mediatype::media_type;
 use palette::{Hsla, Hsva, Hwba, IntoColor, Srgba};
-use std::collections::VecDeque;
 use std::str::FromStr;
+use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
@@ -14,7 +14,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     config_schema: None,
     init: |_, _| {
         Skill::builder()
-            .add_preprocessor(ColorPreprocessor)
+            .add_preprocessor(TokenMerger::new(ColorTokenParser))
             .add_labeler(ColorLabeler)
             .add_corpus(ColorCorpus)
             .add_translator(ColorTranslator)
@@ -23,45 +23,26 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
-struct ColorPreprocessor;
+struct ColorTokenParser;
 
-impl Preprocessor for ColorPreprocessor {
-    fn preprocess(&self, input: Vec<Token>) -> Vec<Token> {
-        let mut output = Vec::new();
-        let mut tokens = input.into_iter().collect::<VecDeque<_>>();
-        while !tokens.is_empty() {
-            for i in 1..=tokens.len() {
-                let len = tokens.len() + 1 - i;
-                let exp = tokens
-                    .iter()
-                    .take(len)
-                    .map(|token| token.as_utf8())
-                    .collect::<Vec<_>>();
-                let exp = exp.join(" ");
-                let is_exp = css_color::Srgb::from_str(&exp).is_ok();
-                if is_exp {
-                    let mut tag = String::new();
-                    for _ in 0..len {
-                        if let Some(token) = tokens.pop_front() {
-                            if !token.tag.is_empty() {
-                                tag = token.tag;
-                            }
-                        }
-                    }
-                    output.push(Token {
-                        data: exp.into(),
-                        media_type: "text/vnd.yozuk.color".parse().unwrap(),
-                        tag,
-                    });
-                    break;
-                }
-            }
-            if let Some(front) = tokens.pop_front() {
-                output.push(front);
+impl TokenParser for ColorTokenParser {
+    fn parse(&self, tokens: &[Token]) -> Option<Token> {
+        let exp = tokens
+            .iter()
+            .map(|token| token.as_utf8())
+            .collect::<Vec<_>>()
+            .join(" ");
+        let mut tag = String::new();
+        for token in tokens {
+            if !token.tag.is_empty() {
+                tag = token.tag.clone();
             }
         }
-        output
+        css_color::Srgb::from_str(&exp).ok().map(|_| Token {
+            data: exp.into(),
+            media_type: "text/vnd.yozuk.color".parse().unwrap(),
+            tag,
+        })
     }
 }
 

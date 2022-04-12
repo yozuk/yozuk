@@ -3027,6 +3027,7 @@ dependencies = [
  "tree_magic",
  "uuid",
  "yozuk-helper-english",
+ "yozuk-helper-preprocessor",
  "yozuk-sdk",
 ]
 
@@ -3037,6 +3038,13 @@ dependencies = [
  "Inflector",
  "distance",
  "singularize",
+]
+
+[[package]]
+name = "yozuk-helper-preprocessor"
+version = "0.1.0"
+dependencies = [
+ "yozuk-sdk",
 ]
 
 [[package]]
