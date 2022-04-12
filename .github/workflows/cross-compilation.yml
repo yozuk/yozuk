@@ -1,0 +1,37 @@
+name: Cross-Compilation
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+    - '**.md'
+    - '**/Dockerfile'
+    - 'images/**'
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:    
+    strategy:
+      matrix:
+        toolchain: [arm-linux-androideabi, armv7-linux-androideabi, aarch64-apple-ios]
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.rustup/toolchains/*
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - uses: extractions/setup-just@v1
+    - name: Install toolchain
+      run: rustup target add ${{ matrix.toolchain }}
+    - name: Build
+      run: cargo build -p yozuk --target=${{ matrix.toolchain }}
