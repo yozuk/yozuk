@@ -27,3 +27,19 @@ fn current_time() {
         CommandArgs::new().add_args(["yozuk-skill-time"])
     );
 }
+
+#[test]
+fn timestamp() {
+    assert_eq!(
+        cmd(tk!(["1640000000"])),
+        CommandArgs::new().add_args(["yozuk-skill-time", "--timestamp", "1640000000000000000"])
+    );
+    assert_eq!(
+        cmd(tk!(["1640000000000"])),
+        CommandArgs::new().add_args(["yozuk-skill-time", "--timestamp", "1640000000000000000"])
+    );
+    assert_eq!(
+        cmd(tk!(["1640000000000000000"])),
+        CommandArgs::new().add_args(["yozuk-skill-time", "--timestamp", "1640000000000000000"])
+    );
+}

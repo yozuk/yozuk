@@ -3,12 +3,13 @@
 
 use chrono::prelude::*;
 use chrono::SecondsFormat;
+use clap::Parser;
 use mediatype::media_type;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"RivT_4cXJtYS1h5JpMxdxd",
+    model_id: b"flWuS_TMghY1Q5wq4fQ_qc",
     config_schema: None,
     init: |env, _| {
         Skill::builder()
@@ -18,6 +19,8 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .build()
     },
 };
+
+const TIMESTAMP_TOLERANCE_DAYS: i64 = 365 * 10;
 
 #[derive(Debug)]
 pub struct TimeCorpus;
@@ -32,10 +35,16 @@ impl Corpus for TimeCorpus {
             tk!(["now"; "time:keyword"]),
             tk!(["now"; "time:keyword"]),
             tk!(["now"; "time:keyword"]),
+            tk!(["now"; "time:keyword"]),
+            tk!(["now"; "time:keyword"]),
+            tk!(["now"; "time:keyword"]),
             tk!(["What", "time"; "time:keyword", "is", "it"]),
             tk!(["What's", "the", "time"; "time:keyword"]),
             tk!(["current", "time"; "time:keyword"]),
             tk!(["time"; "time:keyword"]),
+            tk!(["1640000000"; "input:unix"]),
+            tk!(["1640000000000"; "input:unix"]),
+            tk!(["1640000000000000000"; "input:unix"]),
         ]
         .into_iter()
         .collect()
@@ -58,6 +67,25 @@ impl Translator for TimeTranslator {
             }
         }
 
+        let timestamps = args
+            .iter()
+            .filter(|arg| arg.tag == "input:unix")
+            .filter_map(|arg| arg.as_utf8().parse::<i64>().ok())
+            .flat_map(|ts| {
+                Utc.timestamp_millis_opt(ts)
+                    .single()
+                    .into_iter()
+                    .chain(Utc.timestamp_opt(ts, 0).single())
+                    .chain(Some(Utc.timestamp_nanos(ts)))
+            })
+            .filter(|&ts| (Utc::now() - ts).num_days().abs() <= TIMESTAMP_TOLERANCE_DAYS)
+            .collect::<Vec<_>>();
+
+        if let [ts] = timestamps[..] {
+            let ts = ts.timestamp_nanos().to_string();
+            return Some(CommandArgs::new().add_args(["--timestamp", &ts]));
+        }
+
         None
     }
 }
@@ -66,20 +94,27 @@ impl Translator for TimeTranslator {
 pub struct TimeCommand(Environment);
 
 impl Command for TimeCommand {
-    fn run(
-        &self,
-        _args: CommandArgs,
-        _streams: &mut [InputStream],
-    ) -> Result<Output, CommandError> {
-        let now = Local::now();
-        let time = format!(
-            "{}\n{}",
-            now.timestamp(),
-            now.to_rfc3339_opts(SecondsFormat::Millis, false)
-        );
+    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+        let args = Args::try_parse_from(args.args)?;
+        let time = if let Some(ts) = args.timestamp {
+            let ts = Utc.timestamp_nanos(ts);
+            vec![ts.to_rfc3339_opts(SecondsFormat::Millis, false)]
+        } else {
+            let now = Local::now();
+            vec![
+                now.timestamp().to_string(),
+                now.to_rfc3339_opts(SecondsFormat::Millis, false),
+            ]
+        };
         Ok(Output {
             module: "Time".into(),
-            sections: vec![Section::new(time, media_type!(TEXT / PLAIN))],
+            sections: vec![Section::new(time.join("\n"), media_type!(TEXT / PLAIN))],
         })
     }
+}
+
+#[derive(Parser)]
+pub struct Args {
+    #[clap(short, long)]
+    pub timestamp: Option<i64>,
 }
