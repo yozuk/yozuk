@@ -152,7 +152,12 @@ impl Translator for Base64Translator {
 pub struct Base64Command;
 
 impl Command for Base64Command {
-    fn run(&self, args: CommandArgs, streams: &mut [InputStream]) -> Result<Output, CommandError> {
+    fn run(
+        &self,
+        args: CommandArgs,
+        streams: &mut [InputStream],
+        _locale: &Locale,
+    ) -> Result<Output, CommandError> {
         let streams = streams.iter_mut().map(|stream| {
             stream
                 .bytes()

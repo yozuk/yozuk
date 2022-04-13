@@ -117,7 +117,12 @@ impl Translator for UnitTranslator {
 pub struct UnitCommand;
 
 impl Command for UnitCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+    fn run(
+        &self,
+        args: CommandArgs,
+        _streams: &mut [InputStream],
+        _locale: &Locale,
+    ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         let value = BigDecimal::from_str(args.value.trim())?;
         let (prefix, base) = symbol::parse_symbol(&args.unit).unwrap();

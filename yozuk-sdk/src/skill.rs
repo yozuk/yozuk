@@ -30,7 +30,12 @@ pub trait Translator: fmt::Debug + Send + Sync + 'static {
 }
 
 pub trait Command: fmt::Debug + Send + Sync + 'static {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError>;
+    fn run(
+        &self,
+        args: CommandArgs,
+        _streams: &mut [InputStream],
+        _locale: &Locale,
+    ) -> Result<Output, CommandError>;
     fn priority(&self) -> i32 {
         0
     }

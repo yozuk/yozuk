@@ -111,7 +111,12 @@ impl Translator for TimeTranslator {
 pub struct TimeCommand(Environment);
 
 impl Command for TimeCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+    fn run(
+        &self,
+        args: CommandArgs,
+        _streams: &mut [InputStream],
+        _locale: &Locale,
+    ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         let time = if let Some(ts) = args.timestamp {
             let ts = Utc.timestamp_nanos(ts);

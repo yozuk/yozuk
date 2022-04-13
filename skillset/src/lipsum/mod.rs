@@ -157,7 +157,12 @@ const MAX_COUNT: usize = 300;
 pub struct LipsumCommand(LipsumConfig);
 
 impl Command for LipsumCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+    fn run(
+        &self,
+        args: CommandArgs,
+        _streams: &mut [InputStream],
+        _locale: &Locale,
+    ) -> Result<Output, CommandError> {
         let chain = self.0.custom_text.as_ref().map(|text| {
             let mut chain = MarkovChain::new();
             chain.learn(text);

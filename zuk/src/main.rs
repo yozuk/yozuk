@@ -116,11 +116,16 @@ impl App {
                 .map(|token| tk!(token.clone()))
                 .collect::<Vec<_>>();
 
-            self.exec_command(&tokens, &mut streams)
+            self.exec_command(&tokens, &mut streams, &Default::default())
         }
     }
 
-    fn exec_command(&self, tokens: &[Token], streams: &mut [InputStream]) -> Result<()> {
+    fn exec_command(
+        &self,
+        tokens: &[Token],
+        streams: &mut [InputStream],
+        locale: &Locale,
+    ) -> Result<()> {
         for stream in streams.iter_mut() {
             stream.read_header()?;
         }
@@ -140,7 +145,7 @@ impl App {
                     return Ok(());
                 }
 
-                let result = self.zuk.run_commands(commands, streams);
+                let result = self.zuk.run_commands(commands, streams, locale);
 
                 match result {
                     Ok(output) => printer.print_result(&output)?,
@@ -190,7 +195,7 @@ impl App {
 
                     let tokens = Yozuk::parse_tokens(&line);
                     if !tokens.is_empty() {
-                        self.exec_command(&tokens, &mut [])?;
+                        self.exec_command(&tokens, &mut [], &Default::default())?;
                     }
                 }
                 Err(ReadlineError::Interrupted | ReadlineError::Eof) => {

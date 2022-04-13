@@ -114,7 +114,12 @@ impl Translator for CalcTranslator {
 pub struct CalcCommand;
 
 impl Command for CalcCommand {
-    fn run(&self, args: CommandArgs, _streams: &mut [InputStream]) -> Result<Output, CommandError> {
+    fn run(
+        &self,
+        args: CommandArgs,
+        _streams: &mut [InputStream],
+        _locale: &Locale,
+    ) -> Result<Output, CommandError> {
         let rule = CalcParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule)
             .map(|result| Output {

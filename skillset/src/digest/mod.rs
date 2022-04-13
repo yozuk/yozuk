@@ -101,7 +101,12 @@ impl Translator for DigestTranslator {
 pub struct DigestCommand;
 
 impl Command for DigestCommand {
-    fn run(&self, args: CommandArgs, streams: &mut [InputStream]) -> Result<Output, CommandError> {
+    fn run(
+        &self,
+        args: CommandArgs,
+        streams: &mut [InputStream],
+        _locale: &Locale,
+    ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
 
         let mut entries = BTreeMap::new();

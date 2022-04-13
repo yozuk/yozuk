@@ -6,6 +6,7 @@ pub use bytes::Bytes;
 pub mod args;
 pub mod env;
 pub mod feature;
+pub mod locale;
 pub mod output;
 pub mod prelude;
 pub mod skill;
