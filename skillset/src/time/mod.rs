@@ -3,6 +3,7 @@
 
 use chrono::prelude::*;
 use chrono::SecondsFormat;
+use chrono_tz::Tz;
 use clap::Parser;
 use mediatype::media_type;
 use yozuk_helper_english::normalized_eq;
@@ -115,18 +116,24 @@ impl Command for TimeCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _locale: &Locale,
+        locale: &Locale,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
+        let tz = locale
+            .timezone
+            .as_ref()
+            .and_then(|tz| tz.parse().ok())
+            .unwrap_or(Tz::UTC);
+
         let time = if let Some(ts) = args.timestamp {
             let ts = Utc.timestamp_nanos(ts);
             vec![ts.to_rfc3339_opts(SecondsFormat::Millis, false)]
         } else if let Some(ts) = args.exp {
             let ts = fuzzydate::parse(&ts).unwrap_or_else(|_| Local::now().naive_local());
-            let ts = Local
+            let ts = tz
                 .from_local_datetime(&ts)
                 .single()
-                .unwrap_or_else(Local::now);
+                .unwrap_or_else(|| tz.from_utc_datetime(&Utc::now().naive_utc()));
             vec![
                 ts.timestamp().to_string(),
                 ts.to_rfc3339_opts(SecondsFormat::Millis, false),
