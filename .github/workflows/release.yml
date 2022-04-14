@@ -21,10 +21,11 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: |
-            ~/.rustup/toolchains/stable-*
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
           key: ${{ runner.os }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build project
         run: cargo b --bin zuk --release

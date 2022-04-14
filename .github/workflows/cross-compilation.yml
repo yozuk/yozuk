@@ -25,11 +25,12 @@ jobs:
     - uses: actions/cache@v2
       with:
         path: |
-          ~/.rustup/toolchains/*
-          ~/.cargo/registry
-          ~/.cargo/git
-          target
-        key: ${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ matrix.toolchain }}-stable-cargo
     - uses: extractions/setup-just@v1
     - name: Install toolchain
       run: rustup target add ${{ matrix.toolchain }}
