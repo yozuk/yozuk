@@ -6,8 +6,8 @@ use clap::{ArgEnum, Parser};
 use itertools::iproduct;
 use mediatype::{
     media_type,
-    names::{CHARSET, OCTET_STREAM, PLAIN, TEXT},
-    MediaType, Value, WriteParams,
+    names::{CHARSET, PLAIN, TEXT},
+    Value, WriteParams,
 };
 use std::io::Read;
 use yozuk_helper_english::normalized_eq;
@@ -180,21 +180,15 @@ impl Command for Base64Command {
                         .chain(streams)
                         .filter_map(|data| base64::decode(&data).ok())
                         .map(|data| {
-                            let media_type = tree_magic::from_u8(&data);
                             let mut encdetector = EncodingDetector::new();
                             encdetector.feed(&data, true);
+                            let (enc, likely) = encdetector.guess_assess(None, true);
 
-                            let mut media_type = MediaType::parse(&media_type).unwrap();
-                            if media_type.ty == TEXT {
-                                let enc = encdetector.guess(None, true);
+                            let mut media_type = media_type!(APPLICATION / OCTET_STREAM);
+                            if likely {
+                                media_type.ty = TEXT;
+                                media_type.subty = PLAIN;
                                 media_type.set_param(CHARSET, Value::new(enc.name()).unwrap());
-                            } else if media_type.subty == OCTET_STREAM {
-                                let (enc, likely) = encdetector.guess_assess(None, true);
-                                if likely {
-                                    media_type.ty = TEXT;
-                                    media_type.subty = PLAIN;
-                                    media_type.set_param(CHARSET, Value::new(enc.name()).unwrap());
-                                }
                             }
 
                             Section::new(data, media_type)
