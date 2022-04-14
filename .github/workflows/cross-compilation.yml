@@ -17,7 +17,7 @@ jobs:
   build:    
     strategy:
       matrix:
-        toolchain: [arm-linux-androideabi, armv7-linux-androideabi, aarch64-apple-ios]
+        toolchain: [arm-linux-androideabi, armv7-linux-androideabi, aarch64-apple-ios, wasm32-unknown-unknown]
     runs-on: ubuntu-latest
 
     steps:
