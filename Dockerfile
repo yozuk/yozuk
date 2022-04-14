@@ -1,5 +1,5 @@
-FROM rust:latest as builder
-RUN apt-get update && apt-get install -y cmake
+FROM rust:1.60.0 as builder
+RUN apt-get update && apt-get install -y --no-install-recommends cmake
 WORKDIR /usr/src/app
 
 # Use the old snapshot to enable caching.
