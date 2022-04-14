@@ -58,7 +58,7 @@ impl ToString for Unit {
             self.prefix
                 .map(|prefix| prefix.to_string())
                 .unwrap_or_default(),
-            self.base.to_string()
+            self.base
         )
     }
 }

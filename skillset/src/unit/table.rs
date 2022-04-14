@@ -3,70 +3,63 @@ use super::entry::UnitPrefix::*;
 use super::entry::*;
 use bigdecimal::BigDecimal;
 use lazy_static::lazy_static;
+use strum::Display;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Display, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum BaseUnit {
+    #[strum(serialize = "g")]
     Gram,
+    #[strum(serialize = "oz.")]
     Ounce,
+    #[strum(serialize = "lb")]
     Pound,
 
+    #[strum(serialize = "m")]
     Meter,
+    #[strum(serialize = "in")]
     Inch,
+    #[strum(serialize = "ft")]
     Foot,
+    #[strum(serialize = "yd")]
     Yard,
+    #[strum(serialize = "mi.")]
     Mile,
 
+    #[strum(serialize = "lb")]
     Byte,
 
+    #[strum(serialize = "°C")]
     Celsius,
+    #[strum(serialize = "°F")]
     Fahrenheit,
+    #[strum(serialize = "K")]
     Kelvin,
 
+    #[strum(serialize = "km/h")]
     KmsPerHour,
+    #[strum(serialize = "m/s")]
     MsPerSec,
+    #[strum(serialize = "mph")]
     MilesPerHour,
+    #[strum(serialize = "kn.")]
     Knot,
 
+    #[strum(serialize = "Pa")]
     Pascal,
+    #[strum(serialize = "bar")]
     Bar,
+    #[strum(serialize = "atm")]
     Atmosphere,
+    #[strum(serialize = "mmHg")]
     MmHg,
 
+    #[strum(serialize = "Hz")]
     Hertz,
 
+    #[strum(serialize = "J")]
     Joule,
+    #[strum(serialize = "Cal")]
     Calorie,
-}
-
-impl ToString for BaseUnit {
-    fn to_string(&self) -> String {
-        match self {
-            Self::Gram => "g",
-            Self::Ounce => "oz.",
-            Self::Pound => "lb",
-            Self::Meter => "m",
-            Self::Inch => "in",
-            Self::Foot => "ft",
-            Self::Yard => "yd",
-            Self::Mile => "mi.",
-            Self::Byte => "B",
-            Self::Celsius => "°C",
-            Self::Fahrenheit => "°F",
-            Self::Kelvin => "K",
-            Self::KmsPerHour => "km/h",
-            Self::MsPerSec => "m/s",
-            Self::MilesPerHour => "mph",
-            Self::Knot => "kn.",
-            Self::Pascal => "Pa",
-            Self::Bar => "bar",
-            Self::Atmosphere => "atm",
-            Self::MmHg => "mmHg",
-            Self::Hertz => "Hz",
-            Self::Joule => "J",
-            Self::Calorie => "Cal",
-        }
-        .to_string()
-    }
 }
 
 pub const ENTRIES: &[UnitEntry] = &[
