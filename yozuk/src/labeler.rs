@@ -1,6 +1,8 @@
-use rayon::prelude::*;
 use yozuk_helper_english::normalize;
 use yozuk_sdk::prelude::*;
+
+#[cfg(feature = "rayon")]
+use rayon::prelude::*;
 
 const MAXIMUM_SHANNON_ENTROPY: f32 = 3.0;
 const MAXIMUM_TOKEN_LENGTH: usize = 20;
@@ -15,11 +17,17 @@ impl<'a> FeatureLabeler<'a> {
     }
 
     pub fn label_features(&self, input: &[Token]) -> Vec<Vec<Feature>> {
-        let skill_features = self
-            .labelers
-            .par_iter()
-            .map(|labeler| labeler.label_features(input))
-            .reduce(Vec::new, merge_featurs);
+        #[cfg(feature = "rayon")]
+        let iter = self.labelers.par_iter();
+        #[cfg(not(feature = "rayon"))]
+        let iter = self.labelers.iter();
+
+        let iter = iter.map(|labeler| labeler.label_features(input));
+
+        #[cfg(feature = "rayon")]
+        let skill_features = iter.reduce(Vec::new, merge_featurs);
+        #[cfg(not(feature = "rayon"))]
+        let skill_features = iter.reduce(merge_featurs).unwrap_or_default();
 
         let features = input
             .iter()
