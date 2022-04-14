@@ -1,7 +1,6 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
 
-use rayon::prelude::*;
 use yozuk_helper_english::singularize;
 use yozuk_sdk::prelude::*;
 
@@ -33,8 +32,8 @@ fn label_stop_words(token: &Token) -> impl Iterator<Item = Feature> {
 fn label_synonyms(token: &Token) -> impl Iterator<Item = Feature> {
     let text = singularize(&token.as_utf8().to_lowercase());
     thesaurus::SYNONYMS
-        .par_iter()
-        .find_any(|list| list.contains(&text.as_str()))
+        .iter()
+        .find(|list| list.contains(&text.as_str()))
         .map(|list| Feature {
             name: format!("english:synonym:{}", list.get(0).unwrap()),
             ..Default::default()
