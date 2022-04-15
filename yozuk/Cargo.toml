@@ -59,7 +59,8 @@ default-skills = [
     "yozuk-skill-digest",
     "yozuk-skill-color",
     "yozuk-skill-time",
-    "yozuk-skill-unit"
+    "yozuk-skill-unit",
+    "yozuk-skill-geo"
 ]
 yozuk-skill-mediatype = ["yozuk-core-skillset/yozuk-skill-mediatype"]
 yozuk-skill-version = ["yozuk-core-skillset/yozuk-skill-version"]
@@ -77,6 +78,7 @@ yozuk-skill-smalltalk = ["yozuk-core-skillset/yozuk-skill-smalltalk"]
 yozuk-skill-color = ["yozuk-core-skillset/yozuk-skill-color"]
 yozuk-skill-time = ["yozuk-core-skillset/yozuk-skill-time"]
 yozuk-skill-unit = ["yozuk-core-skillset/yozuk-skill-unit"]
+yozuk-skill-geo = ["yozuk-core-skillset/yozuk-skill-geo"]
 
 [dev-dependencies]
 lazy_static = "1.4.0"
