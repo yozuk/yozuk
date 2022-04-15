@@ -19,7 +19,7 @@
 
 ## Overview
 
-**Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation.
+**Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation, hash calculation and timestamp conversion.
 
 <img alt="Yozuk CLI demo animation" src="https://github.com/yozuk/yozuk/blob/main/images/zuk.gif?raw=true" width="520" />
 
@@ -31,6 +31,7 @@ Unlike normal command-line tools, it uses a simple NLP approach to infer the mea
 
 - 📦 **Portable:** Runs as a single-file executable.
 - 🏝️ **Stand-alone:** No internet access or external database needed.
+- 📱 **Cross-platform:** Supports Windows / macOS / Linux / Android / iOS / WASM
 - 🤖 **Smart:** Automagically construes your requests.
 - 📟 **Handy:** Provides simple text-based interface accessible from any device.
 - 🔒 **Privacy-first:** Never expose any data from your computer.
