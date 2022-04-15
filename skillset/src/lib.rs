@@ -4,6 +4,7 @@ mod color;
 mod dice;
 mod digest;
 mod english;
+mod geo;
 mod lipsum;
 mod mediatype;
 mod nanoid;
@@ -70,4 +71,5 @@ skills!(
     [color, "yozuk-skill-color"],
     [time, "yozuk-skill-time"],
     [unit, "yozuk-skill-unit"],
+    [geo, "yozuk-skill-geo"],
 );

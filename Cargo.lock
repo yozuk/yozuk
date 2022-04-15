@@ -48,7 +48,7 @@ version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cab112f0a86d568ea0e627cc1d6be74a1e9cd55214684db5561995f6dad897c6"
 dependencies = [
- "num-traits",
+ "num-traits 0.2.14",
 ]
 
 [[package]]
@@ -94,7 +94,7 @@ checksum = "6aaf33151a6429fe9211d1b276eafdf70cdff28b071e76c0b0e1503221ea3744"
 dependencies = [
  "num-bigint",
  "num-integer",
- "num-traits",
+ "num-traits 0.2.14",
 ]
 
 [[package]]
@@ -231,7 +231,7 @@ dependencies = [
  "js-sys",
  "libc",
  "num-integer",
- "num-traits",
+ "num-traits 0.2.14",
  "time 0.1.43",
  "wasm-bindgen",
  "winapi",
@@ -833,6 +833,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "geo"
+version = "0.4.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "03421e9865903f0015426358027cafe76d4a3858031adaa1a1f1be5e62cdbb82"
+dependencies = [
+ "num-traits 0.1.43",
+ "serde",
+ "serde_derive",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1369,7 +1380,7 @@ checksum = "f93ab6289c7b344a8a9f60f88d80aa20032336fe78da341afc91c8a2341fc75f"
 dependencies = [
  "autocfg",
  "num-integer",
- "num-traits",
+ "num-traits 0.2.14",
 ]
 
 [[package]]
@@ -1379,7 +1390,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2cc698a63b549a70bc047073d2949cce27cd1c7b0a4a862d08a8031bc2801db"
 dependencies = [
  "autocfg",
- "num-traits",
+ "num-traits 0.2.14",
+]
+
+[[package]]
+name = "num-traits"
+version = "0.1.43"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "92e5113e9fd4cc14ded8e499429f396a20f98c772a47cc8622a736e1ec843c31"
+dependencies = [
+ "num-traits 0.2.14",
 ]
 
 [[package]]
@@ -1429,6 +1449,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
+name = "open-location-code"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c560eb483ef8e670c0e7320ea9154634d5bbcc6bcd74de3ccc5a5f00c6a68651"
+dependencies = [
+ "geo",
+]
+
+[[package]]
 name = "os_str_bytes"
 version = "6.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1444,7 +1473,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9735f7e1e51a3f740bacd5dc2724b61a7806f23597a8736e679f38ee3435d18"
 dependencies = [
  "approx",
- "num-traits",
+ "num-traits 0.2.14",
  "palette_derive",
  "phf 0.9.0",
 ]
@@ -3005,6 +3034,7 @@ dependencies = [
 name = "yozuk-core-skillset"
 version = "0.7.0"
 dependencies = [
+ "anyhow",
  "base64",
  "bigdecimal",
  "chardetng",
@@ -3024,6 +3054,7 @@ dependencies = [
  "mediatype",
  "nanoid",
  "num-bigint",
+ "open-location-code",
  "palette",
  "pest",
  "pest_derive",
