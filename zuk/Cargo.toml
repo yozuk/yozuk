@@ -37,6 +37,7 @@ warp = { version = "0.3.2", optional = true }
 tokio = { version = "1.17.0", features = ["rt-multi-thread"], optional = true }
 futures-util = { version = "0.3.21", optional = true }
 rustyline-derive = "0.6.0"
+localzone = "0.2.0"
 
 [features]
 default = ["http-server"]

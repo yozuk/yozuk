@@ -41,6 +41,7 @@ fn main() -> Result<()> {
 struct App {
     args: Args,
     zuk: Yozuk,
+    i18n: I18n,
 }
 
 impl App {
@@ -72,7 +73,12 @@ impl App {
             .logger(logger)
             .build(ModelSet::from_data(yozuk_bundle::MODEL_DATA)?);
 
-        Ok(Self { args, zuk })
+        let i18n = I18n {
+            timezone: localzone::get_local_zone(),
+            ..Default::default()
+        };
+
+        Ok(Self { args, zuk, i18n })
     }
 
     fn run(self) -> Result<()> {
@@ -116,7 +122,7 @@ impl App {
                 .map(|token| tk!(token.clone()))
                 .collect::<Vec<_>>();
 
-            self.exec_command(&tokens, &mut streams, &Default::default())
+            self.exec_command(&tokens, &mut streams, &self.i18n)
         }
     }
 
@@ -195,7 +201,7 @@ impl App {
 
                     let tokens = Yozuk::parse_tokens(&line);
                     if !tokens.is_empty() {
-                        self.exec_command(&tokens, &mut [], &Default::default())?;
+                        self.exec_command(&tokens, &mut [], &self.i18n)?;
                     }
                 }
                 Err(ReadlineError::Interrupted | ReadlineError::Eof) => {
