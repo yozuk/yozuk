@@ -154,10 +154,12 @@ impl Value {
 impl ToString for Value {
     fn to_string(&self) -> String {
         match self {
-            Self::Dice(dice) if dice.len() == 1 => self.sum().to_string(),
+            Self::Dice(dice) if dice.len() == 1 => {
+                format!("🎲 {}", self.sum())
+            }
             Self::Dice(dice) => {
                 let history = dice.iter().map(ToString::to_string).collect::<Vec<_>>();
-                format!("{} ({})", self.sum(), history.join(" "))
+                format!("🎲 {}\nsum: {}", history.join(" "), self.sum())
             }
             Self::Sum(sum) => sum.to_string(),
         }
