@@ -35,6 +35,7 @@ impl Corpus for DiceCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
         vec![
             tk!(["dice"; "command:dice"]),
+            tk!(["🎲"; "command:dice"]),
             tk!([
                 "roll",
                 "die"; "command:dice"
@@ -192,7 +193,7 @@ impl Translator for DiceTranslator {
             .collect::<Vec<_>>();
 
         if let [dice] = commands[..] {
-            if normalized_eq(dice.as_utf8(), &["dice", "die"], 0) {
+            if normalized_eq(dice.as_utf8(), &["dice", "die", "🎲"], 0) {
                 return Some(CommandArgs::new().add_args([format!("{}d6", count)]));
             }
         }
