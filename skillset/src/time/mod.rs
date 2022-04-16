@@ -125,10 +125,21 @@ impl Command for TimeCommand {
             .and_then(|tz| tz.parse().ok())
             .unwrap_or(Tz::UTC);
 
-        let time = if let Some(ts) = args.timestamp {
+        if let Some(ts) = args.timestamp {
             let ts = Utc.timestamp_nanos(ts);
-            vec![ts.to_rfc3339_opts(SecondsFormat::Millis, false)]
-        } else if let Some(ts) = args.exp {
+            let ts = tz.from_utc_datetime(&ts.naive_utc());
+            let ts = ts.to_rfc3339_opts(SecondsFormat::Millis, false);
+            return Ok(Output {
+                module: "Time".into(),
+                sections: vec![
+                    Section::new("Converting UNIX timestamp", media_type!(TEXT / PLAIN))
+                        .kind(SectionKind::Comment),
+                    Section::new(ts, media_type!(TEXT / PLAIN)),
+                ],
+            });
+        }
+
+        let time = if let Some(ts) = args.exp {
             let ts = fuzzydate::parse(&ts).unwrap_or_else(|_| Local::now().naive_local());
             let ts = tz
                 .from_local_datetime(&ts)
@@ -139,7 +150,7 @@ impl Command for TimeCommand {
                 ts.to_rfc3339_opts(SecondsFormat::Millis, false),
             ]
         } else {
-            let now = Local::now();
+            let now = tz.from_utc_datetime(&Utc::now().naive_utc());
             vec![
                 now.timestamp().to_string(),
                 now.to_rfc3339_opts(SecondsFormat::Millis, false),
