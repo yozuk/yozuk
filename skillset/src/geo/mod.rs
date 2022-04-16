@@ -3,6 +3,7 @@
 
 use anyhow::anyhow;
 use clap::Parser;
+use mediatype::media_type;
 use mediatype::MediaType;
 use serde_derive::Serialize;
 use yozuk_sdk::prelude::*;
@@ -78,10 +79,17 @@ impl Command for GeoCommand {
         };
         Ok(Output {
             module: "Geo".into(),
-            sections: vec![Section::new(
-                serde_json::to_string_pretty(&code).unwrap(),
-                MediaType::parse("application/vnd.yozuk.geo+json").unwrap(),
-            )],
+            sections: vec![
+                Section::new(
+                    "Decoding Open Location Code".to_string(),
+                    media_type!(TEXT / PLAIN),
+                )
+                .kind(SectionKind::Comment),
+                Section::new(
+                    serde_json::to_string_pretty(&code)?,
+                    MediaType::parse("application/vnd.yozuk.geo+json").unwrap(),
+                ),
+            ],
         })
     }
 }
