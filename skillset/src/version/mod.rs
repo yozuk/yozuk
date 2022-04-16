@@ -7,7 +7,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"ascHfHdlzryVq7Rvlpzsn",
+    model_id: b"OfHH5YRaI_kKKk7e56tCZ",
     config_schema: None,
     init: |env, _| {
         Skill::builder()
@@ -25,12 +25,12 @@ impl Corpus for VersionCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
         vec![
             tk!([
-                "build"; "version:keyword",
+                "version"; "version:keyword",
                 "info"; "version:keyword"
             ]),
             tk!([
                 "show",
-                "build"; "version:keyword",
+                "version"; "version:keyword",
                 "info"; "version:keyword"
             ]),
         ]
@@ -50,10 +50,10 @@ impl Translator for VersionTranslator {
             .collect::<Vec<_>>();
 
         if let [build, info] = keywords[..] {
-            if normalized_eq(build.as_utf8(), &["build"], 1)
+            if normalized_eq(build.as_utf8(), &["version"], 1)
                 && normalized_eq(info.as_utf8(), &["info"], 1)
             {
-                return Some(CommandArgs::new().add_args(["--build-info"]));
+                return Some(CommandArgs::new().add_args(["--version-info"]));
             }
         }
 
@@ -85,5 +85,5 @@ impl Command for VersionCommand {
 #[derive(Parser)]
 pub struct Args {
     #[clap(long)]
-    pub build_info: bool,
+    pub version_info: bool,
 }
