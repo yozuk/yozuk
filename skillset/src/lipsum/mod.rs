@@ -161,7 +161,7 @@ impl Command for LipsumCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _locale: &Locale,
+        _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let chain = self.0.custom_text.as_ref().map(|text| {
             let mut chain = MarkovChain::new();

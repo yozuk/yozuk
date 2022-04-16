@@ -141,7 +141,7 @@ impl Command for UuidCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _locale: &Locale,
+        _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {

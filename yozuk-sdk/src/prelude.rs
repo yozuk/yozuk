@@ -1,7 +1,7 @@
 pub use super::args::*;
 pub use super::env::*;
 pub use super::feature::*;
-pub use super::locale::*;
+pub use super::i18n::*;
 pub use super::output::*;
 pub use super::skill::*;
 pub use super::stream::*;

@@ -113,7 +113,7 @@ impl Yozuk {
         &self,
         commands: Vec<CommandArgs>,
         streams: &mut [InputStream],
-        locale: &Locale,
+        i18n: &I18n,
     ) -> Result<Output, YozukError> {
         let commands = commands.into_iter().filter_map(|args| {
             self.model
@@ -125,7 +125,7 @@ impl Yozuk {
         let mut errors = Vec::new();
         for (args, command) in commands {
             let name = args.args[0].clone();
-            match command.run(args, streams, locale) {
+            match command.run(args, streams, i18n) {
                 Ok(result) => return Ok(result),
                 Err(err) => errors.push(err.into_output(name)),
             }

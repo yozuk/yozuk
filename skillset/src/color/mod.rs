@@ -117,7 +117,7 @@ impl Command for ColorCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _locale: &Locale,
+        _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         let colors = args

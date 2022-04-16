@@ -90,7 +90,7 @@ impl Command for SmalltalkCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _locale: &Locale,
+        _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         if args.life_universe_everything {

@@ -223,7 +223,7 @@ impl Command for DiceCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _locale: &Locale,
+        _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let rule = DiceParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule, &self.0)

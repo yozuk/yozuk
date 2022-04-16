@@ -124,7 +124,7 @@ impl App {
         &self,
         tokens: &[Token],
         streams: &mut [InputStream],
-        locale: &Locale,
+        i18n: &I18n,
     ) -> Result<()> {
         for stream in streams.iter_mut() {
             stream.read_header()?;
@@ -145,7 +145,7 @@ impl App {
                     return Ok(());
                 }
 
-                let result = self.zuk.run_commands(commands, streams, locale);
+                let result = self.zuk.run_commands(commands, streams, i18n);
 
                 match result {
                     Ok(output) => printer.print_result(&output)?,

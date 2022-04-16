@@ -65,7 +65,7 @@ impl Command for GeoCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _locale: &Locale,
+        _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         let code = open_location_code::decode(&args.olc.unwrap())

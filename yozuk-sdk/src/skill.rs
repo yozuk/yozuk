@@ -34,7 +34,7 @@ pub trait Command: fmt::Debug + Send + Sync + 'static {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _locale: &Locale,
+        _i18n: &I18n,
     ) -> Result<Output, CommandError>;
     fn priority(&self) -> i32 {
         0
