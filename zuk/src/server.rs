@@ -109,7 +109,7 @@ fn run_command(
             );
         }
     };
-    match zuk.run_commands(commands, &mut streams, None) {
+    match zuk.run_commands(commands, &mut streams, Some(&input.i18n)) {
         Ok(output) => warp::reply::with_status(
             warp::reply::json(&JsonResult::Ok { output: &output }),
             StatusCode::OK,
@@ -130,6 +130,8 @@ fn run_command(
 #[derive(Clone, Deserialize)]
 pub struct JsonInput {
     pub tokens: Vec<Token>,
+    #[serde(default)]
+    pub i18n: I18n,
 }
 
 #[derive(Clone, Serialize)]
