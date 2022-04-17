@@ -22,6 +22,7 @@ use std::borrow::Cow;
 use std::fs::File;
 use std::io;
 use std::io::{Read, Write};
+use sys_locale::get_locale;
 use yozuk::{ModelSet, Yozuk, YozukError};
 use yozuk_sdk::prelude::*;
 
@@ -74,6 +75,7 @@ impl App {
             .build(ModelSet::from_data(yozuk_bundle::MODEL_DATA)?);
 
         let i18n = I18n {
+            locale: get_locale(),
             timezone: localzone::get_local_zone(),
             ..Default::default()
         };
