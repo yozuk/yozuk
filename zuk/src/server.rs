@@ -109,7 +109,7 @@ fn run_command(
             );
         }
     };
-    match zuk.run_commands(commands, &mut streams, &Default::default()) {
+    match zuk.run_commands(commands, &mut streams, None) {
         Ok(output) => warp::reply::with_status(
             warp::reply::json(&JsonResult::Ok { output: &output }),
             StatusCode::OK,

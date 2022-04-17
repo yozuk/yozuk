@@ -28,6 +28,7 @@ pub use modelgen::*;
 
 pub struct Yozuk {
     model: ModelSet,
+    i18n: I18n,
     skills: Vec<SkillCache>,
     labelers: Vec<Box<dyn Labeler>>,
     commands: Vec<Option<CommandCache>>,
@@ -113,7 +114,7 @@ impl Yozuk {
         &self,
         commands: Vec<CommandArgs>,
         streams: &mut [InputStream],
-        i18n: &I18n,
+        i18n: Option<&I18n>,
     ) -> Result<Output, YozukError> {
         let commands = commands.into_iter().filter_map(|args| {
             self.model
@@ -125,7 +126,7 @@ impl Yozuk {
         let mut errors = Vec::new();
         for (args, command) in commands {
             let name = args.args[0].clone();
-            match command.run(args, streams, i18n) {
+            match command.run(args, streams, i18n.unwrap_or(&self.i18n)) {
                 Ok(result) => return Ok(result),
                 Err(err) => errors.push(err.into_output(name)),
             }
@@ -159,6 +160,7 @@ impl Yozuk {
 
 pub struct YozukBuilder {
     config: Config,
+    i18n: I18n,
     logger: Logger,
 }
 
@@ -170,6 +172,11 @@ impl YozukBuilder {
 
     pub fn config(mut self, config: Config) -> Self {
         self.config = config;
+        self
+    }
+
+    pub fn i18n(mut self, i18n: I18n) -> Self {
+        self.i18n = i18n;
         self
     }
 
@@ -238,6 +245,7 @@ impl YozukBuilder {
 
         Yozuk {
             model,
+            i18n: self.i18n,
             skills,
             labelers,
             commands,
@@ -250,6 +258,7 @@ impl Default for YozukBuilder {
     fn default() -> Self {
         Self {
             config: Default::default(),
+            i18n: Default::default(),
             logger: NullLoggerBuilder.build().unwrap(),
         }
     }

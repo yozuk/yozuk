@@ -42,7 +42,6 @@ fn main() -> Result<()> {
 struct App {
     args: Args,
     zuk: Yozuk,
-    i18n: I18n,
 }
 
 impl App {
@@ -69,18 +68,19 @@ impl App {
         builder.destination(Destination::Stderr);
         let logger = builder.build().unwrap();
 
-        let zuk = Yozuk::builder()
-            .config(config)
-            .logger(logger)
-            .build(ModelSet::from_data(yozuk_bundle::MODEL_DATA)?);
-
         let i18n = I18n {
             locale: get_locale(),
             timezone: localzone::get_local_zone(),
             ..Default::default()
         };
 
-        Ok(Self { args, zuk, i18n })
+        let zuk = Yozuk::builder()
+            .config(config)
+            .i18n(i18n)
+            .logger(logger)
+            .build(ModelSet::from_data(yozuk_bundle::MODEL_DATA)?);
+
+        Ok(Self { args, zuk })
     }
 
     fn run(self) -> Result<()> {
@@ -124,16 +124,11 @@ impl App {
                 .map(|token| tk!(token.clone()))
                 .collect::<Vec<_>>();
 
-            self.exec_command(&tokens, &mut streams, &self.i18n)
+            self.exec_command(&tokens, &mut streams)
         }
     }
 
-    fn exec_command(
-        &self,
-        tokens: &[Token],
-        streams: &mut [InputStream],
-        i18n: &I18n,
-    ) -> Result<()> {
+    fn exec_command(&self, tokens: &[Token], streams: &mut [InputStream]) -> Result<()> {
         for stream in streams.iter_mut() {
             stream.read_header()?;
         }
@@ -153,7 +148,7 @@ impl App {
                     return Ok(());
                 }
 
-                let result = self.zuk.run_commands(commands, streams, i18n);
+                let result = self.zuk.run_commands(commands, streams, None);
 
                 match result {
                     Ok(output) => printer.print_result(&output)?,
@@ -203,7 +198,7 @@ impl App {
 
                     let tokens = Yozuk::parse_tokens(&line);
                     if !tokens.is_empty() {
-                        self.exec_command(&tokens, &mut [], &self.i18n)?;
+                        self.exec_command(&tokens, &mut [])?;
                     }
                 }
                 Err(ReadlineError::Interrupted | ReadlineError::Eof) => {
