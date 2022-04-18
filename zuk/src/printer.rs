@@ -5,6 +5,7 @@ use content_inspector::ContentType;
 use hexyl::{BorderStyle, Printer};
 use mediatype::names::JSON;
 use std::io::Write;
+use std::str::FromStr;
 use yozuk_sdk::prelude::*;
 
 pub struct TerminalPrinter;
@@ -49,6 +50,21 @@ impl TerminalPrinter {
                     writeln!(&mut stderr, "{}", style.apply_to(section.as_utf8()))?;
                 }
                 SectionKind::Value => {
+                    let color = section
+                        .attrs
+                        .get("com.yozuk.preview.color")
+                        .and_then(|color| color.as_str())
+                        .and_then(|color| css_color::Srgb::from_str(color).ok());
+                    if let Some(color) = color {
+                        if console::colors_enabled() {
+                            let style = Style::new().color256(ansi_colours::ansi256_from_rgb((
+                                (color.red * 255.0) as u8,
+                                (color.green * 255.0) as u8,
+                                (color.blue * 255.0) as u8,
+                            )));
+                            writeln!(&mut stderr, "{}", style.apply_to(&"███"))?;
+                        }
+                    }
                     if section.media_type.suffix() == Some(JSON) {
                         if let Ok(value) =
                             serde_json::from_slice::<serde_json::Value>(&section.data)

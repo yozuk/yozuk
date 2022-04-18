@@ -39,6 +39,8 @@ futures-util = { version = "0.3.21", optional = true }
 rustyline-derive = "0.6.0"
 localzone = "0.2.0"
 sys-locale = "0.2.0"
+ansi_colours = "1.1.1"
+css-color = "0.2.4"
 
 [features]
 default = ["http-server"]
