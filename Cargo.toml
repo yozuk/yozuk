@@ -11,6 +11,7 @@ resolver = "2"
 
 [profile.release]
 strip = true
+lto = true
 
 [patch.crates-io]
 yozuk-sdk = { path = "./yozuk-sdk" }
