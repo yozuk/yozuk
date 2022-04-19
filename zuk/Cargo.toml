@@ -1,6 +1,6 @@
 [package]
 name = "zuk"
-version = "0.7.0"
+version = "0.8.0"
 edition = "2021"
 default-run = "zuk"
 authors = ["picoHz <picoHz@outlook.com>"]
@@ -11,7 +11,7 @@ repository = "https://github.com/yozuk/yozuk/zuk"
 homepage = "https://yozuk.com"
 documentation = "https://docs.rs/zuk"
 license = "MIT"
-readme = "../../README.md"
+readme = "../README.md"
 
 [dependencies]
 anyhow = "1.0.56"

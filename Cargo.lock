@@ -3148,7 +3148,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-bundle"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "anyhow",
  "yozuk",
@@ -3236,7 +3236,7 @@ dependencies = [
 
 [[package]]
 name = "zuk"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "ansi_colours",
  "anyhow",
