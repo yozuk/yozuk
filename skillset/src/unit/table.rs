@@ -25,7 +25,7 @@ pub enum BaseUnit {
     #[strum(serialize = "mi.")]
     Mile,
 
-    #[strum(serialize = "lb")]
+    #[strum(serialize = "B")]
     Byte,
 
     #[strum(serialize = "°C")]
