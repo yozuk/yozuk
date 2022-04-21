@@ -33,9 +33,6 @@ rustyline = "9.1.2"
 crossterm = "0.23.1"
 serde_derive = "1.0.136"
 serde = "1.0.136"
-warp = { version = "0.3.2", optional = true }
-tokio = { version = "1.17.0", features = ["rt-multi-thread"], optional = true }
-futures-util = { version = "0.3.21", optional = true }
 rustyline-derive = "0.6.0"
 localzone = "0.2.0"
 sys-locale = "0.2.0"
@@ -43,5 +40,4 @@ css-color = "0.2.4"
 owo-colors = "3.3.0"
 
 [features]
-default = ["http-server"]
-http-server = ["warp", "tokio", "futures-util"]
+default = []

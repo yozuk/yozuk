@@ -33,21 +33,6 @@ pub struct Args {
     #[clap(short, long)]
     pub config: Option<PathBuf>,
 
-    /// [server] Start as a REST server
-    #[cfg(feature = "http-server")]
-    #[clap(long, required_if_eq("mode", "server"), display_order(1000))]
-    pub server_addr: Option<std::net::SocketAddr>,
-
-    /// [server] Add an allowed cors origin
-    #[cfg(feature = "http-server")]
-    #[clap(
-        long,
-        display_order(1001),
-        requires("server-addr"),
-        multiple_occurrences(true)
-    )]
-    pub cors_origin: Vec<String>,
-
     /// Dump embedded model data.
     #[clap(long, display_order(1002))]
     pub dump_model: Option<PathBuf>,
@@ -58,6 +43,4 @@ pub enum Mode {
     Auto,
     Direct,
     Repl,
-    #[cfg(feature = "http-server")]
-    HttpServer,
 }

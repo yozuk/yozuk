@@ -28,7 +28,6 @@ use yozuk_sdk::prelude::*;
 
 mod args;
 mod printer;
-mod server;
 
 use args::*;
 use printer::*;
@@ -88,11 +87,6 @@ impl App {
             let mut out = File::create(dump_dst)?;
             out.write_all(yozuk_bundle::MODEL_DATA)?;
             return Ok(());
-        }
-
-        #[cfg(feature = "http-server")]
-        if let Some(addr) = self.args.server_addr {
-            return server::start(addr, self.args.cors_origin, self.zuk);
         }
 
         let stdin = io::stdin();
