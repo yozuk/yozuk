@@ -3,9 +3,9 @@
 
 use anyhow::Result;
 use clap::Parser;
-use console::Style;
 use crossterm::tty::IsTty;
 use mediatype::media_type;
+use owo_colors::OwoColorize;
 use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
 use rustyline::highlight::{Highlighter, MatchingBracketHighlighter};
@@ -173,12 +173,6 @@ impl App {
     fn start_repl(&self) -> Result<()> {
         let mut rl = Editor::new();
 
-        let style = if console::colors_enabled() {
-            Style::new().bold().blue()
-        } else {
-            Style::new()
-        };
-
         let prompt = "» ";
         let helper = YozukHelper {
             highlighter: MatchingBracketHighlighter::new(),
@@ -187,7 +181,7 @@ impl App {
             validator: MatchingBracketValidator::new(),
         };
         rl.set_helper(Some(helper));
-        rl.helper_mut().expect("No helper").colored_prompt = format!("{}", style.apply_to(&prompt));
+        rl.helper_mut().expect("No helper").colored_prompt = format!("{}", prompt.bold().blue());
 
         println!("Hi. I'm Yozuk. How may I assist you?");
         loop {

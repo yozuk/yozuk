@@ -1,9 +1,9 @@
 use anyhow::Result;
-use console::Style;
 use console::Term;
 use content_inspector::ContentType;
 use hexyl::{BorderStyle, Printer};
 use mediatype::names::JSON;
+use owo_colors::OwoColorize;
 use std::io::Write;
 use std::str::FromStr;
 use yozuk_sdk::prelude::*;
@@ -31,23 +31,13 @@ impl TerminalPrinter {
             match section.kind {
                 SectionKind::Comment => {
                     if !output.module.is_empty() {
-                        let style = if console::colors_enabled() {
-                            Style::new().bold().green()
-                        } else {
-                            Style::new()
-                        };
                         write!(
                             &mut stderr,
                             "{}",
-                            style.apply_to(&format!("{}: ", output.module))
+                            format!("{}: ", output.module).bold().green()
                         )?;
                     }
-                    let style = if console::colors_enabled() {
-                        Style::new().dim().white()
-                    } else {
-                        Style::new()
-                    };
-                    writeln!(&mut stderr, "{}", style.apply_to(section.as_utf8()))?;
+                    writeln!(&mut stderr, "{}", section.as_utf8().dimmed().white())?;
                 }
                 SectionKind::Value => {
                     let color = section
@@ -56,14 +46,15 @@ impl TerminalPrinter {
                         .and_then(|color| color.as_str())
                         .and_then(|color| css_color::Srgb::from_str(color).ok());
                     if let Some(color) = color {
-                        if console::colors_enabled() {
-                            let style = Style::new().color256(ansi_colours::ansi256_from_rgb((
+                        writeln!(
+                            &mut stderr,
+                            "{}",
+                            "       ".on_truecolor(
                                 (color.red * 255.0) as u8,
                                 (color.green * 255.0) as u8,
-                                (color.blue * 255.0) as u8,
-                            )));
-                            writeln!(&mut stderr, "{}", style.apply_to(&"███"))?;
-                        }
+                                (color.blue * 255.0) as u8
+                            )
+                        )?;
                     }
                     if section.media_type.suffix() == Some(JSON) {
                         if let Ok(value) =
@@ -96,15 +87,10 @@ impl TerminalPrinter {
         let output = &outputs[0];
         for section in &output.sections {
             if !output.module.is_empty() {
-                let style = if console::colors_enabled() {
-                    Style::new().bold().red()
-                } else {
-                    Style::new()
-                };
                 write!(
                     &mut stderr,
                     "{}",
-                    style.apply_to(&format!("{}: ", output.module))
+                    format!("{}: ", output.module).bold().red()
                 )?;
             }
             writeln!(&mut stderr, "{}", section.as_utf8())?;
@@ -115,25 +101,13 @@ impl TerminalPrinter {
 
     pub fn print_error_str(&self, err: &str) -> Result<()> {
         let mut stderr = Term::stderr();
-
-        let style = if console::colors_enabled() {
-            Style::new().red()
-        } else {
-            Style::new()
-        };
-        writeln!(&mut stderr, "{}", style.apply_to(err))?;
+        writeln!(&mut stderr, "{}", err.red())?;
         Ok(())
     }
 
     pub fn print_suggest(&self, suggest: &str) -> Result<()> {
         let mut stderr = Term::stderr();
-
-        let style = if console::colors_enabled() {
-            Style::new().italic()
-        } else {
-            Style::new()
-        };
-        writeln!(&mut stderr, "Did you mean {} ?", style.apply_to(suggest))?;
+        writeln!(&mut stderr, "Did you mean {} ?", suggest.italic())?;
         Ok(())
     }
 
