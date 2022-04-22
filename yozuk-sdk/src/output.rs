@@ -1,7 +1,6 @@
 use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
-use mediatype::media_type;
-use mediatype::MediaTypeBuf;
+use mediatype::{media_type, MediaTypeBuf};
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;

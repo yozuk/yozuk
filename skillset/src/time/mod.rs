@@ -5,7 +5,6 @@ use chrono::prelude::*;
 use chrono::SecondsFormat;
 use chrono_tz::Tz;
 use clap::Parser;
-use mediatype::media_type;
 use yozuk_helper_english::normalized_eq;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;

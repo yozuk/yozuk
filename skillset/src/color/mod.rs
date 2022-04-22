@@ -3,7 +3,6 @@
 
 use clap::Parser;
 use itertools::iproduct;
-use mediatype::media_type;
 use palette::{Hsla, Hsva, Hwba, IntoColor, Srgba};
 use std::str::FromStr;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};

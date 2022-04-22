@@ -3,7 +3,6 @@
 
 use clap::Parser;
 use itertools::iproduct;
-use mediatype::media_type;
 use std::collections::BTreeMap;
 use std::io::{BufReader, Read};
 use yozuk_helper_english::normalized_eq;

@@ -4,7 +4,6 @@
 use anyhow::Result;
 use clap::Parser;
 use crossterm::tty::IsTty;
-use mediatype::media_type;
 use owo_colors::OwoColorize;
 use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;

@@ -2,7 +2,6 @@
 #![deny(clippy::all)]
 
 use clap::Parser;
-use mediatype::MediaType;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 

@@ -1,6 +1,5 @@
 #![cfg(feature = "modelgen")]
 
-use mediatype::media_type;
 use std::io;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;

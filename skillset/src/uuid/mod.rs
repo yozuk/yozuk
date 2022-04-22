@@ -3,7 +3,6 @@
 
 use clap::Parser;
 use itertools::iproduct;
-use mediatype::media_type;
 use std::iter;
 use uuid::Uuid;
 use yozuk_helper_english::{normalized_eq, pluralize};

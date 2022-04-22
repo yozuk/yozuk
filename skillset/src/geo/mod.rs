@@ -3,8 +3,6 @@
 
 use anyhow::anyhow;
 use clap::Parser;
-use mediatype::media_type;
-use mediatype::MediaType;
 use serde_derive::Serialize;
 use yozuk_sdk::prelude::*;
 

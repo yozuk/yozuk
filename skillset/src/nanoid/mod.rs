@@ -1,6 +1,5 @@
 use clap::Parser;
 use itertools::iproduct;
-use mediatype::media_type;
 use std::iter;
 use yozuk_helper_english::{normalized_eq, pluralize};
 use yozuk_sdk::prelude::*;

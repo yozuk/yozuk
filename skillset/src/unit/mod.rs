@@ -1,7 +1,6 @@
 use bigdecimal::BigDecimal;
 use bigdecimal::One;
 use clap::Parser;
-use mediatype::media_type;
 use std::str::FromStr;
 use yozuk_sdk::prelude::*;
 

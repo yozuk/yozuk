@@ -4,7 +4,6 @@
 use clap::Parser;
 use lipsum::lipsum;
 use lipsum::MarkovChain;
-use mediatype::media_type;
 use serde_derive::Deserialize;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;

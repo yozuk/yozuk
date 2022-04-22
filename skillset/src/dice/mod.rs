@@ -1,7 +1,6 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
 
-use mediatype::{media_type, MediaType};
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;

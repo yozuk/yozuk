@@ -2,7 +2,6 @@
 #![deny(clippy::all)]
 
 use clap::{ArgEnum, Parser};
-use mediatype::media_type;
 use yozuk_sdk::prelude::*;
 
 mod tld;
