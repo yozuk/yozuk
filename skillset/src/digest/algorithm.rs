@@ -109,6 +109,11 @@ pub const ENTRIES: &[AlgorithmEntry] = &[
         keywords: &["blake2b512", "blake2"],
         init: || Box::new(DigestEntry::<blake2::Blake2b512>::new()),
     },
+    AlgorithmEntry {
+        name: "BLAKE3",
+        keywords: &["blake3"],
+        init: || Box::new(DigestEntry::<blake3::Hasher>::new()),
+    },
 ];
 
 pub struct AlgorithmEntry {
