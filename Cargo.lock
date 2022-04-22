@@ -2645,7 +2645,6 @@ dependencies = [
  "shell-words",
  "slog",
  "sloggers",
- "thiserror",
  "yozuk-core-skillset",
  "yozuk-helper-english",
  "yozuk-sdk",

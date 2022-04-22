@@ -23,7 +23,7 @@ use std::fs::File;
 use std::io;
 use std::io::{Read, Write};
 use sys_locale::get_locale;
-use yozuk::{ModelSet, Yozuk, YozukError};
+use yozuk::{ModelSet, Yozuk};
 use yozuk_sdk::prelude::*;
 
 mod args;
@@ -130,35 +130,30 @@ impl App {
         let printer = TerminalPrinter::new();
 
         let commands = if self.args.run {
-            Ok(vec![CommandArgs::new().add_args_iter(&self.args.query)])
+            vec![CommandArgs::new().add_args_iter(&self.args.query)]
         } else {
             self.zuk.get_commands(tokens, streams)
         };
 
-        match commands {
-            Ok(commands) => {
-                if self.args.dry_run {
-                    printer.print_commands(&commands)?;
-                    return Ok(());
-                }
+        if commands.is_empty() {
+            printer.print_error_str("Sorry, I can't understand your request.")?;
+            if let Some(suggest) = self.zuk.suggest(tokens) {
+                printer.print_suggest(&suggest)?;
+            }
+        } else {
+            if self.args.dry_run {
+                printer.print_commands(&commands)?;
+                return Ok(());
+            }
 
-                let result = self.zuk.run_commands(commands, streams, None);
+            let result = self.zuk.run_commands(commands, streams, None);
 
-                match result {
-                    Ok(output) => printer.print_result(&output)?,
-                    Err(YozukError::CommandError { errors }) => {
-                        printer.print_error(&errors)?;
-                    }
-                    _ => (),
+            match result {
+                Ok(output) => printer.print_result(&output)?,
+                Err(errors) => {
+                    printer.print_error(&errors)?;
                 }
             }
-            Err(YozukError::UnintelligibleRequest { suggest }) => {
-                printer.print_error_str("Sorry, I can't understand your request.")?;
-                if let Some(suggest) = suggest {
-                    printer.print_suggest(&suggest)?;
-                }
-            }
-            _ => (),
         }
 
         Ok(())

@@ -5,7 +5,6 @@ use slog::{debug, error, Logger};
 use sloggers::null::NullLoggerBuilder;
 use sloggers::Build;
 use std::{iter, mem};
-use thiserror::Error;
 use yozuk_sdk::prelude::*;
 
 #[cfg(feature = "rayon")]
@@ -47,11 +46,7 @@ impl Yozuk {
         tokens.into_iter().map(|token| tk!(token)).collect()
     }
 
-    pub fn get_commands(
-        &self,
-        tokens: &[Token],
-        streams: &[InputStream],
-    ) -> Result<Vec<CommandArgs>, YozukError> {
+    pub fn get_commands(&self, tokens: &[Token], streams: &[InputStream]) -> Vec<CommandArgs> {
         debug!(self.logger, "{:?}", tokens);
 
         let labeler = FeatureLabeler::new(&self.labelers);
@@ -101,13 +96,8 @@ impl Yozuk {
             })
             .collect::<Vec<_>>();
 
-        if commands.is_empty() {
-            let suggest = self.suggest(tokens);
-            return Err(YozukError::UnintelligibleRequest { suggest });
-        }
-
         commands.sort_by_key(|command| -command.0);
-        Ok(commands.into_iter().map(|command| command.1).collect())
+        commands.into_iter().map(|command| command.1).collect()
     }
 
     pub fn run_commands(
@@ -115,7 +105,7 @@ impl Yozuk {
         commands: Vec<CommandArgs>,
         streams: &mut [InputStream],
         i18n: Option<&I18n>,
-    ) -> Result<Output, YozukError> {
+    ) -> Result<Output, Vec<Output>> {
         let commands = commands.into_iter().filter_map(|args| {
             self.model
                 .get_index(&args.args[0])
@@ -132,10 +122,10 @@ impl Yozuk {
             }
         }
 
-        Err(YozukError::CommandError { errors })
+        Err(errors)
     }
 
-    fn suggest(&self, tokens: &[Token]) -> Option<String> {
+    pub fn suggest(&self, tokens: &[Token]) -> Option<String> {
         let words = tokens
             .iter()
             .map(|token| token.as_utf8())
@@ -262,15 +252,6 @@ impl Default for YozukBuilder {
             logger: NullLoggerBuilder.build().unwrap(),
         }
     }
-}
-
-#[derive(Error, Debug, Clone)]
-pub enum YozukError {
-    #[error("Unable to understand the request")]
-    UnintelligibleRequest { suggest: Option<String> },
-
-    #[error("Faild to run commands")]
-    CommandError { errors: Vec<Output> },
 }
 
 struct SkillCache {

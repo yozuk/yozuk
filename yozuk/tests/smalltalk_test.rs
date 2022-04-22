@@ -28,7 +28,7 @@ fn deep_thought() {
 #[test]
 fn empty() {
     assert_eq!(
-        YOZUK.get_commands(&[], &[]).unwrap().remove(0),
+        YOZUK.get_commands(&[], &[]).remove(0),
         CommandArgs::new().add_args(["yozuk-skill-smalltalk"])
     );
 }

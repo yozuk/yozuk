@@ -14,5 +14,5 @@ lazy_static::lazy_static! {
 
 pub fn cmd(tokens: Vec<Token>) -> CommandArgs {
     let stream = InputStream::new(io::empty(), media_type!(APPLICATION / OCTET_STREAM));
-    YOZUK.get_commands(&tokens, &[stream]).unwrap().remove(0)
+    YOZUK.get_commands(&tokens, &[stream]).remove(0)
 }
