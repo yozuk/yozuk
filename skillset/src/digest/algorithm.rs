@@ -99,6 +99,16 @@ pub const ENTRIES: &[AlgorithmEntry] = &[
             )))
         },
     },
+    AlgorithmEntry {
+        name: "BLAKE2-S-256",
+        keywords: &["blake2s256", "blake2"],
+        init: || Box::new(DigestEntry::<blake2::Blake2s256>::new()),
+    },
+    AlgorithmEntry {
+        name: "BLAKE2-B-512",
+        keywords: &["blake2b512", "blake2"],
+        init: || Box::new(DigestEntry::<blake2::Blake2b512>::new()),
+    },
 ];
 
 pub struct AlgorithmEntry {
