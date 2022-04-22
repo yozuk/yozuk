@@ -17,9 +17,30 @@ jobs:
   build:    
     strategy:
       matrix:
-        toolchain: [arm-linux-androideabi, armv7-linux-androideabi, aarch64-apple-ios, wasm32-unknown-unknown]
+        toolchain: [arm-linux-androideabi, armv7-linux-androideabi, wasm32-unknown-unknown]
     runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ matrix.toolchain }}-stable-cargo
+    - uses: extractions/setup-just@v1
+    - name: Install toolchain
+      run: rustup target add ${{ matrix.toolchain }}
+    - name: Build
+      run: cargo build -p yozuk --target=${{ matrix.toolchain }}
 
+  build-macos:
+    strategy:
+      matrix:
+        toolchain: [aarch64-apple-ios]
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
