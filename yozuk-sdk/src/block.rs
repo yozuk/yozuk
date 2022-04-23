@@ -9,10 +9,12 @@ pub enum Block {
     Comment(Comment),
     Data(Data),
     Preview(Preview),
+    CommandList(CommandList),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Comment {
+    pub title: String,
     pub text: String,
     pub media_type: MediaTypeBuf,
 }
@@ -20,6 +22,14 @@ pub struct Comment {
 impl Comment {
     pub fn new() -> Self {
         Default::default()
+    }
+
+    pub fn set_title<T>(mut self, title: T) -> Self
+    where
+        T: Into<String>,
+    {
+        self.title = title.into();
+        self
     }
 
     pub fn set_text<T>(mut self, text: T) -> Self
@@ -42,6 +52,7 @@ impl Comment {
 impl Default for Comment {
     fn default() -> Self {
         Self {
+            title: String::new(),
             text: String::new(),
             media_type: media_type!(TEXT / PLAIN).into(),
         }
@@ -119,4 +130,59 @@ pub struct ColorPreview {
 pub struct LocationPreview {
     pub latitude: f64,
     pub longitude: f64,
+}
+
+#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CommandList {
+    pub commands: Vec<Command>,
+}
+
+impl CommandList {
+    pub fn new() -> Self {
+        Default::default()
+    }
+
+    pub fn add_command<T>(mut self, command: T) -> Self
+    where
+        T: Into<Command>,
+    {
+        self.commands.push(command.into());
+        self
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Command {
+    pub title: String,
+    pub description: String,
+    pub command: String,
+}
+
+impl Command {
+    pub fn new<T>(command: T) -> Self
+    where
+        T: Into<String>,
+    {
+        Self {
+            title: String::new(),
+            description: String::new(),
+            command: command.into(),
+        }
+    }
+
+    pub fn set_title<T>(mut self, title: T) -> Self
+    where
+        T: Into<String>,
+    {
+        self.title = title.into();
+        self
+    }
+
+    pub fn set_description<T>(mut self, description: T) -> Self
+    where
+        T: Into<String>,
+    {
+        self.description = description.into();
+        self
+    }
 }
