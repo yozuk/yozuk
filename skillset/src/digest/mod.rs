@@ -123,6 +123,7 @@ impl Command for DigestCommand {
                         media_type!(TEXT / PLAIN),
                     )
                     .kind(SectionKind::Comment)],
+                    ..Default::default()
                 }
                 .into());
             }
@@ -151,6 +152,9 @@ impl Command for DigestCommand {
                 media_type!(TEXT / PLAIN),
             )
             .kind(SectionKind::Comment)],
+            blocks: vec![Block::Comment(
+                block::Comment::new().set_text("No valid input source provided"),
+            )],
         }
         .into())
     }
@@ -180,6 +184,11 @@ fn compute_hash(
                 module: "Digest".into(),
                 sections: vec![Section::new(result.join("\n"), media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Value)],
+                blocks: vec![Block::Data(
+                    block::Data::new()
+                        .set_data(result.join("\n"))
+                        .set_media_type(media_type!(TEXT / PLAIN)),
+                )],
             });
         }
     }

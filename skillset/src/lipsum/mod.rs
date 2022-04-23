@@ -180,12 +180,16 @@ impl Command for LipsumCommand {
                     media_type!(TEXT / PLAIN),
                 )
                 .kind(SectionKind::Comment)],
+                blocks: vec![Block::Comment(block::Comment::new().set_text(format!(
+                    "Too large number of the requested words (Limit: {}).",
+                    MAX_COUNT
+                )))],
             }
             .into());
         }
         Ok(Output {
             sections: vec![Section::new(
-                if let Some(chain) = chain {
+                if let Some(chain) = chain.clone() {
                     chain.generate(args.n)
                 } else {
                     lipsum(args.n)
@@ -193,6 +197,15 @@ impl Command for LipsumCommand {
                 media_type!(TEXT / PLAIN),
             )
             .kind(SectionKind::Value)],
+            blocks: vec![Block::Comment(
+                block::Comment::new()
+                    .set_text(if let Some(chain) = chain {
+                        chain.generate(args.n)
+                    } else {
+                        lipsum(args.n)
+                    })
+                    .set_media_type(media_type!(TEXT / PLAIN)),
+            )],
             ..Default::default()
         })
     }

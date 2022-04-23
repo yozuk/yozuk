@@ -101,6 +101,10 @@ impl Command for NanoIdCommand {
                     media_type!(TEXT / PLAIN),
                 )
                 .kind(SectionKind::Comment)],
+                blocks: vec![Block::Comment(block::Comment::new().set_text(format!(
+                    "Too large number of the requested NanoIDs (Limit: {}).",
+                    MAX_COUNT
+                )))],
             }
             .into());
         }
@@ -116,6 +120,18 @@ impl Command for NanoIdCommand {
                 )
                 .kind(SectionKind::Comment),
                 Section::new(list.join("\n"), media_type!(TEXT / PLAIN)),
+            ],
+            blocks: vec![
+                Block::Comment(block::Comment::new().set_text(format!(
+                    "Generating {} {}",
+                    args.n,
+                    pluralize("NanoID", args.n)
+                ))),
+                Block::Data(
+                    block::Data::new()
+                        .set_data(list.join("\n"))
+                        .set_media_type(media_type!(TEXT / PLAIN)),
+                ),
             ],
         })
     }

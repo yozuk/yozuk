@@ -77,6 +77,13 @@ impl Command for VersionCommand {
                 self.0.build_info.to_string(),
                 MediaType::parse("application/vnd.yozuk.version+json").unwrap(),
             )],
+            blocks: vec![Block::Data(
+                block::Data::new()
+                    .set_data(self.0.build_info.to_string())
+                    .set_media_type(
+                        MediaType::parse("application/vnd.yozuk.version+json").unwrap(),
+                    ),
+            )],
         })
     }
 }

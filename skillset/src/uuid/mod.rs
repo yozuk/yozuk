@@ -154,6 +154,10 @@ impl Command for UuidCommand {
                     media_type!(TEXT / PLAIN),
                 )
                 .kind(SectionKind::Comment)],
+                blocks: vec![Block::Comment(block::Comment::new().set_text(format!(
+                    "Too large number of the requested UUIDs (Limit: {}).",
+                    MAX_COUNT
+                )))],
             }
             .into());
         }
@@ -169,6 +173,18 @@ impl Command for UuidCommand {
                 )
                 .kind(SectionKind::Comment),
                 Section::new(list.join("\n"), media_type!(TEXT / PLAIN)),
+            ],
+            blocks: vec![
+                Block::Comment(block::Comment::new().set_text(format!(
+                    "Generating {} {}",
+                    args.n,
+                    pluralize("UUID", args.n)
+                ))),
+                Block::Data(
+                    block::Data::new()
+                        .set_data(list.join("\n"))
+                        .set_media_type(media_type!(TEXT / PLAIN)),
+                ),
             ],
         })
     }

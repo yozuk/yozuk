@@ -199,6 +199,7 @@ impl Command for Base64Command {
                 Ok(Output {
                     module: "Base64 Decoder".into(),
                     sections,
+                    ..Default::default()
                 })
             }
             Mode::Encode => Ok(Output {
@@ -209,6 +210,7 @@ impl Command for Base64Command {
                     .chain(streams)
                     .map(|data| Section::new(base64::encode(data), media_type!(TEXT / PLAIN)))
                     .collect(),
+                ..Default::default()
             }),
         }
     }

@@ -127,11 +127,13 @@ impl Command for CalcCommand {
                     format!("{}", result),
                     media_type!(TEXT / PLAIN),
                 )],
+                ..Default::default()
             })
             .map_err(|err| Output {
                 module: "Calculator".into(),
                 sections: vec![Section::new(format!("{}", err), media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Comment)],
+                ..Default::default()
             })?)
     }
 }

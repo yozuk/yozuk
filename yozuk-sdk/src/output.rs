@@ -1,3 +1,4 @@
+use crate::block::Block;
 use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
 use mediatype::{media_type, MediaTypeBuf};
@@ -6,10 +7,11 @@ use serde_json::Value;
 use std::collections::HashMap;
 use std::str;
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
 pub struct Output {
     pub module: String,
     pub sections: Vec<Section>,
+    pub blocks: Vec<Block>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
@@ -94,6 +96,7 @@ impl CommandError {
                 module: module.into(),
                 sections: vec![Section::new(format!("{}", err), media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Comment)],
+                ..Default::default()
             },
         }
     }

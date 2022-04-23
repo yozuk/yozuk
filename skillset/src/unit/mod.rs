@@ -146,6 +146,15 @@ impl Command for UnitCommand {
                 format!("{} =\n{}", base_unit.to_string(), converted.join("\n")),
                 media_type!(TEXT / PLAIN),
             )],
+            blocks: vec![Block::Data(
+                block::Data::new()
+                    .set_data(format!(
+                        "{} =\n{}",
+                        base_unit.to_string(),
+                        converted.join("\n")
+                    ))
+                    .set_media_type(media_type!(TEXT / PLAIN)),
+            )],
         })
     }
 

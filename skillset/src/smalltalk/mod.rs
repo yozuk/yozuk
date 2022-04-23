@@ -101,11 +101,21 @@ impl Command for SmalltalkCommand {
                 media_type!(TEXT / PLAIN),
             )
             .kind(SectionKind::Comment)],
+                blocks: vec![Block::Comment(
+                    block::Comment::new()
+                        .set_text(
+                "Computing the answer to your question will take a little while. Please ask me \
+                 again seven and a half million years later.")
+                ),
+               ],
             })
         } else {
             Ok(Output {
                 sections: vec![Section::new("Hi. I'm Yozuk.", media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Comment)],
+                blocks: vec![Block::Comment(
+                    block::Comment::new().set_text("Hi. I'm Yozuk."),
+                )],
                 ..Default::default()
             })
         }
