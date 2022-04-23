@@ -117,7 +117,7 @@ impl Command for DigestCommand {
 
             if matched.is_empty() {
                 return Err(Output {
-                    module: "Digest".into(),
+                    title: "Digest".into(),
                     sections: vec![Section::new(
                         format!("Unsupprted algorithm: {}", name),
                         media_type!(TEXT / PLAIN),
@@ -146,7 +146,7 @@ impl Command for DigestCommand {
         }
 
         Err(Output {
-            module: "Digest".into(),
+            title: "Digest".into(),
             sections: vec![Section::new(
                 "No valid input source provided".to_string(),
                 media_type!(TEXT / PLAIN),
@@ -181,7 +181,7 @@ fn compute_hash(
                     .collect::<Vec<_>>()
             };
             return Some(Output {
-                module: "Digest".into(),
+                title: "Digest".into(),
                 sections: vec![Section::new(result.join("\n"), media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Value)],
                 blocks: vec![Block::Data(

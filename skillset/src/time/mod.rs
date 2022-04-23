@@ -129,7 +129,7 @@ impl Command for TimeCommand {
             let ts = tz.from_utc_datetime(&ts.naive_utc());
             let ts = ts.to_rfc3339_opts(SecondsFormat::Millis, false);
             return Ok(Output {
-                module: "Time".into(),
+                title: "Time".into(),
                 sections: vec![
                     Section::new("Converting UNIX timestamp", media_type!(TEXT / PLAIN))
                         .kind(SectionKind::Comment),
@@ -164,7 +164,7 @@ impl Command for TimeCommand {
             ]
         };
         Ok(Output {
-            module: "Time".into(),
+            title: "Time".into(),
             sections: vec![Section::new(time.join("\n"), media_type!(TEXT / PLAIN))],
             blocks: vec![Block::Data(
                 block::Data::new()

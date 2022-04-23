@@ -171,7 +171,7 @@ impl Command for LipsumCommand {
         let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
             return Err(Output {
-                module: "Lorem ipsum".into(),
+                title: "Lorem ipsum".into(),
                 sections: vec![Section::new(
                     format!(
                         "Too large number of the requested words (Limit: {}).",

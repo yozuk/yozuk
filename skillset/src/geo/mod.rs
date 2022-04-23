@@ -76,7 +76,7 @@ impl Command for GeoCommand {
             center: (code.center.x(), code.center.y()),
         };
         Ok(Output {
-            module: "Geo".into(),
+            title: "Geo".into(),
             sections: vec![
                 Section::new(
                     "Decoding Open Location Code".to_string(),

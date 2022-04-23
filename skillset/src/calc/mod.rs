@@ -122,7 +122,7 @@ impl Command for CalcCommand {
         let rule = CalcParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule)
             .map(|result| Output {
-                module: "Calculator".into(),
+                title: "Calculator".into(),
                 sections: vec![Section::new(
                     format!("{}", result),
                     media_type!(TEXT / PLAIN),
@@ -130,7 +130,7 @@ impl Command for CalcCommand {
                 ..Default::default()
             })
             .map_err(|err| Output {
-                module: "Calculator".into(),
+                title: "Calculator".into(),
                 sections: vec![Section::new(format!("{}", err), media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Comment)],
                 ..Default::default()

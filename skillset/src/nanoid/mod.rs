@@ -92,7 +92,7 @@ impl Command for NanoIdCommand {
         let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
             return Err(Output {
-                module: "NanoID Generator".into(),
+                title: "NanoID Generator".into(),
                 sections: vec![Section::new(
                     format!(
                         "Too large number of the requested NanoIDs (Limit: {}).",
@@ -112,7 +112,7 @@ impl Command for NanoIdCommand {
             .take(args.n)
             .collect::<Vec<_>>();
         Ok(Output {
-            module: "NanoID Generator".into(),
+            title: "NanoID Generator".into(),
             sections: vec![
                 Section::new(
                     format!("Generating {} {}", args.n, pluralize("NanoID", args.n)),

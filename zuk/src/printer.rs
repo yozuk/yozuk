@@ -30,11 +30,11 @@ impl TerminalPrinter {
         for section in &output.sections {
             match section.kind {
                 SectionKind::Comment => {
-                    if !output.module.is_empty() {
+                    if !output.title.is_empty() {
                         write!(
                             &mut stderr,
                             "{}",
-                            format!("{}: ", output.module).bold().green()
+                            format!("{}: ", output.title).bold().green()
                         )?;
                     }
                     writeln!(&mut stderr, "{}", section.as_utf8().dimmed().white())?;
@@ -86,11 +86,11 @@ impl TerminalPrinter {
 
         let output = &outputs[0];
         for section in &output.sections {
-            if !output.module.is_empty() {
+            if !output.title.is_empty() {
                 write!(
                     &mut stderr,
                     "{}",
-                    format!("{}: ", output.module).bold().red()
+                    format!("{}: ", output.title).bold().red()
                 )?;
             }
             writeln!(&mut stderr, "{}", section.as_utf8())?;

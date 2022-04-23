@@ -72,7 +72,7 @@ impl Command for VersionCommand {
     ) -> Result<Output, CommandError> {
         let _args = Args::try_parse_from(args.args)?;
         Ok(Output {
-            module: "Version Info".into(),
+            title: "Version Info".into(),
             sections: vec![Section::new(
                 self.0.build_info.to_string(),
                 MediaType::parse("application/vnd.yozuk.version+json").unwrap(),

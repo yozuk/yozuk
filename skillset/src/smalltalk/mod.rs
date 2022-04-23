@@ -94,7 +94,7 @@ impl Command for SmalltalkCommand {
         let args = Args::try_parse_from(args.args)?;
         if args.life_universe_everything {
             Ok(Output {
-                module: "Deep Thought".into(),
+                title: "Deep Thought".into(),
                 sections: vec![Section::new(
                 "Computing the answer to your question will take a little while. Please ask me \
                  again seven and a half million years later.",

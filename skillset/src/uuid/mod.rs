@@ -145,7 +145,7 @@ impl Command for UuidCommand {
         let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
             return Err(Output {
-                module: "UUID Generator".into(),
+                title: "UUID Generator".into(),
                 sections: vec![Section::new(
                     format!(
                         "Too large number of the requested UUIDs (Limit: {}).",
@@ -165,7 +165,7 @@ impl Command for UuidCommand {
             .take(args.n)
             .collect::<Vec<_>>();
         Ok(Output {
-            module: "UUID Generator".into(),
+            title: "UUID Generator".into(),
             sections: vec![
                 Section::new(
                     format!("Generating {} {}", args.n, pluralize("UUID", args.n)),

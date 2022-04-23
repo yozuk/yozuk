@@ -9,7 +9,7 @@ use std::str;
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
 pub struct Output {
-    pub module: String,
+    pub title: String,
     pub sections: Vec<Section>,
     pub blocks: Vec<Block>,
 }
@@ -86,14 +86,14 @@ pub enum CommandError {
 }
 
 impl CommandError {
-    pub fn into_output<T>(self, module: T) -> Output
+    pub fn into_output<T>(self, title: T) -> Output
     where
         T: Into<String>,
     {
         match self {
             Self::Output(output) => output,
             Self::Error(err) => Output {
-                module: module.into(),
+                title: title.into(),
                 sections: vec![Section::new(format!("{}", err), media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Comment)],
                 ..Default::default()

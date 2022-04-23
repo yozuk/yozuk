@@ -197,13 +197,13 @@ impl Command for Base64Command {
                 );
 
                 Ok(Output {
-                    module: "Base64 Decoder".into(),
+                    title: "Base64 Decoder".into(),
                     sections,
                     ..Default::default()
                 })
             }
             Mode::Encode => Ok(Output {
-                module: "Base64 Encoder".into(),
+                title: "Base64 Encoder".into(),
                 sections: args
                     .data
                     .into_iter()

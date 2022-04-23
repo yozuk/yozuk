@@ -227,7 +227,7 @@ impl Command for DiceCommand {
         let rule = DiceParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule, &self.0)
             .map(|result| Output {
-                module: "Dice".into(),
+                title: "Dice".into(),
                 sections: vec![Section::new(result.to_string(), media_type!(TEXT / PLAIN))],
                 blocks: vec![Block::Data(
                     block::Data::new()
@@ -236,7 +236,7 @@ impl Command for DiceCommand {
                 )],
             })
             .map_err(|err| Output {
-                module: "Dice".into(),
+                title: "Dice".into(),
                 sections: vec![Section::new(format!("{}", err), media_type!(TEXT / PLAIN))
                     .kind(SectionKind::Comment)],
                 blocks: vec![Block::Data(

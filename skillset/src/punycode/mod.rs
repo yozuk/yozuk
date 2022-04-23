@@ -70,7 +70,7 @@ impl Command for PunycodeCommand {
                     .collect::<Vec<_>>();
 
                 Ok(Output {
-                    module: "Punycode Decoder".into(),
+                    title: "Punycode Decoder".into(),
                     sections: vec![
                         Section::new("Decoding punycode".to_string(), media_type!(TEXT / PLAIN))
                             .kind(SectionKind::Comment),
@@ -94,7 +94,7 @@ impl Command for PunycodeCommand {
                     .collect::<Vec<_>>();
 
                 Ok(Output {
-                    module: "Punycode Encoder".into(),
+                    title: "Punycode Encoder".into(),
                     sections: vec![
                         Section::new("Encoding punycode".to_string(), media_type!(TEXT / PLAIN))
                             .kind(SectionKind::Comment),
