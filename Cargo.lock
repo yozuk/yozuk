@@ -2716,7 +2716,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-preprocessor"
-version = "0.8.0"
+version = "0.9.0"
 dependencies = [
  "yozuk-sdk",
 ]
