@@ -116,20 +116,14 @@ impl Default for Data {
 pub enum Preview {
     #[serde(rename = "com.yozuk.preview.color")]
     Color(ColorPreview),
-
-    #[serde(rename = "com.yozuk.preview.location")]
-    Location(LocationPreview),
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ColorPreview {
-    pub color: String,
-}
-
-#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
-pub struct LocationPreview {
-    pub latitude: f64,
-    pub longitude: f64,
+    pub red: u8,
+    pub green: u8,
+    pub blue: u8,
+    pub alpha: u8,
 }
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
