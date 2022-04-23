@@ -125,13 +125,13 @@ impl Command for ColorCommand {
             .filter_map(|color| css_color::Srgb::from_str(color).ok())
             .map(|color| Srgba::new(color.red, color.green, color.blue, color.alpha));
         Ok(Output {
-            sections: colors.map(|color| render_color(&color)).collect(),
+            blocks: colors.flat_map(|color| render_color(&color)).collect(),
             ..Default::default()
         })
     }
 }
 
-fn render_color(color: &Srgba) -> Section {
+fn render_color(color: &Srgba) -> Vec<Block> {
     let mut colors = Vec::new();
     let rgba_u8: Srgba<u8> = (*color).into_format();
 
@@ -146,7 +146,7 @@ fn render_color(color: &Srgba) -> Section {
             rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue, rgba_u8.alpha
         )
     };
-    colors.push(hex.clone());
+    colors.push(hex);
 
     colors.push(if color.alpha == 1.0 {
         format!(
@@ -214,7 +214,19 @@ fn render_color(color: &Srgba) -> Section {
         )
     });
 
-    Section::new(colors.join("\n"), media_type!(TEXT / PLAIN)).attr("com.yozuk.preview.color", hex)
+    vec![
+        Block::Preview(block::Preview::Color(block::ColorPreview {
+            red: rgba_u8.color.red,
+            green: rgba_u8.color.green,
+            blue: rgba_u8.color.blue,
+            alpha: rgba_u8.alpha,
+        })),
+        Block::Data(
+            block::Data::new()
+                .set_data(colors.join("\n"))
+                .set_media_type(media_type!(TEXT / PLAIN)),
+        ),
+    ]
 }
 
 #[derive(Parser)]

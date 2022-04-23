@@ -70,11 +70,14 @@ impl Command for PunycodeCommand {
                     .collect::<Vec<_>>();
 
                 Ok(Output {
-                    module: "Punycode Decoder".into(),
-                    sections: vec![
-                        Section::new("Decoding punycode".to_string(), media_type!(TEXT / PLAIN))
-                            .kind(SectionKind::Comment),
-                        Section::new(output.join("\n"), media_type!(TEXT / PLAIN)),
+                    title: "Punycode Decoder".into(),
+                    blocks: vec![
+                        Block::Comment(block::Comment::new().set_text("Decoding punycode")),
+                        Block::Data(
+                            block::Data::new()
+                                .set_data(output.join("\n"))
+                                .set_media_type(media_type!(TEXT / PLAIN)),
+                        ),
                     ],
                 })
             }
@@ -86,14 +89,14 @@ impl Command for PunycodeCommand {
                     .collect::<Vec<_>>();
 
                 Ok(Output {
-                    module: "Punycode Encoder".into(),
-                    sections: vec![
-                        Section::new(
-                            "Encoding into punycode".to_string(),
-                            media_type!(TEXT / PLAIN),
-                        )
-                        .kind(SectionKind::Comment),
-                        Section::new(output.join("\n"), media_type!(TEXT / PLAIN)),
+                    title: "Punycode Encoder".into(),
+                    blocks: vec![
+                        Block::Comment(block::Comment::new().set_text("Encoding punycode")),
+                        Block::Data(
+                            block::Data::new()
+                                .set_data(output.join("\n"))
+                                .set_media_type(media_type!(TEXT / PLAIN)),
+                        ),
                     ],
                 })
             }

@@ -117,12 +117,10 @@ impl Command for DigestCommand {
 
             if matched.is_empty() {
                 return Err(Output {
-                    module: "Digest".into(),
-                    sections: vec![Section::new(
-                        format!("Unsupprted algorithm: {}", name),
-                        media_type!(TEXT / PLAIN),
-                    )
-                    .kind(SectionKind::Comment)],
+                    title: "Digest".into(),
+                    blocks: vec![Block::Comment(
+                        block::Comment::new().set_text(format!("Unsupprted algorithm: {}", name)),
+                    )],
                 }
                 .into());
             }
@@ -145,12 +143,10 @@ impl Command for DigestCommand {
         }
 
         Err(Output {
-            module: "Digest".into(),
-            sections: vec![Section::new(
-                "No valid input source provided".to_string(),
-                media_type!(TEXT / PLAIN),
-            )
-            .kind(SectionKind::Comment)],
+            title: "Digest".into(),
+            blocks: vec![Block::Comment(
+                block::Comment::new().set_text("No valid input source provided"),
+            )],
         }
         .into())
     }
@@ -177,9 +173,12 @@ fn compute_hash(
                     .collect::<Vec<_>>()
             };
             return Some(Output {
-                module: "Digest".into(),
-                sections: vec![Section::new(result.join("\n"), media_type!(TEXT / PLAIN))
-                    .kind(SectionKind::Value)],
+                title: "Digest".into(),
+                blocks: vec![Block::Data(
+                    block::Data::new()
+                        .set_data(result.join("\n"))
+                        .set_media_type(media_type!(TEXT / PLAIN)),
+                )],
             });
         }
     }

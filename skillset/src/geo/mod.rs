@@ -76,16 +76,13 @@ impl Command for GeoCommand {
             center: (code.center.x(), code.center.y()),
         };
         Ok(Output {
-            module: "Geo".into(),
-            sections: vec![
-                Section::new(
-                    "Decoding Open Location Code".to_string(),
-                    media_type!(TEXT / PLAIN),
-                )
-                .kind(SectionKind::Comment),
-                Section::new(
-                    serde_json::to_string_pretty(&code)?,
-                    MediaType::parse("application/vnd.yozuk.geo+json").unwrap(),
+            title: "Geo".into(),
+            blocks: vec![
+                Block::Comment(block::Comment::new().set_text("Decoding Open Location Code")),
+                Block::Data(
+                    block::Data::new()
+                        .set_data(serde_json::to_string_pretty(&code)?)
+                        .set_media_type(media_type!(APPLICATION / JSON)),
                 ),
             ],
         })

@@ -94,18 +94,20 @@ impl Command for SmalltalkCommand {
         let args = Args::try_parse_from(args.args)?;
         if args.life_universe_everything {
             Ok(Output {
-                module: "Deep Thought".into(),
-                sections: vec![Section::new(
+                title: "Deep Thought".into(),
+                blocks: vec![Block::Comment(
+                    block::Comment::new()
+                        .set_text(
                 "Computing the answer to your question will take a little while. Please ask me \
-                 again seven and a half million years later.",
-                media_type!(TEXT / PLAIN),
-            )
-            .kind(SectionKind::Comment)],
+                 again seven and a half million years later.")
+                ),
+               ],
             })
         } else {
             Ok(Output {
-                sections: vec![Section::new("Hi. I'm Yozuk.", media_type!(TEXT / PLAIN))
-                    .kind(SectionKind::Comment)],
+                blocks: vec![Block::Comment(
+                    block::Comment::new().set_text("Hi. I'm Yozuk."),
+                )],
                 ..Default::default()
             })
         }

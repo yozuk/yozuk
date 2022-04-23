@@ -171,28 +171,24 @@ impl Command for LipsumCommand {
         let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
             return Err(Output {
-                module: "Lorem ipsum".into(),
-                sections: vec![Section::new(
-                    format!(
-                        "Too large number of the requested words (Limit: {}).",
-                        MAX_COUNT
-                    ),
-                    media_type!(TEXT / PLAIN),
-                )
-                .kind(SectionKind::Comment)],
+                title: "Lorem ipsum".into(),
+                blocks: vec![Block::Comment(block::Comment::new().set_text(format!(
+                    "Too large number of the requested words (Limit: {}).",
+                    MAX_COUNT
+                )))],
             }
             .into());
         }
         Ok(Output {
-            sections: vec![Section::new(
-                if let Some(chain) = chain {
-                    chain.generate(args.n)
-                } else {
-                    lipsum(args.n)
-                },
-                media_type!(TEXT / PLAIN),
-            )
-            .kind(SectionKind::Value)],
+            blocks: vec![Block::Comment(
+                block::Comment::new()
+                    .set_text(if let Some(chain) = chain {
+                        chain.generate(args.n)
+                    } else {
+                        lipsum(args.n)
+                    })
+                    .set_media_type(media_type!(TEXT / PLAIN)),
+            )],
             ..Default::default()
         })
     }

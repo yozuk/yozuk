@@ -141,10 +141,15 @@ impl Command for UnitCommand {
             .map(|unit| unit.normalized().to_string())
             .collect::<Vec<_>>();
         Ok(Output {
-            module: "Unit Converter".into(),
-            sections: vec![Section::new(
-                format!("{} =\n{}", base_unit.to_string(), converted.join("\n")),
-                media_type!(TEXT / PLAIN),
+            title: "Unit Converter".into(),
+            blocks: vec![Block::Data(
+                block::Data::new()
+                    .set_data(format!(
+                        "{} =\n{}",
+                        base_unit.to_string(),
+                        converted.join("\n")
+                    ))
+                    .set_media_type(media_type!(TEXT / PLAIN)),
             )],
         })
     }

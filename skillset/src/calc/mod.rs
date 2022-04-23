@@ -122,16 +122,20 @@ impl Command for CalcCommand {
         let rule = CalcParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule)
             .map(|result| Output {
-                module: "Calculator".into(),
-                sections: vec![Section::new(
-                    format!("{}", result),
-                    media_type!(TEXT / PLAIN),
+                title: "Calculator".into(),
+                blocks: vec![Block::Data(
+                    block::Data::new()
+                        .set_data(format!("{}", result))
+                        .set_media_type(media_type!(TEXT / PLAIN)),
                 )],
             })
             .map_err(|err| Output {
-                module: "Calculator".into(),
-                sections: vec![Section::new(format!("{}", err), media_type!(TEXT / PLAIN))
-                    .kind(SectionKind::Comment)],
+                title: "Calculator".into(),
+                blocks: vec![Block::Data(
+                    block::Data::new()
+                        .set_data(format!("{}", err))
+                        .set_media_type(media_type!(TEXT / PLAIN)),
+                )],
             })?)
     }
 }
