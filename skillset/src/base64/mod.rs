@@ -167,13 +167,11 @@ impl Command for Base64Command {
         let options = Options::try_parse_from(args.args)?;
         match options.mode {
             Mode::Decode => {
-                let mut sections = vec![Section::new(
-                    "Decoding Base64 string".to_string(),
-                    media_type!(TEXT / PLAIN),
-                )
-                .kind(SectionKind::Comment)];
+                let mut blocks = vec![Block::Comment(
+                    block::Comment::new().set_text("Decoding Base64 string"),
+                )];
 
-                sections.append(
+                blocks.append(
                     &mut args
                         .data
                         .into_iter()
@@ -191,24 +189,32 @@ impl Command for Base64Command {
                                 media_type.set_param(CHARSET, Value::new(enc.name()).unwrap());
                             }
 
-                            Section::new(data, media_type)
+                            Block::Data(
+                                block::Data::new().set_data(data).set_media_type(media_type),
+                            )
                         })
                         .collect(),
                 );
 
                 Ok(Output {
                     title: "Base64 Decoder".into(),
-                    sections,
+                    blocks,
                     ..Default::default()
                 })
             }
             Mode::Encode => Ok(Output {
                 title: "Base64 Encoder".into(),
-                sections: args
+                blocks: args
                     .data
                     .into_iter()
                     .chain(streams)
-                    .map(|data| Section::new(base64::encode(data), media_type!(TEXT / PLAIN)))
+                    .map(|data| {
+                        Block::Data(
+                            block::Data::new()
+                                .set_data(base64::encode(data))
+                                .set_media_type(media_type!(TEXT / PLAIN)),
+                        )
+                    })
                     .collect(),
                 ..Default::default()
             }),

@@ -2,10 +2,8 @@ use anyhow::Result;
 use console::Term;
 use content_inspector::ContentType;
 use hexyl::{BorderStyle, Printer};
-use mediatype::names::JSON;
 use owo_colors::OwoColorize;
 use std::io::Write;
-use std::str::FromStr;
 use yozuk_sdk::prelude::*;
 
 pub struct TerminalPrinter;
@@ -27,54 +25,34 @@ impl TerminalPrinter {
         let mut stdout = Term::stdout();
         let mut stderr = Term::stderr();
 
-        for section in &output.sections {
-            match section.kind {
-                SectionKind::Comment => {
-                    if !output.title.is_empty() {
-                        write!(
-                            &mut stderr,
-                            "{}",
-                            format!("{}: ", output.title).bold().green()
-                        )?;
-                    }
-                    writeln!(&mut stderr, "{}", section.as_utf8().dimmed().white())?;
+        let title = if output.title.is_empty() {
+            String::new()
+        } else {
+            format!("{}", format!("{}: ", output.title).bold().green())
+        };
+
+        for block in &output.blocks {
+            match block {
+                Block::Comment(comment) => {
+                    writeln!(&mut stderr, "{}{}", title, comment.text)?;
                 }
-                SectionKind::Value => {
-                    let color = section
-                        .attrs
-                        .get("com.yozuk.preview.color")
-                        .and_then(|color| color.as_str())
-                        .and_then(|color| css_color::Srgb::from_str(color).ok());
-                    if let Some(color) = color {
-                        writeln!(
-                            &mut stderr,
-                            "{}",
-                            "       ".on_truecolor(
-                                (color.red * 255.0) as u8,
-                                (color.green * 255.0) as u8,
-                                (color.blue * 255.0) as u8
-                            )
-                        )?;
-                    }
-                    if section.media_type.suffix() == Some(JSON) {
-                        if let Ok(value) =
-                            serde_json::from_slice::<serde_json::Value>(&section.data)
-                        {
-                            if let Ok(yaml) = serde_yaml::to_string(&value) {
-                                stdout.write_str(yaml.trim_start_matches("---\n"))?;
-                                return Ok(());
-                            }
-                        }
-                    }
-                    let printable = content_inspector::inspect(&section.data) == ContentType::UTF_8;
+                Block::Data(data) => {
+                    let printable = content_inspector::inspect(&data.data) == ContentType::UTF_8;
                     if printable {
-                        stdout.write_all(&section.data)?;
+                        stdout.write_all(&data.data)?;
                         writeln!(&mut stdout)?;
                     } else {
-                        self.print_binary(&section.data)?;
+                        self.print_binary(&data.data)?;
                     }
                 }
-                _ => {}
+                Block::Preview(block::Preview::Color(color)) => {
+                    writeln!(
+                        &mut stderr,
+                        "{}",
+                        "       ".on_truecolor(color.red, color.green, color.blue)
+                    )?;
+                }
+                _ => (),
             }
         }
 
@@ -85,15 +63,16 @@ impl TerminalPrinter {
         let mut stderr = Term::stderr();
 
         let output = &outputs[0];
-        for section in &output.sections {
-            if !output.title.is_empty() {
-                write!(
-                    &mut stderr,
-                    "{}",
-                    format!("{}: ", output.title).bold().red()
-                )?;
+        let title = if output.title.is_empty() {
+            String::new()
+        } else {
+            format!("{}", format!("{}: ", output.title).bold().red())
+        };
+
+        for block in &output.blocks {
+            if let Block::Comment(comment) = block {
+                writeln!(&mut stderr, "{}{}", title, comment.text)?;
             }
-            writeln!(&mut stderr, "{}", section.as_utf8())?;
         }
 
         Ok(())
