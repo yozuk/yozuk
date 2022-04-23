@@ -3,18 +3,12 @@ use bytes::Bytes;
 use mediatype::{media_type, MediaTypeBuf};
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
-pub struct Block {
-    pub locale: Option<String>,
-    pub timezone: Option<String>,
-    pub location: Option<(f64, f64)>,
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "snake_case")]
-pub enum BlockElement {
+pub enum Block {
     Comment(Comment),
     Data(Data),
+    Preview(Preview),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -104,4 +98,25 @@ impl Default for Data {
             media_type: media_type!(APPLICATION / OCTET_STREAM).into(),
         }
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(tag = "type")]
+pub enum Preview {
+    #[serde(rename = "com.yozuk.preview.color")]
+    Color(ColorPreview),
+
+    #[serde(rename = "com.yozuk.preview.location")]
+    Location(LocationPreview),
+}
+
+#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
+pub struct ColorPreview {
+    pub color: String,
+}
+
+#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
+pub struct LocationPreview {
+    pub latitude: f64,
+    pub longitude: f64,
 }
