@@ -62,6 +62,7 @@ pub struct Data {
     )]
     pub data: Bytes,
 
+    pub file_name: String,
     pub media_type: MediaTypeBuf,
 }
 
@@ -78,6 +79,14 @@ impl Data {
         self
     }
 
+    pub fn set_file_name<T>(mut self, file_name: T) -> Self
+    where
+        T: Into<String>,
+    {
+        self.file_name = file_name.into();
+        self
+    }
+
     pub fn set_media_type<T>(mut self, media_type: T) -> Self
     where
         T: Into<MediaTypeBuf>,
@@ -91,6 +100,7 @@ impl Default for Data {
     fn default() -> Self {
         Self {
             data: Bytes::new(),
+            file_name: String::new(),
             media_type: media_type!(APPLICATION / OCTET_STREAM).into(),
         }
     }
