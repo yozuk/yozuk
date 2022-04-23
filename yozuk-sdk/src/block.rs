@@ -155,18 +155,19 @@ impl CommandList {
 pub struct Command {
     pub title: String,
     pub description: String,
-    pub command: String,
+    pub tokens: Vec<String>,
 }
 
 impl Command {
-    pub fn new<T>(command: T) -> Self
+    pub fn new<I, T>(iter: I) -> Self
     where
         T: Into<String>,
+        I: IntoIterator<Item = T>,
     {
         Self {
             title: String::new(),
             description: String::new(),
-            command: command.into(),
+            tokens: iter.into_iter().map(Into::into).collect(),
         }
     }
 
