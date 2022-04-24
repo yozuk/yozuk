@@ -129,9 +129,41 @@ impl Command for CalcCommand {
             })
             .map_err(|err| Output {
                 title: "Calculator".into(),
-                blocks: vec![Block::Data(
-                    block::Data::new().set_text_data(format!("{}", err)),
+                blocks: vec![Block::Comment(
+                    block::Comment::new().set_text(format!("{}", err)),
                 )],
             })?)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_calc() {
+        let result = CalcCommand.run(
+            CommandArgs::new().add_args(["", "(234 + 4343) * (23 - 43 / 4 * 5)"]),
+            &mut [],
+            &Default::default(),
+        );
+        let expected = Ok(Output {
+            title: "Calculator".into(),
+            blocks: vec![Block::Data(block::Data::new().set_text_data("-140742.75"))],
+        });
+        assert_eq!(result, expected);
+
+        let result = CalcCommand.run(
+            CommandArgs::new().add_args(["", "234 / (5 - 5)"]),
+            &mut [],
+            &Default::default(),
+        );
+        let expected = Err(CommandError::Output(Output {
+            title: "Calculator".into(),
+            blocks: vec![Block::Comment(
+                block::Comment::new().set_text("Division by zero"),
+            )],
+        }));
+        assert_eq!(result, expected);
     }
 }
