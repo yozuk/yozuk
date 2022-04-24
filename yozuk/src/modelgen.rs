@@ -1,6 +1,6 @@
 #![cfg(feature = "modelgen")]
 
-use super::{skill, FeatureLabeler, ModelSet};
+use super::{skill, FeatureLabeler};
 use anyhow::{bail, Result};
 use crfsuite::{Algorithm, Attribute, GraphicalModel, Trainer};
 use nanoid::nanoid;
@@ -12,6 +12,7 @@ use std::{
     io::{Read, Write},
     iter,
 };
+use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
 
 pub fn modelgen(env: &Environment) -> Result<ModelSet> {
@@ -55,12 +56,10 @@ pub fn modelgen(env: &Environment) -> Result<ModelSet> {
         data.append(&mut item);
     }
 
-    Ok(ModelSet {
-        data: data.into(),
-        keys,
-        ranges,
-        header_len: 0,
-    })
+    Ok(ModelSet::new(
+        data,
+        keys.into_iter().zip(ranges.into_iter()),
+    ))
 }
 
 fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8>)> {

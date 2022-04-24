@@ -22,7 +22,8 @@ use std::fs::File;
 use std::io;
 use std::io::{Read, Write};
 use sys_locale::get_locale;
-use yozuk::{ModelSet, Yozuk};
+use yozuk::Yozuk;
+use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
 
 mod args;

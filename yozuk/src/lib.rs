@@ -5,6 +5,7 @@ use slog::{debug, error, Logger};
 use sloggers::null::NullLoggerBuilder;
 use sloggers::Build;
 use std::{iter, mem};
+use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
 
 #[cfg(feature = "rayon")]
@@ -24,6 +25,8 @@ pub use skill::*;
 
 #[cfg(feature = "modelgen")]
 pub use modelgen::*;
+
+pub const SKILLS_DIGEST: [u8; 20] = skill::skills_digest();
 
 pub struct Yozuk {
     model: ModelSet,
@@ -224,7 +227,7 @@ impl YozukBuilder {
                     }
                     commands[index] = Some(CommandCache {
                         name: skill.entry.key,
-                        model: model.get(skill.entry.key),
+                        model: model.get(skill.entry.key).map(ModelEntry::new),
                         translators: mem::take(&mut skill.skill.translators),
                         preprocessors: mem::take(&mut skill.skill.preprocessors),
                         command,
