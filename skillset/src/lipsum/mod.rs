@@ -180,9 +180,9 @@ impl Command for LipsumCommand {
             .into());
         }
         Ok(Output {
-            blocks: vec![Block::Comment(
-                block::Comment::new()
-                    .set_text(if let Some(chain) = chain {
+            blocks: vec![Block::Data(
+                block::Data::new()
+                    .set_data(if let Some(chain) = chain {
                         chain.generate(args.n)
                     } else {
                         lipsum(args.n)
