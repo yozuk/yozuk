@@ -84,6 +84,24 @@ impl Data {
         self
     }
 
+    pub fn set_text_data<T>(mut self, text: T) -> Self
+    where
+        T: Into<String>,
+    {
+        self.data = text.into().into();
+        self.media_type = media_type!(TEXT / PLAIN).into();
+        self
+    }
+
+    pub fn set_json_data<T>(mut self, json: &T) -> Result<Self, serde_json::Error>
+    where
+        T: serde::Serialize,
+    {
+        self.data = serde_json::to_string_pretty(json)?.into();
+        self.media_type = media_type!(APPLICATION / JSON).into();
+        Ok(self)
+    }
+
     pub fn set_file_name<T>(mut self, file_name: T) -> Self
     where
         T: Into<String>,

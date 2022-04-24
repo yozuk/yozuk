@@ -164,11 +164,7 @@ impl Command for UuidCommand {
                     args.n,
                     pluralize("UUID", args.n)
                 ))),
-                Block::Data(
-                    block::Data::new()
-                        .set_data(list.join("\n"))
-                        .set_media_type(media_type!(TEXT / PLAIN)),
-                ),
+                Block::Data(block::Data::new().set_text_data(list.join("\n"))),
             ],
         })
     }

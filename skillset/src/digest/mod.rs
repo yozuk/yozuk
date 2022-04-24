@@ -175,9 +175,7 @@ fn compute_hash(
             return Some(Output {
                 title: "Digest".into(),
                 blocks: vec![Block::Data(
-                    block::Data::new()
-                        .set_data(result.join("\n"))
-                        .set_media_type(media_type!(TEXT / PLAIN)),
+                    block::Data::new().set_text_data(result.join("\n")),
                 )],
             });
         }

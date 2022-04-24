@@ -221,11 +221,7 @@ fn render_color(color: &Srgba) -> Vec<Block> {
             blue: rgba_u8.color.blue,
             alpha: rgba_u8.alpha,
         })),
-        Block::Data(
-            block::Data::new()
-                .set_data(colors.join("\n"))
-                .set_media_type(media_type!(TEXT / PLAIN)),
-        ),
+        Block::Data(block::Data::new().set_text_data(colors.join("\n"))),
     ]
 }
 

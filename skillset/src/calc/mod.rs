@@ -124,17 +124,13 @@ impl Command for CalcCommand {
             .map(|result| Output {
                 title: "Calculator".into(),
                 blocks: vec![Block::Data(
-                    block::Data::new()
-                        .set_data(format!("{}", result))
-                        .set_media_type(media_type!(TEXT / PLAIN)),
+                    block::Data::new().set_text_data(format!("{}", result)),
                 )],
             })
             .map_err(|err| Output {
                 title: "Calculator".into(),
                 blocks: vec![Block::Data(
-                    block::Data::new()
-                        .set_data(format!("{}", err))
-                        .set_media_type(media_type!(TEXT / PLAIN)),
+                    block::Data::new().set_text_data(format!("{}", err)),
                 )],
             })?)
     }

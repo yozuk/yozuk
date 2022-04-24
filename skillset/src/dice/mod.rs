@@ -229,17 +229,13 @@ impl Command for DiceCommand {
             .map(|result| Output {
                 title: "Dice".into(),
                 blocks: vec![Block::Data(
-                    block::Data::new()
-                        .set_data(result.to_string())
-                        .set_media_type(media_type!(TEXT / PLAIN)),
+                    block::Data::new().set_text_data(result.to_string()),
                 )],
             })
             .map_err(|err| Output {
                 title: "Dice".into(),
                 blocks: vec![Block::Data(
-                    block::Data::new()
-                        .set_data(format!("{}", err))
-                        .set_media_type(media_type!(TEXT / PLAIN)),
+                    block::Data::new().set_text_data(format!("{}", err)),
                 )],
             })?)
     }

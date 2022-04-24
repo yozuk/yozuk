@@ -73,11 +73,7 @@ impl Command for PunycodeCommand {
                     title: "Punycode Decoder".into(),
                     blocks: vec![
                         Block::Comment(block::Comment::new().set_text("Decoding punycode")),
-                        Block::Data(
-                            block::Data::new()
-                                .set_data(output.join("\n"))
-                                .set_media_type(media_type!(TEXT / PLAIN)),
-                        ),
+                        Block::Data(block::Data::new().set_text_data(output.join("\n"))),
                     ],
                 })
             }
@@ -92,11 +88,7 @@ impl Command for PunycodeCommand {
                     title: "Punycode Encoder".into(),
                     blocks: vec![
                         Block::Comment(block::Comment::new().set_text("Encoding punycode")),
-                        Block::Data(
-                            block::Data::new()
-                                .set_data(output.join("\n"))
-                                .set_media_type(media_type!(TEXT / PLAIN)),
-                        ),
+                        Block::Data(block::Data::new().set_text_data(output.join("\n"))),
                     ],
                 })
             }

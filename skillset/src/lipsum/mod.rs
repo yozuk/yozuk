@@ -180,15 +180,13 @@ impl Command for LipsumCommand {
             .into());
         }
         Ok(Output {
-            blocks: vec![Block::Data(
-                block::Data::new()
-                    .set_data(if let Some(chain) = chain {
-                        chain.generate(args.n)
-                    } else {
-                        lipsum(args.n)
-                    })
-                    .set_media_type(media_type!(TEXT / PLAIN)),
-            )],
+            blocks: vec![Block::Data(block::Data::new().set_text_data(
+                if let Some(chain) = chain {
+                    chain.generate(args.n)
+                } else {
+                    lipsum(args.n)
+                },
+            ))],
             ..Default::default()
         })
     }

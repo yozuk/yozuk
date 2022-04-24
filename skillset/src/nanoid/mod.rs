@@ -111,11 +111,7 @@ impl Command for NanoIdCommand {
                     args.n,
                     pluralize("NanoID", args.n)
                 ))),
-                Block::Data(
-                    block::Data::new()
-                        .set_data(list.join("\n"))
-                        .set_media_type(media_type!(TEXT / PLAIN)),
-                ),
+                Block::Data(block::Data::new().set_text_data(list.join("\n"))),
             ],
         })
     }

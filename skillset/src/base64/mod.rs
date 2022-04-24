@@ -207,13 +207,7 @@ impl Command for Base64Command {
                     .data
                     .into_iter()
                     .chain(streams)
-                    .map(|data| {
-                        Block::Data(
-                            block::Data::new()
-                                .set_data(base64::encode(data))
-                                .set_media_type(media_type!(TEXT / PLAIN)),
-                        )
-                    })
+                    .map(|data| Block::Data(block::Data::new().set_text_data(base64::encode(data))))
                     .collect(),
             }),
         }

@@ -132,11 +132,7 @@ impl Command for TimeCommand {
                 title: "Time".into(),
                 blocks: vec![
                     Block::Comment(block::Comment::new().set_text("Converting UNIX timestamp")),
-                    Block::Data(
-                        block::Data::new()
-                            .set_data(ts)
-                            .set_media_type(media_type!(TEXT / PLAIN)),
-                    ),
+                    Block::Data(block::Data::new().set_text_data(ts)),
                 ],
             });
         }
@@ -161,9 +157,7 @@ impl Command for TimeCommand {
         Ok(Output {
             title: "Time".into(),
             blocks: vec![Block::Data(
-                block::Data::new()
-                    .set_data(time.join("\n"))
-                    .set_media_type(media_type!(TEXT / PLAIN)),
+                block::Data::new().set_text_data(time.join("\n")),
             )],
         })
     }
