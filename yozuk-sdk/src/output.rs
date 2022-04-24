@@ -15,6 +15,16 @@ pub enum CommandError {
     Error(anyhow::Error),
 }
 
+impl PartialEq for CommandError {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Output(lhs), Self::Output(rhs)) => lhs == rhs,
+            (Self::Error(lhs), Self::Error(rhs)) => lhs.to_string() == rhs.to_string(),
+            _ => false,
+        }
+    }
+}
+
 impl CommandError {
     pub fn into_output<T>(self, title: T) -> Output
     where
