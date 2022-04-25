@@ -386,15 +386,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "coolor"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aaebeb52e38d53b890ebcb723ff23462f39353d4e73db48284591e6395a1c25e"
-dependencies = [
- "crossterm 0.22.1",
-]
-
-[[package]]
 name = "cpufeatures"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -475,20 +466,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "crossbeam"
-version = "0.8.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ae5588f6b3c3cb05239e90bd110f257254aecd01e4635400391aeae07497845"
-dependencies = [
- "cfg-if",
- "crossbeam-channel",
- "crossbeam-deque",
- "crossbeam-epoch",
- "crossbeam-queue",
- "crossbeam-utils",
-]
-
-[[package]]
 name = "crossbeam-channel"
 version = "0.5.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -524,16 +501,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "crossbeam-queue"
-version = "0.3.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f25d8400f4a7a5778f0e4e52384a48cbd9b5c495d110786187fc750075277a2"
-dependencies = [
- "cfg-if",
- "crossbeam-utils",
-]
-
-[[package]]
 name = "crossbeam-utils"
 version = "0.8.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -545,22 +512,6 @@ dependencies = [
 
 [[package]]
 name = "crossterm"
-version = "0.22.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c85525306c4291d1b73ce93c8acf9c339f9b213aef6c1d85c3830cbf1c16325c"
-dependencies = [
- "bitflags",
- "crossterm_winapi",
- "libc",
- "mio 0.7.14",
- "parking_lot 0.11.2",
- "signal-hook",
- "signal-hook-mio",
- "winapi",
-]
-
-[[package]]
-name = "crossterm"
 version = "0.23.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2102ea4f781910f8a5b98dd061f4c2023f479ce7bb1236330099ceb5a93cf17"
@@ -568,8 +519,8 @@ dependencies = [
  "bitflags",
  "crossterm_winapi",
  "libc",
- "mio 0.8.2",
- "parking_lot 0.12.0",
+ "mio",
+ "parking_lot",
  "signal-hook",
  "signal-hook-mio",
  "winapi",
@@ -889,15 +840,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "instant"
-version = "0.1.12"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a5bbe824c507c5da5956355e86a746d82e0e1464f65d862cc5e71da70e94b2c"
-dependencies = [
- "cfg-if",
-]
-
-[[package]]
 name = "io-lifetimes"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1027,12 +969,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "linked-hash-map"
-version = "0.5.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7fb9b38af92608140b86b693604b9ffcc5824240a484d1ecd4795bacb2fe88f3"
-
-[[package]]
 name = "linux-raw-sys"
 version = "0.0.42"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1120,28 +1056,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5aa361d4faea93603064a027415f07bd8e1d5c88c9fbf68bf56a285428fd79ce"
 dependencies = [
  "autocfg",
-]
-
-[[package]]
-name = "minimad"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd37b2e65fbd459544194d8f52ed84027e031684335a062c708774c09d172b0b"
-dependencies = [
- "once_cell",
-]
-
-[[package]]
-name = "mio"
-version = "0.7.14"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8067b404fe97c70829f082dec8bcf4f71225d7eaea1d8645349cb76fa06205cc"
-dependencies = [
- "libc",
- "log",
- "miow",
- "ntapi",
- "winapi",
 ]
 
 [[package]]
@@ -1334,37 +1248,12 @@ dependencies = [
 
 [[package]]
 name = "parking_lot"
-version = "0.11.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d17b78036a60663b797adeaee46f5c9dfebb86948d1255007a1d6be0271ff99"
-dependencies = [
- "instant",
- "lock_api",
- "parking_lot_core 0.8.5",
-]
-
-[[package]]
-name = "parking_lot"
 version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87f5ec2493a61ac0506c0f4199f99070cbe83857b0337006a30f3e6719b8ef58"
 dependencies = [
  "lock_api",
- "parking_lot_core 0.9.2",
-]
-
-[[package]]
-name = "parking_lot_core"
-version = "0.8.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d76e8e1493bcac0d2766c42737f34458f1c8c50c0d23bcb24ea953affb273216"
-dependencies = [
- "cfg-if",
- "instant",
- "libc",
- "redox_syscall",
- "smallvec",
- "winapi",
+ "parking_lot_core",
 ]
 
 [[package]]
@@ -1819,18 +1708,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "serde_yaml"
-version = "0.8.23"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4a521f2940385c165a24ee286aa8599633d162077a54bdcae2a6fd5a7bfa7a0"
-dependencies = [
- "indexmap",
- "ryu",
- "serde",
- "yaml-rust",
-]
-
-[[package]]
 name = "sha-1"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1897,8 +1774,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "29ad2e15f37ec9a6cc544097b78a1ec90001e9f71b81338ca39f430adaca99af"
 dependencies = [
  "libc",
- "mio 0.7.14",
- "mio 0.8.2",
+ "mio",
  "signal-hook",
 ]
 
@@ -2119,20 +1995,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bab24d30b911b2376f3a13cc2cd443142f0c81dda04c118693e35b3835757755"
 dependencies = [
  "winapi-util",
-]
-
-[[package]]
-name = "termimad"
-version = "0.20.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "48c14caf224b3f3d43d93d0532098f9e4906bd79e0978a2e10951f17aab7898b"
-dependencies = [
- "coolor",
- "crossbeam",
- "crossterm 0.22.1",
- "minimad",
- "thiserror",
- "unicode-width",
 ]
 
 [[package]]
@@ -2613,15 +2475,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d19538ccc21819d01deaf88d6a17eae6596a12e9aafdbb97916fb49896d89de9"
 
 [[package]]
-name = "yaml-rust"
-version = "0.4.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
-dependencies = [
- "linked-hash-map",
-]
-
-[[package]]
 name = "yozuk"
 version = "0.9.0"
 dependencies = [
@@ -2730,7 +2583,6 @@ dependencies = [
  "base64",
  "bincode",
  "bytes",
- "clap 3.1.11",
  "entropy",
  "itertools 0.10.3",
  "jsonschema-valid",
@@ -2750,7 +2602,7 @@ dependencies = [
  "clap 3.1.11",
  "console",
  "content_inspector",
- "crossterm 0.23.2",
+ "crossterm",
  "css-color",
  "hexyl",
  "localzone",
@@ -2761,11 +2613,9 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
- "serde_yaml",
  "shell-words",
  "sloggers",
  "sys-locale",
- "termimad",
  "toml",
  "yozuk",
  "yozuk-bundle",
