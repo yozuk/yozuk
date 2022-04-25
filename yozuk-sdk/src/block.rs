@@ -102,6 +102,20 @@ impl Data {
         Ok(self)
     }
 
+    pub fn set_yaml_data<T>(mut self, yaml: &T) -> Result<Self, serde_yaml::Error>
+    where
+        T: serde::Serialize,
+    {
+        self.data = Bytes::from(
+            serde_yaml::to_string(yaml)?
+                .trim_start_matches("---\n")
+                .trim_end_matches("\n")
+                .to_string(),
+        );
+        self.media_type = media_type!(APPLICATION / x_::YAML).into();
+        Ok(self)
+    }
+
     pub fn set_file_name<T>(mut self, file_name: T) -> Self
     where
         T: Into<String>,
