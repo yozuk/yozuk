@@ -79,7 +79,7 @@ impl Command for GeoCommand {
             title: "Geo".into(),
             blocks: vec![
                 Block::Comment(block::Comment::new().set_text("Decoding Open Location Code")),
-                Block::Data(block::Data::new().set_text_data(serde_json::to_string_pretty(&code)?)),
+                Block::Data(block::Data::new().set_yaml_data(&code)?),
             ],
         })
     }
