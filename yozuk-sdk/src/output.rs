@@ -8,6 +8,50 @@ pub struct Output {
     pub blocks: Vec<Block>,
 }
 
+impl Output {
+    pub fn new() -> Self {
+        Default::default()
+    }
+
+    pub fn set_title<T>(mut self, title: T) -> Self
+    where
+        T: Into<String>,
+    {
+        self.title = title.into();
+        self
+    }
+
+    pub fn add_block<T>(mut self, block: T) -> Self
+    where
+        T: Into<Block>,
+    {
+        self.blocks.push(block.into());
+        self
+    }
+
+    pub fn add_blocks<T, I>(mut self, iter: I) -> Self
+    where
+        T: Into<Block>,
+        I: IntoIterator<Item = T>,
+    {
+        self.blocks
+            .append(&mut iter.into_iter().map(Into::into).collect());
+        self
+    }
+}
+
+impl<T> FromIterator<T> for Output
+where
+    T: Into<Block>,
+{
+    fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
+        Self {
+            blocks: iter.into_iter().map(Into::into).collect(),
+            ..Default::default()
+        }
+    }
+}
+
 #[non_exhaustive]
 #[derive(Debug)]
 pub enum CommandError {
