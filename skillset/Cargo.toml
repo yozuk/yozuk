@@ -17,7 +17,7 @@ base64 = "0.13.0"
 clap = { version = "3.1.6", features = ["derive"] }
 itertools = "0.10.3"
 lazy_static = "1.4.0"
-mediatype = "0.19.1"
+mediatype = "0.19.2"
 serde = "1.0.136"
 serde_derive = "1.0.136"
 serde_json = "1.0.79"
