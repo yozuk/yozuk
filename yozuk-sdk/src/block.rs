@@ -6,6 +6,7 @@ use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum Block {
     Comment(Comment),
     Data(Data),
@@ -147,6 +148,7 @@ impl Default for Data {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type")]
+#[non_exhaustive]
 pub enum Preview {
     #[serde(rename = "com.yozuk.preview.color")]
     Color(ColorPreview),
