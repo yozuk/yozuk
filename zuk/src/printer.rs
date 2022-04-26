@@ -53,6 +53,27 @@ impl TerminalPrinter {
                         "       ".on_truecolor(color.red, color.green, color.blue)
                     )?;
                 }
+                Block::Spoiler(spoiler) => {
+                    let term = Term::stderr();
+                    write!(
+                        &mut stderr,
+                        "{} Press enter to show {}",
+                        "Spoiler:".bold(),
+                        spoiler.title.on_red()
+                    )?;
+                    term.read_line()?;
+                    term.clear_last_lines(1)?;
+                    writeln!(
+                        &mut stderr,
+                        "{}{} {}",
+                        spoiler.title.on_red(),
+                        ":".on_red(),
+                        spoiler.data.unsecure()
+                    )?;
+                    write!(&mut stderr, "{}", "Press enter to hide".dimmed())?;
+                    term.read_line()?;
+                    term.clear_last_lines(2)?;
+                }
                 _ => writeln!(&mut stderr, "{}", "[unimplemented]".dimmed())?,
             }
         }
