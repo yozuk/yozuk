@@ -29,8 +29,7 @@ jobs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-        key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo
-    - uses: extractions/setup-just@v1
+        key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Install toolchain
       run: rustup target add ${{ matrix.toolchain }}
     - name: Build
@@ -51,9 +50,7 @@ jobs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-        key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo
-    - name: Install just
-      run: brew install just
+        key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
     - name: Install toolchain
       run: rustup target add ${{ matrix.toolchain }}
     - name: Build
