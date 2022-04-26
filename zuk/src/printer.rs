@@ -52,7 +52,7 @@ impl TerminalPrinter {
                         "       ".on_truecolor(color.red, color.green, color.blue)
                     )?;
                 }
-                _ => (),
+                _ => writeln!(&mut stderr, "{}", "[unimplemented]".dimmed())?,
             }
         }
 
@@ -72,6 +72,8 @@ impl TerminalPrinter {
         for block in &output.blocks {
             if let Block::Comment(comment) = block {
                 writeln!(&mut stderr, "{}{}", title, comment.text)?;
+            } else {
+                writeln!(&mut stderr, "{}", "[unimplemented]".dimmed())?;
             }
         }
 
