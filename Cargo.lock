@@ -2624,6 +2624,7 @@ dependencies = [
  "itertools 0.10.3",
  "jsonschema-valid",
  "mediatype",
+ "nanoid",
  "secstr",
  "serde",
  "serde_derive",

@@ -1,4 +1,4 @@
-use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
+use super::blob::*;
 use bytes::Bytes;
 use mediatype::{media_type, MediaTypeBuf};
 use secstr::SecUtf8;
@@ -64,12 +64,7 @@ impl Default for Comment {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Data {
-    #[serde(
-        serialize_with = "serialize_bytes",
-        deserialize_with = "deserialize_bytes"
-    )]
-    pub data: Bytes,
-
+    pub data: Blob,
     pub file_name: String,
     pub media_type: MediaTypeBuf,
 }
@@ -83,7 +78,7 @@ impl Data {
     where
         T: Into<Bytes>,
     {
-        self.data = data.into();
+        self.data = data.into().into();
         self
     }
 
@@ -109,12 +104,11 @@ impl Data {
     where
         T: serde::Serialize,
     {
-        self.data = Bytes::from(
-            serde_yaml::to_string(yaml)?
-                .trim_start_matches("---\n")
-                .trim_end_matches('\n')
-                .to_string(),
-        );
+        self.data = serde_yaml::to_string(yaml)?
+            .trim_start_matches("---\n")
+            .trim_end_matches('\n')
+            .to_string()
+            .into();
         self.media_type = media_type!(APPLICATION / x_::YAML).into();
         Ok(self)
     }
@@ -139,7 +133,7 @@ impl Data {
 impl Default for Data {
     fn default() -> Self {
         Self {
-            data: Bytes::new(),
+            data: Blob::new(),
             file_name: String::new(),
             media_type: media_type!(APPLICATION / OCTET_STREAM).into(),
         }

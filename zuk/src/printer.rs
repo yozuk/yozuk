@@ -37,12 +37,13 @@ impl TerminalPrinter {
                     writeln!(&mut stderr, "{}{}", title, comment.text)?;
                 }
                 Block::Data(data) => {
-                    let printable = content_inspector::inspect(&data.data) == ContentType::UTF_8;
+                    let data = data.data.data().unwrap();
+                    let printable = content_inspector::inspect(data) == ContentType::UTF_8;
                     if printable {
-                        stdout.write_all(&data.data)?;
+                        stdout.write_all(data)?;
                         writeln!(&mut stdout)?;
                     } else {
-                        self.print_binary(&data.data)?;
+                        self.print_binary(data)?;
                     }
                 }
                 Block::Preview(block::Preview::Color(color)) => {
