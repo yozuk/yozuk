@@ -1,6 +1,7 @@
 use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
 use mediatype::{media_type, MediaTypeBuf};
+use secstr::SecUtf8;
 use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -9,6 +10,7 @@ pub enum Block {
     Comment(Comment),
     Data(Data),
     Preview(Preview),
+    Spoiler(Spoiler),
     CommandList(CommandList),
 }
 
@@ -211,5 +213,24 @@ impl Command {
     {
         self.description = description.into();
         self
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Spoiler {
+    pub title: String,
+    pub data: SecUtf8,
+}
+
+impl Spoiler {
+    pub fn new<T, U>(title: T, data: U) -> Self
+    where
+        T: Into<String>,
+        U: Into<String>,
+    {
+        Self {
+            title: title.into(),
+            data: data.into().into(),
+        }
     }
 }
