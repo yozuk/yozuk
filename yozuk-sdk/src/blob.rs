@@ -44,6 +44,8 @@ impl PartialEq for Blob {
     }
 }
 
+impl Eq for Blob {}
+
 impl From<Bytes> for Blob {
     fn from(data: Bytes) -> Self {
         let mut hasher = Blake2b96::new();
