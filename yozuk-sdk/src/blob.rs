@@ -1,8 +1,8 @@
-use blake2::{digest::consts::U12, Blake2b, Digest};
+use blake2::{digest::consts::U24, Blake2b, Digest};
 use bytes::Bytes;
 use std::str;
 
-type Blake2b96 = Blake2b<U12>;
+type Blake2b128 = Blake2b<U24>;
 
 #[derive(Debug, Clone)]
 pub struct Blob {
@@ -48,7 +48,7 @@ impl Eq for Blob {}
 
 impl From<Bytes> for Blob {
     fn from(data: Bytes) -> Self {
-        let mut hasher = Blake2b96::new();
+        let mut hasher = Blake2b128::new();
         hasher.update(&data);
         let id = base64::encode_config(&hasher.finalize(), base64::URL_SAFE);
         Self { id, data }
@@ -62,10 +62,10 @@ mod tests {
     #[test]
     fn test_blob() {
         let blob = Blob::new();
-        assert_eq!(blob.id(), "uOHdo6wKo4IK0pkL");
+        assert_eq!(blob.id(), "qztTMacTXtUNDxgtAm5gq9s2Rv1RvPij");
 
         let blob = Blob::from(Bytes::from_static(b"Hello World!"));
-        assert_eq!(blob.id(), "VVg4lZh3I00ZfiRa");
+        assert_eq!(blob.id(), "5XxqIJgllsQk_aNhRKvsWTv1oITfqjnf");
         assert_eq!(blob.data().as_ref(), b"Hello World!");
         assert_eq!(blob.as_utf8(), "Hello World!");
     }
