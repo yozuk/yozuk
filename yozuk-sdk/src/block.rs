@@ -109,7 +109,7 @@ impl Data {
         self.data = Bytes::from(
             serde_yaml::to_string(yaml)?
                 .trim_start_matches("---\n")
-                .trim_end_matches("\n")
+                .trim_end_matches('\n')
                 .to_string(),
         );
         self.media_type = media_type!(APPLICATION / x_::YAML).into();
