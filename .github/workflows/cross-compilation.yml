@@ -52,7 +52,8 @@ jobs:
           ~/.cargo/git/db/
           target/
         key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo
-    - uses: extractions/setup-just@v1
+    - name: Install just
+      run: brew install just
     - name: Install toolchain
       run: rustup target add ${{ matrix.toolchain }}
     - name: Build
