@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-bundle"
-version = "0.9.0"
+version = "0.10.0"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Prebuild NLP model for Yozuk"
