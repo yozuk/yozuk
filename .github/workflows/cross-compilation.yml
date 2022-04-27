@@ -2,11 +2,9 @@ name: Cross-Compilation
 
 on:
   push:
-    branches: [ main ]
-    paths-ignore:
-    - '**.md'
-    - '**/Dockerfile'
-    - 'images/**'
+    paths:
+      - '**.toml'
+      - '**.rs'
   pull_request:
     branches: [ main ]
 
