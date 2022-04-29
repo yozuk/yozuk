@@ -15,7 +15,7 @@ use yozuk_sdk::prelude::*;
 use yozuk_sdk::Bytes;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"-6zq-7vR7Ax6tHYBelhCl",
+    model_id: b"ZXn65BxFq5a6KQKFi731m",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -27,12 +27,20 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-const MINIMUM_SHANNON_ENTROPY: f32 = 2.5;
+const MINIMUM_ENTROPY_SCORE: f32 = 10.0;
+
+fn is_like_base64(data: &[u8]) -> bool {
+    if let Ok(decoded) = base64::decode(data) {
+        let score = entropy::shannon_entropy(&data) / entropy::shannon_entropy(&decoded)
+            * data.len() as f32;
+        return score >= MINIMUM_ENTROPY_SCORE;
+    }
+    false
+}
 
 fn label_base64(token: &Token) -> impl Iterator<Item = Feature> {
     Some(token)
-        .filter(|token| entropy::shannon_entropy(&token.data) >= MINIMUM_SHANNON_ENTROPY)
-        .and_then(|token| base64::decode(&token.data).ok())
+        .filter(|token| is_like_base64(&token.data))
         .map(|_| Feature {
             name: "encoding:base64".into(),
             non_entity: true,
@@ -119,19 +127,13 @@ impl Translator for Base64Translator {
             return None;
         }
 
-        let input = inputs
+        let inputs = inputs
             .into_iter()
-            .filter(|arg| {
-                if base64::decode(&arg.as_utf8()).is_ok() {
-                    entropy::shannon_entropy(&arg.data) >= MINIMUM_SHANNON_ENTROPY
-                } else {
-                    false
-                }
-            })
+            .filter(|arg| is_like_base64(&arg.data))
             .map(|arg| arg.data.clone())
             .collect::<Vec<_>>();
 
-        if !input.is_empty()
+        if inputs.len() == 1
             || (!streams.is_empty()
                 && streams
                     .iter()
@@ -140,7 +142,7 @@ impl Translator for Base64Translator {
             return Some(
                 CommandArgs::new()
                     .add_args(["--mode", "decode"])
-                    .add_data_iter(input),
+                    .add_data_iter(inputs),
             );
         }
 

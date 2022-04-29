@@ -38,4 +38,22 @@ fn decode() {
             .add_args(["yozuk-skill-base64", "--mode", "decode"])
             .add_data([String::from("KAAoAAAdmgCEzO0ZOVlteYWIZKzx")])
     );
+    assert_eq!(
+        cmd(tk!(["8J+Mjw=="])),
+        CommandArgs::new()
+            .add_args(["yozuk-skill-base64", "--mode", "decode"])
+            .add_data([String::from("8J+Mjw==")])
+    );
+    assert_eq!(
+        cmd(tk!(["eWFtbA=="])),
+        CommandArgs::new()
+            .add_args(["yozuk-skill-base64", "--mode", "decode"])
+            .add_data([String::from("eWFtbA==")])
+    );
+    assert_eq!(
+        cmd(tk!(["YWE="])),
+        CommandArgs::new()
+            .add_args(["yozuk-skill-base64", "--mode", "decode"])
+            .add_data([String::from("YWE=")])
+    );
 }

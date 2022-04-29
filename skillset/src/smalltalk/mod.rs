@@ -6,7 +6,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"CI5cJBeuNmRj5mMRVAC_X",
+    model_id: b"bQ49wkMRKLOjoZ17U0-i9",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -45,6 +45,14 @@ impl Corpus for SmalltalkCorpus {
             tk!([
                 "The", "answer", "to",
                 "Life,"; "smalltalk:keyword",
+                "universe"; "smalltalk:keyword",
+                "and",
+                "everything"; "smalltalk:keyword"
+            ]),
+            tk!([
+                "The", "answer", "to",
+                "Life,"; "smalltalk:keyword",
+                "the",
                 "universe"; "smalltalk:keyword",
                 "and",
                 "everything"; "smalltalk:keyword"
