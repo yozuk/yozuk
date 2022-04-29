@@ -48,7 +48,6 @@ impl Translator for PasswordTranslator {
 }
 
 const CHARACTERS: &str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*";
-const SCORES: &[&str] = &["0 😱", "1 🤮", "2 😭", "3 😄", "4 😍"];
 
 #[derive(Debug)]
 pub struct PasswordCommand;
@@ -68,16 +67,9 @@ impl Command for PasswordCommand {
             let index = between.sample(&mut rng);
             password.push_str(&CHARACTERS[index..index + 1]);
         }
-        let strength = zxcvbn::zxcvbn(&password, &[])?;
         Ok(Output {
             title: "Password Generator".into(),
-            blocks: vec![
-                Block::Comment(block::Comment::new().set_text(format!(
-                    "zxcvbn score: {}",
-                    SCORES[strength.score() as usize]
-                ))),
-                Block::Spoiler(block::Spoiler::new("Password", password)),
-            ],
+            blocks: vec![Block::Spoiler(block::Spoiler::new("Password", password))],
         })
     }
 }
