@@ -9,6 +9,7 @@ mod lipsum;
 mod mediatype;
 mod nanoid;
 mod numeric;
+mod password;
 mod punycode;
 mod smalltalk;
 mod time;
@@ -72,4 +73,5 @@ skills!(
     [time, "yozuk-skill-time"],
     [unit, "yozuk-skill-unit"],
     [geo, "yozuk-skill-geo"],
+    [password, "yozuk-skill-password"],
 );
