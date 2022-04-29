@@ -34,6 +34,7 @@ pub struct Yozuk {
     skills: Vec<SkillCache>,
     labelers: Vec<Box<dyn Labeler>>,
     commands: Vec<Option<CommandCache>>,
+    redirections: Vec<(Vec<Token>, Vec<String>)>,
     logger: Logger,
 }
 
@@ -51,6 +52,27 @@ impl Yozuk {
 
     pub fn get_commands(&self, tokens: &[Token], streams: &[InputStream]) -> Vec<CommandArgs> {
         debug!(self.logger, "{:?}", tokens);
+
+        let filter = |(redirect, _): &&(Vec<Token>, Vec<String>)| {
+            redirect.len() == tokens.len()
+                && redirect
+                    .iter()
+                    .map(|token| token.as_utf8())
+                    .zip(tokens.iter().map(|token| token.as_utf8()))
+                    .all(|(a, b)| yozuk_helper_english::normalized_eq(a, [b], 0))
+        };
+
+        #[cfg(feature = "rayon")]
+        let redirection = self.redirections.par_iter().find_first(filter);
+
+        #[cfg(not(feature = "rayon"))]
+        let redirection = self.redirections.iter().find(filter);
+
+        if let Some((_, args)) = redirection {
+            return vec![CommandArgs::new()
+                .add_args(["yozuk-redirect"])
+                .add_args_iter(args)];
+        }
 
         let labeler = FeatureLabeler::new(&self.labelers);
 
@@ -155,6 +177,7 @@ pub struct YozukBuilder {
     config: Config,
     i18n: I18n,
     logger: Logger,
+    redirections: Vec<(Vec<Token>, Vec<String>)>,
 }
 
 impl YozukBuilder {
@@ -170,6 +193,20 @@ impl YozukBuilder {
 
     pub fn i18n(mut self, i18n: I18n) -> Self {
         self.i18n = i18n;
+        self
+    }
+
+    pub fn redirection<T, TI, S, SI>(mut self, tokens: TI, args: SI) -> Self
+    where
+        T: Into<Token>,
+        TI: IntoIterator<Item = T>,
+        S: Into<String>,
+        SI: IntoIterator<Item = S>,
+    {
+        self.redirections.push((
+            tokens.into_iter().map(Into::into).collect(),
+            args.into_iter().map(Into::into).collect(),
+        ));
         self
     }
 
@@ -242,6 +279,7 @@ impl YozukBuilder {
             skills,
             labelers,
             commands,
+            redirections: self.redirections,
             logger: self.logger,
         }
     }
@@ -253,6 +291,7 @@ impl Default for YozukBuilder {
             config: Default::default(),
             i18n: Default::default(),
             logger: NullLoggerBuilder.build().unwrap(),
+            redirections: Default::default(),
         }
     }
 }

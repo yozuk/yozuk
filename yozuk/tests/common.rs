@@ -7,7 +7,9 @@ use yozuk_sdk::prelude::*;
 lazy_static::lazy_static! {
     pub static ref YOZUK: Yozuk = {
         let model = yozuk::modelgen(&Environment::new()).unwrap();
-        Yozuk::builder().build(model)
+        Yozuk::builder()
+            .redirection(tk!(["test", "command", "redirect"]), vec!["test", "redirect"])
+            .build(model)
     };
 }
 
