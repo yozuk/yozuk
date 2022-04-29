@@ -83,8 +83,4 @@ impl Token {
             ""
         }
     }
-
-    pub fn shannon_entropy(&self) -> f32 {
-        entropy::shannon_entropy(&self.data)
-    }
 }

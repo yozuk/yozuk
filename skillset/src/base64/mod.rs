@@ -31,7 +31,7 @@ const MINIMUM_SHANNON_ENTROPY: f32 = 2.5;
 
 fn label_base64(token: &Token) -> impl Iterator<Item = Feature> {
     Some(token)
-        .filter(|token| token.shannon_entropy() >= MINIMUM_SHANNON_ENTROPY)
+        .filter(|token| entropy::shannon_entropy(&token.data) >= MINIMUM_SHANNON_ENTROPY)
         .and_then(|token| base64::decode(&token.data).ok())
         .map(|_| Feature {
             name: "encoding:base64".into(),
@@ -123,7 +123,7 @@ impl Translator for Base64Translator {
             .into_iter()
             .filter(|arg| {
                 if base64::decode(&arg.as_utf8()).is_ok() {
-                    arg.shannon_entropy() >= MINIMUM_SHANNON_ENTROPY
+                    entropy::shannon_entropy(&arg.data) >= MINIMUM_SHANNON_ENTROPY
                 } else {
                     false
                 }

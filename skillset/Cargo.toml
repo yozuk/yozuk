@@ -26,6 +26,7 @@ const-sha1 = "0.2.0"
 yozuk-helper-english = "0.1.0"
 yozuk-helper-preprocessor = "0.10.0"
 yozuk-sdk = "0.10.0"
+entropy = "0.4.1"
 anyhow = "1.0.56"
 strum = { version = "0.24.0", features = ["derive"] }
 
