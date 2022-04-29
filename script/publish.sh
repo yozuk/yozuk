@@ -9,13 +9,14 @@ publishCrate() {
     DIFF=$(git diff --name-only main..$LAST_TAG $1)
     
     if [[ -n "$DIFF" ]]; then
-        echo "$1 $2: Changed"
+        echo "$1: Changed"
         sed -i -E "0,/version/ s/version = \"[.0-9]+\"/version = \"${NEXT_TAG#v}\"/" $1/Cargo.toml
         sed -i -E "s/$2 = \"[.0-9]+\"/$2 = \"${NEXT_TAG#v}\"/" */Cargo.toml */*/Cargo.toml
         sed -i -E "s/$2 = \{ version = \"[.0-9]+\"/$2 = { version = \"${NEXT_TAG#v}\"/" */Cargo.toml */*/Cargo.toml
-                    
-        git commit -a -m "publish $2 $NEXT_TAG"
+        cargo tomlfmt -p $1/Cargo.toml   
+        
         just c
+        git commit -a -m "publish $2 $NEXT_TAG"
         cargo publish -p $2
     else
         echo "$1: Unchanged"
