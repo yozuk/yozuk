@@ -35,7 +35,7 @@ sloggers = "2.1.1"
 mediatype = "0.19.2"
 yozuk-sdk = "0.11.0"
 yozuk-helper-english = "0.1.0"
-yozuk-core-skillset = "0.10.0"
+yozuk-core-skillset = "0.11.0"
 
 [features]
 default = [
