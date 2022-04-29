@@ -1,6 +1,6 @@
 [package]
 name = "yozuk"
-version = "0.10.0"
+version = "0.11.0"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Assistant Bot for Programmers"
@@ -19,9 +19,10 @@ bytes = "1.1.0"
 const-sha1 = "0.2.0"
 crfs = "0.2.0"
 crfsuite = { version = "0.3.1", optional = true }
-getrandom = { version = "0.2.5", features = ["js"] }
 distance = "0.4.0"
 entropy = "0.4.1"
+getrandom = { version = "0.2.5", features = ["js"] }
+mediatype = "0.19.2"
 nanoid = "0.4.0"
 num_cpus = "1.13.1"
 punycode = "0.4.1"
@@ -32,55 +33,32 @@ serde_json = "1.0.79"
 shell-words = "1.1.0"
 slog = "2.7.0"
 sloggers = "2.1.1"
-mediatype = "0.19.2"
-yozuk-sdk = "0.11.0"
-yozuk-helper-english = "0.1.0"
 yozuk-core-skillset = "0.11.0"
+yozuk-helper-english = "0.1.0"
+yozuk-sdk = "0.11.0"
 
 [features]
-default = [
-    "default-skills",
-    "rayon"
-]
+default = ["default-skills", "rayon"]
+default-skills = ["yozuk-skill-mediatype", "yozuk-skill-version", "yozuk-skill-base64", "yozuk-skill-english", "yozuk-skill-smalltalk", "yozuk-skill-numeric", "yozuk-skill-calc", "yozuk-skill-uuid", "yozuk-skill-lipsum", "yozuk-skill-nanoid", "yozuk-skill-punycode", "yozuk-skill-dice", "yozuk-skill-digest", "yozuk-skill-color", "yozuk-skill-time", "yozuk-skill-unit", "yozuk-skill-geo", "yozuk-skill-password"]
 modelgen = ["crfsuite", "rayon"]
-default-skills = [
-    "yozuk-skill-mediatype", 
-    "yozuk-skill-version",
-    "yozuk-skill-base64",
-    "yozuk-skill-english", 
-    "yozuk-skill-smalltalk",
-    "yozuk-skill-numeric", 
-    "yozuk-skill-calc",
-    "yozuk-skill-uuid",
-    "yozuk-skill-lipsum",
-    "yozuk-skill-nanoid",
-    "yozuk-skill-punycode",
-    "yozuk-skill-dice",
-    "yozuk-skill-digest",
-    "yozuk-skill-color",
-    "yozuk-skill-time",
-    "yozuk-skill-unit",
-    "yozuk-skill-geo",
-    "yozuk-skill-password"
-]
-yozuk-skill-mediatype = ["yozuk-core-skillset/yozuk-skill-mediatype"]
-yozuk-skill-version = ["yozuk-core-skillset/yozuk-skill-version"]
 yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]
-yozuk-skill-english = ["yozuk-core-skillset/yozuk-skill-english"]
-yozuk-skill-numeric = ["yozuk-core-skillset/yozuk-skill-numeric"]
 yozuk-skill-calc = ["yozuk-core-skillset/yozuk-skill-calc"]
-yozuk-skill-uuid = ["yozuk-core-skillset/yozuk-skill-uuid"]
-yozuk-skill-lipsum = ["yozuk-core-skillset/yozuk-skill-lipsum"]
-yozuk-skill-nanoid = ["yozuk-core-skillset/yozuk-skill-nanoid"]
-yozuk-skill-punycode = ["yozuk-core-skillset/yozuk-skill-punycode"]
+yozuk-skill-color = ["yozuk-core-skillset/yozuk-skill-color"]
 yozuk-skill-dice = ["yozuk-core-skillset/yozuk-skill-dice"]
 yozuk-skill-digest = ["yozuk-core-skillset/yozuk-skill-digest"]
+yozuk-skill-english = ["yozuk-core-skillset/yozuk-skill-english"]
+yozuk-skill-geo = ["yozuk-core-skillset/yozuk-skill-geo"]
+yozuk-skill-lipsum = ["yozuk-core-skillset/yozuk-skill-lipsum"]
+yozuk-skill-mediatype = ["yozuk-core-skillset/yozuk-skill-mediatype"]
+yozuk-skill-nanoid = ["yozuk-core-skillset/yozuk-skill-nanoid"]
+yozuk-skill-numeric = ["yozuk-core-skillset/yozuk-skill-numeric"]
+yozuk-skill-password = ["yozuk-core-skillset/yozuk-skill-password"]
+yozuk-skill-punycode = ["yozuk-core-skillset/yozuk-skill-punycode"]
 yozuk-skill-smalltalk = ["yozuk-core-skillset/yozuk-skill-smalltalk"]
-yozuk-skill-color = ["yozuk-core-skillset/yozuk-skill-color"]
 yozuk-skill-time = ["yozuk-core-skillset/yozuk-skill-time"]
 yozuk-skill-unit = ["yozuk-core-skillset/yozuk-skill-unit"]
-yozuk-skill-geo = ["yozuk-core-skillset/yozuk-skill-geo"]
-yozuk-skill-password = ["yozuk-core-skillset/yozuk-skill-password"]
+yozuk-skill-uuid = ["yozuk-core-skillset/yozuk-skill-uuid"]
+yozuk-skill-version = ["yozuk-core-skillset/yozuk-skill-version"]
 
 [dev-dependencies]
 lazy_static = "1.4.0"
