@@ -74,9 +74,9 @@ impl App {
         };
 
         let zuk = Yozuk::builder()
-            .config(config)
-            .i18n(i18n)
-            .logger(logger)
+            .set_config(config)
+            .set_i18n(i18n)
+            .set_logger(logger)
             .build(ModelSet::from_data(yozuk_bundle::MODEL_DATA)?);
 
         Ok(Self { args, zuk })

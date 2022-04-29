@@ -181,22 +181,22 @@ pub struct YozukBuilder {
 }
 
 impl YozukBuilder {
-    pub fn logger(mut self, logger: Logger) -> Self {
+    pub fn set_logger(mut self, logger: Logger) -> Self {
         self.logger = logger;
         self
     }
 
-    pub fn config(mut self, config: Config) -> Self {
+    pub fn set_config(mut self, config: Config) -> Self {
         self.config = config;
         self
     }
 
-    pub fn i18n(mut self, i18n: I18n) -> Self {
+    pub fn set_i18n(mut self, i18n: I18n) -> Self {
         self.i18n = i18n;
         self
     }
 
-    pub fn redirection<T, TI, S, SI>(mut self, tokens: TI, args: SI) -> Self
+    pub fn add_redirection<T, TI, S, SI>(mut self, tokens: TI, args: SI) -> Self
     where
         T: Into<Token>,
         TI: IntoIterator<Item = T>,
