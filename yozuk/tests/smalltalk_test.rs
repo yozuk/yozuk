@@ -7,7 +7,7 @@ use yozuk_sdk::prelude::*;
 #[test]
 fn deep_thought() {
     assert_eq!(
-        cmd(tk!(["life", "universe", "evertyhing"])),
+        cmd(tk!(["life", "universe", "everything"])),
         CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--life-universe-everything"])
     );
     assert_eq!(
