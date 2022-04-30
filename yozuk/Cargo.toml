@@ -57,7 +57,6 @@ default-skills = [
   "yozuk-skill-unit",
   "yozuk-skill-geo",
   "yozuk-skill-password",
-  "yozuk-skill-bitcoin",
 ]
 modelgen = ["crfsuite", "rayon"]
 yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]

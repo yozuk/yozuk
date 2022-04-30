@@ -1,23 +1,3 @@
-mod base64;
-mod bitcoin;
-mod calc;
-mod color;
-mod dice;
-mod digest;
-mod english;
-mod geo;
-mod lipsum;
-mod mediatype;
-mod nanoid;
-mod numeric;
-mod password;
-mod punycode;
-mod smalltalk;
-mod time;
-mod unit;
-mod uuid;
-mod version;
-
 use yozuk_sdk::prelude::*;
 
 #[derive(Clone)]
@@ -31,6 +11,11 @@ const MODEL_ROOT_ID: &[u8] = b"9oUwu_3TFvxiIJ5Pm7k48";
 #[macro_export]
 macro_rules! skills {
     ( $([ $x:ident, $y:literal ],)* ) => {
+        $(
+            #[cfg(feature = $y)]
+            mod $x;
+        )*
+
         pub const SKILLS: &[NamedSkillEntry] = &[
             $(
                 #[cfg(feature = $y)]
