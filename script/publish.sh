@@ -13,7 +13,7 @@ publishCrate() {
         sed -i -E "0,/version/ s/version = \"[.0-9]+\"/version = \"${NEXT_TAG#v}\"/" $1/Cargo.toml
         sed -i -E "s/$2 = \"[.0-9]+\"/$2 = \"${NEXT_TAG#v}\"/" */Cargo.toml */*/Cargo.toml
         sed -i -E "s/$2 = \{ version = \"[.0-9]+\"/$2 = { version = \"${NEXT_TAG#v}\"/" */Cargo.toml */*/Cargo.toml
-        cargo tomlfmt -p $1/Cargo.toml   
+        taplo fmt $1/Cargo.toml
         
         just c
         git commit -a -m "publish $2 $NEXT_TAG"

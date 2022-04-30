@@ -39,7 +39,26 @@ yozuk-sdk = "0.11.0"
 
 [features]
 default = ["default-skills", "rayon"]
-default-skills = ["yozuk-skill-mediatype", "yozuk-skill-version", "yozuk-skill-base64", "yozuk-skill-english", "yozuk-skill-smalltalk", "yozuk-skill-numeric", "yozuk-skill-calc", "yozuk-skill-uuid", "yozuk-skill-lipsum", "yozuk-skill-nanoid", "yozuk-skill-punycode", "yozuk-skill-dice", "yozuk-skill-digest", "yozuk-skill-color", "yozuk-skill-time", "yozuk-skill-unit", "yozuk-skill-geo", "yozuk-skill-password"]
+default-skills = [
+  "yozuk-skill-mediatype",
+  "yozuk-skill-version",
+  "yozuk-skill-base64",
+  "yozuk-skill-english",
+  "yozuk-skill-smalltalk",
+  "yozuk-skill-numeric",
+  "yozuk-skill-calc",
+  "yozuk-skill-uuid",
+  "yozuk-skill-lipsum",
+  "yozuk-skill-nanoid",
+  "yozuk-skill-punycode",
+  "yozuk-skill-dice",
+  "yozuk-skill-digest",
+  "yozuk-skill-color",
+  "yozuk-skill-time",
+  "yozuk-skill-unit",
+  "yozuk-skill-geo",
+  "yozuk-skill-password",
+]
 modelgen = ["crfsuite", "rayon"]
 yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]
 yozuk-skill-calc = ["yozuk-core-skillset/yozuk-skill-calc"]
