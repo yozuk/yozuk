@@ -21,7 +21,6 @@ crfs = "0.2.0"
 crfsuite = { version = "0.3.1", optional = true }
 distance = "0.4.0"
 entropy = "0.4.1"
-getrandom = { version = "0.2.5", features = ["js"] }
 mediatype = "0.19.2"
 nanoid = "0.4.0"
 num_cpus = "1.13.1"
