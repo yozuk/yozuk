@@ -5,6 +5,7 @@ on:
     paths:
       - '**.toml'
       - '**.rs'
+      - '**.yml'
   pull_request:
     branches: [ main ]
 
@@ -15,7 +16,7 @@ jobs:
   build:    
     strategy:
       matrix:
-        toolchain: [arm-linux-androideabi, armv7-linux-androideabi, wasm32-unknown-unknown]
+        toolchain: [armv7-linux-androideabi, wasm32-unknown-unknown]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -27,11 +28,21 @@ jobs:
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
           target/
-        key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+        key: ${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - uses: nttld/setup-ndk@v1
+      id: setup-ndk
+      with:
+        ndk-version: r23b
+      if: ${{ matrix.toolchain == 'armv7-linux-androideabi' }}
+    - name: Add NDK Path
+      run: echo ${{ steps.setup-ndk.outputs.ndk-path }}/toolchains/llvm/prebuilt/linux-x86_64/bin >> $GITHUB_PATH
+      if: ${{ matrix.toolchain == 'armv7-linux-androideabi' }}
     - name: Install toolchain
       run: rustup target add ${{ matrix.toolchain }}
     - name: Build
       run: cargo build -p yozuk --target=${{ matrix.toolchain }}
+      env:
+        AR_armv7-linux-androideabi: llvm-ar
 
   build-macos:
     strategy:
