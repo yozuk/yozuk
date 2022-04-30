@@ -1,4 +1,5 @@
 mod base64;
+mod bitcoin;
 mod calc;
 mod color;
 mod dice;
@@ -74,4 +75,5 @@ skills!(
     [unit, "yozuk-skill-unit"],
     [geo, "yozuk-skill-geo"],
     [password, "yozuk-skill-password"],
+    [bitcoin, "yozuk-skill-bitcoin"],
 );
