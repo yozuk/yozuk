@@ -58,6 +58,7 @@ default-skills = [
   "yozuk-skill-unit",
   "yozuk-skill-geo",
   "yozuk-skill-password",
+  "yozuk-skill-bitcoin",
 ]
 modelgen = ["crfsuite", "rayon"]
 yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]
@@ -78,6 +79,7 @@ yozuk-skill-time = ["yozuk-core-skillset/yozuk-skill-time"]
 yozuk-skill-unit = ["yozuk-core-skillset/yozuk-skill-unit"]
 yozuk-skill-uuid = ["yozuk-core-skillset/yozuk-skill-uuid"]
 yozuk-skill-version = ["yozuk-core-skillset/yozuk-skill-version"]
+yozuk-skill-bitcoin = ["yozuk-core-skillset/yozuk-skill-bitcoin"]
 
 [dev-dependencies]
 lazy_static = "1.4.0"
