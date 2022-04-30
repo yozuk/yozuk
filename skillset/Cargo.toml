@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-core-skillset"
-version = "0.11.0"
+version = "0.11.1"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Set of default Yozuk skills"
@@ -111,4 +111,3 @@ yozuk-skill-unit = ["bigdecimal", "num-bigint"]
 yozuk-skill-uuid = ["uuid"]
 yozuk-skill-version = []
 yozuk-skill-bitcoin = ["bitcoin"]
-
