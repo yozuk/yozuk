@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 /// Assistant Bot for Programmers
 #[derive(Parser)]
-#[clap(author, version, about, trailing_var_arg = true)]
+#[clap(version, trailing_var_arg = true)]
 pub struct Args {
     /// Request query
     #[clap(multiple_occurrences(true))]
@@ -13,7 +13,7 @@ pub struct Args {
     #[clap(short, long, parse(from_occurrences))]
     pub verbose: usize,
 
-    /// Show the inferred result instead of running it
+    /// Show the inferred internal command without running it
     #[clap(long)]
     pub dry_run: bool,
 
@@ -21,7 +21,7 @@ pub struct Args {
     #[clap(short, long)]
     pub run: bool,
 
-    /// Input files
+    /// Specify input files
     #[clap(short, long, multiple_occurrences(true))]
     pub input: Vec<PathBuf>,
 
@@ -30,6 +30,6 @@ pub struct Args {
     pub config: Option<PathBuf>,
 
     /// Dump embedded model data.
-    #[clap(long, display_order(1002))]
+    #[clap(long, hide(true), display_order(1002))]
     pub dump_model: Option<PathBuf>,
 }
