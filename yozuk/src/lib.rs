@@ -16,6 +16,7 @@ mod model;
 mod modelgen;
 mod skill;
 mod tagger;
+mod tokenizer;
 
 use labeler::*;
 use tagger::*;
@@ -44,10 +45,7 @@ impl Yozuk {
     }
 
     pub fn parse_tokens(text: &str) -> Vec<Token> {
-        let tokens = shell_words::split(text)
-            .ok()
-            .unwrap_or_else(|| text.split_whitespace().map(str::to_string).collect());
-        tokens.into_iter().map(|token| tk!(token)).collect()
+        tokenizer::tokenize(text)
     }
 
     pub fn get_commands(&self, tokens: &[Token], streams: &[InputStream]) -> Vec<CommandArgs> {
@@ -307,26 +305,4 @@ struct CommandCache {
     preprocessors: Vec<Box<dyn Preprocessor>>,
     translators: Vec<Box<dyn Translator>>,
     command: Box<dyn Command>,
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_parse_tokens() {
-        assert_eq!(
-            Yozuk::parse_tokens(" What's   the time "),
-            tk!(["What's", "the", "time"])
-        );
-        assert_eq!(
-            Yozuk::parse_tokens(r#" "Hello world" to md5 "#),
-            tk!(["Hello world", "to", "md5"])
-        );
-        assert_eq!(
-            Yozuk::parse_tokens(r#" (1 + 1) * 2 "#),
-            tk!(["(1", "+", "1)", "*", "2"])
-        );
-        assert_eq!(Yozuk::parse_tokens(r#" " \" \" " "#), tk!([" \" \" "]));
-    }
 }

@@ -1,0 +1,18 @@
+dq_string = ${ "\"" ~ dq_inner ~ "\"" }
+dq_inner = @{ dq_char* }
+dq_char = {
+    !("\"" | "\\") ~ ANY | "\\" ~ ("\"" | "\\" | "/")
+}
+
+sq_string = ${ "'" ~ sq_inner ~ "'" }
+sq_inner = @{ sq_char* }
+sq_char = {
+    !("'" | "\\") ~ ANY | "\\" ~ ("'" | "\\" | "/")
+}
+
+string = ${ inner }
+inner = @{ char+ }
+char = { !" " ~ ANY }
+
+arg = _{ (dq_string | sq_string | string) }
+args = _{ SOI ~ " "* ~ arg ~ (" "+ ~ arg)* ~ " "* ~ EOI }
