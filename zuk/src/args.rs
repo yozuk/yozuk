@@ -1,4 +1,4 @@
-use clap::{ArgEnum, Parser};
+use clap::Parser;
 use std::path::PathBuf;
 
 /// Assistant Bot for Programmers
@@ -8,10 +8,6 @@ pub struct Args {
     /// Request query
     #[clap(multiple_occurrences(true))]
     pub query: Vec<String>,
-
-    /// Specify the output format
-    #[clap(arg_enum, short, long, default_value_t = Mode::Auto)]
-    pub mode: Mode,
 
     /// Increase the logging verbosity
     #[clap(short, long, parse(from_occurrences))]
@@ -36,11 +32,4 @@ pub struct Args {
     /// Dump embedded model data.
     #[clap(long, display_order(1002))]
     pub dump_model: Option<PathBuf>,
-}
-
-#[derive(ArgEnum, Clone, PartialEq, Eq)]
-pub enum Mode {
-    Auto,
-    Direct,
-    Repl,
 }

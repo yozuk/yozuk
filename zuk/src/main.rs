@@ -104,10 +104,7 @@ impl App {
             ));
         }
 
-        let repl =
-            (self.args.mode == Mode::Auto && streams.is_empty() && self.args.query.is_empty())
-                || self.args.mode == Mode::Repl;
-
+        let repl = streams.is_empty() && self.args.query.is_empty();
         if repl {
             self.start_repl()
         } else {
