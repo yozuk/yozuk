@@ -1,3 +1,4 @@
+use bytes::Bytes;
 use yozuk_helper_english::normalize;
 use yozuk_sdk::prelude::*;
 
@@ -88,4 +89,43 @@ fn merge_featurs(mut a: Vec<Vec<Feature>>, mut b: Vec<Vec<Feature>>) -> Vec<Vec<
             a
         })
         .collect()
+}
+
+#[derive(Debug, Clone)]
+pub struct WeightedToken {
+    pub data: Bytes,
+    pub media_type: MediaTypeBuf,
+    pub tag: String,
+    pub weight: f64,
+}
+
+impl WeightedToken {
+    pub fn new(token: Token, weight: f64) -> Self {
+        Self {
+            weight,
+            ..Self::from(token)
+        }
+    }
+}
+
+impl Default for WeightedToken {
+    fn default() -> Self {
+        Self {
+            data: Bytes::new(),
+            media_type: media_type!(TEXT / PLAIN).into(),
+            tag: String::new(),
+            weight: 1.0,
+        }
+    }
+}
+
+impl From<Token> for WeightedToken {
+    fn from(token: Token) -> Self {
+        Self {
+            data: token.data,
+            media_type: token.media_type,
+            tag: token.tag,
+            ..Default::default()
+        }
+    }
 }

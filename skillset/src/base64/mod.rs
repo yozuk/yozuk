@@ -15,12 +15,13 @@ use yozuk_sdk::prelude::*;
 use yozuk_sdk::Bytes;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"ZXn65BxFq5a6KQKFi731m",
+    model_id: b"VLqriB4RpIwzXaG8b_pXa",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
             .add_labeler(Base64Labeler)
             .add_corpus(Base64Corpus)
+            .add_corpus(Base64Corpus2)
             .add_translator(Base64Translator)
             .set_command(Base64Command)
             .build()
@@ -77,9 +78,23 @@ impl Corpus for Base64Corpus {
                     ])
                 }),
             )
-            .chain(vec![tk!(["Base64"; "command:base64"]); 10])
-            .chain(vec![tk!(["SGVsbG8gV29ybGQh"; "input:base64"]); 10])
             .collect()
+    }
+}
+
+#[derive(Debug)]
+pub struct Base64Corpus2;
+
+impl Corpus for Base64Corpus2 {
+    fn training_data(&self) -> Vec<Vec<Token>> {
+        vec![
+            tk!(["Base64"; "command:base64"]),
+            tk!(["SGVsbG8gV29ybGQh"; "input:base64"]),
+        ]
+    }
+
+    fn weight(&self) -> f64 {
+        10.0
     }
 }
 

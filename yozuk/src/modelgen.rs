@@ -1,8 +1,9 @@
 #![cfg(feature = "modelgen")]
 
-use super::{skill, FeatureLabeler};
+use super::{skill, FeatureLabeler, WeightedToken};
 use anyhow::{bail, Result};
 use crfsuite::{Algorithm, Attribute, GraphicalModel, Trainer};
+use itertools::multiunzip;
 use nanoid::nanoid;
 use rayon::prelude::*;
 use std::{
@@ -71,29 +72,41 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
         .iter()
         .map(|skill| (&skill.corpora, &skill.preprocessors))
         .flat_map(|(corpora, preps)| {
-            corpora
-                .iter()
-                .flat_map(|corpus| corpus.training_data())
-                .map(|tokens| {
+            corpora.iter().flat_map(move |corpus| {
+                let weight = corpus.weight();
+                corpus.training_data().into_iter().map(move |tokens| {
                     preps
                         .iter()
                         .fold(tokens, |tokens, prep| prep.preprocess(tokens))
+                        .into_iter()
+                        .map(|token| WeightedToken::new(token, weight))
+                        .collect::<Vec<_>>()
                 })
+            })
         })
         .flat_map(generate_wordiness)
         .map(|data| {
-            let (yseq, words): (Vec<_>, Vec<_>) = data
-                .into_iter()
-                .map(|token| (token.tag.clone(), token))
-                .unzip();
+            let (yseq, words, weights): (Vec<_>, Vec<_>, Vec<_>) =
+                multiunzip(data.into_iter().map(|token| {
+                    (
+                        token.tag.clone(),
+                        Token {
+                            data: token.data,
+                            media_type: token.media_type,
+                            tag: token.tag,
+                        },
+                        token.weight,
+                    )
+                }));
 
             let xseq = labeler
                 .label_features(&words)
                 .into_iter()
-                .map(|features| {
+                .zip(weights)
+                .map(|(features, weight)| {
                     features
                         .into_iter()
-                        .map(|feature| Attribute::new(feature.to_string(), 1.0))
+                        .map(|feature| Attribute::new(feature.to_string(), weight))
                         .collect::<Vec<_>>()
                 })
                 .collect::<Vec<_>>();
@@ -115,38 +128,45 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
         .iter()
         .map(|skill| (&skill.corpora, &skill.preprocessors))
         .flat_map(|(corpora, preps)| {
-            corpora
-                .iter()
-                .flat_map(|corpus| corpus.training_data())
-                .map(|tokens| {
+            corpora.iter().flat_map(move |corpus| {
+                let weight = corpus.weight();
+                corpus.training_data().into_iter().map(move |tokens| {
                     preps
                         .iter()
                         .fold(tokens, |tokens, prep| prep.preprocess(tokens))
+                        .into_iter()
+                        .map(|token| WeightedToken::new(token, weight))
+                        .collect::<Vec<_>>()
                 })
+            })
         })
         .flat_map(generate_wordiness)
         .map(|data| {
-            let (yseq, words): (Vec<_>, Vec<_>) = data
-                .into_iter()
-                .map(|token| {
+            let (yseq, words, weights): (Vec<_>, Vec<_>, Vec<_>) =
+                multiunzip(data.into_iter().map(|token| {
                     (
                         if token.tag == "-" {
                             "-".to_string()
                         } else {
                             "*".to_string()
                         },
-                        token,
+                        Token {
+                            data: token.data,
+                            media_type: token.media_type,
+                            tag: token.tag,
+                        },
+                        token.weight,
                     )
-                })
-                .unzip();
+                }));
 
             let xseq = labeler
                 .label_features(&words)
                 .into_iter()
-                .map(|features| {
+                .zip(weights)
+                .map(|(features, weight)| {
                     features
                         .into_iter()
-                        .map(|feature| Attribute::new(feature.to_string(), 0.01))
+                        .map(|feature| Attribute::new(feature.to_string(), 0.01 * weight))
                         .collect::<Vec<_>>()
                 })
                 .collect::<Vec<_>>();
@@ -183,21 +203,23 @@ struct TrainingData {
     negative_skills: Vec<Skill>,
 }
 
-fn generate_wordiness(data: Vec<Token>) -> impl Iterator<Item = Vec<Token>> {
+fn generate_wordiness(data: Vec<WeightedToken>) -> impl Iterator<Item = Vec<WeightedToken>> {
     generate_wordiness_greetings(&data).chain(iter::once(data))
 }
 
-fn generate_wordiness_greetings(tokens: &[Token]) -> impl Iterator<Item = Vec<Token>> {
+fn generate_wordiness_greetings(
+    tokens: &[WeightedToken],
+) -> impl Iterator<Item = Vec<WeightedToken>> {
     let original = tokens.iter().cloned().collect::<VecDeque<_>>();
     let mut greetings = Vec::new();
 
     let mut data = original.clone();
-    data.push_front(tk!("Yozuk,"));
+    data.push_front(tk!("Yozuk,").into());
     greetings.push(data.into_iter().collect::<Vec<_>>());
 
     let mut data = original;
-    data.push_front(tk!("Yozuk,"));
-    data.push_front(tk!("Hi"));
+    data.push_front(tk!("Yozuk,").into());
+    data.push_front(tk!("Hi").into());
     greetings.push(data.into_iter().collect::<Vec<_>>());
 
     greetings.into_iter()

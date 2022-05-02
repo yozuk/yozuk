@@ -15,6 +15,9 @@ pub trait Labeler: fmt::Debug + Send + Sync + 'static {
 
 pub trait Corpus: fmt::Debug + Send + Sync + 'static {
     fn training_data(&self) -> Vec<Vec<Token>>;
+    fn weight(&self) -> f64 {
+        1.0
+    }
 }
 
 pub trait Suggests: fmt::Debug + Send + Sync + 'static {
