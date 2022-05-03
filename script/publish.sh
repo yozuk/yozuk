@@ -15,7 +15,9 @@ publishCrate() {
         sed -i -E "s/$2 = \{ version = \"[.0-9]+\"/$2 = { version = \"${NEXT_TAG#v}\"/" */Cargo.toml */*/Cargo.toml
         taplo fmt $1/Cargo.toml
         
-        just c
+        cargo fmt --check
+        cargo clippy --all-features
+        cargo check --all-features
         git commit -a -m "publish $2 $NEXT_TAG"
         cargo publish -p $2
     else
