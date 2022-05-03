@@ -33,7 +33,7 @@ shell-words = "1.1.0"
 sloggers = "2.1.1"
 sys-locale = "0.2.0"
 toml = "0.5.8"
-yozuk = "0.11.2"
+yozuk = "0.12.0"
 yozuk-bundle = "0.11.2"
 yozuk-sdk = "0.12.0"
 
