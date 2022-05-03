@@ -6,21 +6,13 @@
 [![Telegram: YozukBot](https://img.shields.io/badge/Telegram-@YozukBot-blue?logo=telegram)](https://t.me/YozukBot)
 </div>
 
-- [Overview](#overview)
-- [Getting Started](#getting-started)
-  - [Online Demo](#online-demo)
-  - [Pre-built binaries](#pre-built-binaries)
-  - [Cargo](#cargo)
-  - [Build from Source](#build-from-source)
-- [Credits](#credits)
-
 ## Overview
 
 **Yozuk** is an assistant bot designed for helping programmers with trivial tasks such as UUID generation, hash calculation and timestamp conversion.
+Unlike normal command-line tools, it uses a simple NLP approach to infer the meaning of your requests, so you don't have to remember the exact syntax of commands.
 
 <img alt="Yozuk CLI demo animation" src="https://github.com/yozuk/yozuk/blob/main/images/zuk.gif?raw=true" width="520" />
 
-Unlike normal command-line tools, it uses a simple NLP approach to infer the meaning of your requests, so you don't have to remember the exact syntax of commands.
 
 ## Getting Started
 
