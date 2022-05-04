@@ -46,7 +46,6 @@ skills!(
     [calc, "yozuk-skill-calc"],
     [dice, "yozuk-skill-dice"],
     [digest, "yozuk-skill-digest"],
-    [english, "yozuk-skill-english"],
     [lipsum, "yozuk-skill-lipsum"],
     [nanoid, "yozuk-skill-nanoid"],
     [numeric, "yozuk-skill-numeric"],

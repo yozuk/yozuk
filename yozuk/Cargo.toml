@@ -37,7 +37,6 @@ default-skills = [
   "yozuk-skill-mediatype",
   "yozuk-skill-version",
   "yozuk-skill-base64",
-  "yozuk-skill-english",
   "yozuk-skill-smalltalk",
   "yozuk-skill-numeric",
   "yozuk-skill-calc",
@@ -59,7 +58,6 @@ yozuk-skill-calc = ["yozuk-core-skillset/yozuk-skill-calc"]
 yozuk-skill-color = ["yozuk-core-skillset/yozuk-skill-color"]
 yozuk-skill-dice = ["yozuk-core-skillset/yozuk-skill-dice"]
 yozuk-skill-digest = ["yozuk-core-skillset/yozuk-skill-digest"]
-yozuk-skill-english = ["yozuk-core-skillset/yozuk-skill-english"]
 yozuk-skill-geo = ["yozuk-core-skillset/yozuk-skill-geo"]
 yozuk-skill-lipsum = ["yozuk-core-skillset/yozuk-skill-lipsum"]
 yozuk-skill-mediatype = ["yozuk-core-skillset/yozuk-skill-mediatype"]

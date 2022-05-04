@@ -77,7 +77,6 @@ yozuk-skill-digest = [
   "blake2",
   "blake3",
 ]
-yozuk-skill-english = []
 yozuk-skill-geo = ["open-location-code"]
 yozuk-skill-lipsum = ["lipsum"]
 yozuk-skill-mediatype = []
