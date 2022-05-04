@@ -1,9 +1,6 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
 
-use slog::{debug, error, Logger};
-use sloggers::null::NullLoggerBuilder;
-use sloggers::Build;
 use std::{iter, mem};
 use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
@@ -36,7 +33,6 @@ pub struct Yozuk {
     labelers: Vec<Box<dyn Labeler>>,
     commands: Vec<Option<CommandCache>>,
     redirections: Vec<(Vec<Token>, Vec<String>)>,
-    logger: Logger,
 }
 
 impl Yozuk {
@@ -49,8 +45,6 @@ impl Yozuk {
     }
 
     pub fn get_commands(&self, tokens: &[Token], streams: &[InputStream]) -> Vec<CommandArgs> {
-        debug!(self.logger, "{:?}", tokens);
-
         let filter = |(redirect, _): &&(Vec<Token>, Vec<String>)| {
             redirect.len() == tokens.len()
                 && redirect
@@ -171,19 +165,14 @@ impl Yozuk {
     }
 }
 
+#[derive(Default)]
 pub struct YozukBuilder {
     config: Config,
     i18n: I18n,
-    logger: Logger,
     redirections: Vec<(Vec<Token>, Vec<String>)>,
 }
 
 impl YozukBuilder {
-    pub fn set_logger(mut self, logger: Logger) -> Self {
-        self.logger = logger;
-        self
-    }
-
     pub fn set_config(mut self, config: Config) -> Self {
         self.config = config;
         self
@@ -211,9 +200,7 @@ impl YozukBuilder {
     pub fn build(self, model: ModelSet) -> Yozuk {
         let build_info = concat!(r#"{"version": ""#, env!("CARGO_PKG_VERSION"), r#""}"#);
 
-        let env = Environment::new()
-            .logger(self.logger.clone())
-            .build_info(build_info);
+        let env = Environment::new().build_info(build_info);
 
         #[cfg(feature = "rayon")]
         let iter = skill::SKILLS.par_iter();
@@ -235,13 +222,7 @@ impl YozukBuilder {
                     skill: (entry.entry.init)(&env, &config).map_err(|err| (entry, err))?,
                 })
             })
-            .collect::<Vec<_>>();
-
-        for result in &results {
-            if let Err((entry, err)) = result {
-                error!(self.logger, "Failed to initialize {}: {}", entry.key, err);
-            }
-        }
+            .collect::<Vec<Result<_, (&NamedSkillEntry, _)>>>();
 
         let mut skills = results
             .into_iter()
@@ -278,18 +259,6 @@ impl YozukBuilder {
             labelers,
             commands,
             redirections: self.redirections,
-            logger: self.logger,
-        }
-    }
-}
-
-impl Default for YozukBuilder {
-    fn default() -> Self {
-        Self {
-            config: Default::default(),
-            i18n: Default::default(),
-            logger: NullLoggerBuilder.build().unwrap(),
-            redirections: Default::default(),
         }
     }
 }

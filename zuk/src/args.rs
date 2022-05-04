@@ -9,10 +9,6 @@ pub struct Args {
     #[clap(multiple_occurrences(true))]
     pub query: Vec<String>,
 
-    /// Increase the logging verbosity
-    #[clap(short, long, parse(from_occurrences))]
-    pub verbose: usize,
-
     /// Show the inferred internal command without running it
     #[clap(long)]
     pub dry_run: bool,

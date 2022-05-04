@@ -12,11 +12,6 @@ use rustyline::hint::{Hinter, HistoryHinter};
 use rustyline::validate::{self, MatchingBracketValidator, Validator};
 use rustyline::{Context, Editor};
 use rustyline_derive::Helper;
-use sloggers::{
-    terminal::{Destination, TerminalLoggerBuilder},
-    types::Severity,
-    Build,
-};
 use std::borrow::Cow;
 use std::fs::File;
 use std::io;
@@ -54,19 +49,6 @@ impl App {
             Default::default()
         };
 
-        let levels = [
-            Severity::Error,
-            Severity::Info,
-            Severity::Debug,
-            Severity::Trace,
-        ];
-
-        let level = args.verbose.min(levels.len() - 1);
-        let mut builder = TerminalLoggerBuilder::new();
-        builder.level(levels[level]);
-        builder.destination(Destination::Stderr);
-        let logger = builder.build().unwrap();
-
         let i18n = I18n {
             locale: get_locale(),
             timezone: localzone::get_local_zone(),
@@ -76,7 +58,6 @@ impl App {
         let zuk = Yozuk::builder()
             .set_config(config)
             .set_i18n(i18n)
-            .set_logger(logger)
             .build(ModelSet::from_data(yozuk_bundle::MODEL_DATA)?);
 
         Ok(Self { args, zuk })

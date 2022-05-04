@@ -2,24 +2,11 @@ use anyhow::{anyhow, Result};
 use jsonschema_valid::schemas;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
-use slog::Logger;
-use sloggers::null::NullLoggerBuilder;
-use sloggers::Build;
 use std::collections::HashMap;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Default, Clone)]
 pub struct Environment {
     pub build_info: &'static str,
-    pub logger: Logger,
-}
-
-impl Default for Environment {
-    fn default() -> Self {
-        Self {
-            build_info: "",
-            logger: NullLoggerBuilder.build().unwrap(),
-        }
-    }
 }
 
 impl Environment {
@@ -29,11 +16,6 @@ impl Environment {
 
     pub fn build_info(mut self, build_info: &'static str) -> Self {
         self.build_info = build_info;
-        self
-    }
-
-    pub fn logger(mut self, logger: Logger) -> Self {
-        self.logger = logger;
         self
     }
 }
