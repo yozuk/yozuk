@@ -2437,7 +2437,6 @@ name = "yozuk"
 version = "0.12.0"
 dependencies = [
  "anyhow",
- "bincode",
  "bytes",
  "const-sha1",
  "crfs",
@@ -2452,9 +2451,6 @@ dependencies = [
  "pest_derive",
  "punycode",
  "rayon",
- "serde",
- "serde_derive",
- "serde_json",
  "yozuk-core-skillset",
  "yozuk-helper-english",
  "yozuk-sdk",
