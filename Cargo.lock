@@ -2448,7 +2448,6 @@ dependencies = [
  "lazy_static",
  "mediatype",
  "nanoid",
- "num_cpus",
  "pest",
  "pest_derive",
  "punycode",
