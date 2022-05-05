@@ -23,7 +23,7 @@ impl Output {
         self
     }
 
-    pub fn set_mode<T>(mut self, mode: OutputMode) -> Self {
+    pub fn set_mode(mut self, mode: OutputMode) -> Self {
         self.mode = mode;
         self
     }
