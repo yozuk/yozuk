@@ -29,7 +29,7 @@ sys-locale = "0.2.0"
 toml = "0.5.8"
 yozuk = "0.12.0"
 yozuk-bundle = "0.12.0"
-yozuk-sdk = "0.12.0"
+yozuk-sdk = "0.13.0"
 
 [features]
 default = []
