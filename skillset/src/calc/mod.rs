@@ -28,7 +28,7 @@ impl TokenParser for CalcTokenParser {
     fn parse(&self, tokens: &[Token]) -> Option<Token> {
         let exp = tokens
             .iter()
-            .map(|token| token.as_utf8())
+            .map(|token| token.as_str())
             .collect::<Vec<_>>()
             .join("");
 
@@ -99,7 +99,7 @@ impl Translator for CalcTranslator {
         let exp = args
             .iter()
             .filter(|arg| arg.media_type == media_type)
-            .map(|arg| arg.as_utf8())
+            .map(|arg| arg.as_str())
             .collect::<Vec<_>>();
         if exp.len() == 1 {
             Some(CommandArgs::new().add_args([exp[0]]))

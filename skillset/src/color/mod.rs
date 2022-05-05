@@ -28,7 +28,7 @@ impl TokenParser for ColorTokenParser {
     fn parse(&self, tokens: &[Token]) -> Option<Token> {
         let exp = tokens
             .iter()
-            .map(|token| token.as_utf8())
+            .map(|token| token.as_str())
             .collect::<Vec<_>>()
             .join(" ");
         let mut tag = String::new();
@@ -54,7 +54,7 @@ impl Labeler for ColorLabeler {
             .iter()
             .map(|token| {
                 Some(token)
-                    .filter(|token| css_color::Srgb::from_str(token.as_utf8()).is_ok())
+                    .filter(|token| css_color::Srgb::from_str(token.as_str()).is_ok())
                     .map(|_| Feature {
                         name: "expr:color".into(),
                         ..Default::default()
@@ -97,10 +97,10 @@ impl Translator for ColorTranslator {
         if !inputs.is_empty()
             && inputs
                 .iter()
-                .all(|arg| css_color::Srgb::from_str(arg.as_utf8()).is_ok())
+                .all(|arg| css_color::Srgb::from_str(arg.as_str()).is_ok())
         {
             return Some(
-                CommandArgs::new().add_args_iter(inputs.into_iter().map(|arg| arg.as_utf8())),
+                CommandArgs::new().add_args_iter(inputs.into_iter().map(|arg| arg.as_str())),
             );
         }
 

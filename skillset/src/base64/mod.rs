@@ -117,7 +117,7 @@ impl Translator for Base64Translator {
     fn parse(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
         if args
             .iter()
-            .any(|arg| arg.tag == "command:base64" && normalized_eq(arg.as_utf8(), &["Base64"], 0))
+            .any(|arg| arg.tag == "command:base64" && normalized_eq(arg.as_str(), &["Base64"], 0))
         {
             let input = args
                 .iter()

@@ -26,7 +26,7 @@ impl Preprocessor for GeoPreprocessor {
         input
             .into_iter()
             .map(|token| {
-                let tag = if open_location_code::is_full(token.as_utf8()) {
+                let tag = if open_location_code::is_full(token.as_str()) {
                     "geo:olc".into()
                 } else {
                     token.tag
@@ -48,7 +48,7 @@ impl Translator for GeoTranslator {
             .collect::<Vec<_>>();
 
         if let [code] = codes[..] {
-            return Some(CommandArgs::new().add_args(["--olc", code.as_utf8()]));
+            return Some(CommandArgs::new().add_args(["--olc", code.as_str()]));
         }
 
         None

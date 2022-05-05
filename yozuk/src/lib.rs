@@ -49,8 +49,8 @@ impl Yozuk {
             redirect.len() == tokens.len()
                 && redirect
                     .iter()
-                    .map(|token| token.as_utf8())
-                    .zip(tokens.iter().map(|token| token.as_utf8()))
+                    .map(|token| token.as_str())
+                    .zip(tokens.iter().map(|token| token.as_str()))
                     .all(|(a, b)| yozuk_helper_english::normalized_eq(a, [b], 0))
         };
 
@@ -159,7 +159,7 @@ impl Yozuk {
     pub fn suggest(&self, tokens: &[Token]) -> Option<String> {
         let words = tokens
             .iter()
-            .map(|token| token.as_utf8())
+            .map(|token| token.as_str())
             .collect::<Vec<_>>();
         let string = words.join(" ");
 

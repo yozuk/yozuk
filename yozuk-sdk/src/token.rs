@@ -76,7 +76,7 @@ impl Default for Token {
 }
 
 impl Token {
-    pub fn as_utf8(&self) -> &str {
+    pub fn as_str(&self) -> &str {
         if let Ok(str) = str::from_utf8(&self.data) {
             str
         } else {

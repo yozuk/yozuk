@@ -23,7 +23,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 };
 
 fn label_uuid(token: &Token) -> impl Iterator<Item = Feature> {
-    Uuid::parse_str(token.as_utf8())
+    Uuid::parse_str(token.as_str())
         .ok()
         .map(|_| Feature {
             name: "format:uuid".into(),
@@ -117,14 +117,14 @@ pub struct UuidTranslator;
 impl Translator for UuidTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         if !args.iter().any(|arg| {
-            arg.tag == "command:uuid" && normalized_eq(arg.as_utf8(), &["UUID", "GUID"], 0)
+            arg.tag == "command:uuid" && normalized_eq(arg.as_str(), &["UUID", "GUID"], 0)
         }) {
             return None;
         }
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")
-            .and_then(|arg| arg.as_utf8().parse::<usize>().ok())
+            .and_then(|arg| arg.as_str().parse::<usize>().ok())
             .unwrap_or(1);
         Some(CommandArgs::new().add_args(["-n".to_string(), count.to_string()]))
     }

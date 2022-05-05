@@ -73,9 +73,9 @@ impl Translator for SmalltalkTranslator {
             .filter(|arg| arg.tag == "smalltalk:keyword")
             .collect::<Vec<_>>();
         if let [life, universe, everything] = keywords[..] {
-            if normalized_eq(life.as_utf8(), &["life"], 1)
-                && normalized_eq(universe.as_utf8(), &["universe"], 1)
-                && normalized_eq(everything.as_utf8(), &["everything"], 1)
+            if normalized_eq(life.as_str(), &["life"], 1)
+                && normalized_eq(universe.as_str(), &["universe"], 1)
+                && normalized_eq(everything.as_str(), &["everything"], 1)
             {
                 return Some(CommandArgs::new().add_args(["--life-universe-everything"]));
             }

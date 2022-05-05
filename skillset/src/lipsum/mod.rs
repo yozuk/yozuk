@@ -116,7 +116,7 @@ impl Translator for LipsumTranslator {
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")
-            .and_then(|arg| arg.as_utf8().parse::<usize>().ok())
+            .and_then(|arg| arg.as_str().parse::<usize>().ok())
             .map(|n| ["-n".to_string(), n.to_string()]);
 
         let keywords = args
@@ -125,23 +125,23 @@ impl Translator for LipsumTranslator {
             .collect::<Vec<_>>();
 
         if let [lorem, ipsum] = keywords[..] {
-            if normalized_eq(lorem.as_utf8(), &["lorem"], 1)
-                && normalized_eq(ipsum.as_utf8(), &["ipsum"], 1)
+            if normalized_eq(lorem.as_str(), &["lorem"], 1)
+                && normalized_eq(ipsum.as_str(), &["ipsum"], 1)
             {
                 return Some(CommandArgs::new().add_args(count));
             }
         }
 
         if let [dummy, text] = keywords[..] {
-            if normalized_eq(dummy.as_utf8(), &["dummy"], 1)
-                && normalized_eq(text.as_utf8(), &["text"], 1)
+            if normalized_eq(dummy.as_str(), &["dummy"], 1)
+                && normalized_eq(text.as_str(), &["text"], 1)
             {
                 return Some(CommandArgs::new().add_args(count));
             }
         }
 
         if let [lipsum] = keywords[..] {
-            if normalized_eq(lipsum.as_utf8(), &["lipsum"], 1) {
+            if normalized_eq(lipsum.as_str(), &["lipsum"], 1) {
                 return Some(CommandArgs::new().add_args(count));
             }
         }

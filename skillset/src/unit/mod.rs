@@ -33,7 +33,7 @@ impl Preprocessor for UnitPreprocessor {
         input
             .into_iter()
             .flat_map(|token| {
-                if let Some((num, unit)) = symbol::parse_num_symbol(token.as_utf8()) {
+                if let Some((num, unit)) = symbol::parse_num_symbol(token.as_str()) {
                     vec![
                         Token {
                             data: num.to_string().into(),
@@ -88,13 +88,13 @@ impl Translator for UnitTranslator {
         let values = args
             .iter()
             .filter(|arg| arg.tag == "input:value")
-            .filter_map(|token| BigDecimal::from_str(token.as_utf8()).ok())
+            .filter_map(|token| BigDecimal::from_str(token.as_str()).ok())
             .collect::<Vec<_>>();
 
         let units = args
             .iter()
             .filter(|arg| arg.tag == "unit:keyword")
-            .filter(|arg| symbol::parse_symbol(arg.as_utf8()).is_some())
+            .filter(|arg| symbol::parse_symbol(arg.as_str()).is_some())
             .collect::<Vec<_>>();
 
         if let [value] = &values[..] {
@@ -103,7 +103,7 @@ impl Translator for UnitTranslator {
                     "--value".to_string(),
                     format!(" {}", value),
                     "--unit".to_string(),
-                    unit.as_utf8().to_string(),
+                    unit.as_str().to_string(),
                 ]));
             }
         }

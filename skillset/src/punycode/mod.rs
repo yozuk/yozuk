@@ -22,26 +22,24 @@ pub struct PunycodeTranslator;
 
 impl Translator for PunycodeTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
-        let decode = !args.is_empty() && args.iter().all(|token| is_punycode(token.as_utf8()));
+        let decode = !args.is_empty() && args.iter().all(|token| is_punycode(token.as_str()));
 
         if decode {
             return Some(
                 CommandArgs::new()
                     .add_args(["--mode", "decode"])
-                    .add_args_iter(args.iter().map(|token| token.as_utf8())),
+                    .add_args_iter(args.iter().map(|token| token.as_str())),
             );
         }
 
-        let encode = !args.is_empty()
-            && args
-                .iter()
-                .all(|token| is_non_ascii_domain(token.as_utf8()));
+        let encode =
+            !args.is_empty() && args.iter().all(|token| is_non_ascii_domain(token.as_str()));
 
         if encode {
             return Some(
                 CommandArgs::new()
                     .add_args(["--mode", "encode"])
-                    .add_args_iter(args.iter().map(|token| token.as_utf8())),
+                    .add_args_iter(args.iter().map(|token| token.as_str())),
             );
         }
 

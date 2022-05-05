@@ -49,7 +49,7 @@ impl TokenParser for TimeTokenParser {
     fn parse(&self, tokens: &[Token]) -> Option<Token> {
         let exp = tokens
             .iter()
-            .map(|token| token.as_utf8())
+            .map(|token| token.as_str())
             .collect::<Vec<_>>()
             .join(" ");
 
@@ -68,8 +68,8 @@ impl Translator for TimeTranslator {
             .collect::<Vec<_>>();
 
         if let [exp] = exps[..] {
-            if fuzzydate::parse(exp.as_utf8()).is_ok() {
-                return Some(CommandArgs::new().add_args(["--exp", exp.as_utf8()]));
+            if fuzzydate::parse(exp.as_str()).is_ok() {
+                return Some(CommandArgs::new().add_args(["--exp", exp.as_str()]));
             }
         }
 
@@ -79,7 +79,7 @@ impl Translator for TimeTranslator {
             .collect::<Vec<_>>();
 
         if let [time, ..] = keywords[..] {
-            if normalized_eq(time.as_utf8(), &["time", "now"], 0) {
+            if normalized_eq(time.as_str(), &["time", "now"], 0) {
                 return Some(CommandArgs::new());
             }
         }
@@ -87,7 +87,7 @@ impl Translator for TimeTranslator {
         let timestamps = args
             .iter()
             .filter(|arg| arg.tag == "input:unix")
-            .filter_map(|arg| arg.as_utf8().parse::<i64>().ok())
+            .filter_map(|arg| arg.as_str().parse::<i64>().ok())
             .flat_map(|ts| {
                 Utc.timestamp_millis_opt(ts)
                     .single()

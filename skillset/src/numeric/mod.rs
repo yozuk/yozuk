@@ -24,7 +24,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 
 fn label_numeric(token: &Token) -> impl Iterator<Item = Feature> {
     let mut features = Vec::new();
-    if let Ok(n) = BigDecimal::from_str(token.as_utf8()) {
+    if let Ok(n) = BigDecimal::from_str(token.as_str()) {
         features.push(Feature {
             name: "numeric".into(),
             ..Default::default()
@@ -79,11 +79,11 @@ impl Translator for NumericTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let integers = args
             .iter()
-            .filter(|arg| parse_int(arg.as_utf8()).is_some())
+            .filter(|arg| parse_int(arg.as_str()).is_some())
             .collect::<Vec<_>>();
 
         if let [num] = integers[..] {
-            return Some(CommandArgs::new().add_args([num.as_utf8()]));
+            return Some(CommandArgs::new().add_args([num.as_str()]));
         }
         None
     }

@@ -32,7 +32,7 @@ impl<'a> FeatureLabeler<'a> {
         let features = input
             .iter()
             .filter(|token| entropy::shannon_entropy(&token.data) <= MAXIMUM_SHANNON_ENTROPY)
-            .filter_map(|token| punycode::encode(&normalize(token.as_utf8())).ok())
+            .filter_map(|token| punycode::encode(&normalize(token.as_str())).ok())
             .map(|text| {
                 if text.len() <= MAXIMUM_TOKEN_LENGTH {
                     vec![Feature {

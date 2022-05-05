@@ -58,7 +58,7 @@ impl TokenParser for DiceTokenParser {
     fn parse(&self, tokens: &[Token]) -> Option<Token> {
         let exp = tokens
             .iter()
-            .map(|token| token.as_utf8())
+            .map(|token| token.as_str())
             .collect::<Vec<_>>()
             .join("");
         match DiceParser::parse(Rule::calculation, &exp) {
@@ -183,7 +183,7 @@ impl Translator for DiceTranslator {
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")
-            .and_then(|arg| arg.as_utf8().parse::<usize>().ok())
+            .and_then(|arg| arg.as_str().parse::<usize>().ok())
             .unwrap_or(1);
 
         let commands = args
@@ -192,7 +192,7 @@ impl Translator for DiceTranslator {
             .collect::<Vec<_>>();
 
         if let [dice] = commands[..] {
-            if normalized_eq(dice.as_utf8(), &["dice", "die", "🎲"], 0) {
+            if normalized_eq(dice.as_str(), &["dice", "die", "🎲"], 0) {
                 return Some(CommandArgs::new().add_args([format!("{}d6", count)]));
             }
         }
@@ -204,7 +204,7 @@ impl Translator for DiceTranslator {
         let exp = args
             .iter()
             .filter(|arg| arg.media_type == media_type)
-            .map(|arg| arg.as_utf8())
+            .map(|arg| arg.as_str())
             .collect::<Vec<_>>();
         if exp.len() == 1 {
             Some(CommandArgs::new().add_args([exp[0]]))

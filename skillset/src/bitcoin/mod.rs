@@ -51,7 +51,7 @@ pub struct BitcoinTranslator;
 impl Translator for BitcoinTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         if args.iter().any(|arg| {
-            arg.tag == "command:bitcoin" && normalized_eq(arg.as_utf8(), &["bitcoin", "btc"], 0)
+            arg.tag == "command:bitcoin" && normalized_eq(arg.as_str(), &["bitcoin", "btc"], 0)
         }) {
             return Some(CommandArgs::new());
         }

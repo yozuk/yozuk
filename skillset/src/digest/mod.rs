@@ -69,7 +69,7 @@ impl Translator for DigestTranslator {
         let input = args
             .iter()
             .filter(|arg| arg.tag == "input:data")
-            .flat_map(|arg| ["--input", arg.as_utf8()]);
+            .flat_map(|arg| ["--input", arg.as_str()]);
 
         let keywords = args
             .iter()
@@ -80,14 +80,14 @@ impl Translator for DigestTranslator {
             && keywords.iter().all(|arg| {
                 ENTRIES
                     .iter()
-                    .any(|entry| normalized_eq(arg.as_utf8(), entry.keywords, 0))
+                    .any(|entry| normalized_eq(arg.as_str(), entry.keywords, 0))
             })
         {
             return Some(
                 CommandArgs::new().add_args_iter(input).add_args_iter(
                     keywords
                         .iter()
-                        .flat_map(|arg| ["--algorithm", arg.as_utf8()]),
+                        .flat_map(|arg| ["--algorithm", arg.as_str()]),
                 ),
             );
         }

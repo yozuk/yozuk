@@ -49,8 +49,8 @@ impl Translator for VersionTranslator {
             .collect::<Vec<_>>();
 
         if let [build, info] = keywords[..] {
-            if normalized_eq(build.as_utf8(), &["version"], 1)
-                && normalized_eq(info.as_utf8(), &["info"], 1)
+            if normalized_eq(build.as_str(), &["version"], 1)
+                && normalized_eq(info.as_str(), &["info"], 1)
             {
                 return Some(CommandArgs::new().add_args(["--version-info"]));
             }
