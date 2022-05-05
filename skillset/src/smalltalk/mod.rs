@@ -110,6 +110,7 @@ impl Command for SmalltalkCommand {
                  again seven and a half million years later.")
                 ),
                ],
+                ..Default::default()
             })
         } else {
             Ok(Output {

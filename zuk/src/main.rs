@@ -127,7 +127,11 @@ impl App {
             let result = self.zuk.run_commands(commands, streams, None);
 
             match result {
-                Ok(output) => printer.print_result(&output)?,
+                Ok(outputs) => {
+                    for output in outputs {
+                        printer.print_result(&output)?
+                    }
+                }
                 Err(errors) => {
                     printer.print_error(&errors)?;
                 }

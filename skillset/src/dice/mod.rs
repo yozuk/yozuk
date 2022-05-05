@@ -231,12 +231,14 @@ impl Command for DiceCommand {
                 blocks: vec![Block::Data(
                     block::Data::new().set_text_data(result.to_string()),
                 )],
+                ..Default::default()
             })
             .map_err(|err| Output {
                 title: "Dice".into(),
                 blocks: vec![Block::Data(
                     block::Data::new().set_text_data(format!("{}", err)),
                 )],
+                ..Default::default()
             })?)
     }
 }

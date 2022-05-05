@@ -134,6 +134,7 @@ impl Command for TimeCommand {
                     Block::Comment(block::Comment::new().set_text("Converting UNIX timestamp")),
                     Block::Data(block::Data::new().set_text_data(ts)),
                 ],
+                ..Default::default()
             });
         }
 
@@ -159,6 +160,7 @@ impl Command for TimeCommand {
             blocks: vec![Block::Data(
                 block::Data::new().set_text_data(time.join("\n")),
             )],
+            ..Default::default()
         })
     }
 }

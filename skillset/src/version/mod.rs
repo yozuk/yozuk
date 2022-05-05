@@ -78,6 +78,7 @@ impl Command for VersionCommand {
                     .set_data(self.0.build_info.to_string())
                     .set_media_type(media_type!(APPLICATION / JSON)),
             )],
+            ..Default::default()
         })
     }
 }

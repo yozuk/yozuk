@@ -122,7 +122,7 @@ impl Yozuk {
         commands: Vec<CommandArgs>,
         streams: &mut [InputStream],
         i18n: Option<&I18n>,
-    ) -> Result<Output, Vec<Output>> {
+    ) -> Result<Vec<Output>, Vec<Output>> {
         let commands = commands.into_iter().filter_map(|args| {
             self.model
                 .get_index(&args.args[0])
@@ -130,16 +130,30 @@ impl Yozuk {
                 .map(|cmd| (args, &cmd.command))
         });
 
+        let mut primary = None;
+        let mut results = Vec::new();
         let mut errors = Vec::new();
         for (args, command) in commands {
             let name = args.args[0].clone();
             match command.run(args, streams, i18n.unwrap_or(&self.i18n)) {
-                Ok(result) => return Ok(result),
+                Ok(result) => {
+                    if result.mode == OutputMode::Primary {
+                        if primary.is_none() {
+                            primary = Some(result);
+                        }
+                    } else {
+                        results.push(result);
+                    }
+                }
                 Err(err) => errors.push(err.into_output(name)),
             }
         }
 
-        Err(errors)
+        if errors.is_empty() {
+            Ok(primary.into_iter().chain(results).collect())
+        } else {
+            Err(errors)
+        }
     }
 
     pub fn suggest(&self, tokens: &[Token]) -> Option<String> {

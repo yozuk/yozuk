@@ -126,12 +126,14 @@ impl Command for CalcCommand {
                 blocks: vec![Block::Data(
                     block::Data::new().set_text_data(format!("{}", result)),
                 )],
+                ..Default::default()
             })
             .map_err(|err| Output {
                 title: "Calculator".into(),
                 blocks: vec![Block::Comment(
                     block::Comment::new().set_text(format!("{}", err)),
                 )],
+                ..Default::default()
             })?)
     }
 }
@@ -150,6 +152,7 @@ mod tests {
         let expected = Ok(Output {
             title: "Calculator".into(),
             blocks: vec![Block::Data(block::Data::new().set_text_data("-140742.75"))],
+            ..Default::default()
         });
         assert_eq!(result, expected);
 
@@ -163,6 +166,7 @@ mod tests {
             blocks: vec![Block::Comment(
                 block::Comment::new().set_text("Division by zero"),
             )],
+            ..Default::default()
         }));
         assert_eq!(result, expected);
     }

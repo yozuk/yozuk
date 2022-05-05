@@ -150,6 +150,7 @@ impl Command for UuidCommand {
                     "Too large number of the requested UUIDs (Limit: {}).",
                     MAX_COUNT
                 )))],
+                ..Default::default()
             }
             .into());
         }
@@ -166,6 +167,7 @@ impl Command for UuidCommand {
                 ))),
                 Block::Data(block::Data::new().set_text_data(list.join("\n"))),
             ],
+            ..Default::default()
         })
     }
 }

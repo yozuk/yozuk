@@ -70,6 +70,7 @@ impl Command for PasswordCommand {
         Ok(Output {
             title: "Password Generator".into(),
             blocks: vec![Block::Spoiler(block::Spoiler::new("Password", password))],
+            ..Default::default()
         })
     }
 }

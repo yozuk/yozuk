@@ -97,6 +97,7 @@ impl Command for NanoIdCommand {
                     "Too large number of the requested NanoIDs (Limit: {}).",
                     MAX_COUNT
                 )))],
+                ..Default::default()
             }
             .into());
         }
@@ -113,6 +114,7 @@ impl Command for NanoIdCommand {
                 ))),
                 Block::Data(block::Data::new().set_text_data(list.join("\n"))),
             ],
+            ..Default::default()
         })
     }
 }

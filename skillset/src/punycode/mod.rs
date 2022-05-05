@@ -75,6 +75,7 @@ impl Command for PunycodeCommand {
                         Block::Comment(block::Comment::new().set_text("Decoding punycode")),
                         Block::Data(block::Data::new().set_text_data(output.join("\n"))),
                     ],
+                    ..Default::default()
                 })
             }
             Mode::Encode => {
@@ -90,6 +91,7 @@ impl Command for PunycodeCommand {
                         Block::Comment(block::Comment::new().set_text("Encoding punycode")),
                         Block::Data(block::Data::new().set_text_data(output.join("\n"))),
                     ],
+                    ..Default::default()
                 })
             }
         }

@@ -7,6 +7,7 @@ use std::str;
 pub struct Output {
     pub title: String,
     pub blocks: Vec<Block>,
+    pub mode: OutputMode,
 }
 
 impl Output {
@@ -19,6 +20,11 @@ impl Output {
         T: Into<String>,
     {
         self.title = title.into();
+        self
+    }
+
+    pub fn set_mode<T>(mut self, mode: OutputMode) -> Self {
+        self.mode = mode;
         self
     }
 
@@ -70,6 +76,19 @@ where
     }
 }
 
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
+#[serde(rename_all = "snake_case")]
+pub enum OutputMode {
+    Primary,
+    Attachment,
+}
+
+impl Default for OutputMode {
+    fn default() -> Self {
+        Self::Primary
+    }
+}
+
 #[non_exhaustive]
 #[derive(Debug)]
 pub enum CommandError {
@@ -99,6 +118,7 @@ impl CommandError {
                 blocks: vec![Block::Comment(
                     block::Comment::new().set_text(format!("{}", err)),
                 )],
+                ..Default::default()
             },
         }
     }

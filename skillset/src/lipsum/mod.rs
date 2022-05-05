@@ -176,6 +176,7 @@ impl Command for LipsumCommand {
                     "Too large number of the requested words (Limit: {}).",
                     MAX_COUNT
                 )))],
+                ..Default::default()
             }
             .into());
         }

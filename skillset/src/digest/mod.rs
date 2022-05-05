@@ -121,6 +121,7 @@ impl Command for DigestCommand {
                     blocks: vec![Block::Comment(
                         block::Comment::new().set_text(format!("Unsupprted algorithm: {}", name)),
                     )],
+                    ..Default::default()
                 }
                 .into());
             }
@@ -147,6 +148,7 @@ impl Command for DigestCommand {
             blocks: vec![Block::Comment(
                 block::Comment::new().set_text("No valid input source provided"),
             )],
+            ..Default::default()
         }
         .into())
     }
@@ -177,6 +179,7 @@ fn compute_hash(
                 blocks: vec![Block::Data(
                     block::Data::new().set_text_data(result.join("\n")),
                 )],
+                ..Default::default()
             });
         }
     }

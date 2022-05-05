@@ -147,6 +147,7 @@ impl Command for UnitCommand {
                 base_unit.to_string(),
                 converted.join("\n")
             )))],
+            ..Default::default()
         })
     }
 

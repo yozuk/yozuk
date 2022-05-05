@@ -81,6 +81,7 @@ impl Command for GeoCommand {
                 Block::Comment(block::Comment::new().set_text("Decoding Open Location Code")),
                 Block::Data(block::Data::new().set_yaml_data(&code)?),
             ],
+            ..Default::default()
         })
     }
 }

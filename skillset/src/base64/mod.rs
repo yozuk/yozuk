@@ -216,6 +216,7 @@ impl Command for Base64Command {
                 Ok(Output {
                     title: "Base64 Decoder".into(),
                     blocks,
+                    ..Default::default()
                 })
             }
             Mode::Encode => Ok(Output {
@@ -226,6 +227,7 @@ impl Command for Base64Command {
                     .chain(streams)
                     .map(|data| Block::Data(block::Data::new().set_text_data(base64::encode(data))))
                     .collect(),
+                ..Default::default()
             }),
         }
     }

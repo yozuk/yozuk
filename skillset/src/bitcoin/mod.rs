@@ -81,6 +81,7 @@ impl Command for BitcoinCommand {
                 Block::Data(block::Data::new().set_text_data(address.to_string())),
                 Block::Spoiler(block::Spoiler::new("Private Key", private_key.to_wif())),
             ],
+            ..Default::default()
         })
     }
 }
