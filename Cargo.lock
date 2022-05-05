@@ -2260,7 +2260,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-bundle"
-version = "0.13.0"
+version = "0.13.1"
 dependencies = [
  "anyhow",
  "hex",
