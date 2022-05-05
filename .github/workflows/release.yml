@@ -33,13 +33,13 @@ jobs:
         run: target/release/zuk --dump-model model.data
         if: ${{ matrix.os == 'ubuntu-latest' }}
       - name: Make archive
-        run: tar -C target/release -czvf zuk-${{ github.ref_name }}-${{ runner.arch }}-${{ runner.os }}.tar.gz zuk
+        run: tar -C target/release -Jcvf zuk-${{ github.ref_name }}-${{ runner.arch }}-${{ runner.os }}.tar.xz zuk
         if: ${{ matrix.os != 'windows-latest' }}
       - name: Make archive
-        run: tar -C target/release -a -c -f zuk-${{ github.ref_name }}-${{ runner.arch }}-${{ runner.os }}.zip zuk.exe
+        run: tar -C target/release -acf zuk-${{ github.ref_name }}-${{ runner.arch }}-${{ runner.os }}.zip zuk.exe
         if: ${{ matrix.os == 'windows-latest' }}
       - name: Make model archive
-        run: gzip model.data -c > model-${{ github.ref_name }}.gz
+        run: xz model.data -c > model-${{ github.ref_name }}.xz
         if: ${{ matrix.os == 'ubuntu-latest' }}
       - name: Create release
         env:
@@ -49,7 +49,7 @@ jobs:
       - name: Upload archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.ref_name }} *.gz
+        run: gh release upload ${{ github.ref_name }} *.xz
         if: ${{ matrix.os != 'windows-latest' }}
       - name: Upload archive
         env:
