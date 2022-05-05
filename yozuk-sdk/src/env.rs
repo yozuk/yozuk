@@ -1,5 +1,4 @@
-use anyhow::{anyhow, Result};
-use jsonschema_valid::schemas;
+use anyhow::Result;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
@@ -38,19 +37,7 @@ impl Default for SkillConfig {
 }
 
 impl SkillConfig {
-    pub fn new(data: &Value, schema: &str) -> Result<Self> {
-        let schema: Value = serde_json::from_str(schema)?;
-        let cfg = jsonschema_valid::Config::from_schema(&schema, Some(schemas::Draft::Draft6))?;
-        cfg.validate_schema()
-            .and_then(|_| cfg.validate(data))
-            .map_err(|err| {
-                anyhow!(
-                    "{}",
-                    err.map(|err| err.to_string())
-                        .collect::<Vec<_>>()
-                        .join("\n")
-                )
-            })?;
+    pub fn new(data: &Value) -> Result<Self> {
         Ok(Self {
             data: serde_json::to_string(data)?,
         })

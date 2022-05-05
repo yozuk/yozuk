@@ -228,7 +228,7 @@ impl YozukBuilder {
                     .skills
                     .get(entry.key)
                     .zip(entry.entry.config_schema)
-                    .map(|(value, schema)| SkillConfig::new(value, schema))
+                    .map(|(value, _)| SkillConfig::new(value))
                     .unwrap_or_else(|| Ok(Default::default()))
                     .map_err(|err| (entry, err))?;
                 Ok(SkillCache {
