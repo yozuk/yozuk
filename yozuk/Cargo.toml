@@ -27,7 +27,7 @@ pest = "2.1.3"
 pest_derive = "2.1.0"
 punycode = "0.4.1"
 rayon = { version = "1.5.1", optional = true }
-yozuk-core-skillset = "0.13.0"
+yozuk-core-skillset = "0.13.1"
 yozuk-helper-english = "0.1.0"
 yozuk-sdk = "0.13.0"
 
