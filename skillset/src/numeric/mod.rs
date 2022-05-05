@@ -77,13 +77,11 @@ pub struct NumericTranslator;
 
 impl Translator for NumericTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
-        let integers = args
-            .iter()
-            .filter(|arg| parse_int(arg.as_str()).is_some())
-            .collect::<Vec<_>>();
-
-        if let [num] = integers[..] {
-            return Some(CommandArgs::new().add_args([num.as_str()]));
+        let is_integer = args.iter().all(|arg| parse_int(arg.as_str()).is_some());
+        if is_integer {
+            if let [arg] = args {
+                return Some(CommandArgs::new().add_args([arg.as_str()]));
+            }
         }
         None
     }
