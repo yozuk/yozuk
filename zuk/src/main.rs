@@ -128,8 +128,11 @@ impl App {
 
             match result {
                 Ok(outputs) => {
-                    for output in outputs {
-                        printer.print_result(&output)?
+                    for i in 0..outputs.len() {
+                        printer.print_result(&outputs[i])?;
+                        if outputs.len() > 1 && i < outputs.len() - 1 {
+                            println!("--");
+                        }
                     }
                 }
                 Err(errors) => {
