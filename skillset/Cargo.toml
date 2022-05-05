@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-core-skillset"
-version = "0.12.0"
+version = "0.13.0"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Set of default Yozuk skills"
