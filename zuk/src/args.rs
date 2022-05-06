@@ -24,8 +24,4 @@ pub struct Args {
     /// Load config from a TOML file
     #[clap(short, long)]
     pub config: Option<PathBuf>,
-
-    /// Dump embedded model data.
-    #[clap(long, hide(true), display_order(1002))]
-    pub dump_model: Option<PathBuf>,
 }

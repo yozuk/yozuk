@@ -15,7 +15,7 @@ use rustyline_derive::Helper;
 use std::borrow::Cow;
 use std::fs::File;
 use std::io;
-use std::io::{Read, Write};
+use std::io::Read;
 use sys_locale::get_locale;
 use yozuk::Yozuk;
 use yozuk_sdk::model::*;
@@ -64,12 +64,6 @@ impl App {
     }
 
     fn run(self) -> Result<()> {
-        if let Some(dump_dst) = self.args.dump_model {
-            let mut out = File::create(dump_dst)?;
-            out.write_all(yozuk_bundle::MODEL_DATA)?;
-            return Ok(());
-        }
-
         let stdin = io::stdin();
         let mut streams = vec![];
         if !stdin.is_tty() {
