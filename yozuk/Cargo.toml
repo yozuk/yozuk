@@ -24,7 +24,7 @@ pest_derive = "2.1.0"
 rayon = { version = "1.5.1", optional = true }
 yozuk-core-skillset = "0.13.1"
 yozuk-helper-english = "0.1.0"
-yozuk-sdk = "0.13.0"
+yozuk-sdk = "0.14.0"
 yozuk-model = "0.13.0"
 
 [features]
@@ -74,5 +74,5 @@ lazy_static = "1.4.0"
 [build-dependencies]
 anyhow = "1.0.56"
 yozuk-core-skillset = "0.13.1"
-yozuk-sdk = "0.13.0"
+yozuk-sdk = "0.14.0"
 yozuk-model = { version = "0.13.0", features = ["modelgen"] }
