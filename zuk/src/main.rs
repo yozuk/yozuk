@@ -22,6 +22,7 @@ use yozuk_sdk::prelude::*;
 
 mod args;
 mod printer;
+mod rpc;
 
 use args::*;
 use printer::*;
