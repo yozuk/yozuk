@@ -66,7 +66,7 @@ impl App {
             let stdout = io::stdout();
             let stdin = stdin.lock();
             let stdout = stdout.lock();
-            return rpc::start_server(stdin, stdout);
+            return rpc::start_server(self.zuk, stdin, stdout);
         }
 
         let mut streams = vec![];

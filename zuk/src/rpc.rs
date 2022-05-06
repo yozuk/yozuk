@@ -4,16 +4,18 @@ use anyhow::Result;
 use json_rpc2::{Request, Response, Server, Service};
 use serde_json::{de::IoRead, Deserializer, Value};
 use std::io::{Read, Write};
+use yozuk::Yozuk;
+use yozuk_sdk::prelude::*;
 
 struct ServiceHandler;
 impl Service for ServiceHandler {
-    type Data = ();
-    fn handle(&self, request: &Request, _ctx: &Self::Data) -> json_rpc2::Result<Option<Response>> {
+    type Data = Yozuk;
+    fn handle(&self, request: &Request, zuk: &Self::Data) -> json_rpc2::Result<Option<Response>> {
         let response = match request.method() {
-            "hello" => {
-                let params: String = request.deserialize()?;
-                let message = format!("Hello, {}!", params);
-                Some((request, Value::String(message)).into())
+            "get_commands" => {
+                let tokens: Vec<Token> = request.deserialize()?;
+                let commands = zuk.get_commands(&tokens, &[]);
+                Some((request, serde_json::to_value(commands).unwrap()).into())
             }
             _ => None,
         };
@@ -21,17 +23,17 @@ impl Service for ServiceHandler {
     }
 }
 
-pub fn start_server<R, W>(reader: R, mut writer: W) -> Result<()>
+pub fn start_server<R, W>(zuk: Yozuk, reader: R, mut writer: W) -> Result<()>
 where
     R: Read,
     W: Write,
 {
-    let service: Box<dyn Service<Data = ()>> = Box::new(ServiceHandler {});
+    let service: Box<dyn Service<Data = Yozuk>> = Box::new(ServiceHandler {});
     let server = Server::new(vec![&service]);
     let reader = IoRead::new(reader);
     let stream = Deserializer::new(reader).into_iter::<Request>();
     for request in stream {
-        let response = server.serve(&request?, &());
+        let response = server.serve(&request?, &zuk);
         serde_json::to_writer(&mut writer, &response)?;
         writeln!(&mut writer)?;
     }
