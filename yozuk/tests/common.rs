@@ -1,12 +1,10 @@
-#![cfg(feature = "modelgen")]
-
 use std::io;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
 lazy_static::lazy_static! {
     pub static ref YOZUK: Yozuk = {
-        let model = yozuk::modelgen(&Environment::new()).unwrap();
+        let model = yozuk_sdk::model::ModelSet::from_data(yozuk::MODEL_DATA).unwrap();
         Yozuk::builder()
             .add_redirection(tk!(["test", "command", "redirect"]), vec!["test", "redirect"])
             .build(model)

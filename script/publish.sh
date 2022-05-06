@@ -28,9 +28,9 @@ publishCrate() {
 publishCrate "yozuk-sdk" "yozuk-sdk"
 publishCrate "helpers/english" "yozuk-helper-english"
 publishCrate "helpers/preprocessor" "yozuk-helper-preprocessor"
+publishCrate "yozuk-model" "yozuk-model"
 publishCrate "skillset" "yozuk-core-skillset"
 publishCrate "yozuk" "yozuk"
-publishCrate "yozuk-bundle" "yozuk-bundle"
 publishCrate "zuk" "zuk"
 
 git tag $NEXT_TAG

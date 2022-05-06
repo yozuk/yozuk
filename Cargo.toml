@@ -1,5 +1,5 @@
 [workspace]
-members = ["yozuk", "yozuk-sdk", "yozuk-bundle", "skillset", "zuk", "helpers/*"]
+members = ["yozuk", "yozuk-sdk", "yozuk-model", "skillset", "zuk", "helpers/*"]
 resolver = "2"
 
 [profile.release]
@@ -12,4 +12,4 @@ yozuk-helper-english = { path = "./helpers/english" }
 yozuk-helper-preprocessor = { path = "./helpers/preprocessor" }
 yozuk-core-skillset = { path = "./skillset" }
 yozuk = { path = "./yozuk" }
-yozuk-bundle = { path = "./yozuk-bundle" }
+yozuk-model = { path = "./yozuk-model" }

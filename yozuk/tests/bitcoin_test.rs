@@ -1,4 +1,4 @@
-#![cfg(all(feature = "modelgen", feature = "yozuk-skill-bitcoin"))]
+#![cfg(feature = "yozuk-skill-bitcoin")]
 
 mod common;
 use common::cmd;

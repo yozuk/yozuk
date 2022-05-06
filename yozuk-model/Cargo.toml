@@ -1,0 +1,29 @@
+[package]
+name = "yozuk-model"
+version = "0.13.1"
+edition = "2021"
+authors = ["picoHz <picoHz@outlook.com>"]
+description = "NLP model generator for Yozuk"
+keywords = ["yozuk"]
+categories = ["text-processing"]
+repository = "https://github.com/yozuk/yozuk-modelgen"
+homepage = "https://yozuk.com"
+documentation = "https://docs.rs/yozuk-modelgen"
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
+anyhow = { version = "1.0.57", optional = true }
+bytes = { version = "1.1.0", optional = true }
+crfsuite = { version = "0.3.1", optional = true }
+itertools = { version = "0.10.3", optional = true }
+nanoid = { version = "0.4.0", optional = true }
+rayon = { version = "1.5.2", optional = true }
+yozuk-sdk = "0.13.0"
+yozuk-helper-english = "0.1.0"
+punycode = "0.4.1"
+entropy = "0.4.1"
+
+[features]
+default = []
+modelgen = ["crfsuite", "rayon", "anyhow", "bytes", "itertools", "nanoid"]

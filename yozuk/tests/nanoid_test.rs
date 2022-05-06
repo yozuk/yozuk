@@ -1,4 +1,4 @@
-#![cfg(all(feature = "modelgen", feature = "yozuk-skill-nanoid"))]
+#![cfg(feature = "yozuk-skill-nanoid")]
 
 mod common;
 use common::cmd;

@@ -2242,29 +2242,15 @@ dependencies = [
  "bytes",
  "const-sha1",
  "crfs",
- "crfsuite",
  "distance",
- "entropy",
- "itertools",
  "lazy_static",
  "mediatype",
- "nanoid",
  "pest",
  "pest_derive",
- "punycode",
  "rayon",
  "yozuk-core-skillset",
  "yozuk-helper-english",
- "yozuk-sdk",
-]
-
-[[package]]
-name = "yozuk-bundle"
-version = "0.13.1"
-dependencies = [
- "anyhow",
- "hex",
- "yozuk",
+ "yozuk-model",
  "yozuk-sdk",
 ]
 
@@ -2334,6 +2320,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "yozuk-model"
+version = "0.13.1"
+dependencies = [
+ "anyhow",
+ "bytes",
+ "crfsuite",
+ "entropy",
+ "itertools",
+ "nanoid",
+ "punycode",
+ "rayon",
+ "yozuk-helper-english",
+ "yozuk-sdk",
+]
+
+[[package]]
 name = "yozuk-sdk"
 version = "0.13.0"
 dependencies = [
@@ -2368,6 +2370,5 @@ dependencies = [
  "sys-locale",
  "toml",
  "yozuk",
- "yozuk-bundle",
  "yozuk-sdk",
 ]

@@ -1,4 +1,4 @@
-#![cfg(all(feature = "modelgen", feature = "yozuk-skill-version"))]
+#![cfg(feature = "yozuk-skill-version")]
 
 mod common;
 use common::cmd;

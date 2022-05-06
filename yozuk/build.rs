@@ -11,15 +11,17 @@ fn main() -> Result<()> {
     if let Ok(mut file) = File::open(&model_path) {
         let mut data = Vec::new();
         let _ = file.read_to_end(&mut data);
-        if data.ends_with(&yozuk::SKILLS_DIGEST) && ModelSet::from_data(data).is_ok() {
+        if data.ends_with(&yozuk_core_skillset::skills_digest())
+            && ModelSet::from_data(data).is_ok()
+        {
             return Ok(());
         }
     }
 
-    let model = yozuk::modelgen(&Environment::new())?;
+    let model = yozuk_model::modelgen(yozuk_core_skillset::SKILLS, &Environment::new())?;
     let mut file = File::create(model_path)?;
     model.write(&mut file)?;
-    file.write_all(&yozuk::SKILLS_DIGEST)?;
+    file.write_all(&yozuk_core_skillset::skills_digest())?;
 
     Ok(())
 }

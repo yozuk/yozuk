@@ -1,4 +1,4 @@
-#![cfg(all(feature = "modelgen", feature = "yozuk-skill-smalltalk"))]
+#![cfg(feature = "yozuk-skill-smalltalk")]
 
 mod common;
 use common::{cmd, YOZUK};

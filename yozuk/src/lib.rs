@@ -2,29 +2,24 @@
 #![deny(clippy::all)]
 
 use std::{iter, mem};
+use yozuk_model::FeatureLabeler;
 use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
 
 #[cfg(feature = "rayon")]
 use rayon::prelude::*;
 
-mod labeler;
 mod model;
-mod modelgen;
 mod skill;
 mod tagger;
 mod tokenizer;
 
-use labeler::*;
 use tagger::*;
 
 pub use model::*;
 pub use skill::*;
 
-#[cfg(feature = "modelgen")]
-pub use modelgen::*;
-
-pub const SKILLS_DIGEST: [u8; 20] = skill::skills_digest();
+pub const MODEL_DATA: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/model.data"));
 
 pub struct Yozuk {
     model: ModelSet,

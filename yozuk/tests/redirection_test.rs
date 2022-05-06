@@ -1,5 +1,3 @@
-#![cfg(feature = "modelgen")]
-
 mod common;
 use common::cmd;
 use yozuk_sdk::prelude::*;

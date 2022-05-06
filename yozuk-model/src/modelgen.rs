@@ -1,30 +1,24 @@
 #![cfg(feature = "modelgen")]
 
-use super::{skill, FeatureLabeler};
+use super::labeler::*;
 use anyhow::{bail, Result};
 use bytes::Bytes;
 use crfsuite::{Algorithm, Attribute, GraphicalModel, Trainer};
 use itertools::multiunzip;
 use nanoid::nanoid;
 use rayon::prelude::*;
-use std::{
-    collections::VecDeque,
-    env,
-    fs::{File, OpenOptions},
-    io::{Read, Write},
-    iter,
-};
+use std::{collections::VecDeque, env, fs::File, io::Read, iter};
 use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
 
-pub fn modelgen(env: &Environment) -> Result<ModelSet> {
-    let mut keys = skill::SKILLS
+pub fn modelgen(skills: &[NamedSkillEntry], env: &Environment) -> Result<ModelSet> {
+    let mut keys = skills
         .iter()
         .map(|item| item.key.to_string())
         .collect::<Vec<_>>();
     keys.sort();
 
-    let labelers = skill::SKILLS
+    let labelers = skills
         .par_iter()
         .flat_map(|item| {
             (item.entry.init)(env, &Default::default())
@@ -35,12 +29,12 @@ pub fn modelgen(env: &Environment) -> Result<ModelSet> {
 
     let labeler = FeatureLabeler::new(&labelers);
 
-    let dataset = skill::SKILLS
+    let dataset = skills
         .par_iter()
         .map(|item| TrainingData {
             key: item.key.to_string(),
             skills: vec![(item.entry.init)(env, &Default::default()).unwrap()],
-            negative_skills: skill::SKILLS
+            negative_skills: skills
                 .par_iter()
                 .filter(|neg| neg.key != item.key)
                 .map(|neg| (neg.entry.init)(env, &Default::default()).unwrap())
@@ -186,11 +180,6 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
     );
 
     tr.train(&filename, -1)?;
-    let digest = skill::skills_digest();
-    let mut file = OpenOptions::new().append(true).open(&filename).unwrap();
-    file.write_all(&digest[..])?;
-    file.flush()?;
-
     let mut file = File::open(&filename)?;
     let mut data = Vec::new();
     file.read_to_end(&mut data)?;

@@ -58,7 +58,7 @@ impl App {
         let zuk = Yozuk::builder()
             .set_config(config)
             .set_i18n(i18n)
-            .build(ModelSet::from_data(yozuk_bundle::MODEL_DATA)?);
+            .build(ModelSet::from_data(yozuk::MODEL_DATA)?);
 
         Ok(Self { args, zuk })
     }

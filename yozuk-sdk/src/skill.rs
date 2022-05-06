@@ -9,6 +9,12 @@ pub struct SkillEntry {
     pub init: fn(&Environment, &SkillConfig) -> Result<Skill>,
 }
 
+#[derive(Clone, Copy)]
+pub struct NamedSkillEntry {
+    pub key: &'static str,
+    pub entry: SkillEntry,
+}
+
 pub trait Labeler: fmt::Debug + Send + Sync + 'static {
     fn label_features(&self, input: &[Token]) -> Vec<Vec<Feature>>;
 }

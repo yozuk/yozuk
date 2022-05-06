@@ -1,11 +1,5 @@
 use yozuk_sdk::prelude::*;
 
-#[derive(Clone)]
-pub struct NamedSkillEntry {
-    pub key: &'static str,
-    pub entry: SkillEntry,
-}
-
 const MODEL_ROOT_ID: &[u8] = b"9oUwu_3TFvxiIJ5Pm7k48";
 
 #[macro_export]
