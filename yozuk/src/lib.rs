@@ -19,7 +19,7 @@ use tagger::*;
 pub use model::*;
 pub use skill::*;
 
-pub const MODEL_DATA: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/model.data"));
+const MODEL_DATA: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/model.data"));
 
 pub struct Yozuk {
     model: ModelSet,
@@ -206,7 +206,8 @@ impl YozukBuilder {
         self
     }
 
-    pub fn build(self, model: ModelSet) -> Yozuk {
+    pub fn build(self) -> Yozuk {
+        let model = ModelSet::from_data(MODEL_DATA).unwrap();
         let build_info = concat!(r#"{"version": ""#, env!("CARGO_PKG_VERSION"), r#""}"#);
 
         let env = Environment::new().build_info(build_info);

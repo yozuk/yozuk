@@ -18,7 +18,6 @@ use std::io;
 use std::io::Read;
 use sys_locale::get_locale;
 use yozuk::Yozuk;
-use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
 
 mod args;
@@ -55,11 +54,7 @@ impl App {
             ..Default::default()
         };
 
-        let zuk = Yozuk::builder()
-            .set_config(config)
-            .set_i18n(i18n)
-            .build(ModelSet::from_data(yozuk::MODEL_DATA)?);
-
+        let zuk = Yozuk::builder().set_config(config).set_i18n(i18n).build();
         Ok(Self { args, zuk })
     }
 
