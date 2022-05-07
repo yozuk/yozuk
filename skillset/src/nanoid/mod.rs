@@ -91,31 +91,26 @@ impl Command for NanoIdCommand {
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
-            return Err(Output {
-                title: "NanoID Generator".into(),
-                blocks: vec![Block::Comment(block::Comment::new().set_text(format!(
+            return Err(Output::new()
+                .set_title("NanoID Generator")
+                .add_block(Block::Comment(block::Comment::new().set_text(format!(
                     "Too large number of the requested NanoIDs (Limit: {}).",
                     MAX_COUNT
-                )))],
-                ..Default::default()
-            }
-            .into());
+                ))))
+                .into());
         }
         let list = iter::repeat_with(|| nanoid::nanoid!())
             .take(args.n)
             .collect::<Vec<_>>();
-        Ok(Output {
-            title: "NanoID Generator".into(),
-            blocks: vec![
-                Block::Comment(block::Comment::new().set_text(format!(
-                    "Generating {} {}",
-                    args.n,
-                    pluralize("NanoID", args.n)
-                ))),
-                Block::Data(block::Data::new().set_text_data(list.join("\n"))),
-            ],
-            ..Default::default()
-        })
+
+        Ok(Output::new().set_title("NanoID Generator").add_blocks(vec![
+            Block::Comment(block::Comment::new().set_text(format!(
+                "Generating {} {}",
+                args.n,
+                pluralize("NanoID", args.n)
+            ))),
+            Block::Data(block::Data::new().set_text_data(list.join("\n"))),
+        ]))
     }
 }
 

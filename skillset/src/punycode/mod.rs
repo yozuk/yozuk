@@ -66,15 +66,10 @@ impl Command for PunycodeCommand {
                     .iter()
                     .map(|s| decode_punycode(s))
                     .collect::<Vec<_>>();
-
-                Ok(Output {
-                    title: "Punycode Decoder".into(),
-                    blocks: vec![
-                        Block::Comment(block::Comment::new().set_text("Decoding punycode")),
-                        Block::Data(block::Data::new().set_text_data(output.join("\n"))),
-                    ],
-                    ..Default::default()
-                })
+                Ok(Output::new().set_title("Punycode Decoder").add_blocks(vec![
+                    Block::Comment(block::Comment::new().set_text("Decoding punycode")),
+                    Block::Data(block::Data::new().set_text_data(output.join("\n"))),
+                ]))
             }
             Mode::Encode => {
                 let output = args
@@ -83,14 +78,10 @@ impl Command for PunycodeCommand {
                     .map(|s| encode_punycode(s))
                     .collect::<Vec<_>>();
 
-                Ok(Output {
-                    title: "Punycode Encoder".into(),
-                    blocks: vec![
-                        Block::Comment(block::Comment::new().set_text("Encoding punycode")),
-                        Block::Data(block::Data::new().set_text_data(output.join("\n"))),
-                    ],
-                    ..Default::default()
-                })
+                Ok(Output::new().set_title("Punycode Decoder").add_blocks(vec![
+                    Block::Comment(block::Comment::new().set_text("Encoding punycode")),
+                    Block::Data(block::Data::new().set_text_data(output.join("\n"))),
+                ]))
             }
         }
     }

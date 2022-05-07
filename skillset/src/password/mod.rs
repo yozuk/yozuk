@@ -67,11 +67,10 @@ impl Command for PasswordCommand {
             let index = between.sample(&mut rng);
             password.push_str(&CHARACTERS[index..index + 1]);
         }
-        Ok(Output {
-            title: "Password Generator".into(),
-            blocks: vec![Block::Spoiler(block::Spoiler::new("Password", password))],
-            ..Default::default()
-        })
+
+        Ok(Output::new()
+            .set_title("NanoID Generator")
+            .add_block(Block::Spoiler(block::Spoiler::new("Password", password))))
     }
 }
 

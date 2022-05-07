@@ -101,24 +101,16 @@ impl Command for SmalltalkCommand {
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         if args.life_universe_everything {
-            Ok(Output {
-                title: "Deep Thought".into(),
-                blocks: vec![Block::Comment(
-                    block::Comment::new()
-                        .set_text(
+            Ok(Output::new()
+                .set_title("Deep Thought")
+                .add_block(Block::Comment(block::Comment::new().set_text(
                 "Computing the answer to your question will take a little while. Please ask me \
-                 again seven and a half million years later.")
-                ),
-               ],
-                ..Default::default()
-            })
+                 again seven and a half million years later.",
+            ))))
         } else {
-            Ok(Output {
-                blocks: vec![Block::Comment(
-                    block::Comment::new().set_text("Hi. I'm Yozuk."),
-                )],
-                ..Default::default()
-            })
+            Ok(Output::new().add_block(Block::Comment(
+                block::Comment::new().set_text("Hi. I'm Yozuk."),
+            )))
         }
     }
 
