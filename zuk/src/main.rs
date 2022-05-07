@@ -22,6 +22,7 @@ use yozuk_sdk::prelude::*;
 
 mod args;
 mod printer;
+mod rpc;
 
 use args::*;
 use printer::*;
@@ -59,9 +60,17 @@ impl App {
     }
 
     fn run(self) -> Result<()> {
-        let stdin = io::stdin();
+        #[cfg(feature = "rpc")]
+        if self.args.rpc {
+            let stdin = io::stdin();
+            let stdout = io::stdout();
+            let stdin = stdin.lock();
+            let stdout = stdout.lock();
+            return rpc::start_server(self.zuk, stdin, stdout);
+        }
+
         let mut streams = vec![];
-        if !stdin.is_tty() {
+        if !io::stdin().is_tty() {
             streams.push(InputStream::new(
                 io::stdin(),
                 media_type!(APPLICATION / OCTET_STREAM),
