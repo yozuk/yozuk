@@ -140,15 +140,13 @@ impl Command for UnitCommand {
             .filter(|unit| unit.base != base_unit.base || unit.prefix != base_unit.prefix)
             .map(|unit| unit.normalized().to_string())
             .collect::<Vec<_>>();
-        Ok(Output {
-            title: "Unit Converter".into(),
-            blocks: vec![Block::Data(block::Data::new().set_text_data(format!(
+        Ok(Output::new()
+            .set_title("Unit Converter")
+            .add_block(Block::Data(block::Data::new().set_text_data(format!(
                 "{} =\n{}",
                 base_unit.to_string(),
                 converted.join("\n")
-            )))],
-            ..Default::default()
-        })
+            )))))
     }
 
     fn priority(&self) -> i32 {

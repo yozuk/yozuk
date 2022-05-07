@@ -144,31 +144,25 @@ impl Command for UuidCommand {
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
-            return Err(Output {
-                title: "UUID Generator".into(),
-                blocks: vec![Block::Comment(block::Comment::new().set_text(format!(
+            return Err(Output::new()
+                .set_title("UUID Generator")
+                .add_block(Block::Comment(block::Comment::new().set_text(format!(
                     "Too large number of the requested UUIDs (Limit: {}).",
                     MAX_COUNT
-                )))],
-                ..Default::default()
-            }
-            .into());
+                ))))
+                .into());
         }
         let list = iter::repeat_with(|| format!("{}", Uuid::new_v4()))
             .take(args.n)
             .collect::<Vec<_>>();
-        Ok(Output {
-            title: "UUID Generator".into(),
-            blocks: vec![
-                Block::Comment(block::Comment::new().set_text(format!(
-                    "Generating {} {}",
-                    args.n,
-                    pluralize("UUID", args.n)
-                ))),
-                Block::Data(block::Data::new().set_text_data(list.join("\n"))),
-            ],
-            ..Default::default()
-        })
+        Ok(Output::new().set_title("UUID Generator").add_blocks(vec![
+            Block::Comment(block::Comment::new().set_text(format!(
+                "Generating {} {}",
+                args.n,
+                pluralize("UUID", args.n)
+            ))),
+            Block::Data(block::Data::new().set_text_data(list.join("\n"))),
+        ]))
     }
 }
 

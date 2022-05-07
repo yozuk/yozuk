@@ -128,14 +128,10 @@ impl Command for TimeCommand {
             let ts = Utc.timestamp_nanos(ts);
             let ts = tz.from_utc_datetime(&ts.naive_utc());
             let ts = ts.to_rfc3339_opts(SecondsFormat::Millis, false);
-            return Ok(Output {
-                title: "Time".into(),
-                blocks: vec![
-                    Block::Comment(block::Comment::new().set_text("Converting UNIX timestamp")),
-                    Block::Data(block::Data::new().set_text_data(ts)),
-                ],
-                ..Default::default()
-            });
+            return Ok(Output::new().set_title("Time").add_blocks(vec![
+                Block::Comment(block::Comment::new().set_text("Converting UNIX timestamp")),
+                Block::Data(block::Data::new().set_text_data(ts)),
+            ]));
         }
 
         let time = if let Some(ts) = args.exp {
@@ -155,13 +151,9 @@ impl Command for TimeCommand {
                 now.to_rfc3339_opts(SecondsFormat::Millis, false),
             ]
         };
-        Ok(Output {
-            title: "Time".into(),
-            blocks: vec![Block::Data(
-                block::Data::new().set_text_data(time.join("\n")),
-            )],
-            ..Default::default()
-        })
+        Ok(Output::new().set_title("Time").add_block(Block::Data(
+            block::Data::new().set_text_data(time.join("\n")),
+        )))
     }
 }
 
