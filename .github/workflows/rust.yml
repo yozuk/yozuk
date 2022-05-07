@@ -5,7 +5,6 @@ on:
     branches: [ main ]
     paths-ignore:
     - '**.md'
-    - '**/Dockerfile'
     - 'images/**'
   pull_request:
     branches: [ main ]
@@ -16,7 +15,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
@@ -28,6 +26,12 @@ jobs:
           ~/.cargo/git/db/
           target/
         key: ${{ runner.os }}-stable-cargo
-    - uses: extractions/setup-just@v1
-    - name: Run checks
-      run: just check
+    - uses: taiki-e/install-action@nextest
+    - name: Run fmt
+      run: cargo fmt --check
+    - name: Run clippy
+      run: cargo clippy --all-features
+    - name: Run test
+      run: cargo nextest run --all-features
+    - name: Run test without rayon
+      run: cargo nextest run -p yozuk --no-default-features --features default-skills
