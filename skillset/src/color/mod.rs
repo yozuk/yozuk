@@ -124,10 +124,10 @@ impl Command for ColorCommand {
             .iter()
             .filter_map(|color| css_color::Srgb::from_str(color).ok())
             .map(|color| Srgba::new(color.red, color.green, color.blue, color.alpha));
-        Ok(Output {
-            blocks: colors.flat_map(|color| render_color(&color)).collect(),
-            ..Default::default()
-        })
+
+        Ok(Output::new()
+            .set_title("Color")
+            .add_blocks(colors.flat_map(|color| render_color(&color))))
     }
 }
 

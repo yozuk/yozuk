@@ -226,19 +226,15 @@ impl Command for DiceCommand {
     ) -> Result<Output, CommandError> {
         let rule = DiceParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule, &self.0)
-            .map(|result| Output {
-                title: "Dice".into(),
-                blocks: vec![Block::Data(
+            .map(|result| {
+                Output::new().set_title("Dice").add_block(Block::Data(
                     block::Data::new().set_text_data(result.to_string()),
-                )],
-                ..Default::default()
+                ))
             })
-            .map_err(|err| Output {
-                title: "Dice".into(),
-                blocks: vec![Block::Data(
+            .map_err(|err| {
+                Output::new().set_title("Dice").add_block(Block::Data(
                     block::Data::new().set_text_data(format!("{}", err)),
-                )],
-                ..Default::default()
+                ))
             })?)
     }
 }

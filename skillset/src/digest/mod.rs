@@ -116,14 +116,12 @@ impl Command for DigestCommand {
                 .collect::<Vec<_>>();
 
             if matched.is_empty() {
-                return Err(Output {
-                    title: "Digest".into(),
-                    blocks: vec![Block::Comment(
+                return Err(Output::new()
+                    .set_title("Digest")
+                    .add_block(Block::Comment(
                         block::Comment::new().set_text(format!("Unsupprted algorithm: {}", name)),
-                    )],
-                    ..Default::default()
-                }
-                .into());
+                    ))
+                    .into());
             }
 
             for entry in matched {
@@ -143,14 +141,12 @@ impl Command for DigestCommand {
             }
         }
 
-        Err(Output {
-            title: "Digest".into(),
-            blocks: vec![Block::Comment(
+        Err(Output::new()
+            .set_title("Digest")
+            .add_block(Block::Comment(
                 block::Comment::new().set_text("No valid input source provided"),
-            )],
-            ..Default::default()
-        }
-        .into())
+            ))
+            .into())
     }
 }
 
@@ -174,13 +170,10 @@ fn compute_hash(
                     .map(|(name, mut hash)| format!("{}: {}", name, hex::encode(hash.finalize())))
                     .collect::<Vec<_>>()
             };
-            return Some(Output {
-                title: "Digest".into(),
-                blocks: vec![Block::Data(
-                    block::Data::new().set_text_data(result.join("\n")),
-                )],
-                ..Default::default()
-            });
+
+            return Some(Output::new().set_title("Digest").add_block(Block::Data(
+                block::Data::new().set_text_data(result.join("\n")),
+            )));
         }
     }
     None

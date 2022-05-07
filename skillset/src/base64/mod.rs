@@ -213,22 +213,13 @@ impl Command for Base64Command {
                         .collect(),
                 );
 
-                Ok(Output {
-                    title: "Base64 Decoder".into(),
-                    blocks,
-                    ..Default::default()
-                })
+                Ok(Output::new().set_title("Base64 Decoder").add_blocks(blocks))
             }
-            Mode::Encode => Ok(Output {
-                title: "Base64 Encoder".into(),
-                blocks: args
-                    .data
-                    .into_iter()
-                    .chain(streams)
-                    .map(|data| Block::Data(block::Data::new().set_text_data(base64::encode(data))))
-                    .collect(),
-                ..Default::default()
-            }),
+            Mode::Encode => Ok(Output::new().set_title("Base64 Encoder").add_blocks(
+                args.data.into_iter().chain(streams).map(|data| {
+                    Block::Data(block::Data::new().set_text_data(base64::encode(data)))
+                }),
+            )),
         }
     }
 

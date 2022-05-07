@@ -74,14 +74,11 @@ impl Command for BitcoinCommand {
         let private_key = PrivateKey::new(privkey, Network::Bitcoin);
         let public_key = PublicKey::new(pubkey);
         let address = Address::p2pkh(&public_key, Network::Bitcoin);
-        Ok(Output {
-            title: "Bitcoin".into(),
-            blocks: vec![
-                Block::Comment(block::Comment::new().set_text("Generating a new address")),
-                Block::Data(block::Data::new().set_text_data(address.to_string())),
-                Block::Spoiler(block::Spoiler::new("Private Key", private_key.to_wif())),
-            ],
-            ..Default::default()
-        })
+
+        Ok(Output::new().set_title("Bitcoin").add_blocks(vec![
+            Block::Comment(block::Comment::new().set_text("Generating a new address")),
+            Block::Data(block::Data::new().set_text_data(address.to_string())),
+            Block::Spoiler(block::Spoiler::new("Private Key", private_key.to_wif())),
+        ]))
     }
 }

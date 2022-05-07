@@ -75,14 +75,11 @@ impl Command for GeoCommand {
             east: code.east,
             center: (code.center.x(), code.center.y()),
         };
-        Ok(Output {
-            title: "Geo".into(),
-            blocks: vec![
-                Block::Comment(block::Comment::new().set_text("Decoding Open Location Code")),
-                Block::Data(block::Data::new().set_json_data(&code)?),
-            ],
-            ..Default::default()
-        })
+
+        Ok(Output::new().set_title("Geo").add_blocks(vec![
+            Block::Comment(block::Comment::new().set_text("Decoding Open Location Code")),
+            Block::Data(block::Data::new().set_json_data(&code)?),
+        ]))
     }
 }
 

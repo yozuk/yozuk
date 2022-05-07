@@ -121,19 +121,17 @@ impl Command for CalcCommand {
     ) -> Result<Output, CommandError> {
         let rule = CalcParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule)
-            .map(|result| Output {
-                title: "Calculator".into(),
-                blocks: vec![Block::Data(
+            .map(|result| {
+                Output::new().set_title("Calculator").add_block(Block::Data(
                     block::Data::new().set_text_data(format!("{}", result)),
-                )],
-                ..Default::default()
+                ))
             })
-            .map_err(|err| Output {
-                title: "Calculator".into(),
-                blocks: vec![Block::Comment(
-                    block::Comment::new().set_text(format!("{}", err)),
-                )],
-                ..Default::default()
+            .map_err(|err| {
+                Output::new()
+                    .set_title("Calculator")
+                    .add_block(Block::Comment(
+                        block::Comment::new().set_text(format!("{}", err)),
+                    ))
             })?)
     }
 }
@@ -149,11 +147,9 @@ mod tests {
             &mut [],
             &Default::default(),
         );
-        let expected = Ok(Output {
-            title: "Calculator".into(),
-            blocks: vec![Block::Data(block::Data::new().set_text_data("-140742.75"))],
-            ..Default::default()
-        });
+        let expected = Ok(Output::new()
+            .set_title("Calculator")
+            .add_block(Block::Data(block::Data::new().set_text_data("-140742.75"))));
         assert_eq!(result, expected);
 
         let result = CalcCommand.run(
@@ -161,13 +157,13 @@ mod tests {
             &mut [],
             &Default::default(),
         );
-        let expected = Err(CommandError::Output(Output {
-            title: "Calculator".into(),
-            blocks: vec![Block::Comment(
-                block::Comment::new().set_text("Division by zero"),
-            )],
-            ..Default::default()
-        }));
+        let expected = Err(CommandError::Output(
+            Output::new()
+                .set_title("Calculator")
+                .add_block(Block::Comment(
+                    block::Comment::new().set_text("Division by zero"),
+                )),
+        ));
         assert_eq!(result, expected);
     }
 }

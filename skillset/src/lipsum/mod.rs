@@ -170,26 +170,24 @@ impl Command for LipsumCommand {
 
         let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
-            return Err(Output {
-                title: "Lorem ipsum".into(),
-                blocks: vec![Block::Comment(block::Comment::new().set_text(format!(
+            return Err(Output::new()
+                .set_title("Lorem ipsum")
+                .add_block(Block::Comment(block::Comment::new().set_text(format!(
                     "Too large number of the requested words (Limit: {}).",
                     MAX_COUNT
-                )))],
-                ..Default::default()
-            }
-            .into());
+                ))))
+                .into());
         }
-        Ok(Output {
-            blocks: vec![Block::Data(block::Data::new().set_text_data(
+
+        Ok(Output::new()
+            .set_title("Lorem ipsum")
+            .add_block(Block::Data(block::Data::new().set_text_data(
                 if let Some(chain) = chain {
                     chain.generate(args.n)
                 } else {
                     lipsum(args.n)
                 },
-            ))],
-            ..Default::default()
-        })
+            ))))
     }
 }
 
