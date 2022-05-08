@@ -13,3 +13,12 @@ yozuk-helper-preprocessor = { path = "./helpers/preprocessor" }
 yozuk-core-skillset = { path = "./skillset" }
 yozuk = { path = "./yozuk" }
 yozuk-model = { path = "./yozuk-model" }
+
+[profile.dev.package.crfsuite]
+opt-level = 3
+
+[profile.dev.package.yozuk-model]
+opt-level = 3
+
+[profile.dev.package.rayon]
+opt-level = 3
