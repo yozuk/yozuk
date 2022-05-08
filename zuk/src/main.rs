@@ -59,7 +59,7 @@ impl App {
         Ok(Self { args, zuk })
     }
 
-    fn run(self) -> Result<()> {
+    fn run(mut self) -> Result<()> {
         #[cfg(feature = "rpc")]
         if self.args.rpc {
             let stdin = io::stdin();
@@ -85,6 +85,7 @@ impl App {
 
         let repl = streams.is_empty() && self.args.query.is_empty();
         if repl {
+            self.args.verbose += 1;
             self.start_repl()
         } else {
             let tokens = self
@@ -103,7 +104,7 @@ impl App {
             stream.read_header()?;
         }
 
-        let printer = TerminalPrinter::new();
+        let printer = TerminalPrinter::new(&self.args);
 
         let commands = if self.args.run {
             vec![CommandArgs::new().add_args_iter(&self.args.query)]

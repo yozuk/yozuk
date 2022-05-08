@@ -1,3 +1,4 @@
+use crate::Args;
 use anyhow::Result;
 use content_inspector::ContentType;
 use crossterm::tty::IsTty;
@@ -7,11 +8,13 @@ use std::io::BufRead;
 use std::io::{self, Write};
 use yozuk_sdk::prelude::*;
 
-pub struct TerminalPrinter;
+pub struct TerminalPrinter<'a> {
+    args: &'a Args,
+}
 
-impl TerminalPrinter {
-    pub fn new() -> Self {
-        Self
+impl<'a> TerminalPrinter<'a> {
+    pub fn new(args: &'a Args) -> Self {
+        Self { args }
     }
 
     pub fn print_commands(&self, commands: &[CommandArgs]) -> Result<()> {
@@ -36,7 +39,9 @@ impl TerminalPrinter {
         for block in &output.blocks {
             match block {
                 Block::Comment(comment) => {
-                    writeln!(&mut stderr, "{}{}", title, comment.text)?;
+                    if self.args.verbose > 0 {
+                        writeln!(&mut stderr, "{}{}", title, comment.text)?;
+                    }
                 }
                 Block::Data(data) => {
                     let data = data.data.data().unwrap();
@@ -88,7 +93,11 @@ impl TerminalPrinter {
                         Clear(ClearType::FromCursorDown)
                     )?;
                 }
-                _ => writeln!(&mut stderr, "{}", "[unimplemented]".dimmed())?,
+                _ => {
+                    if self.args.verbose > 0 {
+                        writeln!(&mut stderr, "{}", "[unimplemented]".dimmed())?
+                    }
+                }
             }
         }
 

@@ -21,6 +21,10 @@ pub struct Args {
     #[clap(short, long, multiple_occurrences(true))]
     pub input: Vec<PathBuf>,
 
+    /// Increase the verbosity
+    #[clap(short, long, parse(from_occurrences))]
+    pub verbose: usize,
+
     /// Load config from a TOML file
     #[clap(short, long)]
     pub config: Option<PathBuf>,
