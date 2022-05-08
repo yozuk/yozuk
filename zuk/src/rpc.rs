@@ -51,7 +51,7 @@ where
     Ok(())
 }
 
-#[derive(Deserialize)]
+#[derive(Default, Serialize, Deserialize)]
 pub struct GetCommandsRequest {
     #[serde(default)]
     pub input: String,
@@ -67,19 +67,19 @@ impl From<GetCommandsRequest> for Vec<Token> {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct GetCommandsResponse {
     pub commands: Vec<CommandArgs>,
 }
 
-#[derive(Deserialize)]
+#[derive(Default, Serialize, Deserialize)]
 pub struct RunCommandsRequest {
     pub commands: Vec<CommandArgs>,
     #[serde(default)]
     pub i18n: I18n,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(tag = "result", content = "outputs")]
 pub enum RunCommandsResponse {
     #[serde(rename = "ok")]
@@ -94,5 +94,51 @@ impl From<std::result::Result<Vec<Output>, Vec<Output>>> for RunCommandsResponse
             Ok(outputs) => Self::Ok(outputs),
             Err(outputs) => Self::Err(outputs),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::{Number, Value};
+    use std::io::Cursor;
+
+    #[test]
+    fn test_rpc() {
+        let mut input = Vec::<u8>::new();
+
+        let command = GetCommandsRequest {
+            input: "1 + 1".into(),
+            ..Default::default()
+        };
+        let req = json_rpc2::Request::new(
+            Some(Value::Number(Number::from_f64(1.0).unwrap())),
+            "get_commands".into(),
+            Some(serde_json::to_value(command).unwrap()),
+        );
+        input.append(&mut serde_json::to_vec(&req).unwrap());
+
+        let command = RunCommandsRequest {
+            commands: vec![CommandArgs::new().add_args(["yozuk-skill-calc", "1+1"])],
+            ..Default::default()
+        };
+        let req = json_rpc2::Request::new(
+            Some(Value::Number(Number::from_f64(2.0).unwrap())),
+            "run_commands".into(),
+            Some(serde_json::to_value(command).unwrap()),
+        );
+        input.append(&mut serde_json::to_vec(&req).unwrap());
+
+        let zuk = Yozuk::builder().build();
+        let mut input = Cursor::new(input);
+        let mut output = Vec::<u8>::new();
+        start_server(zuk, &mut input, &mut output).unwrap();
+        assert_eq!(
+            String::from_utf8(output).unwrap(),
+            format!("{}\n{}\n",
+                "{\"jsonrpc\":\"2.0\",\"id\":1.0,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"1+1\"],\"data\":[]}]}}",
+                "{\"jsonrpc\":\"2.0\",\"id\":2.0,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"2\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"mode\":\"primary\",\"title\":\"Calculator\"}],\"result\":\"ok\"}}"
+            )
+        );
     }
 }
