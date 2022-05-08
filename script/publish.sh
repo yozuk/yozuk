@@ -17,7 +17,7 @@ publishCrate() {
         
         cargo fmt --check
         cargo clippy --all-features
-        cargo check --all-features
+        cargo nextest --all-features
         git commit -a -m "publish $2 $NEXT_TAG"
         for i in {1..3}; do cargo publish -p $2 && break || sleep 10; done
     else

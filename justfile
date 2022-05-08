@@ -9,5 +9,5 @@ alias c := check
 check:
     cargo fmt --check
     cargo clippy --all-features
-    cargo test --all-features
-    cargo test -p yozuk --no-default-features --features default-skills
+    cargo nextest run --all-features
+    cargo nextest run -p yozuk --no-default-features --features default-skills
