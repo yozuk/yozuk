@@ -13,6 +13,13 @@ Unlike normal command-line tools, it uses a simple NLP approach to infer the mea
 
 <img alt="Yozuk CLI demo animation" src="https://github.com/yozuk/yozuk/blob/main/images/zuk.gif?raw=true" width="520" />
 
+### Advantages
+
+- **Transparent:** Fully open-source, no external dependency, no internet access and no tracking. Your data is completely under your control.
+
+- **Portable:** Not to mention WebAssembly support, Yozuk runs natively on Windows, macOS, Linux, Android and iOS.
+
+- **Flexible:** Yozuk’s simple text-based interface is lightweight and easy to extend. You can stay in touch with it from any device.
 
 ## Getting Started
 
