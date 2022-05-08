@@ -201,15 +201,16 @@ fn generate_wordiness_greetings(
     tokens: &[WeightedToken],
 ) -> impl Iterator<Item = Vec<WeightedToken>> {
     let original = tokens.iter().cloned().collect::<VecDeque<_>>();
-    let mut greetings = Vec::new();
+    let weight: f64 = tokens.iter().map(|token| token.weight).sum::<f64>() / tokens.len() as f64;
 
+    let mut greetings = Vec::new();
     let mut data = original.clone();
-    data.push_front(tk!("Yozuk,").into());
+    data.push_front(WeightedToken::new(tk!("Yozuk,"), weight));
     greetings.push(data.into_iter().collect::<Vec<_>>());
 
     let mut data = original;
-    data.push_front(tk!("Yozuk,").into());
-    data.push_front(tk!("Hi").into());
+    data.push_front(WeightedToken::new(tk!("Yozuk,"), weight));
+    data.push_front(WeightedToken::new(tk!("Hi"), weight));
     greetings.push(data.into_iter().collect::<Vec<_>>());
 
     greetings.into_iter()
