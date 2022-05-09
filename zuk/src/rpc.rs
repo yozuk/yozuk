@@ -118,6 +118,17 @@ mod tests {
         );
         input.append(&mut serde_json::to_vec(&req).unwrap());
 
+        let command = GetCommandsRequest {
+            input_tokens: Some(tk!(["2", "*", "3"])),
+            ..Default::default()
+        };
+        let req = json_rpc2::Request::new(
+            Some(Value::Number(Number::from_f64(2.0).unwrap())),
+            "get_commands".into(),
+            Some(serde_json::to_value(command).unwrap()),
+        );
+        input.append(&mut serde_json::to_vec(&req).unwrap());
+
         let command = RunCommandsRequest {
             commands: vec![CommandArgs::new().add_args(["yozuk-skill-calc", "1+1"])],
             ..Default::default()
@@ -135,8 +146,9 @@ mod tests {
         start_server(zuk, &mut input, &mut output).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("{}\n{}\n",
+            format!("{}\n{}\n{}\n",
                 "{\"jsonrpc\":\"2.0\",\"id\":1.0,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"1+1\"],\"data\":[]}]}}",
+                "{\"jsonrpc\":\"2.0\",\"id\":2.0,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"2*3\"],\"data\":[]}]}}",
                 "{\"jsonrpc\":\"2.0\",\"id\":2.0,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"2\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"mode\":\"primary\",\"title\":\"Calculator\"}],\"result\":\"ok\"}}"
             )
         );
