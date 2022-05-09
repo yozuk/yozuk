@@ -2,30 +2,58 @@
 
 use anyhow::Result;
 use json_rpc2::{Request, Response, Server, Service};
+use mediatype::media_type;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::{de::IoRead, Deserializer};
-use std::io::{Read, Write};
+use std::fs::File;
+use std::io::{Cursor, Read, Write};
+use std::path::PathBuf;
+use std::sync::Mutex;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
-struct ServiceHandler;
+struct ServiceHandler {
+    streams: Mutex<Vec<InputStream>>,
+}
 
 impl Service for ServiceHandler {
     type Data = Yozuk;
     fn handle(&self, request: &Request, zuk: &Self::Data) -> json_rpc2::Result<Option<Response>> {
         let response = match request.method() {
+            "set_streams" => {
+                let mut streams = self.streams.lock().unwrap();
+                let req: Vec<Stream> = request.deserialize()?;
+                *streams = req
+                    .into_iter()
+                    .filter_map(|data| match data {
+                        Stream::Base64 { base64 } => base64::decode(base64).ok().map(|data| {
+                            InputStream::new(
+                                Cursor::new(data),
+                                media_type!(APPLICATION / OCTET_STREAM),
+                            )
+                        }),
+                        Stream::File { path } => File::open(path).ok().map(|file| {
+                            InputStream::new(file, media_type!(APPLICATION / OCTET_STREAM))
+                        }),
+                    })
+                    .collect();
+                Some((request, serde_json::Value::Null).into())
+            }
             "get_commands" => {
+                let streams = self.streams.lock().unwrap();
                 let req: GetCommandsRequest = request.deserialize()?;
                 let tokens: Vec<Token> = req.into();
-                let commands = zuk.get_commands(&tokens, &[]);
+                let commands = zuk.get_commands(&tokens, &streams);
                 let res = GetCommandsResponse { commands };
                 Some((request, serde_json::to_value(res).unwrap()).into())
             }
             "run_commands" => {
+                let mut streams = self.streams.lock().unwrap();
                 let req: RunCommandsRequest = request.deserialize()?;
                 let result: RunCommandsResponse = zuk
-                    .run_commands(req.commands, &mut [], Some(&req.i18n))
+                    .run_commands(req.commands, &mut streams, Some(&req.i18n))
                     .into();
+                streams.clear();
                 Some((request, serde_json::to_value(result).unwrap()).into())
             }
             _ => None,
@@ -39,7 +67,9 @@ where
     R: Read,
     W: Write,
 {
-    let service: Box<dyn Service<Data = Yozuk>> = Box::new(ServiceHandler);
+    let service: Box<dyn Service<Data = Yozuk>> = Box::new(ServiceHandler {
+        streams: Mutex::new(Vec::new()),
+    });
     let server = Server::new(vec![&service]);
     let reader = IoRead::new(reader);
     let stream = Deserializer::new(reader).into_iter::<Request>();
@@ -49,6 +79,13 @@ where
         writeln!(&mut writer)?;
     }
     Ok(())
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(untagged)]
+pub enum Stream {
+    Base64 { base64: String },
+    File { path: PathBuf },
 }
 
 #[derive(Default, Serialize, Deserialize)]
@@ -100,8 +137,9 @@ impl From<std::result::Result<Vec<Output>, Vec<Output>>> for RunCommandsResponse
 #[cfg(test)]
 mod tests {
     use super::*;
-    use serde_json::{Number, Value};
+    use serde_json::json;
     use std::io::Cursor;
+    use tempfile::NamedTempFile;
 
     #[test]
     fn test_rpc() {
@@ -112,7 +150,7 @@ mod tests {
             ..Default::default()
         };
         let req = json_rpc2::Request::new(
-            Some(Value::Number(Number::from_f64(1.0).unwrap())),
+            Some(json!(1u32)),
             "get_commands".into(),
             Some(serde_json::to_value(command).unwrap()),
         );
@@ -123,7 +161,7 @@ mod tests {
             ..Default::default()
         };
         let req = json_rpc2::Request::new(
-            Some(Value::Number(Number::from_f64(2.0).unwrap())),
+            Some(json!(2u32)),
             "get_commands".into(),
             Some(serde_json::to_value(command).unwrap()),
         );
@@ -134,7 +172,58 @@ mod tests {
             ..Default::default()
         };
         let req = json_rpc2::Request::new(
-            Some(Value::Number(Number::from_f64(2.0).unwrap())),
+            Some(json!(3u32)),
+            "run_commands".into(),
+            Some(serde_json::to_value(command).unwrap()),
+        );
+        input.append(&mut serde_json::to_vec(&req).unwrap());
+
+        let streams = vec![Stream::Base64 {
+            base64: "SGVsbG8gd29ybGQ=".into(),
+        }];
+        let req = json_rpc2::Request::new(
+            Some(json!(4u32)),
+            "set_streams".into(),
+            Some(serde_json::to_value(streams).unwrap()),
+        );
+        input.append(&mut serde_json::to_vec(&req).unwrap());
+
+        let command = RunCommandsRequest {
+            commands: vec![CommandArgs::new().add_args([
+                "yozuk-skill-digest",
+                "--algorithm",
+                "sha1",
+            ])],
+            ..Default::default()
+        };
+        let req = json_rpc2::Request::new(
+            Some(json!(5u32)),
+            "run_commands".into(),
+            Some(serde_json::to_value(command).unwrap()),
+        );
+        input.append(&mut serde_json::to_vec(&req).unwrap());
+
+        let mut file = NamedTempFile::new().unwrap();
+        writeln!(file, "Hello World?").unwrap();
+        let path = file.into_temp_path().keep().unwrap();
+        let streams = vec![Stream::File { path }];
+        let req = json_rpc2::Request::new(
+            Some(json!(6u32)),
+            "set_streams".into(),
+            Some(serde_json::to_value(streams).unwrap()),
+        );
+        input.append(&mut serde_json::to_vec(&req).unwrap());
+
+        let command = RunCommandsRequest {
+            commands: vec![CommandArgs::new().add_args([
+                "yozuk-skill-digest",
+                "--algorithm",
+                "sha1",
+            ])],
+            ..Default::default()
+        };
+        let req = json_rpc2::Request::new(
+            Some(json!(7u32)),
             "run_commands".into(),
             Some(serde_json::to_value(command).unwrap()),
         );
@@ -146,10 +235,14 @@ mod tests {
         start_server(zuk, &mut input, &mut output).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("{}\n{}\n{}\n",
-                "{\"jsonrpc\":\"2.0\",\"id\":1.0,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"1+1\"],\"data\":[]}]}}",
-                "{\"jsonrpc\":\"2.0\",\"id\":2.0,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"2*3\"],\"data\":[]}]}}",
-                "{\"jsonrpc\":\"2.0\",\"id\":2.0,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"2\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"mode\":\"primary\",\"title\":\"Calculator\"}],\"result\":\"ok\"}}"
+            format!("{}\n{}\n{}\n{}\n{}\n{}\n{}\n",
+                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"1+1\"],\"data\":[]}]}}",
+                "{\"jsonrpc\":\"2.0\",\"id\":2,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"2*3\"],\"data\":[]}]}}",
+                "{\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"2\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"mode\":\"primary\",\"title\":\"Calculator\"}],\"result\":\"ok\"}}",
+                "{\"jsonrpc\":\"2.0\",\"id\":4,\"result\":null}",
+                "{\"jsonrpc\":\"2.0\",\"id\":5,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"7b502c3a1f48c8609ae212cdfb639dee39673f5e\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"mode\":\"primary\",\"title\":\"Digest\"}],\"result\":\"ok\"}}",
+                "{\"jsonrpc\":\"2.0\",\"id\":6,\"result\":null}",
+                "{\"jsonrpc\":\"2.0\",\"id\":7,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"357e04830e05f3c37ca86e491dce8acfa447efeb\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"mode\":\"primary\",\"title\":\"Digest\"}],\"result\":\"ok\"}}"
             )
         );
     }
