@@ -950,9 +950,9 @@ dependencies = [
 
 [[package]]
 name = "mediatype"
-version = "0.19.2"
+version = "0.19.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "118bff2d3cb72e2b27904255acf296d84472fe9e3da3d1677aed48bfae10af4a"
+checksum = "763c573229266ff7ba98f919ad1e2de0804836772a48c2d55e3c32eb246114f9"
 dependencies = [
  "serde",
 ]
