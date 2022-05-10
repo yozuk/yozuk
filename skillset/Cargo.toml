@@ -58,7 +58,7 @@ thiserror = "1.0.30"
 uuid = { version = "1.0.0", features = ["v4"], optional = true }
 yozuk-helper-english = "0.1.0"
 yozuk-helper-preprocessor = "0.14.1"
-yozuk-sdk = "0.14.1"
+yozuk-sdk = "0.14.2"
 
 [features]
 default = []

@@ -33,7 +33,7 @@ shell-words = "1.1.0"
 sys-locale = "0.2.0"
 toml = "0.5.8"
 yozuk = "0.14.1"
-yozuk-sdk = "0.14.1"
+yozuk-sdk = "0.14.2"
 
 [features]
 default = ["rpc"]
