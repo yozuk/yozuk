@@ -46,6 +46,7 @@ default-skills = [
   "yozuk-skill-unit",
   "yozuk-skill-geo",
   "yozuk-skill-password",
+  "yozuk-skill-urlencode",
 ]
 yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]
 yozuk-skill-calc = ["yozuk-core-skillset/yozuk-skill-calc"]
@@ -65,6 +66,7 @@ yozuk-skill-unit = ["yozuk-core-skillset/yozuk-skill-unit"]
 yozuk-skill-uuid = ["yozuk-core-skillset/yozuk-skill-uuid"]
 yozuk-skill-version = ["yozuk-core-skillset/yozuk-skill-version"]
 yozuk-skill-bitcoin = ["yozuk-core-skillset/yozuk-skill-bitcoin"]
+yozuk-skill-urlencode = ["yozuk-core-skillset/yozuk-skill-urlencode"]
 
 [dev-dependencies]
 lazy_static = "1.4.0"

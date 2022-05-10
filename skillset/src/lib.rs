@@ -54,4 +54,5 @@ skills!(
     [geo, "yozuk-skill-geo"],
     [password, "yozuk-skill-password"],
     [bitcoin, "yozuk-skill-bitcoin"],
+    [urlencode, "yozuk-skill-urlencode"],
 );
