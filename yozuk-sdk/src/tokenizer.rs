@@ -1,9 +1,14 @@
+use super::tk;
+use super::token::*;
 use pest::{iterators::Pair, Parser};
-use yozuk_sdk::prelude::*;
 
-#[derive(pest_derive::Parser)]
-#[grammar = "token.pest"]
-struct TokenParser;
+mod parser {
+    #[derive(pest_derive::Parser)]
+    #[grammar = "token.pest"]
+    pub struct TokenParser;
+}
+
+use parser::*;
 
 #[derive(Default)]
 pub struct Tokenizer {}

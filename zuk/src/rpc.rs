@@ -9,7 +9,7 @@ use std::fs::File;
 use std::io::{Cursor, Read, Write};
 use std::path::PathBuf;
 use std::sync::Mutex;
-use yozuk::{Tokenizer, Yozuk};
+use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
 struct ServiceHandler {

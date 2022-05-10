@@ -17,7 +17,7 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 use sys_locale::get_locale;
-use yozuk::{Tokenizer, Yozuk};
+use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
 mod args;

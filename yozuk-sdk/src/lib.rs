@@ -15,5 +15,6 @@ pub mod prelude;
 pub mod skill;
 pub mod stream;
 pub mod token;
+pub mod tokenizer;
 
 mod serde_bytes;

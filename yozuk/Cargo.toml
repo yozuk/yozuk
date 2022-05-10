@@ -19,8 +19,6 @@ const-sha1 = "0.2.0"
 crfs = "0.2.0"
 distance = "0.4.0"
 mediatype = "0.19.3"
-pest = "2.1.3"
-pest_derive = "2.1.0"
 rayon = { version = "1.5.1", optional = true }
 yozuk-core-skillset = "0.14.2"
 yozuk-helper-english = "0.1.0"

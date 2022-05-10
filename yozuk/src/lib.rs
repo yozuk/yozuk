@@ -15,13 +15,11 @@ compile_error!("wasm target does not support rayon");
 mod model;
 mod skill;
 mod tagger;
-mod tokenizer;
 
 use tagger::*;
 
 pub use model::*;
 pub use skill::*;
-pub use tokenizer::*;
 
 const MODEL_DATA: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/model.data"));
 
