@@ -25,7 +25,7 @@ rayon = { version = "1.5.1", optional = true }
 yozuk-core-skillset = "0.14.1"
 yozuk-helper-english = "0.1.0"
 yozuk-sdk = "0.14.2"
-yozuk-model = "0.14.1"
+yozuk-model = "0.14.2"
 
 [features]
 default = ["default-skills", "rayon"]
@@ -75,4 +75,4 @@ lazy_static = "1.4.0"
 anyhow = "1.0.56"
 yozuk-core-skillset = "0.14.1"
 yozuk-sdk = "0.14.2"
-yozuk-model = { version = "0.14.1", features = ["modelgen"] }
+yozuk-model = { version = "0.14.2", features = ["modelgen"] }
