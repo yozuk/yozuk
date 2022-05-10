@@ -34,4 +34,4 @@ jobs:
     - name: Run test
       run: cargo nextest run --all-features
     - name: Run test without rayon
-      run: cargo nextest run -p yozuk --no-default-features --features default-skills
+      run: cargo nextest run -p yozuk

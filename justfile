@@ -10,4 +10,3 @@ check:
     cargo fmt --check
     cargo clippy --all-features
     cargo nextest run --all-features
-    cargo nextest run -p yozuk --no-default-features --features default-skills

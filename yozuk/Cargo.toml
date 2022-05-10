@@ -26,7 +26,7 @@ yozuk-sdk = "0.14.2"
 yozuk-model = "0.14.2"
 
 [features]
-default = ["default-skills", "rayon"]
+default = ["default-skills"]
 rayon = ["dep:rayon", "yozuk-model/rayon"]
 default-skills = [
   "yozuk-skill-mediatype",
