@@ -3,16 +3,25 @@ use yozuk_sdk::prelude::*;
 
 #[derive(pest_derive::Parser)]
 #[grammar = "token.pest"]
-pub struct TokenParser;
+struct TokenParser;
 
-pub fn tokenize(input: &str) -> Vec<Token> {
-    if let Ok(args) = TokenParser::parse(Rule::args, input) {
-        args.filter_map(parse_arg).collect()
-    } else {
-        input
-            .split_whitespace()
-            .map(|s| tk!(s.to_string()))
-            .collect()
+#[derive(Default)]
+pub struct Tokenizer {}
+
+impl Tokenizer {
+    pub fn new() -> Self {
+        Default::default()
+    }
+
+    pub fn tokenize(&self, input: &str) -> Vec<Token> {
+        if let Ok(args) = TokenParser::parse(Rule::args, input) {
+            args.filter_map(parse_arg).collect()
+        } else {
+            input
+                .split_whitespace()
+                .map(|s| tk!(s.to_string()))
+                .collect()
+        }
     }
 }
 
@@ -42,19 +51,20 @@ mod tests {
 
     #[test]
     fn test_tokenize() {
+        let tokenizer = Tokenizer::new();
         assert_eq!(
-            tokenize(" What's   the time "),
+            tokenizer.tokenize(" What's   the time "),
             tk!(["What's", "the", "time"])
         );
         assert_eq!(
-            tokenize(r#" "Hello world" to md5 "#),
+            tokenizer.tokenize(r#" "Hello world" to md5 "#),
             tk!(["Hello world", "to", "md5"])
         );
         assert_eq!(
-            tokenize(r#" (1 + 1) * 2 "#),
+            tokenizer.tokenize(r#" (1 + 1) * 2 "#),
             tk!(["(1", "+", "1)", "*", "2"])
         );
-        assert_eq!(tokenize(r#" " \" \" " "#), tk!([" \" \" "]));
-        assert_eq!(tokenize(" #ffffff "), tk!(["#ffffff"]));
+        assert_eq!(tokenizer.tokenize(r#" " \" \" " "#), tk!([" \" \" "]));
+        assert_eq!(tokenizer.tokenize(" #ffffff "), tk!(["#ffffff"]));
     }
 }

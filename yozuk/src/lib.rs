@@ -21,6 +21,7 @@ use tagger::*;
 
 pub use model::*;
 pub use skill::*;
+pub use tokenizer::*;
 
 const MODEL_DATA: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/model.data"));
 
@@ -36,10 +37,6 @@ pub struct Yozuk {
 impl Yozuk {
     pub fn builder() -> YozukBuilder {
         Default::default()
-    }
-
-    pub fn parse_tokens(text: &str) -> Vec<Token> {
-        tokenizer::tokenize(text)
     }
 
     pub fn get_commands(&self, tokens: &[Token], streams: &[InputStream]) -> Vec<CommandArgs> {

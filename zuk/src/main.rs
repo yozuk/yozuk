@@ -17,7 +17,7 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 use sys_locale::get_locale;
-use yozuk::Yozuk;
+use yozuk::{Tokenizer, Yozuk};
 use yozuk_sdk::prelude::*;
 
 mod args;
@@ -163,7 +163,7 @@ impl App {
                 Ok(line) => {
                     rl.add_history_entry(line.as_str());
 
-                    let tokens = Yozuk::parse_tokens(&line);
+                    let tokens = Tokenizer::new().tokenize(&line);
                     if !tokens.is_empty() {
                         self.exec_command(&tokens, &mut [])?;
                     }

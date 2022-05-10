@@ -9,7 +9,7 @@ use std::fs::File;
 use std::io::{Cursor, Read, Write};
 use std::path::PathBuf;
 use std::sync::Mutex;
-use yozuk::Yozuk;
+use yozuk::{Tokenizer, Yozuk};
 use yozuk_sdk::prelude::*;
 
 struct ServiceHandler {
@@ -100,7 +100,7 @@ impl From<GetCommandsRequest> for Vec<Token> {
     fn from(mut req: GetCommandsRequest) -> Self {
         req.input_tokens
             .take()
-            .unwrap_or_else(|| Yozuk::parse_tokens(&req.input))
+            .unwrap_or_else(|| Tokenizer::new().tokenize(&req.input))
     }
 }
 
