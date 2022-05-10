@@ -2397,7 +2397,6 @@ dependencies = [
  "base64",
  "bincode",
  "bytes",
- "itertools",
  "mediatype",
  "nanoid",
  "pest",
