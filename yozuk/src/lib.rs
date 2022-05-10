@@ -9,6 +9,9 @@ use yozuk_sdk::prelude::*;
 #[cfg(feature = "rayon")]
 use rayon::prelude::*;
 
+#[cfg(all(feature = "rayon", target_arch = "wasm32"))]
+compile_error!("wasm target does not support rayon");
+
 mod model;
 mod skill;
 mod tagger;
