@@ -40,7 +40,11 @@ jobs:
     - name: Install toolchain
       run: rustup target add ${{ matrix.toolchain }}
     - name: Build
+      run: cargo build -p yozuk --target=${{ matrix.toolchain }} --no-default-features --features default-skills
+      if: ${{ matrix.toolchain == 'wasm32-unknown-unknown' }}
+    - name: Build
       run: cargo build -p yozuk --target=${{ matrix.toolchain }}
+      if: ${{ matrix.toolchain == 'armv7-linux-androideabi' }}
       env:
         AR_armv7-linux-androideabi: llvm-ar
 
