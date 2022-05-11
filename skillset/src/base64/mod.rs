@@ -15,13 +15,11 @@ use yozuk_sdk::prelude::*;
 use yozuk_sdk::Bytes;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"VLqriB4RpIwzXaG8b_pXa",
+    model_id: b"u4q_8wwjC8oi7rZFUs0U4",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
-            .add_labeler(Base64Labeler)
             .add_corpus(Base64Corpus)
-            .add_corpus(Base64Corpus2)
             .add_translator(Base64Translator)
             .set_command(Base64Command)
             .build()
@@ -37,17 +35,6 @@ fn is_like_base64(data: &[u8]) -> bool {
         return score >= MINIMUM_ENTROPY_SCORE;
     }
     false
-}
-
-fn label_base64(token: &Token) -> impl Iterator<Item = Feature> {
-    Some(token)
-        .filter(|token| is_like_base64(&token.data))
-        .map(|_| Feature {
-            name: "encoding:base64".into(),
-            non_entity: true,
-            ..Default::default()
-        })
-        .into_iter()
 }
 
 #[derive(Debug)]
@@ -69,43 +56,13 @@ impl Corpus for Base64Corpus {
                     "Base64"; "command:base64"
                 ])
             })
-            .chain(
-                iproduct!(inputs, ["of", "of", "of", "of"]).map(|(data, suffix)| {
-                    tk!([
-                        "Base64"; "command:base64",
-                        suffix,
-                        data; "input:data"
-                    ])
-                }),
-            )
-            .collect()
-    }
-}
-
-#[derive(Debug)]
-pub struct Base64Corpus2;
-
-impl Corpus for Base64Corpus2 {
-    fn training_data(&self) -> Vec<Vec<Token>> {
-        vec![
-            tk!(["Base64"; "command:base64"]),
-            tk!(["SGVsbG8gV29ybGQh"; "input:base64"]),
-        ]
-    }
-
-    fn weight(&self) -> f64 {
-        10.0
-    }
-}
-
-#[derive(Debug)]
-pub struct Base64Labeler;
-
-impl Labeler for Base64Labeler {
-    fn label_features(&self, input: &[Token]) -> Vec<Vec<Feature>> {
-        input
-            .iter()
-            .map(|token| label_base64(token).collect())
+            .chain(iproduct!(inputs, ["of"]).map(|(data, suffix)| {
+                tk!([
+                    "Base64"; "command:base64",
+                    suffix,
+                    data; "input:data"
+                ])
+            }))
             .collect()
     }
 }
@@ -134,21 +91,9 @@ impl Translator for Base64Translator {
             }
         }
 
-        let inputs = args
-            .iter()
-            .filter(|arg| arg.tag == "input:base64")
-            .collect::<Vec<_>>();
-        if inputs.len() > 1 {
-            return None;
-        }
-
-        let inputs = inputs
-            .into_iter()
-            .filter(|arg| is_like_base64(&arg.data))
-            .map(|arg| arg.data.clone())
-            .collect::<Vec<_>>();
-
-        if inputs.len() == 1
+        let inputs = args.iter().map(|arg| arg.data.clone()).collect::<Vec<_>>();
+        let is_base64 = inputs.len() == 1 && inputs.iter().all(|arg| is_like_base64(arg));
+        if is_base64
             || (!streams.is_empty()
                 && streams
                     .iter()
@@ -225,7 +170,7 @@ impl Command for Base64Command {
     }
 
     fn priority(&self) -> i32 {
-        -100
+        -120
     }
 }
 
