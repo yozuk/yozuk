@@ -2,6 +2,7 @@ use crate::Args;
 use anyhow::Result;
 use crossterm::tty::IsTty;
 use hexyl::{BorderStyle, Printer};
+use mediatype::media_type;
 use owo_colors::OwoColorize;
 use std::io::BufRead;
 use std::io::{self, Write};
@@ -44,9 +45,11 @@ impl<'a> TerminalPrinter<'a> {
                     }
                 }
                 Block::Data(data) => {
+                    let media_type = &data.media_type;
                     let data = data.data.data().unwrap();
-                    let printable = str::from_utf8(data).is_ok();
-                    if printable {
+                    if *media_type != media_type!(APPLICATION / OCTET_STREAM)
+                        && str::from_utf8(data).is_ok()
+                    {
                         stdout.write_all(data)?;
                         writeln!(&mut stdout)?;
                     } else {
