@@ -1,11 +1,11 @@
 use crate::Args;
 use anyhow::Result;
-use content_inspector::ContentType;
 use crossterm::tty::IsTty;
 use hexyl::{BorderStyle, Printer};
 use owo_colors::OwoColorize;
 use std::io::BufRead;
 use std::io::{self, Write};
+use std::str;
 use yozuk_sdk::prelude::*;
 
 pub struct TerminalPrinter<'a> {
@@ -45,7 +45,7 @@ impl<'a> TerminalPrinter<'a> {
                 }
                 Block::Data(data) => {
                     let data = data.data.data().unwrap();
-                    let printable = content_inspector::inspect(data) == ContentType::UTF_8;
+                    let printable = str::from_utf8(data).is_ok();
                     if printable {
                         stdout.write_all(data)?;
                         writeln!(&mut stdout)?;
