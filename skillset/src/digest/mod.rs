@@ -118,9 +118,9 @@ impl Command for DigestCommand {
             if matched.is_empty() {
                 return Err(Output::new()
                     .set_title("Digest")
-                    .add_block(Block::Comment(
+                    .add_block(
                         block::Comment::new().set_text(format!("Unsupprted algorithm: {}", name)),
-                    ))
+                    )
                     .into());
             }
 
@@ -143,9 +143,7 @@ impl Command for DigestCommand {
 
         Err(Output::new()
             .set_title("Digest")
-            .add_block(Block::Comment(
-                block::Comment::new().set_text("No valid input source provided"),
-            ))
+            .add_block(block::Comment::new().set_text("No valid input source provided"))
             .into())
     }
 }
@@ -171,9 +169,11 @@ fn compute_hash(
                     .collect::<Vec<_>>()
             };
 
-            return Some(Output::new().set_title("Digest").add_block(Block::Data(
-                block::Data::new().set_text_data(result.join("\n")),
-            )));
+            return Some(
+                Output::new()
+                    .set_title("Digest")
+                    .add_block(block::Data::new().set_text_data(result.join("\n"))),
+            );
         }
     }
     None

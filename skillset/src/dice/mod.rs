@@ -227,14 +227,14 @@ impl Command for DiceCommand {
         let rule = DiceParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule, &self.0)
             .map(|result| {
-                Output::new().set_title("Dice").add_block(Block::Data(
-                    block::Data::new().set_text_data(result.to_string()),
-                ))
+                Output::new()
+                    .set_title("Dice")
+                    .add_block(block::Data::new().set_text_data(result.to_string()))
             })
             .map_err(|err| {
-                Output::new().set_title("Dice").add_block(Block::Data(
-                    block::Data::new().set_text_data(format!("{}", err)),
-                ))
+                Output::new()
+                    .set_title("Dice")
+                    .add_block(block::Data::new().set_text_data(format!("{}", err)))
             })?)
     }
 }

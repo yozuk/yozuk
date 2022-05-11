@@ -22,6 +22,12 @@ pub struct Comment {
     pub media_type: MediaTypeBuf,
 }
 
+impl From<Comment> for Block {
+    fn from(block: Comment) -> Self {
+        Self::Comment(block)
+    }
+}
+
 impl Comment {
     pub fn new() -> Self {
         Default::default()
@@ -67,6 +73,12 @@ pub struct Data {
     pub data: Blob,
     pub file_name: String,
     pub media_type: MediaTypeBuf,
+}
+
+impl From<Data> for Block {
+    fn from(block: Data) -> Self {
+        Self::Data(block)
+    }
 }
 
 impl Data {
@@ -135,6 +147,12 @@ pub enum Preview {
     Color(ColorPreview),
 }
 
+impl From<Preview> for Block {
+    fn from(block: Preview) -> Self {
+        Self::Preview(block)
+    }
+}
+
 #[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ColorPreview {
     pub red: u8,
@@ -146,6 +164,12 @@ pub struct ColorPreview {
 #[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CommandList {
     pub commands: Vec<Command>,
+}
+
+impl From<CommandList> for Block {
+    fn from(block: CommandList) -> Self {
+        Self::CommandList(block)
+    }
 }
 
 impl CommandList {
@@ -203,6 +227,12 @@ impl Command {
 pub struct Spoiler {
     pub title: String,
     pub data: SecUtf8,
+}
+
+impl From<Spoiler> for Block {
+    fn from(block: Spoiler) -> Self {
+        Self::Spoiler(block)
+    }
 }
 
 impl Spoiler {

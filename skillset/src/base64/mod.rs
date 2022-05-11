@@ -216,9 +216,10 @@ impl Command for Base64Command {
                 Ok(Output::new().set_title("Base64 Decoder").add_blocks(blocks))
             }
             Mode::Encode => Ok(Output::new().set_title("Base64 Encoder").add_blocks(
-                args.data.into_iter().chain(streams).map(|data| {
-                    Block::Data(block::Data::new().set_text_data(base64::encode(data)))
-                }),
+                args.data
+                    .into_iter()
+                    .chain(streams)
+                    .map(|data| block::Data::new().set_text_data(base64::encode(data))),
             )),
         }
     }

@@ -103,14 +103,12 @@ impl Command for SmalltalkCommand {
         if args.life_universe_everything {
             Ok(Output::new()
                 .set_title("Deep Thought")
-                .add_block(Block::Comment(block::Comment::new().set_text(
+                .add_block(block::Comment::new().set_text(
                 "Computing the answer to your question will take a little while. Please ask me \
                  again seven and a half million years later.",
-            ))))
-        } else {
-            Ok(Output::new().add_block(Block::Comment(
-                block::Comment::new().set_text("Hi. I'm Yozuk."),
             )))
+        } else {
+            Ok(Output::new().add_block(block::Comment::new().set_text("Hi. I'm Yozuk.")))
         }
     }
 

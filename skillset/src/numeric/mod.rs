@@ -108,11 +108,7 @@ impl Command for NumericCommand {
                     .filter(|&r| r != radix)
                     .map(|radix| radix.format(num))
                     .collect::<Vec<_>>();
-                Block::Data(block::Data::new().set_text_data(format!(
-                    "{} =\n{}",
-                    original,
-                    redixes.join("\n")
-                )))
+                block::Data::new().set_text_data(format!("{} =\n{}", original, redixes.join("\n")))
             });
         Ok(Output::new()
             .add_blocks(blocks)

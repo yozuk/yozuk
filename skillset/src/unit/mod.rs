@@ -142,11 +142,11 @@ impl Command for UnitCommand {
             .collect::<Vec<_>>();
         Ok(Output::new()
             .set_title("Unit Converter")
-            .add_block(Block::Data(block::Data::new().set_text_data(format!(
+            .add_block(block::Data::new().set_text_data(format!(
                 "{} =\n{}",
                 base_unit.to_string(),
                 converted.join("\n")
-            )))))
+            ))))
     }
 
     fn priority(&self) -> i32 {

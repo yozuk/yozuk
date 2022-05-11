@@ -51,12 +51,10 @@ impl Command for UrlEncodeCommand {
             .inputs
             .iter()
             .filter_map(|arg| urlencoding::decode(arg).ok())
-            .map(|data| Block::Data(block::Data::new().set_text_data(data)));
+            .map(|data| block::Data::new().set_text_data(data));
         Ok(Output::new()
             .set_title("URL Decoder")
-            .add_block(Block::Comment(
-                block::Comment::new().set_text("Decoding URL encoding"),
-            ))
+            .add_block(block::Comment::new().set_text("Decoding URL encoding"))
             .add_blocks(blocks))
     }
 

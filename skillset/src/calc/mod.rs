@@ -122,16 +122,14 @@ impl Command for CalcCommand {
         let rule = CalcParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule)
             .map(|result| {
-                Output::new().set_title("Calculator").add_block(Block::Data(
-                    block::Data::new().set_text_data(format!("{}", result)),
-                ))
+                Output::new()
+                    .set_title("Calculator")
+                    .add_block(block::Data::new().set_text_data(format!("{}", result)))
             })
             .map_err(|err| {
                 Output::new()
                     .set_title("Calculator")
-                    .add_block(Block::Comment(
-                        block::Comment::new().set_text(format!("{}", err)),
-                    ))
+                    .add_block(block::Comment::new().set_text(format!("{}", err)))
             })?)
     }
 }
@@ -149,7 +147,7 @@ mod tests {
         );
         let expected = Ok(Output::new()
             .set_title("Calculator")
-            .add_block(Block::Data(block::Data::new().set_text_data("-140742.75"))));
+            .add_block(block::Data::new().set_text_data("-140742.75")));
         assert_eq!(result, expected);
 
         let result = CalcCommand.run(
@@ -160,9 +158,7 @@ mod tests {
         let expected = Err(CommandError::Output(
             Output::new()
                 .set_title("Calculator")
-                .add_block(Block::Comment(
-                    block::Comment::new().set_text("Division by zero"),
-                )),
+                .add_block(block::Comment::new().set_text("Division by zero")),
         ));
         assert_eq!(result, expected);
     }

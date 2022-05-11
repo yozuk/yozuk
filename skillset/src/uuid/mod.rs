@@ -146,10 +146,10 @@ impl Command for UuidCommand {
         if args.n > MAX_COUNT {
             return Err(Output::new()
                 .set_title("UUID Generator")
-                .add_block(Block::Comment(block::Comment::new().set_text(format!(
+                .add_block(block::Comment::new().set_text(format!(
                     "Too large number of the requested UUIDs (Limit: {}).",
                     MAX_COUNT
-                ))))
+                )))
                 .into());
         }
         let list = iter::repeat_with(|| format!("{}", Uuid::new_v4()))

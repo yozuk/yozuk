@@ -70,7 +70,7 @@ impl Command for PasswordCommand {
 
         Ok(Output::new()
             .set_title("NanoID Generator")
-            .add_block(Block::Spoiler(block::Spoiler::new("Password", password))))
+            .add_block(block::Spoiler::new("Password", password)))
     }
 }
 

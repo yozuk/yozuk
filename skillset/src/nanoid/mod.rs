@@ -93,10 +93,10 @@ impl Command for NanoIdCommand {
         if args.n > MAX_COUNT {
             return Err(Output::new()
                 .set_title("NanoID Generator")
-                .add_block(Block::Comment(block::Comment::new().set_text(format!(
+                .add_block(block::Comment::new().set_text(format!(
                     "Too large number of the requested NanoIDs (Limit: {}).",
                     MAX_COUNT
-                ))))
+                )))
                 .into());
         }
         let list = iter::repeat_with(|| nanoid::nanoid!())

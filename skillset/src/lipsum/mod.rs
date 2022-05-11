@@ -172,22 +172,22 @@ impl Command for LipsumCommand {
         if args.n > MAX_COUNT {
             return Err(Output::new()
                 .set_title("Lorem ipsum")
-                .add_block(Block::Comment(block::Comment::new().set_text(format!(
+                .add_block(block::Comment::new().set_text(format!(
                     "Too large number of the requested words (Limit: {}).",
                     MAX_COUNT
-                ))))
+                )))
                 .into());
         }
 
         Ok(Output::new()
             .set_title("Lorem ipsum")
-            .add_block(Block::Data(block::Data::new().set_text_data(
-                if let Some(chain) = chain {
+            .add_block(
+                block::Data::new().set_text_data(if let Some(chain) = chain {
                     chain.generate(args.n)
                 } else {
                     lipsum(args.n)
-                },
-            ))))
+                }),
+            ))
     }
 }
 

@@ -151,9 +151,9 @@ impl Command for TimeCommand {
                 now.to_rfc3339_opts(SecondsFormat::Millis, false),
             ]
         };
-        Ok(Output::new().set_title("Time").add_block(Block::Data(
-            block::Data::new().set_text_data(time.join("\n")),
-        )))
+        Ok(Output::new()
+            .set_title("Time")
+            .add_block(block::Data::new().set_text_data(time.join("\n"))))
     }
 }
 

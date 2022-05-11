@@ -71,13 +71,11 @@ impl Command for VersionCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let _args = Args::try_parse_from(args.args)?;
-        Ok(Output::new()
-            .set_title("Version Info")
-            .add_block(Block::Data(
-                block::Data::new()
-                    .set_data(self.0.build_info.to_string())
-                    .set_media_type(media_type!(APPLICATION / JSON)),
-            )))
+        Ok(Output::new().set_title("Version Info").add_block(
+            block::Data::new()
+                .set_data(self.0.build_info.to_string())
+                .set_media_type(media_type!(APPLICATION / JSON)),
+        ))
     }
 }
 
