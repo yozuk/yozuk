@@ -2311,6 +2311,7 @@ version = "0.14.2"
 dependencies = [
  "anyhow",
  "base64",
+ "bech32",
  "bigdecimal",
  "bitcoin",
  "blake2",

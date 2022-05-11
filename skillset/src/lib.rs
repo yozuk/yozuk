@@ -55,4 +55,5 @@ skills!(
     [password, "yozuk-skill-password"],
     [bitcoin, "yozuk-skill-bitcoin"],
     [urlencode, "yozuk-skill-urlencode"],
+    [bech32, "yozuk-skill-bech32"],
 );
