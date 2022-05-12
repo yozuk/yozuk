@@ -69,6 +69,8 @@ impl App {
             return rpc::start_server(self.zuk, stdin, stdout);
         }
 
+        enter_secure_context()?;
+
         let mut streams = vec![];
         if !io::stdin().is_tty() {
             streams.push(InputStream::new(
@@ -240,4 +242,24 @@ impl Validator for YozukHelper {
     fn validate_while_typing(&self) -> bool {
         self.validator.validate_while_typing()
     }
+}
+
+#[cfg(target_os = "linux")]
+fn enter_secure_context() -> Result<()> {
+    extrasafe::SafetyContext::new()
+        .enable(extrasafe::builtins::danger_zone::Threads::nothing().allow_create())?
+        .enable(
+            extrasafe::builtins::SystemIO::nothing()
+                .allow_stdin()
+                .allow_stdout()
+                .allow_stderr()
+                .allow_ioctl(),
+        )?
+        .apply_to_all_threads()?;
+    Ok(())
+}
+
+#[cfg(not(target_os = "linux"))]
+fn enter_secure_context() -> Result<()> {
+    Ok(())
 }

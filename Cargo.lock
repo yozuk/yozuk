@@ -669,6 +669,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "extrasafe"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1db63fe9a905eac48ad58a52c7891625ce2390d579ed24eb74345cff9caab9cd"
+dependencies = [
+ "libc",
+ "libseccomp",
+ "syscalls",
+ "thiserror",
+]
+
+[[package]]
 name = "fake-simd"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -896,6 +908,23 @@ checksum = "e5c5c79307edb0b2700c2f940b303e53e62105f758d39c5e46973391828edd00"
 dependencies = [
  "cmake",
 ]
+
+[[package]]
+name = "libseccomp"
+version = "0.2.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "49bda1fbf25c42ac8942ff7df1eb6172a3bc36299e84be0dba8c888a7db68c80"
+dependencies = [
+ "libc",
+ "libseccomp-sys",
+ "pkg-config",
+]
+
+[[package]]
+name = "libseccomp-sys"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9a7cbbd4ad467251987c6e5b47d53b11a5a05add08f2447a9e2d70aef1e0d138"
 
 [[package]]
 name = "linux-raw-sys"
@@ -1177,6 +1206,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "paste"
+version = "1.0.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c520e05135d6e763148b6426a837e239041653ba7becd2e538c076c738025fc"
+
+[[package]]
 name = "pest"
 version = "2.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1301,6 +1336,12 @@ dependencies = [
  "siphasher",
  "uncased",
 ]
+
+[[package]]
+name = "pkg-config"
+version = "0.3.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1df8c4ec4b0627e53bdf214615ad287367e482558cf84b109250b37464dc03ae"
 
 [[package]]
 name = "ppv-lite86"
@@ -1888,6 +1929,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "syscalls"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a837f64f72473acde47fbd13431e83fc9081e52ae49ea1430003831536ed04d7"
+dependencies = [
+ "cc",
+ "paste",
+]
+
+[[package]]
 name = "tempfile"
 version = "3.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2414,6 +2465,7 @@ dependencies = [
  "base64",
  "clap 3.1.11",
  "crossterm",
+ "extrasafe",
  "hexyl",
  "json-rpc2",
  "localzone",
