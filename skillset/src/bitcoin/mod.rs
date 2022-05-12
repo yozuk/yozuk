@@ -9,7 +9,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"s58l68IJz5WVuF9yYJj2o",
+    model_id: b"3oV85PD5eAdimpfsfCO12",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -40,7 +40,8 @@ impl Corpus for BitcoinCorpus {
                 ]
             })
             .chain(vec![
-                tk!(["bitcoin"; "command:bitcoin", "btc"; "command:bitcoin"]),
+                tk!(["bitcoin"; "command:bitcoin"]),
+                tk!(["btc"; "command:bitcoin"]),
             ])
             .collect()
     }
