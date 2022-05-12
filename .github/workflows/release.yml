@@ -27,6 +27,9 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install apt packages
+        run: sudo apt-get install -y libseccomp-dev
+        if: ${{ matrix.os == 'ubuntu-latest' }}
       - name: Set Env
         run: node -p "'platform=' + process.argv[1].toLowerCase()" ${{ runner.os }}-${{ runner.arch }} >> $GITHUB_ENV
         if: ${{ matrix.os != 'windows-latest' }}
