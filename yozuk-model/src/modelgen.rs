@@ -205,12 +205,18 @@ fn generate_wordiness_greetings(
 
     let mut greetings = Vec::new();
     let mut data = original.clone();
-    data.push_front(WeightedToken::new(tk!("Yozuk,"), weight));
+    data.push_front(WeightedToken::new(
+        tk!("Yozuk,"; "wordiness:greeting"),
+        weight,
+    ));
     greetings.push(data.into_iter().collect::<Vec<_>>());
 
     let mut data = original;
-    data.push_front(WeightedToken::new(tk!("Yozuk,"), weight));
-    data.push_front(WeightedToken::new(tk!("Hi"), weight));
+    data.push_front(WeightedToken::new(
+        tk!("Yozuk,"; "wordiness:greeting"),
+        weight,
+    ));
+    data.push_front(WeightedToken::new(tk!("Hi"; "wordiness:greeting"), weight));
     greetings.push(data.into_iter().collect::<Vec<_>>());
 
     greetings.into_iter()

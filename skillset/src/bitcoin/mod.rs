@@ -39,7 +39,9 @@ impl Corpus for BitcoinCorpus {
                     ]),
                 ]
             })
-            .chain(Some(tk!(["bitcoin"; "command:bitcoin"])))
+            .chain(vec![
+                tk!(["bitcoin"; "command:bitcoin", "btc"; "command:bitcoin"]),
+            ])
             .collect()
     }
 }

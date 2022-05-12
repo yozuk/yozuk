@@ -7,6 +7,10 @@ use yozuk_sdk::prelude::*;
 #[test]
 fn test_address_generation() {
     assert_eq!(
+        cmd(tk!(["btc"])),
+        CommandArgs::new().add_args(["yozuk-skill-bitcoin"])
+    );
+    assert_eq!(
         cmd(tk!(["bitcoin"])),
         CommandArgs::new().add_args(["yozuk-skill-bitcoin"])
     );
