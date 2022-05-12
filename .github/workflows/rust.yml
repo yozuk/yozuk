@@ -27,6 +27,8 @@ jobs:
           target/
         key: ${{ runner.os }}-stable-cargo
     - uses: taiki-e/install-action@nextest
+    - name: Install apt packages
+      run: sudo apt-get install -y libseccomp-dev
     - name: Run fmt
       run: cargo fmt --check
     - name: Run clippy
