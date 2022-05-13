@@ -31,7 +31,7 @@ serde_json = { version = "1.0.81", optional = true }
 shell-words = "1.1.0"
 sys-locale = "0.2.0"
 toml = "0.5.8"
-yozuk = { version = "0.14.2", features = ["rayon"] }
+yozuk = { version = "0.14.2" }
 yozuk-sdk = "0.14.2"
 
 [target.'cfg(target_os = "linux")'.dependencies]
@@ -39,7 +39,8 @@ extrasafe = { version = "0.1.2", optional = true }
 syscalls = { version = "0.5.0", optional = true }
 
 [features]
-default = ["rpc", "secure-context"]
+default = ["rayon", "rpc", "secure-context"]
+rayon = ["yozuk/rayon"]
 rpc = ["json-rpc2", "serde", "serde_derive", "serde_json", "base64"]
 secure-context = ["extrasafe", "syscalls"]
 
