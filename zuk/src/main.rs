@@ -28,6 +28,8 @@ use args::*;
 use printer::*;
 
 fn main() -> Result<()> {
+    enter_secure_context()?;
+
     let args = Args::parse();
     let app = App::new(args)?;
     app.run()
@@ -68,8 +70,6 @@ impl App {
             let stdout = stdout.lock();
             return rpc::start_server(self.zuk, stdin, stdout);
         }
-
-        enter_secure_context()?;
 
         let mut streams = vec![];
         if !io::stdin().is_tty() {
@@ -255,7 +255,16 @@ fn enter_secure_context() -> Result<()> {
 
     impl RuleSet for CustomRules {
         fn simple_rules(&self) -> Vec<Sysno> {
-            vec![Sysno::poll, Sysno::ppoll]
+            vec![
+                Sysno::poll,
+                Sysno::ppoll,
+                Sysno::read,
+                Sysno::readv,
+                Sysno::preadv,
+                Sysno::preadv2,
+                Sysno::pread64,
+                Sysno::lseek,
+            ]
         }
 
         fn conditional_rules(&self) -> HashMap<Sysno, Vec<Rule>> {
@@ -271,7 +280,8 @@ fn enter_secure_context() -> Result<()> {
         .enable(Threads::nothing().allow_create())?
         .enable(
             SystemIO::nothing()
-                .allow_stdin()
+                .allow_open_readonly()
+                .allow_close()
                 .allow_stdout()
                 .allow_stderr()
                 .allow_ioctl(),
