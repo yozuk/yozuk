@@ -49,7 +49,6 @@ skills!(
     [uuid, "yozuk-skill-uuid"],
     [version, "yozuk-skill-version"],
     [color, "yozuk-skill-color"],
-    [time, "yozuk-skill-time"],
     [unit, "yozuk-skill-unit"],
     [geo, "yozuk-skill-geo"],
     [password, "yozuk-skill-password"],

@@ -42,7 +42,6 @@ default-skills = [
   "yozuk-skill-dice",
   "yozuk-skill-digest",
   "yozuk-skill-color",
-  "yozuk-skill-time",
   "yozuk-skill-unit",
   "yozuk-skill-geo",
   "yozuk-skill-password",
@@ -62,7 +61,6 @@ yozuk-skill-numeric = ["yozuk-core-skillset/yozuk-skill-numeric"]
 yozuk-skill-password = ["yozuk-core-skillset/yozuk-skill-password"]
 yozuk-skill-punycode = ["yozuk-core-skillset/yozuk-skill-punycode"]
 yozuk-skill-smalltalk = ["yozuk-core-skillset/yozuk-skill-smalltalk"]
-yozuk-skill-time = ["yozuk-core-skillset/yozuk-skill-time"]
 yozuk-skill-unit = ["yozuk-core-skillset/yozuk-skill-unit"]
 yozuk-skill-uuid = ["yozuk-core-skillset/yozuk-skill-uuid"]
 yozuk-skill-version = ["yozuk-core-skillset/yozuk-skill-version"]
