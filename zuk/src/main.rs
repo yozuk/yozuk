@@ -246,15 +246,37 @@ impl Validator for YozukHelper {
 
 #[cfg(target_os = "linux")]
 fn enter_secure_context() -> Result<()> {
-    extrasafe::SafetyContext::new()
-        .enable(extrasafe::builtins::danger_zone::Threads::nothing().allow_create())?
+    use extrasafe::builtins::{danger_zone::Threads, SystemIO};
+    use extrasafe::{Rule, RuleSet, SafetyContext};
+    use std::collections::HashMap;
+    use syscalls::Sysno;
+
+    struct CustomRules;
+
+    impl RuleSet for CustomRules {
+        fn simple_rules(&self) -> Vec<Sysno> {
+            vec![Sysno::poll, Sysno::ppoll]
+        }
+
+        fn conditional_rules(&self) -> HashMap<Sysno, Vec<Rule>> {
+            HashMap::new()
+        }
+
+        fn name(&self) -> &'static str {
+            "CustomRules"
+        }
+    }
+
+    SafetyContext::new()
+        .enable(Threads::nothing().allow_create())?
         .enable(
-            extrasafe::builtins::SystemIO::nothing()
+            SystemIO::nothing()
                 .allow_stdin()
                 .allow_stdout()
                 .allow_stderr()
                 .allow_ioctl(),
         )?
+        .enable(CustomRules)?
         .apply_to_all_threads()?;
     Ok(())
 }
