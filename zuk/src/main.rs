@@ -244,7 +244,7 @@ impl Validator for YozukHelper {
     }
 }
 
-#[cfg(target_os = "linux")]
+#[cfg(all(target_os = "linux", feature = "secure-context"))]
 fn enter_secure_context() -> Result<()> {
     use extrasafe::builtins::{danger_zone::Threads, SystemIO};
     use extrasafe::{Rule, RuleSet, SafetyContext};
@@ -255,16 +255,7 @@ fn enter_secure_context() -> Result<()> {
 
     impl RuleSet for CustomRules {
         fn simple_rules(&self) -> Vec<Sysno> {
-            vec![
-                Sysno::poll,
-                Sysno::ppoll,
-                Sysno::read,
-                Sysno::readv,
-                Sysno::preadv,
-                Sysno::preadv2,
-                Sysno::pread64,
-                Sysno::lseek,
-            ]
+            vec![Sysno::poll, Sysno::ppoll]
         }
 
         fn conditional_rules(&self) -> HashMap<Sysno, Vec<Rule>> {
@@ -282,6 +273,7 @@ fn enter_secure_context() -> Result<()> {
             SystemIO::nothing()
                 .allow_open_readonly()
                 .allow_close()
+                .allow_read()
                 .allow_stdout()
                 .allow_stderr()
                 .allow_ioctl(),
@@ -291,7 +283,7 @@ fn enter_secure_context() -> Result<()> {
     Ok(())
 }
 
-#[cfg(not(target_os = "linux"))]
+#[cfg(not(all(target_os = "linux", feature = "secure-context")))]
 fn enter_secure_context() -> Result<()> {
     Ok(())
 }
