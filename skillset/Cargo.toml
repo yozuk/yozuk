@@ -29,7 +29,6 @@ crc_all = { version = "0.2.0", optional = true }
 css-color = { version = "0.2.4", optional = true }
 digest = { version = "0.10.3", optional = true }
 entropy = "0.4.1"
-fuzzydate = { version = "0.1.5", optional = true }
 getrandom = { version = "0.2.5", features = ["js"] }
 hex = { version = "0.4.3", optional = true }
 itertools = "0.10.3"
