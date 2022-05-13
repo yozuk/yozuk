@@ -244,7 +244,7 @@ impl Validator for YozukHelper {
     }
 }
 
-#[cfg(target_os = "linux")]
+#[cfg(all(target_os = "linux", feature = "secure-context"))]
 fn enter_secure_context() -> Result<()> {
     use extrasafe::builtins::{danger_zone::Threads, SystemIO};
     use extrasafe::{Rule, RuleSet, SafetyContext};
@@ -291,7 +291,7 @@ fn enter_secure_context() -> Result<()> {
     Ok(())
 }
 
-#[cfg(not(target_os = "linux"))]
+#[cfg(not(all(target_os = "linux", feature = "secure-context")))]
 fn enter_secure_context() -> Result<()> {
     Ok(())
 }
