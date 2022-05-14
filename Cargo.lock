@@ -122,6 +122,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "bit-vec"
+version = "0.6.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "349f9b6a179ed607305526ca489b34ad0a41aed5f7980fa90eb03160b69598fb"
+
+[[package]]
 name = "bitcoin"
 version = "0.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -887,6 +893,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "libmath"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "81f9daadfd4d8c4946fa32071d428cb70e493ab2c55a57a48da5261447d124cf"
+dependencies = [
+ "rand 0.3.23",
+]
+
+[[package]]
 name = "libseccomp"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -988,6 +1003,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "miller_rabin"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1452e070785e5b10b7db952464c9f9c65e8df2074ce8dac21a9d22d6cf29b4d7"
+dependencies = [
+ "num-bigint",
+ "num-integer",
+ "num-traits 0.2.14",
+ "rand 0.8.5",
+ "rayon",
+]
+
+[[package]]
 name = "mio"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1059,6 +1087,7 @@ dependencies = [
  "autocfg 1.1.0",
  "num-integer",
  "num-traits 0.2.14",
+ "rand 0.8.5",
 ]
 
 [[package]]
@@ -1279,6 +1308,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eb9f9e6e233e5c4a35559a617bf40a4ec447db2e84c20b55a6f83167b7e57872"
 
 [[package]]
+name = "prime_tools"
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8373fbf30504d82a72a54968d09bed5929434eb1a4a7b71da385c90cb1d6c43b"
+dependencies = [
+ "bit-vec",
+ "libmath",
+]
+
+[[package]]
 name = "proc-macro-error"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1340,6 +1379,29 @@ checksum = "c069c179fcdc6a2fe24d8d18305cf085fdbd4f922c041943e203685d6a1c58fd"
 dependencies = [
  "endian-type",
  "nibble_vec",
+]
+
+[[package]]
+name = "rand"
+version = "0.3.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "64ac302d8f83c0c1974bf758f6b041c6c8ada916fbb44a609158ca8b064cc76c"
+dependencies = [
+ "libc",
+ "rand 0.4.6",
+]
+
+[[package]]
+name = "rand"
+version = "0.4.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "552840b97013b1a26992c11eac34bdd778e464601a4c2054b5f0bff7c6761293"
+dependencies = [
+ "fuchsia-cprng",
+ "libc",
+ "rand_core 0.3.1",
+ "rdrand",
+ "winapi",
 ]
 
 [[package]]
@@ -2355,12 +2417,14 @@ dependencies = [
  "lipsum",
  "md-5",
  "mediatype",
+ "miller_rabin",
  "nanoid",
  "num-bigint",
  "open-location-code",
  "palette",
  "pest",
  "pest_derive",
+ "prime_tools",
  "punycode",
  "rand 0.8.5",
  "serde",

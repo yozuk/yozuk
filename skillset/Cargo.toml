@@ -36,12 +36,14 @@ lazy_static = "1.4.0"
 lipsum = { version = "0.8.0", optional = true }
 md-5 = { version = "0.10.1", optional = true }
 mediatype = "0.19.3"
+miller_rabin = { version = "1.1.0", optional = true }
 nanoid = { version = "0.4.0", optional = true }
 num-bigint = { version = "0.4", optional = true }
 open-location-code = { version = "0.1.0", optional = true }
 palette = { version = "0.6.0", optional = true }
 pest = { version = "2.1.3", optional = true }
 pest_derive = { version = "2.1.0", optional = true }
+prime_tools = { version = "0.3.4", optional = true }
 punycode = { version = "0.4.1", optional = true }
 
 rand = { version = "0.8.5", features = ["small_rng"], optional = true }
@@ -90,3 +92,4 @@ yozuk-skill-version = []
 yozuk-skill-bitcoin = ["bitcoin"]
 yozuk-skill-urlencode = ["urlencoding"]
 yozuk-skill-bech32 = ["bech32"]
+yozuk-skill-prime = ["bigdecimal", "num-bigint", "miller_rabin", "prime_tools"]
