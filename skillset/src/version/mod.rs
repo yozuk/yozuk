@@ -73,7 +73,7 @@ impl Command for VersionCommand {
         let _args = Args::try_parse_from(args.args)?;
         Ok(Output::new().set_title("Version Info").add_block(
             block::Data::new()
-                .set_data(self.0.build_info.to_string())
+                .set_data(serde_json::to_string_pretty(&self.0.build_info)?)
                 .set_media_type(media_type!(APPLICATION / JSON)),
         ))
     }
