@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-helper-preprocessor"
-version = "0.14.2"
+version = "0.15.1"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Preprocessor utilities for Yozuk"
