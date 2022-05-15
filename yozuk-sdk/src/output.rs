@@ -1,4 +1,5 @@
 use crate::block::{self, Block};
+use crate::metadata::Metadata;
 use bytes::Bytes;
 use serde_derive::{Deserialize, Serialize};
 use std::str;
@@ -7,6 +8,7 @@ use std::str;
 pub struct Output {
     pub title: String,
     pub blocks: Vec<Block>,
+    pub metadata: Vec<Metadata>,
     pub mode: OutputMode,
 }
 
@@ -43,6 +45,14 @@ impl Output {
     {
         self.blocks
             .append(&mut iter.into_iter().map(Into::into).collect());
+        self
+    }
+
+    pub fn add_metadata<T>(mut self, data: T) -> Self
+    where
+        T: Into<Metadata>,
+    {
+        self.metadata.push(data.into());
         self
     }
 

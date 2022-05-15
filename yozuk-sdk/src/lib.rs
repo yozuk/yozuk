@@ -9,6 +9,7 @@ pub mod block;
 pub mod env;
 pub mod feature;
 pub mod i18n;
+pub mod metadata;
 pub mod model;
 pub mod output;
 pub mod prelude;

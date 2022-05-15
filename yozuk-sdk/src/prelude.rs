@@ -4,6 +4,7 @@ pub use super::block::{self, Block};
 pub use super::env::*;
 pub use super::feature::*;
 pub use super::i18n::*;
+pub use super::metadata::*;
 pub use super::output::*;
 pub use super::skill::*;
 pub use super::stream::*;

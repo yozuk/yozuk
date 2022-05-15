@@ -238,11 +238,11 @@ mod tests {
             format!("{}\n{}\n{}\n{}\n{}\n{}\n{}\n",
                 "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"1+1\"],\"data\":[]}]}}",
                 "{\"jsonrpc\":\"2.0\",\"id\":2,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"2*3\"],\"data\":[]}]}}",
-                "{\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"2\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"mode\":\"primary\",\"title\":\"Calculator\"}],\"result\":\"ok\"}}",
+                "{\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"2\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"metadata\":[],\"mode\":\"primary\",\"title\":\"Calculator\"}],\"result\":\"ok\"}}",
                 "{\"jsonrpc\":\"2.0\",\"id\":4,\"result\":null}",
-                "{\"jsonrpc\":\"2.0\",\"id\":5,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"7b502c3a1f48c8609ae212cdfb639dee39673f5e\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"mode\":\"primary\",\"title\":\"Digest\"}],\"result\":\"ok\"}}",
+                "{\"jsonrpc\":\"2.0\",\"id\":5,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"7b502c3a1f48c8609ae212cdfb639dee39673f5e\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"metadata\":[],\"mode\":\"primary\",\"title\":\"Digest\"}],\"result\":\"ok\"}}",
                 "{\"jsonrpc\":\"2.0\",\"id\":6,\"result\":null}",
-                "{\"jsonrpc\":\"2.0\",\"id\":7,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"357e04830e05f3c37ca86e491dce8acfa447efeb\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"mode\":\"primary\",\"title\":\"Digest\"}],\"result\":\"ok\"}}"
+                "{\"jsonrpc\":\"2.0\",\"id\":7,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"357e04830e05f3c37ca86e491dce8acfa447efeb\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"type\":\"data\"}],\"metadata\":[],\"mode\":\"primary\",\"title\":\"Digest\"}],\"result\":\"ok\"}}"
             )
         );
     }
