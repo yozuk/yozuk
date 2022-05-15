@@ -125,7 +125,7 @@ impl Primality {
         match self {
             Self::Yes => format!("Yes, {num} is a prime number."),
             Self::Probably => format!("Yes, {num} is probably a prime number. (Miller–Rabin test)"),
-            Self::No => format!("No, {num} is not a prime number"),
+            Self::No => format!("No, {num} is not a prime number."),
         }
     }
 }
