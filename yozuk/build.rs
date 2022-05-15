@@ -5,11 +5,6 @@ use yozuk_sdk::model::*;
 use yozuk_sdk::prelude::*;
 
 fn main() -> Result<()> {
-    build_data::set_GIT_COMMIT();
-    build_data::set_BUILD_TIMESTAMP();
-    build_data::set_RUSTC_VERSION();
-    build_data::no_debug_rebuilds();
-
     let out_dir = env::var_os("OUT_DIR").unwrap();
     let model_path = Path::new(&out_dir).join("model.data");
 

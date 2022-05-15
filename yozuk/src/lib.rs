@@ -206,13 +206,9 @@ impl YozukBuilder {
 
     pub fn build(self) -> Yozuk {
         let model = ModelSet::from_data(MODEL_DATA).unwrap();
-        let build_info = BuildInfo {
-            version: env!("CARGO_PKG_VERSION").into(),
-            commit: env!("GIT_COMMIT").into(),
-            rustc: env!("RUSTC_VERSION").into(),
-            timestamp: env!("BUILD_TIMESTAMP").into(),
-        };
-        let env = Environment::new().build_info("yozuk", build_info);
+        let build_info = concat!(r#"{"version": ""#, env!("CARGO_PKG_VERSION"), r#""}"#);
+
+        let env = Environment::new().build_info(build_info);
 
         #[cfg(feature = "rayon")]
         let iter = skill::SKILLS.par_iter();

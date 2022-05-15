@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 #[derive(Debug, Default, Clone)]
 pub struct Environment {
-    pub build_info: HashMap<String, BuildInfo>,
+    pub build_info: &'static str,
 }
 
 impl Environment {
@@ -13,21 +13,10 @@ impl Environment {
         Default::default()
     }
 
-    pub fn build_info<T>(mut self, name: T, build_info: BuildInfo) -> Self
-    where
-        T: Into<String>,
-    {
-        self.build_info.insert(name.into(), build_info);
+    pub fn build_info(mut self, build_info: &'static str) -> Self {
+        self.build_info = build_info;
         self
     }
-}
-
-#[derive(Debug, Default, Clone, Deserialize, Serialize)]
-pub struct BuildInfo {
-    pub version: String,
-    pub commit: String,
-    pub rustc: String,
-    pub timestamp: String,
 }
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize)]
