@@ -12,6 +12,24 @@ pub enum Metadata {
 }
 
 impl Metadata {
+    pub fn docs<T>(url: T) -> Result<Self, url::ParseError>
+    where
+        T: AsRef<str>,
+    {
+        Ok(Self::Docs {
+            url: Url::parse(url.as_ref())?,
+        })
+    }
+
+    pub fn share<T>(url: T) -> Result<Self, url::ParseError>
+    where
+        T: AsRef<str>,
+    {
+        Ok(Self::Share {
+            url: Url::parse(url.as_ref())?,
+        })
+    }
+
     pub fn value<T>(value: T) -> Self
     where
         T: Into<Value>,
