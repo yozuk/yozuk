@@ -174,18 +174,12 @@ impl Yozuk {
 
 #[derive(Default)]
 pub struct YozukBuilder {
-    env: Environment,
     config: Config,
     i18n: I18n,
     redirections: Vec<(Vec<Token>, Vec<String>)>,
 }
 
 impl YozukBuilder {
-    pub fn set_env(mut self, env: Environment) -> Self {
-        self.env = env;
-        self
-    }
-
     pub fn set_config(mut self, config: Config) -> Self {
         self.config = config;
         self
@@ -218,9 +212,7 @@ impl YozukBuilder {
             rustc: env!("RUSTC_VERSION").into(),
             timestamp: env!("BUILD_TIMESTAMP").into(),
         };
-        let env = Environment::new()
-            .build_info("yozuk", build_info)
-            .merge(self.env);
+        let env = Environment::new().build_info("yozuk", build_info);
 
         #[cfg(feature = "rayon")]
         let iter = skill::SKILLS.par_iter();

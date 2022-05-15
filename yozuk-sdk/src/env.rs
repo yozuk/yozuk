@@ -20,12 +20,6 @@ impl Environment {
         self.build_info.insert(name.into(), build_info);
         self
     }
-
-    pub fn merge(self, other: Self) -> Self {
-        let mut build_info = self.build_info;
-        build_info.extend(other.build_info);
-        Self { build_info }
-    }
 }
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize)]
