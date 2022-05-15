@@ -2387,7 +2387,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-sdk"
-version = "0.14.2"
+version = "0.15.1"
 dependencies = [
  "anyhow",
  "base64",
