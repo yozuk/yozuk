@@ -48,6 +48,7 @@ default-skills = [
   "yozuk-skill-urlencode",
   "yozuk-skill-bech32",
   "yozuk-skill-prime",
+  "yozuk-skill-jwt",
 ]
 yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]
 yozuk-skill-calc = ["yozuk-core-skillset/yozuk-skill-calc"]
@@ -69,6 +70,7 @@ yozuk-skill-bitcoin = ["yozuk-core-skillset/yozuk-skill-bitcoin"]
 yozuk-skill-urlencode = ["yozuk-core-skillset/yozuk-skill-urlencode"]
 yozuk-skill-bech32 = ["yozuk-core-skillset/yozuk-skill-bech32"]
 yozuk-skill-prime = ["yozuk-core-skillset/yozuk-skill-prime"]
+yozuk-skill-jwt = ["yozuk-core-skillset/yozuk-skill-jwt"]
 
 [dev-dependencies]
 lazy_static = "1.4.0"
