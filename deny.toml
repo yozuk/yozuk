@@ -78,7 +78,8 @@ allow = [
     "BSD-3-Clause",
     "Unlicense",
     "BSL-1.0",
-    "ISC"
+    "ISC",
+    "OpenSSL"
 ]
 # List of explicitly disallowed licenses
 # See https://spdx.org/licenses/ for list of possible licenses
@@ -111,6 +112,14 @@ exceptions = [
     # Each entry is the crate and version constraint, and its specific allow
     # list
     #{ allow = ["Zlib"], name = "adler32", version = "*" },
+]
+
+[[licenses.clarify]]
+name = "ring"
+version = "*"
+expression = "MIT AND ISC AND OpenSSL"
+license-files = [
+    { path = "LICENSE", hash = 3171872035 }
 ]
 
 # Some crates don't have (easily) machine readable licensing information,
