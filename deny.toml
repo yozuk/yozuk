@@ -117,6 +117,9 @@ exceptions = [
 name = "ring"
 version = "*"
 expression = "MIT AND ISC AND OpenSSL"
+license-files = [
+    { path = "LICENSE", hash = "" }
+]
 
 # Some crates don't have (easily) machine readable licensing information,
 # adding a clarification entry for it allows you to manually specify the
