@@ -71,6 +71,7 @@ impl Default for Comment {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Data {
     pub data: Blob,
+    pub title: String,
     pub file_name: String,
     pub media_type: MediaTypeBuf,
 }
@@ -112,6 +113,14 @@ impl Data {
         Ok(self)
     }
 
+    pub fn set_title<T>(mut self, title: T) -> Self
+    where
+        T: Into<String>,
+    {
+        self.title = title.into();
+        self
+    }
+
     pub fn set_file_name<T>(mut self, file_name: T) -> Self
     where
         T: Into<String>,
@@ -133,6 +142,7 @@ impl Default for Data {
     fn default() -> Self {
         Self {
             data: Blob::new(),
+            title: String::new(),
             file_name: String::new(),
             media_type: media_type!(APPLICATION / OCTET_STREAM).into(),
         }
