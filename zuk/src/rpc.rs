@@ -272,7 +272,8 @@ mod tests {
                 3,
                 RunCommandsResponse::Ok(vec![Output::new()
                     .set_title("Calculator")
-                    .add_block(block::Data::new().set_text_data("2"))]),
+                    .add_block(block::Data::new().set_text_data("2"))
+                    .add_metadata(Metadata::value(2.0))]),
             ),
             Response::new(4, serde_json::Value::Null),
             Response::new(

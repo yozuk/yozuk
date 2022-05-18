@@ -119,23 +119,26 @@ impl Command for ColorCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
-        let colors = args
+        let (metadata, colors): (Vec<_>, Vec<_>) = args
             .inputs
             .iter()
             .filter_map(|color| css_color::Srgb::from_str(color).ok())
-            .map(|color| Srgba::new(color.red, color.green, color.blue, color.alpha));
+            .map(|color| {
+                let color = Srgba::new(color.red, color.green, color.blue, color.alpha);
+                (Metadata::value(hex_color(&color)), color)
+            })
+            .unzip();
 
         Ok(Output::new()
             .set_title("Color")
-            .add_blocks_iter(colors.flat_map(|color| render_color(&color))))
+            .add_blocks_iter(colors.into_iter().flat_map(|color| render_color(&color)))
+            .add_metadata_iter(metadata))
     }
 }
 
-fn render_color(color: &Srgba) -> Vec<Block> {
-    let mut colors = Vec::new();
+fn hex_color(color: &Srgba) -> String {
     let rgba_u8: Srgba<u8> = (*color).into_format();
-
-    let hex = if rgba_u8.alpha == 255 {
+    if rgba_u8.alpha == 255 {
         format!(
             "#{:02x}{:02x}{:02x}",
             rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue
@@ -145,8 +148,14 @@ fn render_color(color: &Srgba) -> Vec<Block> {
             "#{:02x}{:02x}{:02x}{:02x}",
             rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue, rgba_u8.alpha
         )
-    };
-    colors.push(hex);
+    }
+}
+
+fn render_color(color: &Srgba) -> Vec<Block> {
+    let mut colors = Vec::new();
+    let rgba_u8: Srgba<u8> = (*color).into_format();
+
+    colors.push(hex_color(color));
 
     colors.push(if color.alpha == 1.0 {
         format!(

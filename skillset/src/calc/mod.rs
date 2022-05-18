@@ -1,8 +1,7 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
 
-use bigdecimal::BigDecimal;
-use bigdecimal::Zero;
+use bigdecimal::{BigDecimal, ToPrimitive, Zero};
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
@@ -125,6 +124,7 @@ impl Command for CalcCommand {
                 Output::new()
                     .set_title("Calculator")
                     .add_block(block::Data::new().set_text_data(format!("{}", result)))
+                    .add_metadata_iter(result.to_f64().map(Metadata::value))
             })
             .map_err(|err| {
                 Output::new()
@@ -147,7 +147,8 @@ mod tests {
         );
         let expected = Ok(Output::new()
             .set_title("Calculator")
-            .add_block(block::Data::new().set_text_data("-140742.75")));
+            .add_block(block::Data::new().set_text_data("-140742.75"))
+            .add_metadata(Metadata::value(-140742.75)));
         assert_eq!(result, expected);
 
         let result = CalcCommand.run(

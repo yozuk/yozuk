@@ -149,6 +149,13 @@ impl Value {
             Self::Sum(sum) => *sum,
         }
     }
+
+    fn metadata(&self) -> Vec<Metadata> {
+        match self {
+            Self::Dice(dice) => dice.iter().map(|val| Metadata::value(*val)).collect(),
+            Self::Sum(sum) => vec![Metadata::value(*sum)],
+        }
+    }
 }
 
 impl ToString for Value {
@@ -230,6 +237,7 @@ impl Command for DiceCommand {
                 Output::new()
                     .set_title("Dice")
                     .add_block(block::Data::new().set_text_data(result.to_string()))
+                    .add_metadata_iter(result.metadata())
             })
             .map_err(|err| {
                 Output::new()

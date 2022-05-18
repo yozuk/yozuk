@@ -108,11 +108,12 @@ impl Command for PrimeCommand {
         };
         Ok(Output::new()
             .set_title("Primality Test")
-            .add_block(block::Data::new().set_text_data(primality.to_string(&args.test))))
+            .add_block(block::Data::new().set_text_data(primality.to_string(&args.test)))
+            .add_metadata(Metadata::value(primality != Primality::No)))
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 enum Primality {
     Yes,
     Probably,
