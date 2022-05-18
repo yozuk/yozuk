@@ -38,7 +38,7 @@ impl Output {
         self
     }
 
-    pub fn add_blocks<T, I>(mut self, iter: I) -> Self
+    pub fn add_blocks_iter<T, I>(mut self, iter: I) -> Self
     where
         T: Into<Block>,
         I: IntoIterator<Item = T>,

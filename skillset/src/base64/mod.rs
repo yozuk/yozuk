@@ -158,9 +158,11 @@ impl Command for Base64Command {
                         .collect(),
                 );
 
-                Ok(Output::new().set_title("Base64 Decoder").add_blocks(blocks))
+                Ok(Output::new()
+                    .set_title("Base64 Decoder")
+                    .add_blocks_iter(blocks))
             }
-            Mode::Encode => Ok(Output::new().set_title("Base64 Encoder").add_blocks(
+            Mode::Encode => Ok(Output::new().set_title("Base64 Encoder").add_blocks_iter(
                 args.data
                     .into_iter()
                     .chain(streams)

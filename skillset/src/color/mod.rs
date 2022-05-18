@@ -127,7 +127,7 @@ impl Command for ColorCommand {
 
         Ok(Output::new()
             .set_title("Color")
-            .add_blocks(colors.flat_map(|color| render_color(&color))))
+            .add_blocks_iter(colors.flat_map(|color| render_color(&color))))
     }
 }
 

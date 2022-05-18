@@ -55,7 +55,7 @@ impl Command for UrlEncodeCommand {
         Ok(Output::new()
             .set_title("URL Decoder")
             .add_block(block::Comment::new().set_text("Decoding URL encoding"))
-            .add_blocks(blocks))
+            .add_blocks_iter(blocks))
     }
 
     fn priority(&self) -> i32 {

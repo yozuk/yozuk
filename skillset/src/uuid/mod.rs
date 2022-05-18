@@ -155,14 +155,16 @@ impl Command for UuidCommand {
         let list = iter::repeat_with(|| format!("{}", Uuid::new_v4()))
             .take(args.n)
             .collect::<Vec<_>>();
-        Ok(Output::new().set_title("UUID Generator").add_blocks(vec![
-            Block::Comment(block::Comment::new().set_text(format!(
-                "Generating {} {}",
-                args.n,
-                pluralize("UUID", args.n)
-            ))),
-            Block::Data(block::Data::new().set_text_data(list.join("\n"))),
-        ]))
+        Ok(Output::new()
+            .set_title("UUID Generator")
+            .add_blocks_iter(vec![
+                Block::Comment(block::Comment::new().set_text(format!(
+                    "Generating {} {}",
+                    args.n,
+                    pluralize("UUID", args.n)
+                ))),
+                Block::Data(block::Data::new().set_text_data(list.join("\n"))),
+            ]))
     }
 }
 

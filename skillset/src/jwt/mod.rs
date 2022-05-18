@@ -64,7 +64,7 @@ impl Command for JwtCommand {
                     Block::Data(block::Data::new().set_data(sig)),
                 ]
             });
-        Ok(Output::new().set_title("JWT Decoder").add_blocks(blocks))
+        Ok(Output::new().set_title("JWT Decoder").add_blocks_iter(blocks))
     }
 }
 

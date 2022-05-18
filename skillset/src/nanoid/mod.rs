@@ -103,14 +103,16 @@ impl Command for NanoIdCommand {
             .take(args.n)
             .collect::<Vec<_>>();
 
-        Ok(Output::new().set_title("NanoID Generator").add_blocks(vec![
-            Block::Comment(block::Comment::new().set_text(format!(
-                "Generating {} {}",
-                args.n,
-                pluralize("NanoID", args.n)
-            ))),
-            Block::Data(block::Data::new().set_text_data(list.join("\n"))),
-        ]))
+        Ok(Output::new()
+            .set_title("NanoID Generator")
+            .add_blocks_iter(vec![
+                Block::Comment(block::Comment::new().set_text(format!(
+                    "Generating {} {}",
+                    args.n,
+                    pluralize("NanoID", args.n)
+                ))),
+                Block::Data(block::Data::new().set_text_data(list.join("\n"))),
+            ]))
     }
 }
 

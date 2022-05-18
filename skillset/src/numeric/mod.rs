@@ -111,7 +111,7 @@ impl Command for NumericCommand {
                 block::Data::new().set_text_data(format!("{} =\n{}", original, redixes.join("\n")))
             });
         Ok(Output::new()
-            .add_blocks(blocks)
+            .add_blocks_iter(blocks)
             .set_mode(OutputMode::Attachment))
     }
 

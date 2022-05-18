@@ -56,7 +56,9 @@ impl Command for Bech32Command {
                     Block::Data(block::Data::new().set_data(data)),
                 ]
             });
-        Ok(Output::new().set_title("Bech32 Decoder").add_blocks(blocks))
+        Ok(Output::new()
+            .set_title("Bech32 Decoder")
+            .add_blocks_iter(blocks))
     }
 
     fn priority(&self) -> i32 {
