@@ -137,9 +137,30 @@ impl From<std::result::Result<Vec<Output>, Vec<Output>>> for RunCommandsResponse
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde_derive::Serialize;
     use serde_json::json;
     use std::io::Cursor;
     use tempfile::NamedTempFile;
+
+    #[derive(Serialize)]
+    struct Response {
+        jsonrpc: String,
+        id: usize,
+        result: serde_json::Value,
+    }
+
+    impl Response {
+        fn new<T>(id: usize, result: T) -> serde_json::Result<Self>
+        where
+            T: serde::Serialize,
+        {
+            Ok(Self {
+                jsonrpc: "2.0".into(),
+                id,
+                result: serde_json::to_value(result)?,
+            })
+        }
+    }
 
     #[test]
     fn test_rpc() {
@@ -233,17 +254,50 @@ mod tests {
         let mut input = Cursor::new(input);
         let mut output = Vec::<u8>::new();
         start_server(zuk, &mut input, &mut output).unwrap();
+
+        let responses = vec![
+            Response::new(
+                1,
+                GetCommandsResponse {
+                    commands: vec![CommandArgs::new().add_args(["yozuk-skill-calc", "1+1"])],
+                },
+            ),
+            Response::new(
+                2,
+                GetCommandsResponse {
+                    commands: vec![CommandArgs::new().add_args(["yozuk-skill-calc", "2*3"])],
+                },
+            ),
+            Response::new(
+                3,
+                RunCommandsResponse::Ok(vec![Output::new()
+                    .set_title("Calculator")
+                    .add_block(block::Data::new().set_text_data("2"))]),
+            ),
+            Response::new(4, serde_json::Value::Null),
+            Response::new(
+                5,
+                RunCommandsResponse::Ok(vec![Output::new().set_title("Digest").add_block(
+                    block::Data::new().set_text_data("7b502c3a1f48c8609ae212cdfb639dee39673f5e"),
+                )]),
+            ),
+            Response::new(6, serde_json::Value::Null),
+            Response::new(
+                7,
+                RunCommandsResponse::Ok(vec![Output::new().set_title("Digest").add_block(
+                    block::Data::new().set_text_data("357e04830e05f3c37ca86e491dce8acfa447efeb"),
+                )]),
+            ),
+        ];
+
+        let responses = responses
+            .into_iter()
+            .map(|res| serde_json::to_string(&res.unwrap()).unwrap())
+            .collect::<Vec<_>>();
+
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("{}\n{}\n{}\n{}\n{}\n{}\n{}\n",
-                "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"1+1\"],\"data\":[]}]}}",
-                "{\"jsonrpc\":\"2.0\",\"id\":2,\"result\":{\"commands\":[{\"args\":[\"yozuk-skill-calc\",\"2*3\"],\"data\":[]}]}}",
-                "{\"jsonrpc\":\"2.0\",\"id\":3,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"2\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"title\":\"\",\"type\":\"data\"}],\"metadata\":[],\"mode\":\"primary\",\"title\":\"Calculator\"}],\"result\":\"ok\"}}",
-                "{\"jsonrpc\":\"2.0\",\"id\":4,\"result\":null}",
-                "{\"jsonrpc\":\"2.0\",\"id\":5,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"7b502c3a1f48c8609ae212cdfb639dee39673f5e\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"title\":\"\",\"type\":\"data\"}],\"metadata\":[],\"mode\":\"primary\",\"title\":\"Digest\"}],\"result\":\"ok\"}}",
-                "{\"jsonrpc\":\"2.0\",\"id\":6,\"result\":null}",
-                "{\"jsonrpc\":\"2.0\",\"id\":7,\"result\":{\"outputs\":[{\"blocks\":[{\"data\":\"357e04830e05f3c37ca86e491dce8acfa447efeb\",\"file_name\":\"\",\"media_type\":\"text/plain\",\"title\":\"\",\"type\":\"data\"}],\"metadata\":[],\"mode\":\"primary\",\"title\":\"Digest\"}],\"result\":\"ok\"}}"
-            )
+            responses.join("\n") + "\n"
         );
     }
 }
