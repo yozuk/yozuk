@@ -56,6 +56,16 @@ impl Output {
         self
     }
 
+    pub fn add_metadata_iter<T, I>(mut self, iter: I) -> Self
+    where
+        T: Into<Metadata>,
+        I: IntoIterator<Item = T>,
+    {
+        self.metadata
+            .append(&mut iter.into_iter().map(Into::into).collect());
+        self
+    }
+
     pub fn externalize_large_blobs(&mut self, len: usize) -> Vec<(String, Bytes)> {
         self.blocks
             .iter_mut()
