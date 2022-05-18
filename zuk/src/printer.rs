@@ -19,9 +19,26 @@ impl<'a> TerminalPrinter<'a> {
     }
 
     pub fn print_commands(&self, commands: &[CommandArgs]) -> Result<()> {
+        self.print_json(&commands, io::stderr().lock())?;
+
         let mut stdout = io::stdout();
         for cmd in commands {
             writeln!(&mut stdout, "{}", shell_words::join(&cmd.args))?;
+        }
+        Ok(())
+    }
+
+    pub fn print_json<T, W>(&self, data: &T, mut output: W) -> Result<()>
+    where
+        T: serde::Serialize,
+        W: Write,
+    {
+        if self.args.verbose > 1 {
+            writeln!(
+                &mut output,
+                "{}",
+                serde_json::to_string_pretty(&data).unwrap().dimmed()
+            )?;
         }
         Ok(())
     }
@@ -36,6 +53,8 @@ impl<'a> TerminalPrinter<'a> {
         } else {
             format!("{}", format!("{}: ", output.title).bold().green())
         };
+
+        self.print_json(&output, stderr.lock())?;
 
         for block in &output.blocks {
             match block {
@@ -116,6 +135,8 @@ impl<'a> TerminalPrinter<'a> {
         } else {
             format!("{}", format!("{}: ", output.title).bold().red())
         };
+
+        self.print_json(&output, stderr.lock())?;
 
         for block in &output.blocks {
             if let Block::Comment(comment) = block {
