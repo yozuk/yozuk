@@ -4,7 +4,7 @@ use std::io::{Read, Result};
 const HEADER_LENGTH: usize = 1024;
 
 pub struct InputStream {
-    reader: Box<dyn Read + Send + Sync>,
+    reader: Box<dyn Read + Sync>,
     header: Option<Box<[u8]>>,
     offset: usize,
     media_type: MediaTypeBuf,
@@ -13,7 +13,7 @@ pub struct InputStream {
 impl InputStream {
     pub fn new<T, M>(reader: T, media_type: M) -> Self
     where
-        T: 'static + Read + Send + Sync,
+        T: 'static + Read + Sync,
         M: Into<MediaTypeBuf>,
     {
         Self {
