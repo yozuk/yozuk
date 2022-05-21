@@ -102,6 +102,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf9ff0bbfd639f15c74af777d81383cf53efb7c93613f6cab67c6c11e05bbf8b"
 
 [[package]]
+name = "bech32"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c5738be7561b0eeb501ef1d5c5db3f24e01ceb55fededd9b00039aada34966ad"
+
+[[package]]
 name = "bigdecimal"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -133,7 +139,7 @@ version = "0.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42b2a9a8e3c7544f5ce2b475f2f56580a3102b37e0ee001558ad4faedcf56cf4"
 dependencies = [
- "bech32",
+ "bech32 0.8.1",
  "bitcoin_hashes",
  "secp256k1",
 ]
@@ -2385,7 +2391,7 @@ version = "0.16.2"
 dependencies = [
  "anyhow",
  "base64",
- "bech32",
+ "bech32 0.9.0",
  "bigdecimal",
  "bitcoin",
  "blake2",
