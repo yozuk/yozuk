@@ -1,6 +1,6 @@
 [package]
 name = "zuk"
-version = "0.16.0"
+version = "0.16.2"
 edition = "2021"
 default-run = "zuk"
 authors = ["picoHz <picoHz@outlook.com>"]
