@@ -101,7 +101,7 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
                 .map(|(features, weight)| {
                     features
                         .into_iter()
-                        .map(|feature| Attribute::new(feature.to_string(), weight))
+                        .map(|feature| Attribute::new(crate::minify_feature(&feature), weight))
                         .collect::<Vec<_>>()
                 })
                 .collect::<Vec<_>>();
@@ -161,7 +161,9 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
                 .map(|(features, weight)| {
                     features
                         .into_iter()
-                        .map(|feature| Attribute::new(feature.to_string(), 0.01 * weight))
+                        .map(|feature| {
+                            Attribute::new(crate::minify_feature(&feature), 0.01 * weight)
+                        })
                         .collect::<Vec<_>>()
                 })
                 .collect::<Vec<_>>();

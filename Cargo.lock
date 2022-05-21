@@ -2450,6 +2450,8 @@ name = "yozuk-model"
 version = "0.16.0"
 dependencies = [
  "anyhow",
+ "base64",
+ "blake2",
  "bytes",
  "crfs",
  "crfsuite",

@@ -24,7 +24,7 @@ impl Tagger {
                 features
                     .as_ref()
                     .iter()
-                    .map(|feature| Attribute::new(feature.to_string(), 1.0))
+                    .map(|feature| Attribute::new(crate::minify_feature(feature), 1.0))
                     .collect::<Vec<_>>()
             })
             .collect::<Vec<_>>();
