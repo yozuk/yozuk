@@ -1,5 +1,6 @@
-use super::{FeatureLabeler, Tagger};
+use super::FeatureLabeler;
 use bytes::Bytes;
+use yozuk_model::*;
 use yozuk_sdk::prelude::*;
 
 pub struct ModelEntry {

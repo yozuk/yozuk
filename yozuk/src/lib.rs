@@ -14,9 +14,6 @@ compile_error!("wasm target does not support rayon");
 
 mod model;
 mod skill;
-mod tagger;
-
-use tagger::*;
 
 pub use model::*;
 pub use skill::*;
