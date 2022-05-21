@@ -31,7 +31,7 @@ serde_json = { version = "1.0.81", optional = true }
 shell-words = "1.1.0"
 sys-locale = "0.2.0"
 toml = "0.5.8"
-yozuk = { version = "0.16.0" }
+yozuk = { version = "0.16.2" }
 yozuk-sdk = "0.16.2"
 
 [target.'cfg(target_os = "linux")'.dependencies]
