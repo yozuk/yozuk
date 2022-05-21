@@ -29,25 +29,25 @@ impl Corpus for PrimeCorpus {
             tk!([
                 "is",
                 "0"; "input:number",
-                "prime"; "prime:keyword"
+                "prime"; "keyword"
             ]),
             tk!([
                 "is",
                 "0"; "input:number",
                 "a",
-                "prime"; "prime:keyword",
+                "prime"; "keyword",
                 "number"
             ]),
             tk!([
                 "is",
                 "65535"; "input:number",
-                "prime"; "prime:keyword"
+                "prime"; "keyword"
             ]),
             tk!([
                 "is",
                 "65535"; "input:number",
                 "a",
-                "prime"; "prime:keyword",
+                "prime"; "keyword",
                 "number"
             ]),
         ]
@@ -63,7 +63,7 @@ impl Translator for PrimeTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let prime = args
             .iter()
-            .any(|arg| arg.tag == "prime:keyword" && normalized_eq(arg.as_str(), &["prime"], 1));
+            .any(|arg| arg.tag == "keyword" && normalized_eq(arg.as_str(), &["prime"], 1));
 
         if prime {
             let inputs = args

@@ -67,12 +67,12 @@ impl Corpus for UnitCorpus {
                         .map(move |prefix| {
                             tk!([
                                 "1.0"; "input:value",
-                                format!("{}{}", prefix.to_string(), sym); "unit:keyword"
+                                format!("{}{}", prefix.to_string(), sym); "keyword"
                             ])
                         })
                         .chain(Some(tk!([
                             "1.0"; "input:value",
-                            sym.to_string(); "unit:keyword"
+                            sym.to_string(); "keyword"
                         ])))
                 })
             })
@@ -93,7 +93,7 @@ impl Translator for UnitTranslator {
 
         let units = args
             .iter()
-            .filter(|arg| arg.tag == "unit:keyword")
+            .filter(|arg| arg.tag == "keyword")
             .filter(|arg| symbol::parse_symbol(arg.as_str()).is_some())
             .collect::<Vec<_>>();
 

@@ -24,13 +24,13 @@ impl Corpus for VersionCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
         vec![
             tk!([
-                "version"; "version:keyword",
-                "info"; "version:keyword"
+                "version"; "keyword",
+                "info"; "keyword"
             ]),
             tk!([
                 "show",
-                "version"; "version:keyword",
-                "info"; "version:keyword"
+                "version"; "keyword",
+                "info"; "keyword"
             ]),
         ]
         .into_iter()
@@ -45,7 +45,7 @@ impl Translator for VersionTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
-            .filter(|arg| arg.tag == "version:keyword")
+            .filter(|arg| arg.tag == "keyword")
             .collect::<Vec<_>>();
 
         if let [build, info] = keywords[..] {

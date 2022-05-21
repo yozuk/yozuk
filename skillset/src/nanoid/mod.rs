@@ -26,7 +26,7 @@ impl Corpus for NanoIdCorpus {
             .flat_map(|(verb, name)| {
                 vec![tk!([
                     verb,
-                    name; "command:nanoid"
+                    name; "command"
                 ])]
             })
             .chain(
@@ -35,12 +35,12 @@ impl Corpus for NanoIdCorpus {
                         vec![tk!([
                             verb,
                             format!("{}", count); "input:count",
-                            name; "command:nanoid"
+                            name; "command"
                         ])]
                     },
                 ),
             )
-            .chain(["nanoid", "NanoID"].map(|name| tk!([name; "command:nanoid"])))
+            .chain(["nanoid", "NanoID"].map(|name| tk!([name; "command"])))
             .collect()
     }
 }
@@ -64,7 +64,7 @@ impl Translator for NanoIdTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         if !args
             .iter()
-            .any(|arg| arg.tag == "command:nanoid" && normalized_eq(arg.as_str(), &["NanoID"], 0))
+            .any(|arg| arg.tag == "command" && normalized_eq(arg.as_str(), &["NanoID"], 0))
         {
             return None;
         }

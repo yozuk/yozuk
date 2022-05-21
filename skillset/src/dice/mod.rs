@@ -33,20 +33,20 @@ pub struct DiceCorpus;
 impl Corpus for DiceCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
         vec![
-            tk!(["dice"; "command:dice"]),
-            tk!(["🎲"; "command:dice"]),
+            tk!(["dice"; "command"]),
+            tk!(["🎲"; "command"]),
             tk!([
                 "roll",
-                "die"; "command:dice"
+                "die"; "command"
             ]),
             tk!([
                 "roll",
-                "dice"; "command:dice"
+                "dice"; "command"
             ]),
             tk!([
                 "roll",
                 "3"; "input:count",
-                "dice"; "command:dice"
+                "dice"; "command"
             ]),
         ]
     }
@@ -195,7 +195,7 @@ impl Translator for DiceTranslator {
 
         let commands = args
             .iter()
-            .filter(|arg| arg.tag == "command:dice")
+            .filter(|arg| arg.tag == "command")
             .collect::<Vec<_>>();
 
         if let [dice] = commands[..] {

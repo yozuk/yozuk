@@ -43,12 +43,12 @@ impl Corpus for UuidCorpus {
                 vec![
                     tk!([
                         verb,
-                        name; "command:uuid"
+                        name; "command"
                     ]),
                     tk!([
                         "please",
                         verb,
-                        name; "command:uuid"
+                        name; "command"
                     ]),
                 ]
             })
@@ -59,19 +59,19 @@ impl Corpus for UuidCorpus {
                             tk!([
                                 verb,
                                 format!("{}", count); "input:count",
-                                name; "command:uuid"
+                                name; "command"
                             ]),
                             tk!([
                                 "please",
                                 verb,
                                 format!("{}", count); "input:count",
-                                name; "command:uuid"
+                                name; "command"
                             ]),
                         ]
                     },
                 ),
             )
-            .chain(["uuid", "guid"].map(|name| tk!([name; "command:uuid"])))
+            .chain(["uuid", "guid"].map(|name| tk!([name; "command"])))
             .chain(vec![tk!([
                 "generate",
                 format!("{}", Uuid::nil()); "input:uuid"
@@ -116,9 +116,10 @@ pub struct UuidTranslator;
 
 impl Translator for UuidTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
-        if !args.iter().any(|arg| {
-            arg.tag == "command:uuid" && normalized_eq(arg.as_str(), &["UUID", "GUID"], 0)
-        }) {
+        if !args
+            .iter()
+            .any(|arg| arg.tag == "command" && normalized_eq(arg.as_str(), &["UUID", "GUID"], 0))
+        {
             return None;
         }
         let count = args

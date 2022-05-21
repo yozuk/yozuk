@@ -24,38 +24,38 @@ impl Corpus for SmalltalkCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
         vec![
             tk!([
-                "Life"; "smalltalk:keyword",
-                "universe"; "smalltalk:keyword",
-                "everything"; "smalltalk:keyword"
+                "Life"; "keyword",
+                "universe"; "keyword",
+                "everything"; "keyword"
             ]),
             tk!([
-                "Life,"; "smalltalk:keyword",
+                "Life,"; "keyword",
                 "the",
-                "universe"; "smalltalk:keyword",
+                "universe"; "keyword",
                 "and",
-                "everything"; "smalltalk:keyword"
+                "everything"; "keyword"
             ]),
             tk!([
                 "The", "answer", "to",
-                "Life,"; "smalltalk:keyword",
-                "universe"; "smalltalk:keyword",
+                "Life,"; "keyword",
+                "universe"; "keyword",
                 "and",
-                "everything"; "smalltalk:keyword"
+                "everything"; "keyword"
             ]),
             tk!([
                 "The", "answer", "to",
-                "Life,"; "smalltalk:keyword",
-                "universe"; "smalltalk:keyword",
+                "Life,"; "keyword",
+                "universe"; "keyword",
                 "and",
-                "everything"; "smalltalk:keyword"
+                "everything"; "keyword"
             ]),
             tk!([
                 "The", "answer", "to",
-                "Life,"; "smalltalk:keyword",
+                "Life,"; "keyword",
                 "the",
-                "universe"; "smalltalk:keyword",
+                "universe"; "keyword",
                 "and",
-                "everything"; "smalltalk:keyword"
+                "everything"; "keyword"
             ]),
         ]
         .into_iter()
@@ -70,7 +70,7 @@ impl Translator for SmalltalkTranslator {
     fn parse(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
-            .filter(|arg| arg.tag == "smalltalk:keyword")
+            .filter(|arg| arg.tag == "keyword")
             .collect::<Vec<_>>();
         if let [life, universe, everything] = keywords[..] {
             if normalized_eq(life.as_str(), &["life"], 1)

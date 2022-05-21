@@ -30,19 +30,16 @@ impl Corpus for BitcoinCorpus {
                 vec![
                     tk!([
                         verb,
-                        name; "command:bitcoin"
+                        name; "command"
                     ]),
                     tk!([
                         verb,
-                        name; "command:bitcoin",
+                        name; "command",
                         "address"
                     ]),
                 ]
             })
-            .chain(vec![
-                tk!(["bitcoin"; "command:bitcoin"]),
-                tk!(["btc"; "command:bitcoin"]),
-            ])
+            .chain(vec![tk!(["bitcoin"; "command"]), tk!(["btc"; "command"])])
             .collect()
     }
 }
@@ -52,9 +49,10 @@ pub struct BitcoinTranslator;
 
 impl Translator for BitcoinTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
-        if args.iter().any(|arg| {
-            arg.tag == "command:bitcoin" && normalized_eq(arg.as_str(), &["bitcoin", "btc"], 0)
-        }) {
+        if args
+            .iter()
+            .any(|arg| arg.tag == "command" && normalized_eq(arg.as_str(), &["bitcoin", "btc"], 0))
+        {
             return Some(CommandArgs::new());
         }
         None

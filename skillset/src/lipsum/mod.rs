@@ -27,23 +27,23 @@ impl Corpus for LipsumCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
         vec![
             tk!([
-                "Lorem"; "lipsum:keyword",
-                "ipsum"; "lipsum:keyword",
+                "Lorem"; "keyword",
+                "ipsum"; "keyword",
                 "dolor",
                 "sit",
                 "amet"
             ]),
             tk!([
-                "Lorem"; "lipsum:keyword",
-                "ipsum"; "lipsum:keyword",
+                "Lorem"; "keyword",
+                "ipsum"; "keyword",
                 "dolor",
                 "sit",
                 "amet",
                 "100"; "input:count"
             ]),
             tk!([
-                "Lorem"; "lipsum:keyword",
-                "ipsum"; "lipsum:keyword",
+                "Lorem"; "keyword",
+                "ipsum"; "keyword",
                 "dolor",
                 "sit",
                 "amet",
@@ -51,47 +51,47 @@ impl Corpus for LipsumCorpus {
                 "words"
             ]),
             tk!([
-                "lorem"; "lipsum:keyword",
-                "ipsum"; "lipsum:keyword"
+                "lorem"; "keyword",
+                "ipsum"; "keyword"
             ]),
             tk!([
-                "lorem"; "lipsum:keyword",
-                "ipsum"; "lipsum:keyword",
+                "lorem"; "keyword",
+                "ipsum"; "keyword",
                 "100"; "input:count"
             ]),
             tk!([
-                "lorem"; "lipsum:keyword",
-                "ipsum"; "lipsum:keyword",
+                "lorem"; "keyword",
+                "ipsum"; "keyword",
                 "100"; "input:count",
                 "words"
             ]),
-            tk!(["lipsum,"; "lipsum:keyword"]),
+            tk!(["lipsum,"; "keyword"]),
             tk!([
-                "lipsum,"; "lipsum:keyword",
+                "lipsum,"; "keyword",
                 "100"; "input:count"
             ]),
             tk!([
-                "lipsum,"; "lipsum:keyword",
+                "lipsum,"; "keyword",
                 "100"; "input:count",
                 "words"
             ]),
             tk!([
-                "dummy"; "lipsum:keyword",
-                "text"; "lipsum:keyword"
+                "dummy"; "keyword",
+                "text"; "keyword"
             ]),
             tk!([
                 "Generate",
-                "dummy"; "lipsum:keyword",
-                "text"; "lipsum:keyword"
+                "dummy"; "keyword",
+                "text"; "keyword"
             ]),
             tk!([
-                "dummy"; "lipsum:keyword",
-                "text"; "lipsum:keyword",
+                "dummy"; "keyword",
+                "text"; "keyword",
                 "100"; "input:count"
             ]),
             tk!([
-                "dummy"; "lipsum:keyword",
-                "text"; "lipsum:keyword",
+                "dummy"; "keyword",
+                "text"; "keyword",
                 "100"; "input:count",
                 "words"
             ]),
@@ -99,8 +99,8 @@ impl Corpus for LipsumCorpus {
                 "Generate",
                 "100"; "input:count",
                 "words",
-                "dummy"; "lipsum:keyword",
-                "text"; "lipsum:keyword"
+                "dummy"; "keyword",
+                "text"; "keyword"
             ]),
         ]
         .into_iter()
@@ -121,7 +121,7 @@ impl Translator for LipsumTranslator {
 
         let keywords = args
             .iter()
-            .filter(|arg| arg.tag == "lipsum:keyword")
+            .filter(|arg| arg.tag == "keyword")
             .collect::<Vec<_>>();
 
         if let [lorem, ipsum] = keywords[..] {

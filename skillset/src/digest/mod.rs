@@ -43,7 +43,7 @@ impl Corpus for DigestCorpus {
             tk!([
                 data; "input:data",
                 prefix,
-                *alg; "digest:keyword"
+                *alg; "keyword"
             ])
         })
         .chain(
@@ -52,8 +52,8 @@ impl Corpus for DigestCorpus {
                 .flat_map(|entry| entry.keywords)
                 .flat_map(|key| {
                     [
-                        tk!([key.to_string(); "digest:keyword"]),
-                        tk!([key.to_string(); "digest:keyword", key.to_string(); "digest:keyword"]),
+                        tk!([key.to_string(); "keyword"]),
+                        tk!([key.to_string(); "keyword", key.to_string(); "keyword"]),
                     ]
                 }),
         )
@@ -73,7 +73,7 @@ impl Translator for DigestTranslator {
 
         let keywords = args
             .iter()
-            .filter(|arg| arg.tag == "digest:keyword")
+            .filter(|arg| arg.tag == "keyword")
             .collect::<Vec<_>>();
 
         if !keywords.is_empty()

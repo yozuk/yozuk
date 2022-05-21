@@ -25,10 +25,10 @@ impl Corpus for PasswordCorpus {
             .flat_map(|(verb, name)| {
                 vec![tk!([
                     verb,
-                    name; "command:password"
+                    name; "command"
                 ])]
             })
-            .chain(["password", "pwgen"].map(|name| tk!([name; "command:password"])))
+            .chain(["password", "pwgen"].map(|name| tk!([name; "command"])))
             .collect()
     }
 }
@@ -39,7 +39,7 @@ pub struct PasswordTranslator;
 impl Translator for PasswordTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         if args.iter().any(|arg| {
-            arg.tag == "command:password" && normalized_eq(arg.as_str(), &["password", "pwgen"], 0)
+            arg.tag == "command" && normalized_eq(arg.as_str(), &["password", "pwgen"], 0)
         }) {
             return Some(CommandArgs::new());
         }
