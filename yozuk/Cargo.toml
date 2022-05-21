@@ -20,7 +20,7 @@ crfs = "0.2.0"
 distance = "0.4.0"
 mediatype = "0.19.3"
 rayon = { version = "1.5.1", optional = true }
-yozuk-core-skillset = "0.16.0"
+yozuk-core-skillset = "0.16.2"
 yozuk-helper-english = "0.1.0"
 yozuk-sdk = "0.16.2"
 yozuk-model = "0.16.2"
@@ -77,6 +77,6 @@ lazy_static = "1.4.0"
 
 [build-dependencies]
 anyhow = "1.0.56"
-yozuk-core-skillset = "0.16.0"
+yozuk-core-skillset = "0.16.2"
 yozuk-sdk = "0.16.2"
 yozuk-model = { version = "0.16.2", features = ["modelgen"] }
