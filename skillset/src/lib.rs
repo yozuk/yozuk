@@ -57,4 +57,5 @@ skills!(
     [bech32, "yozuk-skill-bech32"],
     [prime, "yozuk-skill-prime"],
     [jwt, "yozuk-skill-jwt"],
+    [blurhash, "yozuk-skill-blurhash"],
 );
