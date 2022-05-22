@@ -17,6 +17,7 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 use sys_locale::get_locale;
+use time_tz::TimeZone;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
@@ -53,7 +54,9 @@ impl App {
 
         let i18n = I18n {
             locale: get_locale(),
-            timezone: localzone::get_local_zone(),
+            timezone: time_tz::system::get_timezone()
+                .map(|tz| tz.name().to_string())
+                .ok(),
             ..Default::default()
         };
 
