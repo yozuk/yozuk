@@ -12,19 +12,16 @@ use std::sync::Mutex;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
-struct ServiceHandler {}
-
-struct ServiceData {
-    zuk: Yozuk,
+struct ServiceHandler {
     streams: Mutex<Vec<InputStream>>,
 }
 
 impl Service for ServiceHandler {
-    type Data = ServiceData;
-    fn handle(&self, request: &Request, data: &Self::Data) -> json_rpc2::Result<Option<Response>> {
+    type Data = Yozuk;
+    fn handle(&self, request: &Request, zuk: &Self::Data) -> json_rpc2::Result<Option<Response>> {
         let response = match request.method() {
             "set_streams" => {
-                let mut streams = data.streams.lock().unwrap();
+                let mut streams = self.streams.lock().unwrap();
                 let req: Vec<Stream> = request.deserialize()?;
                 *streams = req
                     .into_iter()
@@ -43,18 +40,17 @@ impl Service for ServiceHandler {
                 Some((request, serde_json::Value::Null).into())
             }
             "get_commands" => {
-                let streams = data.streams.lock().unwrap();
+                let streams = self.streams.lock().unwrap();
                 let req: GetCommandsRequest = request.deserialize()?;
                 let tokens: Vec<Token> = req.into();
-                let commands = data.zuk.get_commands(&tokens, &streams);
+                let commands = zuk.get_commands(&tokens, &streams);
                 let res = GetCommandsResponse { commands };
                 Some((request, serde_json::to_value(res).unwrap()).into())
             }
             "run_commands" => {
-                let mut streams = data.streams.lock().unwrap();
+                let mut streams = self.streams.lock().unwrap();
                 let req: RunCommandsRequest = request.deserialize()?;
-                let result: RunCommandsResponse = data
-                    .zuk
+                let result: RunCommandsResponse = zuk
                     .run_commands(req.commands, &mut streams, Some(&req.i18n))
                     .into();
                 streams.clear();
@@ -71,16 +67,14 @@ where
     R: Read,
     W: Write,
 {
-    let service: Box<dyn Service<Data = ServiceData>> = Box::new(ServiceHandler {});
+    let service: Box<dyn Service<Data = Yozuk>> = Box::new(ServiceHandler {
+        streams: Mutex::new(Vec::new()),
+    });
     let server = Server::new(vec![&service]);
     let reader = IoRead::new(reader);
     let stream = Deserializer::new(reader).into_iter::<Request>();
-    let data = ServiceData {
-        streams: Mutex::new(Vec::new()),
-        zuk,
-    };
     for request in stream {
-        let response = server.serve(&request?, &data);
+        let response = server.serve(&request?, &zuk);
         serde_json::to_writer(&mut writer, &response)?;
         writeln!(&mut writer)?;
     }
