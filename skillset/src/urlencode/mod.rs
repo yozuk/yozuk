@@ -28,7 +28,7 @@ pub struct UrlEncodeTranslator;
 
 impl Translator for UrlEncodeTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
-        let is_urlencoded = args.iter().all(|arg| is_urlencoded(arg.as_str()));
+        let is_urlencoded = !args.is_empty() && args.iter().all(|arg| is_urlencoded(arg.as_str()));
         if is_urlencoded {
             return Some(CommandArgs::new().add_args_iter(args.iter().map(|arg| arg.as_str())));
         }

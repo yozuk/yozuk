@@ -77,7 +77,8 @@ pub struct NumericTranslator;
 
 impl Translator for NumericTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
-        let is_integer = args.iter().all(|arg| parse_int(arg.as_str()).is_some());
+        let is_integer =
+            !args.is_empty() && args.iter().all(|arg| parse_int(arg.as_str()).is_some());
         if is_integer {
             if let [arg] = args {
                 return Some(CommandArgs::new().add_args([arg.as_str()]));
