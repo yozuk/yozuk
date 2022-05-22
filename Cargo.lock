@@ -2456,6 +2456,7 @@ dependencies = [
  "palette",
  "pest",
  "pest_derive",
+ "pix",
  "png_pong",
  "prime_tools",
  "punycode",

@@ -2,6 +2,8 @@
 #![deny(clippy::all)]
 
 use clap::Parser;
+use mediatype::media_type;
+use pix::rgb::SRgba8;
 use yozuk_sdk::prelude::*;
 
 mod base83;
@@ -30,6 +32,8 @@ impl Translator for BlurHashTranslator {
     }
 }
 
+const IMAGE_SIZE: u32 = 64;
+
 #[derive(Debug)]
 pub struct BlurHashCommand;
 
@@ -42,10 +46,26 @@ impl Command for BlurHashCommand {
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         let blocks = args.inputs.iter().flat_map(|arg| {
-            let pixels = blurhash::decode(arg.as_str(), 50, 50, 1.0);
+            let pixels = blurhash::decode(arg.as_str(), IMAGE_SIZE, IMAGE_SIZE, 1.0);
+            let pixels = pixels
+                .chunks(4)
+                .map(|color| SRgba8::new(color[0], color[1], color[2], color[3]))
+                .collect::<Vec<_>>();
+            let raster = png_pong::PngRaster::Rgba8(pix::Raster::with_pixels(
+                IMAGE_SIZE, IMAGE_SIZE, pixels,
+            ));
+            let mut out_data = Vec::new();
+            let mut encoder = png_pong::Encoder::new(&mut out_data).into_step_enc();
+            let step = png_pong::Step { raster, delay: 0 };
+            encoder.encode(&step).unwrap();
             vec![
                 Block::Comment(block::Comment::new().set_text("Decoding BlurHash")),
-                Block::Data(block::Data::new().set_data(pixels)),
+                Block::Data(
+                    block::Data::new()
+                        .set_data(out_data)
+                        .set_file_name("blurhash.png")
+                        .set_media_type(media_type!(IMAGE / PNG)),
+                ),
             ]
         });
         Ok(Output::new()
