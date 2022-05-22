@@ -68,7 +68,9 @@ pub fn validate_blurhash(hash: &[u8]) -> bool {
         return false;
     }
 
-    hash.len() == HEADER_LENGTH + (nx as usize * ny as usize - 1) * 2
+    let data = &hash[HEADER_LENGTH..];
+    let length = (nx as usize * ny as usize - 1) * 2;
+    data.len() == length && data.iter().all(|&c| char_to_value(c).is_some())
 }
 
 #[cfg(test)]

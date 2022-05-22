@@ -24,7 +24,8 @@ pub struct BlurHashTranslator;
 
 impl Translator for BlurHashTranslator {
     fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
-        let is_blurhash = args.iter().all(|arg| base83::validate_blurhash(&arg.data));
+        let is_blurhash =
+            !args.is_empty() && args.iter().all(|arg| base83::validate_blurhash(&arg.data));
         if is_blurhash {
             return Some(CommandArgs::new().add_args_iter(args.iter().map(|arg| arg.as_str())));
         }
@@ -71,6 +72,10 @@ impl Command for BlurHashCommand {
         Ok(Output::new()
             .set_title("BlurHash Decoder")
             .add_blocks_iter(blocks))
+    }
+
+    fn priority(&self) -> i32 {
+        -50
     }
 }
 
