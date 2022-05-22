@@ -8,18 +8,18 @@ use yozuk_sdk::prelude::*;
 fn test_address_generation() {
     assert_eq!(
         cmd(tk!(["btc"])),
-        CommandArgs::new().add_args(["yozuk-skill-bitcoin"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-bitcoin"]))
     );
     assert_eq!(
         cmd(tk!(["bitcoin"])),
-        CommandArgs::new().add_args(["yozuk-skill-bitcoin"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-bitcoin"]))
     );
     assert_eq!(
         cmd(tk!(["generate", "bitcoin", "address"])),
-        CommandArgs::new().add_args(["yozuk-skill-bitcoin"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-bitcoin"]))
     );
     assert_eq!(
         cmd(tk!(["New", "bitcoin", "address"])),
-        CommandArgs::new().add_args(["yozuk-skill-bitcoin"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-bitcoin"]))
     );
 }

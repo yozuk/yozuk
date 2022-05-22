@@ -8,6 +8,6 @@ use yozuk_sdk::prelude::*;
 fn build_info() {
     assert_eq!(
         cmd(tk!(["version", "info"])),
-        CommandArgs::new().add_args(["yozuk-skill-version", "--version-info"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-version", "--version-info"]))
     );
 }

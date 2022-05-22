@@ -8,7 +8,7 @@ use yozuk_sdk::prelude::*;
 fn deep_thought() {
     assert_eq!(
         cmd(tk!(["life", "universe", "everything"])),
-        CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--life-universe-everything"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--life-universe-everything"]))
     );
     assert_eq!(
         cmd(tk!([
@@ -21,14 +21,14 @@ fn deep_thought() {
             "and",
             "everything"
         ])),
-        CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--life-universe-everything"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--life-universe-everything"]))
     );
 }
 
 #[test]
 fn empty() {
     assert_eq!(
-        YOZUK.get_commands(&[], &[]).remove(0),
-        CommandArgs::new().add_args(["yozuk-skill-smalltalk"])
+        YOZUK.get_commands(&[], &[]).into_iter().next(),
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk"]))
     );
 }

@@ -10,7 +10,7 @@ lazy_static::lazy_static! {
     };
 }
 
-pub fn cmd(tokens: Vec<Token>) -> CommandArgs {
+pub fn cmd(tokens: Vec<Token>) -> Option<CommandArgs> {
     let stream = InputStream::new(io::empty(), media_type!(APPLICATION / OCTET_STREAM));
-    YOZUK.get_commands(&tokens, &[stream]).remove(0)
+    YOZUK.get_commands(&tokens, &[stream]).into_iter().next()
 }

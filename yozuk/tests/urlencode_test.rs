@@ -8,6 +8,6 @@ use yozuk_sdk::prelude::*;
 fn urlencode() {
     assert_eq!(
         cmd(tk!(["Hi%21%20I%27m%20Yozuk."])),
-        CommandArgs::new().add_args(["yozuk-skill-urlencode", "Hi%21%20I%27m%20Yozuk."])
+        Some(CommandArgs::new().add_args(["yozuk-skill-urlencode", "Hi%21%20I%27m%20Yozuk."]))
     );
 }

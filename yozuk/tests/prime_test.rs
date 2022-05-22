@@ -8,11 +8,11 @@ use yozuk_sdk::prelude::*;
 fn is_prime() {
     assert_eq!(
         cmd(tk!(["Is", "0", "prime?"])),
-        CommandArgs::new().add_args(["yozuk-skill-prime", "--test", "0"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-prime", "--test", "0"]))
     );
     assert_eq!(
         cmd(tk!(["Is", "982451653", "a", "prime", "number"])),
-        CommandArgs::new().add_args(["yozuk-skill-prime", "--test", "982451653"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-prime", "--test", "982451653"]))
     );
     assert_eq!(
         cmd(tk!([
@@ -20,10 +20,10 @@ fn is_prime() {
             "37975227936943673922808872755445627854565536638199",
             "prime"
         ])),
-        CommandArgs::new().add_args([
+        Some(CommandArgs::new().add_args([
             "yozuk-skill-prime",
             "--test",
             "37975227936943673922808872755445627854565536638199"
-        ])
+        ]))
     );
 }

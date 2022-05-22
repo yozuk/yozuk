@@ -8,6 +8,6 @@ use yozuk_sdk::prelude::*;
 fn blurhash() {
     assert_eq!(
         cmd(tk!(["LlMF%n00%#MwS|WCWEM{R*bbWBbH"])),
-        CommandArgs::new().add_args(["yozuk-skill-blurhash", "LlMF%n00%#MwS|WCWEM{R*bbWBbH"])
+        Some(CommandArgs::new().add_args(["yozuk-skill-blurhash", "LlMF%n00%#MwS|WCWEM{R*bbWBbH"]))
     );
 }

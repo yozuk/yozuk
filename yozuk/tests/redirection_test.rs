@@ -6,10 +6,10 @@ use yozuk_sdk::prelude::*;
 fn test_redirection() {
     assert_eq!(
         cmd(tk!(["test", "command", "redirect"])),
-        CommandArgs::new().add_args(["yozuk-redirect", "test", "redirect"])
+        Some(CommandArgs::new().add_args(["yozuk-redirect", "test", "redirect"]))
     );
     assert_eq!(
         cmd(tk!(["Test", "commands", "redirect"])),
-        CommandArgs::new().add_args(["yozuk-redirect", "test", "redirect"])
+        Some(CommandArgs::new().add_args(["yozuk-redirect", "test", "redirect"]))
     );
 }
