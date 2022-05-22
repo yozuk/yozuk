@@ -9,7 +9,7 @@ use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
 use rustyline::highlight::{Highlighter, MatchingBracketHighlighter};
 use rustyline::hint::{Hinter, HistoryHinter};
-use rustyline::validate::{self, MatchingBracketValidator, Validator};
+use rustyline::validate::{self, Validator};
 use rustyline::{Context, Editor};
 use rustyline_derive::Helper;
 use std::borrow::Cow;
@@ -153,7 +153,6 @@ impl App {
             highlighter: MatchingBracketHighlighter::new(),
             hinter: HistoryHinter {},
             colored_prompt: "".to_owned(),
-            validator: MatchingBracketValidator::new(),
         };
         rl.set_helper(Some(helper));
         rl.helper_mut().expect("No helper").colored_prompt = format!("{}", prompt.bold().blue());
@@ -188,7 +187,6 @@ impl App {
 #[derive(Helper)]
 struct YozukHelper {
     highlighter: MatchingBracketHighlighter,
-    validator: MatchingBracketValidator,
     hinter: HistoryHinter,
     colored_prompt: String,
 }
@@ -234,13 +232,13 @@ impl Highlighter for YozukHelper {
 impl Validator for YozukHelper {
     fn validate(
         &self,
-        ctx: &mut validate::ValidationContext,
+        _ctx: &mut validate::ValidationContext,
     ) -> rustyline::Result<validate::ValidationResult> {
-        self.validator.validate(ctx)
+        Ok(validate::ValidationResult::Valid(None))
     }
 
     fn validate_while_typing(&self) -> bool {
-        self.validator.validate_while_typing()
+        false
     }
 }
 
