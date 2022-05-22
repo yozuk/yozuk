@@ -17,9 +17,14 @@ pub fn pluralize(word: &str, n: usize) -> Cow<'_, str> {
 }
 
 pub fn normalize(text: &str) -> String {
-    let text = text.trim_end_matches(|c: char| c.is_ascii_punctuation());
-    let text = singularize(&text.to_lowercase());
-    snakecase::to_snake_case(&text)
+    let norm_text = text.trim_end_matches(|c: char| c.is_ascii_punctuation());
+    let norm_text = singularize(&norm_text.to_lowercase());
+    let norm_text = snakecase::to_snake_case(&norm_text);
+    if norm_text.is_empty() {
+        text.to_string()
+    } else {
+        norm_text
+    }
 }
 
 pub fn normalized_eq<A, B, T>(a: A, b: B, levenshtein_tolerance: usize) -> bool
