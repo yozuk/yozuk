@@ -165,9 +165,18 @@ impl<'a> TerminalPrinter<'a> {
         let mut stdout = io::stdout();
         if stdout.is_tty() {
             let show_color = true;
+            let show_char_panel = true;
+            let show_position_panel = true;
             let use_squeezing = false;
             let border_style = BorderStyle::Unicode;
-            let mut printer = Printer::new(&mut stdout, show_color, border_style, use_squeezing);
+            let mut printer = Printer::new(
+                &mut stdout,
+                show_color,
+                show_char_panel,
+                show_position_panel,
+                border_style,
+                use_squeezing,
+            );
             printer.print_all(data).unwrap();
         } else {
             stdout.write_all(data)?;
