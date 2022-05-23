@@ -50,6 +50,7 @@ default-skills = [
   "yozuk-skill-prime",
   "yozuk-skill-jwt",
   "yozuk-skill-blurhash",
+  "yozuk-skill-qrcode",
 ]
 yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]
 yozuk-skill-calc = ["yozuk-core-skillset/yozuk-skill-calc"]
@@ -73,6 +74,7 @@ yozuk-skill-bech32 = ["yozuk-core-skillset/yozuk-skill-bech32"]
 yozuk-skill-prime = ["yozuk-core-skillset/yozuk-skill-prime"]
 yozuk-skill-jwt = ["yozuk-core-skillset/yozuk-skill-jwt"]
 yozuk-skill-blurhash = ["yozuk-core-skillset/yozuk-skill-blurhash"]
+yozuk-skill-qrcode = ["yozuk-core-skillset/yozuk-skill-qrcode"]
 
 [dev-dependencies]
 lazy_static = "1.4.0"

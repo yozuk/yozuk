@@ -58,4 +58,5 @@ skills!(
     [prime, "yozuk-skill-prime"],
     [jwt, "yozuk-skill-jwt"],
     [blurhash, "yozuk-skill-blurhash"],
+    [qrcode, "yozuk-skill-qrcode"],
 );
