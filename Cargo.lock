@@ -2561,7 +2561,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-english"
-version = "0.1.0"
+version = "0.16.3"
 dependencies = [
  "Inflector",
  "distance",
