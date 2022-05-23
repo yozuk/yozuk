@@ -50,7 +50,7 @@ cargo install zuk
 
 #### Build Requirements
 
-- **Rust toolchain**: 1.58.0 or later
+- **Rust toolchain**: 1.60.0 or later
 - **CMake**: 3.12 or later
 
 ## Credits
