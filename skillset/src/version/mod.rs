@@ -1,6 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
-
 use clap::Parser;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;

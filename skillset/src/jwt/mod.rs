@@ -1,6 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
-
 use anyhow::Result;
 use clap::Parser;
 use mediatype::media_type;
@@ -64,7 +61,9 @@ impl Command for JwtCommand {
                     Block::Data(block::Data::new().set_data(sig)),
                 ]
             });
-        Ok(Output::new().set_title("JWT Decoder").add_blocks_iter(blocks))
+        Ok(Output::new()
+            .set_title("JWT Decoder")
+            .add_blocks_iter(blocks))
     }
 }
 

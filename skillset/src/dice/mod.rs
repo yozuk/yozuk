@@ -1,5 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
 
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;

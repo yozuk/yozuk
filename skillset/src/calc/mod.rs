@@ -1,5 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
 
 use bigdecimal::{BigDecimal, ToPrimitive, Zero};
 use pest::iterators::{Pair, Pairs};

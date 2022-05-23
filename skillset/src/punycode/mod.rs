@@ -1,6 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
-
 use clap::{ArgEnum, Parser};
 use yozuk_sdk::prelude::*;
 

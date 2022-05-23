@@ -1,6 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
-
 use anyhow::anyhow;
 use clap::Parser;
 use serde_derive::Serialize;

@@ -1,6 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
-
 use bigdecimal::{BigDecimal, ToPrimitive};
 use clap::Parser;
 use num_bigint::ToBigInt;

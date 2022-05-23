@@ -1,3 +1,6 @@
+#![forbid(unsafe_code)]
+#![deny(clippy::all)]
+
 use yozuk_sdk::prelude::*;
 
 const MODEL_ROOT_ID: &[u8] = b"PoFM8IqW78CTHcctCP5N9";

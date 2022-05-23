@@ -1,6 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
-
 use bech32::Variant;
 use clap::Parser;
 use yozuk_sdk::prelude::*;

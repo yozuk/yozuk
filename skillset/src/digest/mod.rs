@@ -1,6 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
-
 use clap::Parser;
 use itertools::iproduct;
 use std::collections::BTreeMap;

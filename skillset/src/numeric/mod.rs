@@ -1,6 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all)]
-
 use bigdecimal::BigDecimal;
 use bigdecimal::Signed;
 use clap::Parser;
