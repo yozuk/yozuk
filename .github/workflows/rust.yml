@@ -27,6 +27,7 @@ jobs:
           target/
         key: ${{ runner.os }}-stable-cargo
     - uses: taiki-e/install-action@nextest
+    - uses: rui314/setup-mold@v1
     - name: Install apt packages
       run: sudo apt-get install -y libseccomp-dev
     - name: Run fmt

@@ -27,6 +27,7 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: rui314/setup-mold@v1
       - name: Install apt packages
         run: sudo apt-get install -y libseccomp-dev
         if: ${{ matrix.os == 'ubuntu-latest' }}
