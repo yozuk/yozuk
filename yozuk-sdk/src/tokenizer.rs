@@ -71,5 +71,12 @@ mod tests {
         );
         assert_eq!(tokenizer.tokenize(r#" " \" \" " "#), tk!([" \" \" "]));
         assert_eq!(tokenizer.tokenize(" #ffffff "), tk!(["#ffffff"]));
+        assert_eq!(
+            tokenizer.tokenize(
+                r#"　"Hello　world"
+             to　md5　"#
+            ),
+            tk!(["Hello　world", "to", "md5"])
+        );
     }
 }

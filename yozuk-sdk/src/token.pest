@@ -1,3 +1,5 @@
+ws = _{ WHITE_SPACE | "\r" | "\n" | "\t" }
+
 dq_string = ${ "\"" ~ dq_inner ~ "\"" }
 dq_inner = @{ dq_char* }
 dq_char = {
@@ -12,7 +14,7 @@ sq_char = {
 
 string = ${ inner }
 inner = @{ char+ }
-char = { !" " ~ ANY }
+char = { !ws ~ ANY }
 
 arg = _{ (dq_string | sq_string | string) }
-args = _{ SOI ~ " "* ~ arg ~ (" "+ ~ arg)* ~ " "* ~ EOI }
+args = _{ SOI ~ ws* ~ arg ~ (ws+ ~ arg)* ~ ws* ~ EOI }
