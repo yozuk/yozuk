@@ -7,7 +7,7 @@ mod definition;
 use definition::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"eXnvelz00ebeXMFxGUTK7",
+    model_id: b"NA7YShJlZRtndZH5FqXc2",
     config_schema: None,
     init: |_, _| {
         Skill::builder()
@@ -23,6 +23,7 @@ pub struct Constant {
     pub name: &'static str,
     pub tokens: Vec<Vec<Token>>,
     pub value: &'static str,
+    pub scale: i32,
     pub unit: Option<&'static str>,
     pub is_exact: bool,
 }
@@ -90,9 +91,14 @@ impl Command for ConstCommand {
                 } else {
                     format!("{} {}", item.name, "≈")
                 };
+                let scale = if item.scale != 0 {
+                    format!("⏨{}", item.scale)
+                } else {
+                    String::new()
+                };
                 let value = item
                     .unit
-                    .map(|unit| format!("{} {}", item.value, unit))
+                    .map(|unit| format!("{}{} {}", item.value, scale, unit))
                     .unwrap_or_else(|| item.value.to_string());
                 vec![
                     Block::Comment(block::Comment::new().set_text(comment)),

@@ -17,6 +17,7 @@ lazy_static::lazy_static! {
                     ]),
                 ],
                 value: "3.14159265358979323846264338327950288419716939937510",
+                scale: 0,
                 unit: None,
                 is_exact: false,
             },
@@ -47,9 +48,35 @@ lazy_static::lazy_static! {
                     ]),
                 ],
                 value: "299792458",
+                scale: 0,
                 unit: Some("m/s"),
                 is_exact: true,
-            }
+            },
+            "electron-mass" => Constant {
+                name: "Electron mass",
+                tokens: vec![
+                    tk!([
+                        "electron"; "keyword:electron-mass",
+                        "mass"; "keyword:electron-mass"
+                    ]),
+                    tk!([
+                        "mass"; "keyword:electron-mass",
+                        "of",
+                        "electron"; "keyword:electron-mass"
+                    ]),
+                    tk!([
+                        "a",
+                        "mass"; "keyword:electron-mass",
+                        "of",
+                        "an",
+                        "electron"; "keyword:electron-mass"
+                    ])
+                ],
+                value: "9.109383701528",
+                scale: -31,
+                unit: Some("kg"),
+                is_exact: true,
+            },
         ]
     };
 }

@@ -31,3 +31,15 @@ fn speed_of_light() {
         Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "speed-of-light"]))
     );
 }
+
+#[test]
+fn electron_mass() {
+    assert_eq!(
+        cmd(tk!(["Electron", "Mass"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "electron-mass"]))
+    );
+    assert_eq!(
+        cmd(tk!(["mass", "of", "electron"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "electron-mass"]))
+    );
+}
