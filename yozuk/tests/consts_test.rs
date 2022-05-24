@@ -27,7 +27,7 @@ fn speed_of_light() {
         Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "speed-of-light"]))
     );
     assert_eq!(
-        cmd(tk!(["speed", "of", "light", "in", "vaccum"])),
+        cmd(tk!(["speed", "of", "light", "in", "vacuum"])),
         Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "speed-of-light"]))
     );
 }

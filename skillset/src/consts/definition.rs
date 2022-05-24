@@ -43,7 +43,7 @@ lazy_static::lazy_static! {
                         "of",
                         "light"; "keyword:speed-of-light",
                         "in",
-                        "vaccum"
+                        "vacuum"
                     ]),
                 ],
                 value: "299792458",
