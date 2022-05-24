@@ -1,7 +1,9 @@
 use clap::Parser;
 use yozuk_sdk::prelude::*;
+use std::collections::HashSet;
 
 mod definition;
+use definition::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"bQ49wkMRKLOjoZ17U0-i9",
@@ -16,11 +18,12 @@ pub const ENTRY: SkillEntry = SkillEntry {
 };
 
 #[derive(Default)]
-struct Constant {
+pub struct Constant {
     pub name: &'static str,
     pub tokens: Vec<Vec<Token>>,
     pub value: &'static str,
     pub unit: Option<&'static str>,
+    pub is_exact: bool,
 }
 
 #[derive(Debug)]
@@ -28,44 +31,7 @@ pub struct ConstCorpus;
 
 impl Corpus for ConstCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        vec![
-            tk!([
-                "Life"; "keyword",
-                "universe"; "keyword",
-                "everything"; "keyword"
-            ]),
-            tk!([
-                "Life,"; "keyword",
-                "the",
-                "universe"; "keyword",
-                "and",
-                "everything"; "keyword"
-            ]),
-            tk!([
-                "The", "answer", "to",
-                "Life,"; "keyword",
-                "universe"; "keyword",
-                "and",
-                "everything"; "keyword"
-            ]),
-            tk!([
-                "The", "answer", "to",
-                "Life,"; "keyword",
-                "universe"; "keyword",
-                "and",
-                "everything"; "keyword"
-            ]),
-            tk!([
-                "The", "answer", "to",
-                "Life,"; "keyword",
-                "the",
-                "universe"; "keyword",
-                "and",
-                "everything"; "keyword"
-            ]),
-        ]
-        .into_iter()
-        .collect()
+        DEFINITIONS.values().flat_map(|def| def.tokens.clone()).collect()
     }
 }
 
@@ -73,7 +39,12 @@ impl Corpus for ConstCorpus {
 pub struct ConstTranslator;
 
 impl Translator for ConstTranslator {
-    fn parse(&self, _args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+        let keys: HashSet<String> = args.iter()
+        .map(|arg| arg.tag.clone())
+        .filter(|tag| tag.starts_with("keyword:"))
+        .map(|tag| tag.trim_start_matches("keyword:").to_string())
+        .collect();
         None
     }
 }
@@ -88,22 +59,13 @@ impl Command for ConstCommand {
         _streams: &mut [InputStream],
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
-        let args = Args::try_parse_from(args.args)?;
-        if args.life_universe_everything {
-            Ok(Output::new()
-                .set_title("Deep Thought")
-                .add_block(block::Comment::new().set_text(
-                "Computing the answer to your question will take a little while. Please ask me \
-                 again seven and a half million years later.",
-            )))
-        } else {
-            Ok(Output::new().add_block(block::Comment::new().set_text("Hi. I'm Yozuk.")))
-        }
+        let _args = Args::try_parse_from(args.args)?;
+        Ok(Output::new().add_block(block::Comment::new().set_text("Hi. I'm Yozuk.")))
     }
 }
 
 #[derive(Parser)]
 pub struct Args {
     #[clap(long)]
-    pub life_universe_everything: bool,
+    pub name: String,
 }
