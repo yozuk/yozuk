@@ -2561,6 +2561,7 @@ dependencies = [
  "itertools",
  "lazy_static",
  "lipsum",
+ "maplit",
  "md-5",
  "mediatype",
  "miller_rabin",

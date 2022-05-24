@@ -62,4 +62,5 @@ skills!(
     [jwt, "yozuk-skill-jwt"],
     [blurhash, "yozuk-skill-blurhash"],
     [qrcode, "yozuk-skill-qrcode"],
+    [consts, "yozuk-skill-consts"],
 );
