@@ -92,7 +92,7 @@ impl Command for ConstCommand {
                     format!("{} {}", item.name, "≈")
                 };
                 let scale = if item.scale != 0 {
-                    format!("⏨{}", item.scale)
+                    format!("e{}", item.scale)
                 } else {
                     String::new()
                 };
