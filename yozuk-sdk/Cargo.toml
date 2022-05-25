@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-sdk"
-version = "0.16.3"
+version = "0.17.0"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Types used in the Yozuk ecosystem"
