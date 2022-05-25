@@ -1,4 +1,3 @@
-
 use clap::Parser;
 use itertools::iproduct;
 use pix::gray::SGray8;
@@ -115,7 +114,11 @@ impl Command for QrCodeCommand {
                     block::Data::new()
                         .set_data(out_data)
                         .set_file_name("qcode.png")
-                        .set_media_type(media_type!(IMAGE / PNG)),
+                        .set_media_type(media_type!(IMAGE / PNG))
+                        .set_display(DisplaySuggestion {
+                            image: Some(ImageDisplay::Pixelated),
+                            ..Default::default()
+                        }),
                 )]
             });
         Ok(Output::new()

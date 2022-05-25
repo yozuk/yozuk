@@ -1,4 +1,3 @@
-
 use clap::Parser;
 use mediatype::media_type;
 use pix::rgb::SRgba8;
@@ -63,7 +62,11 @@ impl Command for BlurHashCommand {
                     block::Data::new()
                         .set_data(out_data)
                         .set_file_name("blurhash.png")
-                        .set_media_type(media_type!(IMAGE / PNG)),
+                        .set_media_type(media_type!(IMAGE / PNG))
+                        .set_display(DisplaySuggestion {
+                            image: Some(ImageDisplay::Smooth),
+                            ..Default::default()
+                        }),
                 ),
             ]
         });

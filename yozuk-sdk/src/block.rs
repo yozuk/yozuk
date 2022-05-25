@@ -1,4 +1,5 @@
 use super::blob::*;
+use crate::display::*;
 use bytes::Bytes;
 use mediatype::{media_type, MediaTypeBuf};
 use secstr::SecUtf8;
@@ -74,6 +75,9 @@ pub struct Data {
     pub title: String,
     pub file_name: String,
     pub media_type: MediaTypeBuf,
+
+    #[serde(skip_serializing_if = "DisplaySuggestion::is_default")]
+    pub display: DisplaySuggestion,
 }
 
 impl From<Data> for Block {
@@ -136,6 +140,14 @@ impl Data {
         self.media_type = media_type.into();
         self
     }
+
+    pub fn set_display<T>(mut self, display: T) -> Self
+    where
+        T: Into<DisplaySuggestion>,
+    {
+        self.display = display.into();
+        self
+    }
 }
 
 impl Default for Data {
@@ -145,6 +157,7 @@ impl Default for Data {
             title: String::new(),
             file_name: String::new(),
             media_type: media_type!(APPLICATION / OCTET_STREAM).into(),
+            display: Default::default(),
         }
     }
 }
