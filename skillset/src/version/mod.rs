@@ -4,8 +4,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"OfHH5YRaI_kKKk7e56tCZ",
-    config_schema: None,
-    init: |env, _| {
+    init: |env| {
         Skill::builder()
             .add_corpus(VersionCorpus)
             .add_translator(VersionTranslator)

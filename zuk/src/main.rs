@@ -15,7 +15,6 @@ use rustyline_derive::Helper;
 use std::borrow::Cow;
 use std::fs::File;
 use std::io;
-use std::io::Read;
 use sys_locale::get_locale;
 use time_tz::TimeZone;
 use yozuk::Yozuk;
@@ -43,15 +42,6 @@ struct App {
 
 impl App {
     fn new(args: Args) -> Result<Self> {
-        let config: Config = if let Some(config) = &args.config {
-            let mut file = File::open(config)?;
-            let mut data = Vec::new();
-            file.read_to_end(&mut data)?;
-            toml::from_slice(&data)?
-        } else {
-            Default::default()
-        };
-
         let i18n = I18n {
             locale: get_locale(),
             timezone: time_tz::system::get_timezone()
@@ -60,7 +50,7 @@ impl App {
             ..Default::default()
         };
 
-        let zuk = Yozuk::builder().set_config(config).set_i18n(i18n).build();
+        let zuk = Yozuk::builder().set_i18n(i18n).build();
         Ok(Self { args, zuk })
     }
 

@@ -25,10 +25,6 @@ pub struct Args {
     #[clap(short, long, parse(from_occurrences))]
     pub verbose: usize,
 
-    /// Load config from a TOML file
-    #[clap(short, long)]
-    pub config: Option<PathBuf>,
-
     /// Start RPC server
     #[cfg(feature = "rpc")]
     #[clap(long)]

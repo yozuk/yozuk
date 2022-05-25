@@ -13,8 +13,7 @@ use yozuk_sdk::Bytes;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"u4q_8wwjC8oi7rZFUs0U4",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_corpus(Base64Corpus)
             .add_translator(Base64Translator)

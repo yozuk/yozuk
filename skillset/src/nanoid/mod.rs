@@ -6,8 +6,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"RcVutnguDE51HEtdOHHC4",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_corpus(NanoIdCorpus)
             .add_suggests(NanoIdSuggests)

@@ -20,11 +20,7 @@ pub fn modelgen(skills: &[NamedSkillEntry], env: &Environment) -> Result<ModelSe
 
     let labelers = skills
         .par_iter()
-        .flat_map(|item| {
-            (item.entry.init)(env, &Default::default())
-                .unwrap()
-                .labelers
-        })
+        .flat_map(|item| (item.entry.init)(env).unwrap().labelers)
         .collect::<Vec<_>>();
 
     let labeler = FeatureLabeler::new(&labelers);
@@ -33,11 +29,11 @@ pub fn modelgen(skills: &[NamedSkillEntry], env: &Environment) -> Result<ModelSe
         .par_iter()
         .map(|item| TrainingData {
             key: item.key.to_string(),
-            skills: vec![(item.entry.init)(env, &Default::default()).unwrap()],
+            skills: vec![(item.entry.init)(env).unwrap()],
             negative_skills: skills
                 .par_iter()
                 .filter(|neg| neg.key != item.key)
-                .map(|neg| (neg.entry.init)(env, &Default::default()).unwrap())
+                .map(|neg| (neg.entry.init)(env).unwrap())
                 .collect(),
         })
         .filter_map(|item| learn(item, &labeler).ok())

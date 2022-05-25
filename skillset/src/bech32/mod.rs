@@ -4,8 +4,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"6uuGAB41Wm0UUKduj9xtA",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_translator(Bech32Translator)
             .set_command(Bech32Command)

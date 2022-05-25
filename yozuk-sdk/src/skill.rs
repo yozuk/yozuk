@@ -5,8 +5,7 @@ use std::fmt;
 #[derive(Clone, Copy)]
 pub struct SkillEntry {
     pub model_id: &'static [u8],
-    pub config_schema: Option<&'static str>,
-    pub init: fn(&Environment, &SkillConfig) -> Result<Skill>,
+    pub init: fn(&Environment) -> Result<Skill>,
 }
 
 #[derive(Clone, Copy)]

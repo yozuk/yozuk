@@ -7,8 +7,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"tzUyypo_Lz2T95dun91YX",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_labeler(UuidLabeler)
             .add_corpus(UuidCorpus)

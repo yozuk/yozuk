@@ -1,4 +1,3 @@
-
 use bigdecimal::{BigDecimal, ToPrimitive, Zero};
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
@@ -9,8 +8,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"Bk4CKgQi8qhO3A0IBqK5t",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(CalcTokenParser))
             .add_translator(CalcTranslator)

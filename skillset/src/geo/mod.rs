@@ -5,8 +5,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"nCK0EVzqv9V0ZTStJRjQn",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_preprocessor(GeoPreprocessor)
             .add_translator(GeoTranslator)

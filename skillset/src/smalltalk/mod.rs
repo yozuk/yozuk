@@ -1,12 +1,10 @@
-
 use clap::Parser;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"bQ49wkMRKLOjoZ17U0-i9",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_corpus(SmalltalkCorpus)
             .add_translator(SmalltalkTranslator)

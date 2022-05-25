@@ -3,8 +3,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"zj6AkibVnIy0xBLEosYdH",
-    config_schema: None,
-    init: |_, _| Skill::builder().add_labeler(CoreLabeler).build(),
+    init: |_| Skill::builder().add_labeler(CoreLabeler).build(),
 };
 
 fn label_media_type(token: &Token) -> impl Iterator<Item = Feature> {

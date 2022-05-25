@@ -7,8 +7,7 @@ mod base83;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"DAyoatvv8aj-BkVUo-18M",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_translator(BlurHashTranslator)
             .set_command(BlurHashCommand)

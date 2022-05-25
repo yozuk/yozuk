@@ -1,9 +1,7 @@
-
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
-use rand::{rngs::SmallRng, Rng, SeedableRng};
-use serde_derive::Deserialize;
+use rand::Rng;
 use std::iter;
 use thiserror::Error;
 use yozuk_helper_english::normalized_eq;
@@ -12,13 +10,12 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"Szq9sPvc3_bTUeMJSGjnC",
-    config_schema: Some(include_str!("./schema.json")),
-    init: |_, config| {
+    init: |_| {
         Skill::builder()
             .add_corpus(DiceCorpus)
             .add_preprocessor(TokenMerger::new(DiceTokenParser))
             .add_translator(DiceTranslator)
-            .set_command(DiceCommand(config.get()))
+            .set_command(DiceCommand)
             .build()
     },
 };
@@ -89,12 +86,12 @@ lazy_static::lazy_static! {
     };
 }
 
-fn eval(expression: Pairs<Rule>, config: &DiceConfig) -> Result<Value, DiceError> {
+fn eval(expression: Pairs<Rule>) -> Result<Value, DiceError> {
     PREC_CLIMBER.climb(
         expression,
         |pair: Pair<Rule>| match pair.as_rule() {
             Rule::int => Ok(Value::Sum(pair.as_str().parse::<isize>().unwrap())),
-            Rule::expr => eval(pair.into_inner(), config),
+            Rule::expr => eval(pair.into_inner()),
             Rule::dice => {
                 let (rolls, size) = pair.as_str().split_once('d').unwrap();
                 let rolls = rolls.parse::<usize>().unwrap();
@@ -104,16 +101,9 @@ fn eval(expression: Pairs<Rule>, config: &DiceConfig) -> Result<Value, DiceError
 
                 let size = size.parse::<isize>().unwrap_or(6);
                 let mut csrng = rand::thread_rng();
-                let mut fastrng = SmallRng::from_entropy();
                 let dice = iter::repeat(())
                     .take(rolls)
-                    .map(|_| {
-                        if config.secure {
-                            csrng.gen_range(1..=size)
-                        } else {
-                            fastrng.gen_range(1..=size)
-                        }
-                    })
+                    .map(|_| csrng.gen_range(1..=size))
                     .collect();
                 Ok(Value::Dice(dice))
             }
@@ -220,7 +210,7 @@ impl Translator for DiceTranslator {
 }
 
 #[derive(Debug)]
-pub struct DiceCommand(DiceConfig);
+pub struct DiceCommand;
 
 impl Command for DiceCommand {
     fn run(
@@ -230,7 +220,7 @@ impl Command for DiceCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let rule = DiceParser::parse(Rule::calculation, &args.args[1])?;
-        Ok(eval(rule, &self.0)
+        Ok(eval(rule)
             .map(|result| {
                 Output::new()
                     .set_title("Dice")
@@ -243,10 +233,4 @@ impl Command for DiceCommand {
                     .add_block(block::Data::new().set_text_data(format!("{}", err)))
             })?)
     }
-}
-
-#[derive(Debug, Default, Copy, Clone, Deserialize)]
-struct DiceConfig {
-    #[serde(default)]
-    secure: bool,
 }

@@ -10,8 +10,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"3oV85PD5eAdimpfsfCO12",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_corpus(BitcoinCorpus)
             .add_translator(BitcoinTranslator)

@@ -7,8 +7,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"XCgzZKk_EgpTRQnDAvpwA",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_corpus(PrimeCorpus)
             .add_translator(PrimeTranslator)

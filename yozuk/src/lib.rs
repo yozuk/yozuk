@@ -171,17 +171,11 @@ impl Yozuk {
 
 #[derive(Default)]
 pub struct YozukBuilder {
-    config: Config,
     i18n: I18n,
     redirections: Vec<(Vec<Token>, Vec<String>)>,
 }
 
 impl YozukBuilder {
-    pub fn set_config(mut self, config: Config) -> Self {
-        self.config = config;
-        self
-    }
-
     pub fn set_i18n(mut self, i18n: I18n) -> Self {
         self.i18n = i18n;
         self
@@ -214,17 +208,9 @@ impl YozukBuilder {
 
         let results = iter
             .map(|entry| {
-                let config = self
-                    .config
-                    .skills
-                    .get(entry.key)
-                    .zip(entry.entry.config_schema)
-                    .map(|(value, _)| SkillConfig::new(value))
-                    .unwrap_or_else(|| Ok(Default::default()))
-                    .map_err(|err| (entry, err))?;
                 Ok(SkillCache {
                     entry,
-                    skill: (entry.entry.init)(&env, &config).map_err(|err| (entry, err))?,
+                    skill: (entry.entry.init)(&env).map_err(|err| (entry, err))?,
                 })
             })
             .collect::<Vec<Result<_, (&NamedSkillEntry, _)>>>();

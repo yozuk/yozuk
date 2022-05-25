@@ -8,8 +8,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"881SN07tdT529jbaAYLwX",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_translator(JwtTranslator)
             .set_command(JwtCommand)

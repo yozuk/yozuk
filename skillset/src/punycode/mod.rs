@@ -5,8 +5,7 @@ mod tld;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"9Kr7qeDGzvzR8ph-ZyuQm",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_translator(PunycodeTranslator)
             .set_command(PunycodeCommand)

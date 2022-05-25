@@ -9,8 +9,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"nSz49UpiDtQLWUfAUZEq1",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_labeler(NumericLabeler)
             .add_translator(NumericTranslator)

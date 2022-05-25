@@ -8,8 +8,7 @@ use definition::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"NA7YShJlZRtndZH5FqXc2",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_corpus(ConstCorpus)
             .add_translator(ConstTranslator)

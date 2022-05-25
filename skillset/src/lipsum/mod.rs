@@ -1,18 +1,15 @@
 use clap::Parser;
 use lipsum::lipsum;
-use lipsum::MarkovChain;
-use serde_derive::Deserialize;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"WKQjgQTbySg0_NOxuUHBD",
-    config_schema: Some(include_str!("./schema.json")),
-    init: |_, config| {
+    init: |_| {
         Skill::builder()
             .add_corpus(LipsumCorpus)
             .add_translator(LipsumTranslator)
-            .set_command(LipsumCommand(config.get()))
+            .set_command(LipsumCommand)
             .build()
     },
 };
@@ -150,7 +147,7 @@ impl Translator for LipsumTranslator {
 const MAX_COUNT: usize = 300;
 
 #[derive(Debug)]
-pub struct LipsumCommand(LipsumConfig);
+pub struct LipsumCommand;
 
 impl Command for LipsumCommand {
     fn run(
@@ -159,12 +156,6 @@ impl Command for LipsumCommand {
         _streams: &mut [InputStream],
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
-        let chain = self.0.custom_text.as_ref().map(|text| {
-            let mut chain = MarkovChain::new();
-            chain.learn(text);
-            chain
-        });
-
         let args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
             return Err(Output::new()
@@ -178,13 +169,7 @@ impl Command for LipsumCommand {
 
         Ok(Output::new()
             .set_title("Lorem ipsum")
-            .add_block(
-                block::Data::new().set_text_data(if let Some(chain) = chain {
-                    chain.generate(args.n)
-                } else {
-                    lipsum(args.n)
-                }),
-            ))
+            .add_block(block::Data::new().set_text_data(lipsum(args.n))))
     }
 }
 
@@ -192,10 +177,4 @@ impl Command for LipsumCommand {
 pub struct Args {
     #[clap(short, default_value_t = 30)]
     pub n: usize,
-}
-
-#[derive(Debug, Default, Clone, Deserialize)]
-struct LipsumConfig {
-    #[serde(default)]
-    custom_text: Option<String>,
 }

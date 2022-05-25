@@ -7,8 +7,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"fYemWbybyq3U8v_aB9eWYc",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(ColorTokenParser))
             .add_labeler(ColorLabeler)

@@ -7,8 +7,7 @@ use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"bAy_Du64C8aBhMa_VvVrm",
-    config_schema: None,
-    init: |_, _| {
+    init: |_| {
         Skill::builder()
             .add_corpus(QrCodeCorpus)
             .add_translator(QrCodeTranslator)
