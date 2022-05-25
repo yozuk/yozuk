@@ -16,7 +16,7 @@ jobs:
   build:    
     strategy:
       matrix:
-        toolchain: [armv7-linux-androideabi, wasm32-unknown-unknown]
+        toolchain: [armv7-linux-androideabi, wasm32-unknown-unknown, wasm32-wasi]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
       run: rustup target add ${{ matrix.toolchain }}
     - name: Build
       run: cargo build -p yozuk --target=${{ matrix.toolchain }}
-      if: ${{ matrix.toolchain == 'wasm32-unknown-unknown' }}
+      if: ${{ matrix.toolchain != 'armv7-linux-androideabi' }}
     - name: Build
       run: cargo build -p yozuk --target=${{ matrix.toolchain }} --all-features
       if: ${{ matrix.toolchain == 'armv7-linux-androideabi' }}
