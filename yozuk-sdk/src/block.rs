@@ -18,7 +18,9 @@ pub enum Block {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Comment {
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub title: String,
+
     pub text: String,
     pub media_type: MediaTypeBuf,
 }
@@ -72,8 +74,13 @@ impl Default for Comment {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Data {
     pub data: Blob,
+
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub title: String,
+
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub file_name: String,
+
     pub media_type: MediaTypeBuf,
 
     #[serde(skip_serializing_if = "DisplaySuggestion::is_default")]
@@ -211,8 +218,12 @@ impl CommandList {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Command {
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub title: String,
+
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub description: String,
+
     pub tokens: Vec<String>,
 }
 
