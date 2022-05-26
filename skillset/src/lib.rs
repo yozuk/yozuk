@@ -63,4 +63,5 @@ skills!(
     [blurhash, "yozuk-skill-blurhash"],
     [qrcode, "yozuk-skill-qrcode"],
     [consts, "yozuk-skill-consts"],
+    [time, "yozuk-skill-time"],
 );
