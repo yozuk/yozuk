@@ -84,7 +84,7 @@ impl Suggests for UuidSuggests {
         [
             "UUID",
             "GUID",
-            "Genarate UUID",
+            "Generate UUID",
             "Generate GUID",
             "New UUID",
             "New GUID",

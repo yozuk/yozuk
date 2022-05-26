@@ -112,7 +112,7 @@ impl Command for QrCodeCommand {
                 vec![Block::Data(
                     block::Data::new()
                         .set_data(out_data)
-                        .set_file_name("qcode.png")
+                        .set_file_name("qrcode.png")
                         .set_media_type(media_type!(IMAGE / PNG))
                         .set_display(DisplaySuggestion {
                             image: Some(ImageDisplay::Pixelated),
