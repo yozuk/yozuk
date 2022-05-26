@@ -29,4 +29,9 @@ pub struct Args {
     #[cfg(feature = "rpc")]
     #[clap(long)]
     pub rpc: bool,
+
+    /// Dump embedded model data.
+    #[cfg(debug_assertions)]
+    #[clap(long, display_order(1000))]
+    pub dump_model: Option<PathBuf>,
 }

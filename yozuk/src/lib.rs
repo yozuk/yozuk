@@ -18,7 +18,7 @@ mod skill;
 pub use model::*;
 pub use skill::*;
 
-const MODEL_DATA: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/model.data"));
+pub const MODEL_DATA: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/model.data"));
 
 pub struct Yozuk {
     model: ModelSet,

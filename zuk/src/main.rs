@@ -64,6 +64,14 @@ impl App {
             return rpc::start_server(self.zuk, stdin, stdout);
         }
 
+        #[cfg(debug_assertions)]
+        if let Some(dump_dst) = self.args.dump_model {
+            use std::io::Write;
+            let mut out = File::create(dump_dst)?;
+            out.write_all(yozuk::MODEL_DATA)?;
+            return Ok(());
+        }
+
         let mut streams = vec![];
         if !io::stdin().is_tty() {
             streams.push(InputStream::new(
