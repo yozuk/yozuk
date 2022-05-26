@@ -25,9 +25,9 @@ impl<'a> FeatureLabeler<'a> {
         let iter = iter.map(|labeler| labeler.label_features(input));
 
         #[cfg(feature = "rayon")]
-        let skill_features = iter.reduce(Vec::new, merge_featurs);
+        let skill_features = iter.reduce(Vec::new, merge_features);
         #[cfg(not(feature = "rayon"))]
-        let skill_features = iter.reduce(merge_featurs).unwrap_or_default();
+        let skill_features = iter.reduce(merge_features).unwrap_or_default();
 
         let features = input
             .iter()
@@ -45,17 +45,17 @@ impl<'a> FeatureLabeler<'a> {
             })
             .collect::<Vec<_>>();
 
-        let features = merge_featurs(skill_features, features);
+        let features = merge_features(skill_features, features);
 
-        let mut nighbores: Vec<Vec<Feature>> = vec![vec![]; features.len()];
+        let mut neighbors: Vec<Vec<Feature>> = vec![vec![]; features.len()];
 
         for (i, list) in features.iter().enumerate() {
             for offset in [-2, -1, 1, 2] {
                 let index = i as isize + offset;
-                if index >= 0 && index < nighbores.len() as isize {
+                if index >= 0 && index < neighbors.len() as isize {
                     let index = index as usize;
                     if !features[index].iter().any(|f| f.non_entity) {
-                        nighbores[index as usize].append(
+                        neighbors[index as usize].append(
                             &mut list
                                 .iter()
                                 .map(|f| Feature {
@@ -71,13 +71,13 @@ impl<'a> FeatureLabeler<'a> {
 
         features
             .into_iter()
-            .zip(nighbores.into_iter())
+            .zip(neighbors.into_iter())
             .map(|(a, b)| a.into_iter().chain(b.into_iter()).collect())
             .collect()
     }
 }
 
-fn merge_featurs(mut a: Vec<Vec<Feature>>, mut b: Vec<Vec<Feature>>) -> Vec<Vec<Feature>> {
+fn merge_features(mut a: Vec<Vec<Feature>>, mut b: Vec<Vec<Feature>>) -> Vec<Vec<Feature>> {
     let len = a.len().max(b.len());
     a.resize_with(len, Vec::new);
     b.resize_with(len, Vec::new);
