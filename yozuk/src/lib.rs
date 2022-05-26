@@ -20,6 +20,8 @@ pub use skill::*;
 
 pub const MODEL_DATA: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/model.data"));
 
+const MAX_ARG_BYTES_LEN: usize = 1024;
+
 pub struct Yozuk {
     model: ModelSet,
     i18n: I18n,
@@ -113,6 +115,15 @@ impl Yozuk {
         streams: &mut [InputStream],
         i18n: Option<&I18n>,
     ) -> Result<Vec<Output>, Vec<Output>> {
+        if commands
+            .iter()
+            .any(|cmd| cmd.bytes_len() > MAX_ARG_BYTES_LEN)
+        {
+            return Err(vec![
+                Output::new().add_block(block::Comment::new().set_text("Too large arguments"))
+            ]);
+        }
+
         let commands = commands.into_iter().filter_map(|args| {
             self.model
                 .get_index(&args.args[0])

@@ -18,6 +18,11 @@ impl CommandArgs {
         Default::default()
     }
 
+    pub fn bytes_len(&self) -> usize {
+        self.args.iter().fold(0, |acc, arg| acc + arg.len())
+            + self.data.iter().fold(0, |acc, data| acc + data.len())
+    }
+
     pub fn add_args<T>(mut self, item: T) -> Self
     where
         T: IntoArgs<String>,
