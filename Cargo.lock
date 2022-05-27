@@ -1037,9 +1037,9 @@ dependencies = [
 
 [[package]]
 name = "miller_rabin"
-version = "1.1.0"
+version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1452e070785e5b10b7db952464c9f9c65e8df2074ce8dac21a9d22d6cf29b4d7"
+checksum = "449d692e97917789de315f09f478a497605746f468f86e8e9a24375d03330735"
 dependencies = [
  "num-bigint",
  "num-integer",
