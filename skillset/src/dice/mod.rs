@@ -1,3 +1,5 @@
+use bigdecimal::{ToPrimitive, Zero};
+use fraction::prelude::*;
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
@@ -7,6 +9,9 @@ use thiserror::Error;
 use yozuk_helper_english::normalized_eq;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
+
+type Decimal = GenericDecimal<u64, u8>;
+const DECIMAL_PRECISION: u8 = 16;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"Szq9sPvc3_bTUeMJSGjnC",
@@ -90,20 +95,24 @@ fn eval(expression: Pairs<Rule>) -> Result<Value, DiceError> {
     PREC_CLIMBER.climb(
         expression,
         |pair: Pair<Rule>| match pair.as_rule() {
-            Rule::int => Ok(Value::Sum(pair.as_str().parse::<isize>().unwrap())),
+            Rule::num => Ok(Value::Sum(
+                pair.as_str()
+                    .parse::<Decimal>()
+                    .map_err(|_| DiceError::Overflow)?,
+            )),
             Rule::expr => eval(pair.into_inner()),
             Rule::dice => {
                 let (rolls, size) = pair.as_str().split_once('d').unwrap();
-                let rolls = rolls.parse::<usize>().unwrap();
+                let rolls = rolls.parse::<usize>().map_err(|_| DiceError::Overflow)?;
                 if rolls > MAX_ROLLS {
                     return Err(DiceError::TooManyRolls { limit: MAX_ROLLS });
                 }
 
-                let size = size.parse::<isize>().unwrap_or(6);
+                let size = size.parse::<usize>().unwrap_or(6);
                 let mut csrng = rand::thread_rng();
                 let dice = iter::repeat(())
                     .take(rolls)
-                    .map(|_| csrng.gen_range(1..=size))
+                    .map(|_| Decimal::from(csrng.gen_range(1..=size)))
                     .collect();
                 Ok(Value::Dice(dice))
             }
@@ -116,7 +125,7 @@ fn eval(expression: Pairs<Rule>) -> Result<Value, DiceError> {
                 Rule::add => lhs + rhs,
                 Rule::subtract => lhs - rhs,
                 Rule::multiply => lhs * rhs,
-                Rule::divide if rhs == 0 => return Err(DiceError::DivisionByZero),
+                Rule::divide if rhs.is_zero() => return Err(DiceError::DivisionByZero),
                 Rule::divide => lhs / rhs,
                 _ => unreachable!(),
             }))
@@ -126,12 +135,12 @@ fn eval(expression: Pairs<Rule>) -> Result<Value, DiceError> {
 
 #[derive(Debug, Clone)]
 enum Value {
-    Dice(Vec<isize>),
-    Sum(isize),
+    Dice(Vec<Decimal>),
+    Sum(Decimal),
 }
 
 impl Value {
-    fn sum(&self) -> isize {
+    fn sum(&self) -> Decimal {
         match self {
             Self::Dice(dice) => dice.iter().sum(),
             Self::Sum(sum) => *sum,
@@ -140,8 +149,19 @@ impl Value {
 
     fn metadata(&self) -> Vec<Metadata> {
         match self {
-            Self::Dice(dice) => dice.iter().map(|val| Metadata::value(*val)).collect(),
-            Self::Sum(sum) => vec![Metadata::value(*sum)],
+            Self::Dice(dice) => dice
+                .iter()
+                .filter_map(|val| val.to_u64())
+                .map(Metadata::value)
+                .collect(),
+            Self::Sum(sum) => sum.to_f64().map(Metadata::value).into_iter().collect(),
+        }
+    }
+
+    fn calc_precision(self) -> Self {
+        match self {
+            Self::Dice(dice) => Self::Dice(dice),
+            Self::Sum(sum) => Self::Sum(sum.calc_precision(Some(DECIMAL_PRECISION))),
         }
     }
 }
@@ -168,6 +188,9 @@ pub enum DiceError {
 
     #[error("Too many rolls (limit: {limit})")]
     TooManyRolls { limit: usize },
+
+    #[error("Overflow")]
+    Overflow,
 }
 
 #[derive(Debug)]
@@ -222,6 +245,7 @@ impl Command for DiceCommand {
         let rule = DiceParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule)
             .map(|result| {
+                let result = result.calc_precision();
                 Output::new()
                     .set_title("Dice")
                     .add_block(block::Data::new().set_text_data(result.to_string()))
@@ -230,7 +254,7 @@ impl Command for DiceCommand {
             .map_err(|err| {
                 Output::new()
                     .set_title("Dice")
-                    .add_block(block::Data::new().set_text_data(format!("{}", err)))
+                    .add_block(block::Comment::new().set_text(format!("{}", err)))
             })?)
     }
 }

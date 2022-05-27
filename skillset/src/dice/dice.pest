@@ -1,5 +1,7 @@
-int = @{ '1'..'9' ~ ASCII_DIGIT* }
-dice = @{ int ~ "d" ~ int? }
+natural = @{ '1'..'9' ~ ASCII_DIGIT* }
+int = @{ ("+" | "-")? ~ ASCII_DIGIT+ }
+num = @{ int ~ ("." ~ ASCII_DIGIT*)? ~ (^"e" ~ int)? }
+dice = @{ natural ~ "d" ~ natural? }
 
 operation = _{ add | subtract | multiply | divide }
 add       = { "+" }
@@ -8,7 +10,7 @@ multiply  = { "*" }
 divide    = { "/" }
 
 expr = { term ~ (operation ~ term)* }
-term = _{ dice | int | "(" ~ expr ~ ")" }
+term = _{ dice | num | "(" ~ expr ~ ")" }
 
 calculation = _{ SOI ~ expr ~ EOI }
 
