@@ -39,18 +39,12 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
       - name: Build project
         run: cargo b --bin zuk --release
-      - name: Dump model data
-        run: target/release/zuk --dump-model model.data
-        if: ${{ matrix.os == 'ubuntu-latest' }}
       - name: Make archive
         run: tar -C target/release -Jcvf zuk-${{ env.platform }}.tar.xz zuk
         if: ${{ matrix.os != 'windows-latest' }}
       - name: Make archive
         run: tar -C target/release -acf zuk-${{ env.platform }}.zip zuk.exe
         if: ${{ matrix.os == 'windows-latest' }}
-      - name: Make model archive
-        run: xz model.data -c > model.xz
-        if: ${{ matrix.os == 'ubuntu-latest' }}
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
