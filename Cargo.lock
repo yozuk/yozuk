@@ -2666,6 +2666,7 @@ dependencies = [
  "urlencoding",
  "uuid",
  "yozuk-helper-english",
+ "yozuk-helper-platform",
  "yozuk-helper-preprocessor",
  "yozuk-sdk",
 ]
@@ -2678,6 +2679,14 @@ dependencies = [
  "deunicode",
  "distance",
  "singularize",
+]
+
+[[package]]
+name = "yozuk-helper-platform"
+version = "0.17.1"
+dependencies = [
+ "time",
+ "wasm-bindgen",
 ]
 
 [[package]]

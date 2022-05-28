@@ -10,6 +10,7 @@ lto = true
 yozuk-sdk = { path = "./yozuk-sdk" }
 yozuk-helper-english = { path = "./helpers/english" }
 yozuk-helper-preprocessor = { path = "./helpers/preprocessor" }
+yozuk-helper-platform = { path = "./helpers/platform" }
 yozuk-core-skillset = { path = "./skillset" }
 yozuk = { path = "./yozuk" }
 yozuk-model = { path = "./yozuk-model" }
