@@ -2683,7 +2683,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-platform"
-version = "0.17.1"
+version = "0.17.2"
 dependencies = [
  "time",
  "wasm-bindgen",
