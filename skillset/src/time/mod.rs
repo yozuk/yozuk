@@ -3,6 +3,7 @@ use time::format_description::well_known::Rfc3339;
 use time::OffsetDateTime;
 use time_tz::{timezones, Offset, TimeZone};
 use yozuk_helper_english::normalized_eq;
+use yozuk_helper_platform::time::now_utc;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
@@ -66,7 +67,7 @@ impl Translator for TimeTranslator {
                     .chain(OffsetDateTime::from_unix_timestamp_nanos(ts as i128).ok())
             })
             .filter(|&ts| {
-                (OffsetDateTime::now_utc() - ts).whole_days().abs() <= TIMESTAMP_TOLERANCE_DAYS
+                (now_utc() - ts).whole_days().abs() <= TIMESTAMP_TOLERANCE_DAYS
             })
             .collect::<Vec<_>>();
 
@@ -103,7 +104,7 @@ impl Command for TimeCommand {
             let ts = ts.to_offset(offset.to_utc());
             Ok(Output::new().add_block(block::Comment::new().set_text(ts.format(&Rfc3339)?)))
         } else {
-            let now = OffsetDateTime::now_utc();
+            let now = now_utc();
             let offset = tz.get_offset_utc(&now);
             let now = now.to_offset(offset.to_utc());
             let text = format!("{}\n{}", now.unix_timestamp(), now.format(&Rfc3339)?);
