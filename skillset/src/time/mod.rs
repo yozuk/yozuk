@@ -102,13 +102,13 @@ impl Command for TimeCommand {
             let ts = OffsetDateTime::from_unix_timestamp_nanos(unix)?;
             let offset = tz.get_offset_utc(&ts);
             let ts = ts.to_offset(offset.to_utc());
-            Ok(Output::new().add_block(block::Comment::new().set_text(ts.format(&Rfc3339)?)))
+            Ok(Output::new().add_block(block::Data::new().set_text_data(ts.format(&Rfc3339)?)))
         } else {
             let now = now_utc();
             let offset = tz.get_offset_utc(&now);
             let now = now.to_offset(offset.to_utc());
             let text = format!("{}\n{}", now.unix_timestamp(), now.format(&Rfc3339)?);
-            Ok(Output::new().add_block(block::Comment::new().set_text(text)))
+            Ok(Output::new().add_block(block::Data::new().set_text_data(text)))
         }
     }
 }
