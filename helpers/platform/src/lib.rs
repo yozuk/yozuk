@@ -1,4 +1,4 @@
-#[cfg(all(target_arch = "wasm32", target_vendor = "unknown"))]
+#[cfg(all(target_arch = "wasm32", target_os = "unknown"))]
 pub mod time {
     use time_crate::OffsetDateTime;
     use wasm_bindgen::prelude::*;
@@ -13,7 +13,7 @@ pub mod time {
     }
 }
 
-#[cfg(not(all(target_arch = "wasm32", target_vendor = "unknown")))]
+#[cfg(not(all(target_arch = "wasm32", target_os = "unknown")))]
 pub mod time {
     use time_crate::OffsetDateTime;
 
