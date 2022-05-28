@@ -1,5 +1,6 @@
 use bigdecimal::{ToPrimitive, Zero};
 use fraction::prelude::*;
+use fraction::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
@@ -122,11 +123,11 @@ fn eval(expression: Pairs<Rule>) -> Result<Value, DiceError> {
             let lhs = lhs?.sum();
             let rhs = rhs?.sum();
             Ok(Value::Sum(match op.as_rule() {
-                Rule::add => lhs + rhs,
-                Rule::subtract => lhs - rhs,
-                Rule::multiply => lhs * rhs,
+                Rule::add => lhs.checked_add(&rhs).ok_or(DiceError::Overflow)?,
+                Rule::subtract => lhs.checked_sub(&rhs).ok_or(DiceError::Overflow)?,
+                Rule::multiply => lhs.checked_mul(&rhs).ok_or(DiceError::Overflow)?,
                 Rule::divide if rhs.is_zero() => return Err(DiceError::DivisionByZero),
-                Rule::divide => lhs / rhs,
+                Rule::divide => lhs.checked_div(&rhs).ok_or(DiceError::Overflow)?,
                 _ => unreachable!(),
             }))
         },
