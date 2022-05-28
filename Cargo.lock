@@ -2736,7 +2736,7 @@ dependencies = [
 
 [[package]]
 name = "zuk"
-version = "0.17.1"
+version = "0.17.2"
 dependencies = [
  "anyhow",
  "base64",
