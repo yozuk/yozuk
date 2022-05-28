@@ -1,4 +1,6 @@
-use bigdecimal::{BigDecimal, ToPrimitive, Zero};
+use bigdecimal::{ToPrimitive, Zero};
+use fraction::prelude::*;
+use fraction::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
@@ -16,6 +18,9 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .build()
     },
 };
+
+type Decimal = GenericDecimal<u128, u8>;
+const DECIMAL_PRECISION: u8 = u8::MAX;
 
 struct CalcTokenParser;
 
@@ -53,23 +58,26 @@ lazy_static::lazy_static! {
     };
 }
 
-fn eval(expression: Pairs<Rule>) -> Result<BigDecimal, CalcError> {
+fn eval(expression: Pairs<Rule>) -> Result<Decimal, CalcError> {
     PREC_CLIMBER.climb(
         expression,
         |pair: Pair<Rule>| match pair.as_rule() {
-            Rule::num => Ok(pair.as_str().parse::<BigDecimal>().unwrap()),
+            Rule::num => Ok(pair
+                .as_str()
+                .parse::<Decimal>()
+                .map_err(|_| CalcError::Overflow)?),
             Rule::expr => eval(pair.into_inner()),
             _ => unreachable!(),
         },
-        |lhs: Result<BigDecimal, CalcError>, op: Pair<Rule>, rhs: Result<BigDecimal, CalcError>| {
+        |lhs: Result<Decimal, CalcError>, op: Pair<Rule>, rhs: Result<Decimal, CalcError>| {
             let lhs = lhs?;
             let rhs = rhs?;
             Ok(match op.as_rule() {
-                Rule::add => lhs + rhs,
-                Rule::subtract => lhs - rhs,
-                Rule::multiply => lhs * rhs,
+                Rule::add => lhs.checked_add(&rhs).ok_or(CalcError::Overflow)?,
+                Rule::subtract => lhs.checked_sub(&rhs).ok_or(CalcError::Overflow)?,
+                Rule::multiply => lhs.checked_mul(&rhs).ok_or(CalcError::Overflow)?,
                 Rule::divide if rhs.is_zero() => return Err(CalcError::DivisionByZero),
-                Rule::divide => lhs / rhs,
+                Rule::divide => lhs.checked_div(&rhs).ok_or(CalcError::Overflow)?,
                 _ => unreachable!(),
             })
         },
@@ -80,6 +88,9 @@ fn eval(expression: Pairs<Rule>) -> Result<BigDecimal, CalcError> {
 pub enum CalcError {
     #[error("Division by zero")]
     DivisionByZero,
+
+    #[error("Overflow")]
+    Overflow,
 }
 
 #[derive(Debug)]
@@ -117,6 +128,7 @@ impl Command for CalcCommand {
         let rule = CalcParser::parse(Rule::calculation, &args.args[1])?;
         Ok(eval(rule)
             .map(|result| {
+                let result = result.calc_precision(Some(DECIMAL_PRECISION));
                 Output::new()
                     .set_title("Calculator")
                     .add_block(block::Data::new().set_text_data(format!("{}", result)))
