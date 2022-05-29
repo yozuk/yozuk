@@ -1,6 +1,6 @@
 import init, { exec, push_stream } from './wasm-web/yozuk_wasm'
 
-let initialized = false;
+let initialized: boolean = false;
 
 async function init_once() {
     if (!initialized) {
@@ -10,7 +10,11 @@ async function init_once() {
 }
 
 export class Yozuk {
-    async exec() {
+    async exec(streams: Uint8Array[] = []): Promise<any> {
         await init_once();
+        for (const stream of streams) {
+            push_stream(stream);
+        }
+        return JSON.parse(exec(""));
     }
 }
