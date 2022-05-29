@@ -20,9 +20,12 @@ pub fn push_stream(buffer: Box<[u8]>) {
 }
 
 #[wasm_bindgen]
-pub fn exec(query: &str) -> Result<String, JsValue> {
+pub fn exec(command: &str, i18n: &str) -> Result<String, JsValue> {
     let streams = mem::take(STREAMS.lock().unwrap().deref_mut());
-    let input: JsonInput = serde_json::from_str(query).unwrap();
+    let input = JsonInput {
+        tokens: Tokenizer::new().tokenize(command),
+        i18n: serde_json::from_str(i18n).unwrap_or_default(),
+    };
     let result = run(input, streams);
     Ok(serde_json::to_string(&result).unwrap())
 }
