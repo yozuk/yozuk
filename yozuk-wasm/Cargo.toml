@@ -1,0 +1,27 @@
+[package]
+name = "yozuk-wasm"
+version = "0.1.0"
+edition = "2021"
+authors = ["picoHz <picoHz@outlook.com>"]
+description = "Yozuk wasm port"
+keywords = ["yozuk"]
+categories = ["text-processing"]
+repository = "https://github.com/yozuk/yozuk"
+homepage = "https://yozuk.com"
+documentation = "https://docs.rs/yozuk"
+license = "MIT"
+readme = "../README.md"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+lazy_static = "1.4.0"
+mediatype = "0.19.3"
+serde = "1.0.137"
+serde_derive = "1.0.137"
+serde_json = "1.0.81"
+wasm-bindgen = "0.2.80"
+yozuk = "0.17.2"
+yozuk-sdk = "0.17.1"
+
