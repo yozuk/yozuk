@@ -2740,8 +2740,10 @@ version = "0.17.2"
 dependencies = [
  "anyhow",
  "base64",
+ "chardetng",
  "clap",
  "crossterm",
+ "encoding_rs",
  "extrasafe",
  "hexyl",
  "json-rpc2",

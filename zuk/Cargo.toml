@@ -16,8 +16,10 @@ readme = "../README.md"
 [dependencies]
 anyhow = "1.0.56"
 base64 = { version = "0.13.0", optional = true }
+chardetng = "0.1.17"
 clap = { version = "3.1.6", features = ["derive"] }
 crossterm = "0.23.1"
+encoding_rs = "0.8.31"
 hexyl = "0.10.0"
 json-rpc2 = { version = "0.11.1", optional = true }
 mediatype = "0.19.3"
