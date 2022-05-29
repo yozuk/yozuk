@@ -4,6 +4,13 @@ version = "0.1.0"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Yozuk wasm port"
+keywords = ["yozuk"]
+categories = ["text-processing"]
+repository = "https://github.com/yozuk/yozuk"
+homepage = "https://yozuk.com"
+documentation = "https://docs.rs/yozuk"
+license = "MIT"
+readme = "../README.md"
 
 [lib]
 crate-type = ["cdylib"]
