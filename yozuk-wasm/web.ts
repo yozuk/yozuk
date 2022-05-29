@@ -10,17 +10,15 @@ async function init_once() {
 }
 
 export class Yozuk {
-    async exec(command: string, i18n: I18n = {}, streams: Uint8Array[] = []): Promise<any> {
+    async exec(command: string, streams: Uint8Array[] = []): Promise<any> {
         await init_once();
+        const i18n = {
+            locale: navigator.language,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        };
         for (const stream of streams) {
             push_stream(stream);
         }
         return JSON.parse(exec(command, JSON.stringify(i18n)));
     }
-}
-
-interface I18n {
-    locale?: string
-    timezone?: string
-    location?: [number, number]
 }
