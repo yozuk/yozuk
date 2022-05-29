@@ -1,0 +1,15 @@
+{
+  "name": "yozuk-wasm",
+  "version": "0.1.0",
+  "description": "",
+  "main": "web.js",
+  "scripts": {
+    "prepare": "node prepare.js"
+  },
+  "files": [
+    "*.toml",
+    "**/*.rs"
+  ],
+  "author": "",
+  "license": "MIT"
+}
