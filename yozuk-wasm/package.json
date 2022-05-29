@@ -1,15 +1,12 @@
 {
-  "name": "yozuk-wasm",
-  "version": "0.1.0",
-  "description": "",
+  "name": "@yozuk/yozuk-wasm",
+  "version": "0.17.2",
+  "description": "Yozuk WebAssembly port",
   "main": "web.ts",
   "scripts": {
-    "prepare": "node prepare.js"
+    "preinstall": "node scripts/preinstall.js"
   },
-  "files": [
-    "*.toml",
-    "**/*.rs"
-  ],
-  "author": "",
-  "license": "MIT"
+  "author": "picoHz <picoHz@outlook.com>",
+  "license": "MIT",
+  "sideEffects": false
 }
