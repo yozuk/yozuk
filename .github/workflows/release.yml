@@ -31,6 +31,9 @@ jobs:
       - name: Install apt packages
         run: sudo apt-get install -y libseccomp-dev
         if: ${{ matrix.os == 'ubuntu-latest' }}
+      - name: Install wasm-pack
+        run: sudo npm install -g wasm-pack
+        if: ${{ matrix.os == 'ubuntu-latest' }}
       - name: Set Env
         run: node -p "'platform=' + process.argv[1].toLowerCase()" ${{ runner.os }}-${{ runner.arch }} >> $GITHUB_ENV
         if: ${{ matrix.os != 'windows-latest' }}
@@ -45,6 +48,9 @@ jobs:
       - name: Make archive
         run: tar -C target/release -acf zuk-${{ env.platform }}.zip zuk.exe
         if: ${{ matrix.os == 'windows-latest' }}
+      - name: Make WASM archive
+        run: node script/wasm-pack.js
+        if: ${{ matrix.os == 'ubuntu-latest' }}
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -53,7 +59,7 @@ jobs:
       - name: Upload archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.ref_name }} *.xz
+        run: gh release upload ${{ github.ref_name }} *.tar.*
         if: ${{ matrix.os != 'windows-latest' }}
       - name: Upload archive
         env:
