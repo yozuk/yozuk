@@ -1,5 +1,6 @@
 import init, { exec, push_stream } from './wasm-web/yozuk_wasm'
-import { Result } from './output'
+import { Base64 } from "js-base64";
+import { Result, Output } from './output'
 
 let initialized: boolean = false;
 
@@ -20,6 +21,17 @@ export class Yozuk {
         for (const stream of streams) {
             push_stream(stream);
         }
-        return JSON.parse(exec(command, JSON.stringify(i18n)));
+        const result = JSON.parse(exec(command, JSON.stringify(i18n)));
+        if (result.outputs) {
+            result.outputs.forEach((output) => {
+                output.blocks.forEach((block) => {
+                    const { data } = block;
+                    if (data) {
+                        block.data = Base64.decode(data);
+                    }
+                });
+            });
+        }
+        return result;
     }
 }

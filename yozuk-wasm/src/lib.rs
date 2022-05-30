@@ -40,7 +40,7 @@ fn run(input: JsonInput, buffer: Vec<Box<[u8]>>) -> JsonResult {
 
     let commands = zuk.get_commands(&input.tokens, &streams);
     if commands.is_empty() {
-        return JsonResult::NoCommand { suggest: None };
+        return JsonResult::NoCommand;
     }
 
     match zuk.run_commands(commands, &mut streams, Some(&input.i18n)) {
@@ -54,7 +54,7 @@ fn run(input: JsonInput, buffer: Vec<Box<[u8]>>) -> JsonResult {
 pub enum JsonResult {
     Ok { outputs: Vec<Output> },
     Fail { outputs: Vec<Output> },
-    NoCommand { suggest: Option<String> },
+    NoCommand,
     Error { message: String },
 }
 
