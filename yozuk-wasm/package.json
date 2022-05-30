@@ -1,6 +1,6 @@
 {
   "name": "@yozuk/yozuk-wasm",
-  "version": "0.17.2",
+  "version": "0.18.0",
   "description": "Yozuk WebAssembly port",
   "main": "web.ts",
   "author": "picoHz <picoHz@outlook.com>",
