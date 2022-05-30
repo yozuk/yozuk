@@ -2,15 +2,6 @@
 
 const { execSync } = require('node:child_process');
 
-const options = {
-    cwd: `${__dirname}/../yozuk-wasm`,
-    env: {
-        ...process.env,
-        "RUSTFLAGS": "-C opt-level=z"
-    },
-    stdio: 'inherit'
-};
-
 function build(out, target, profile, env = {}) {
     const dir = `${__dirname}/../yozuk-wasm`;
     const options = {
