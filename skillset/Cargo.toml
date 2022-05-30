@@ -67,7 +67,7 @@ uuid = { version = "1.0.0", features = ["v4"], optional = true }
 yozuk-helper-english = "0.17.1"
 yozuk-helper-preprocessor = "0.17.1"
 yozuk-helper-platform = "0.17.2"
-yozuk-sdk = "0.17.1"
+yozuk-sdk = "0.18.0"
 
 [features]
 default = []
