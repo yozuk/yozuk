@@ -1,4 +1,5 @@
 import init, { exec, push_stream } from './wasm-web/yozuk_wasm'
+import { Result } from './output'
 
 let initialized: boolean = false;
 
@@ -10,7 +11,7 @@ async function init_once() {
 }
 
 export class Yozuk {
-    async exec(command: string, streams: Uint8Array[] = []): Promise<any> {
+    async exec(command: string, streams: Uint8Array[] = []): Promise<Result> {
         await init_once();
         const i18n = {
             locale: navigator.language,
