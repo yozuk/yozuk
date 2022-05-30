@@ -3,9 +3,6 @@
   "version": "0.17.2",
   "description": "Yozuk WebAssembly port",
   "main": "web.ts",
-  "scripts": {
-    "preinstall": "node scripts/preinstall.js"
-  },
   "author": "picoHz <picoHz@outlook.com>",
   "license": "MIT",
   "sideEffects": false
