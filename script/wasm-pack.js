@@ -23,7 +23,7 @@ function build(out, target, profile, env = {}) {
         stdio: 'inherit'
     };
     execSync(`wasm-pack build -d ${out} -t ${target} --${profile}`, options);
-    execSync(`tar -C ${dir} -Jcvf yozuk-${out}.tar.xz ${out}`);
+    execSync(`tar -C ${dir} -zcvf yozuk-${out}.tar.gz ${out}`);
 }
 
 build('wasm-web', 'web', 'release', { "RUSTFLAGS": "-C opt-level=z" });

@@ -5,5 +5,12 @@
   "main": "web.ts",
   "author": "picoHz <picoHz@outlook.com>",
   "license": "MIT",
-  "sideEffects": false
+  "scripts": {
+    "install": "node scripts/install.js"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "decompress": "^4.2.1",
+    "download": "^8.0.0"
+  }
 }
