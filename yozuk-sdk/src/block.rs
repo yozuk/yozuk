@@ -1,5 +1,5 @@
-use super::blob::*;
 use crate::display::*;
+use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
 use mediatype::{media_type, MediaTypeBuf};
 use secstr::SecUtf8;
@@ -73,7 +73,11 @@ impl Default for Comment {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Data {
-    pub data: Blob,
+    #[serde(
+        serialize_with = "serialize_bytes",
+        deserialize_with = "deserialize_bytes"
+    )]
+    pub data: Bytes,
 
     #[serde(skip_serializing_if = "String::is_empty")]
     pub title: String,
@@ -102,7 +106,7 @@ impl Data {
     where
         T: Into<Bytes>,
     {
-        self.data = data.into().into();
+        self.data = data.into();
         self
     }
 
@@ -160,7 +164,7 @@ impl Data {
 impl Default for Data {
     fn default() -> Self {
         Self {
-            data: Blob::new(),
+            data: Bytes::new(),
             title: String::new(),
             file_name: String::new(),
             media_type: media_type!(APPLICATION / OCTET_STREAM).into(),

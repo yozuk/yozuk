@@ -1,5 +1,4 @@
 pub use super::args::*;
-pub use super::blob::*;
 pub use super::block::{self, Block};
 pub use super::display::*;
 pub use super::env::*;

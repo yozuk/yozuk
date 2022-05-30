@@ -4,7 +4,6 @@
 pub use bytes::Bytes;
 
 pub mod args;
-pub mod blob;
 pub mod block;
 pub mod display;
 pub mod env;

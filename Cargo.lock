@@ -2724,7 +2724,6 @@ dependencies = [
  "bincode",
  "bytes",
  "mediatype",
- "nanoid",
  "pest",
  "pest_derive",
  "secstr",

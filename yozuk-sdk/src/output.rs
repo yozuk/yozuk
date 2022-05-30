@@ -1,6 +1,5 @@
 use crate::block::{self, Block};
 use crate::metadata::Metadata;
-use bytes::Bytes;
 use serde_derive::{Deserialize, Serialize};
 use std::str;
 
@@ -64,23 +63,6 @@ impl Output {
         self.metadata
             .append(&mut iter.into_iter().map(Into::into).collect());
         self
-    }
-
-    pub fn externalize_large_blobs(&mut self, len: usize) -> Vec<(String, Bytes)> {
-        self.blocks
-            .iter_mut()
-            .filter_map(|block| {
-                if let Block::Data(ref mut data) = block {
-                    if data.data.data().map(|data| data.len()).unwrap_or(0) > len {
-                        data.data.externalize()
-                    } else {
-                        None
-                    }
-                } else {
-                    None
-                }
-            })
-            .collect()
     }
 }
 

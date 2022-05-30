@@ -64,14 +64,13 @@ impl<'a> TerminalPrinter<'a> {
                     }
                 }
                 Block::Data(data) => {
-                    let data = data.data.data().unwrap();
                     let mut detector = EncodingDetector::new();
-                    detector.feed(data, true);
+                    detector.feed(&data.data, true);
                     if detector.guess(None, true) == encoding_rs::UTF_8 {
-                        stdout.write_all(data)?;
+                        stdout.write_all(&data.data)?;
                         writeln!(&mut stdout)?;
                     } else {
-                        self.print_binary(data)?;
+                        self.print_binary(&data.data)?;
                     }
                 }
                 Block::Preview(block::Preview::Color(color)) => {
