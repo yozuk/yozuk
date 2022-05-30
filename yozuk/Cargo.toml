@@ -1,6 +1,6 @@
 [package]
 name = "yozuk"
-version = "0.17.2"
+version = "0.18.0"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Assistant Bot for Programmers"
