@@ -35,7 +35,7 @@ publishCrate "yozuk" "yozuk"
 publishCrate "zuk" "zuk"
 
 sed -i -E "0,/version/ s/\"version\": \"[.0-9]+\"/\"version\": \"${NEXT_TAG#v}\"/" yozuk-wasm/package.json
-npm publish ./yozuk-wasm --dry-run
+npm publish ./yozuk-wasm
 git commit -a -m "publish yozuk-wasm $NEXT_TAG"
 
 git tag $NEXT_TAG
