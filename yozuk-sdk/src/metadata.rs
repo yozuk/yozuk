@@ -9,6 +9,7 @@ pub enum Metadata {
     Docs { url: Url },
     Share { url: Url },
     Value { value: Value },
+    Color { color: String },
 }
 
 impl Metadata {
@@ -36,6 +37,15 @@ impl Metadata {
     {
         Self::Value {
             value: value.into(),
+        }
+    }
+
+    pub fn color<T>(color: T) -> Self
+    where
+        T: Into<String>,
+    {
+        Self::Color {
+            color: color.into(),
         }
     }
 }

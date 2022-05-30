@@ -121,14 +121,18 @@ impl Command for ColorCommand {
             .filter_map(|color| css_color::Srgb::from_str(color).ok())
             .map(|color| {
                 let color = Srgba::new(color.red, color.green, color.blue, color.alpha);
-                (Metadata::value(hex_color(&color)), color)
+                (hex_color(&color), color)
             })
             .unzip();
 
         Ok(Output::new()
             .set_title("Color")
             .add_blocks_iter(colors.into_iter().flat_map(|color| render_color(&color)))
-            .add_metadata_iter(metadata))
+            .add_metadata_iter(
+                metadata
+                    .into_iter()
+                    .flat_map(|color| [Metadata::value(color.clone()), Metadata::color(color)]),
+            ))
     }
 }
 
@@ -219,15 +223,9 @@ fn render_color(color: &Srgba) -> Vec<Block> {
         )
     });
 
-    vec![
-        Block::Preview(block::Preview::Color(block::ColorPreview {
-            red: rgba_u8.color.red,
-            green: rgba_u8.color.green,
-            blue: rgba_u8.color.blue,
-            alpha: rgba_u8.alpha,
-        })),
-        Block::Data(block::Data::new().set_text_data(colors.join("\n"))),
-    ]
+    vec![Block::Data(
+        block::Data::new().set_text_data(colors.join("\n")),
+    )]
 }
 
 #[derive(Parser)]

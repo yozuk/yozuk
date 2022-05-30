@@ -7,6 +7,7 @@ use owo_colors::OwoColorize;
 use std::io::BufRead;
 use std::io::{self, Write};
 use std::str;
+use std::str::FromStr;
 use yozuk_sdk::prelude::*;
 
 pub struct TerminalPrinter<'a> {
@@ -56,6 +57,22 @@ impl<'a> TerminalPrinter<'a> {
 
         self.print_json(&output, stderr.lock())?;
 
+        for data in &output.metadata {
+            if let Metadata::Color { color } = data {
+                if let Ok(color) = css_color::Srgb::from_str(color) {
+                    writeln!(
+                        &mut stderr,
+                        "{}",
+                        "       ".on_truecolor(
+                            (color.red * 255.0) as u8,
+                            (color.green * 255.0) as u8,
+                            (color.blue * 255.0) as u8,
+                        )
+                    )?;
+                }
+            }
+        }
+
         for block in &output.blocks {
             match block {
                 Block::Comment(comment) => {
@@ -72,13 +89,6 @@ impl<'a> TerminalPrinter<'a> {
                     } else {
                         self.print_binary(&data.data)?;
                     }
-                }
-                Block::Preview(block::Preview::Color(color)) => {
-                    writeln!(
-                        &mut stderr,
-                        "{}",
-                        "       ".on_truecolor(color.red, color.green, color.blue)
-                    )?;
                 }
                 Block::Spoiler(spoiler) => {
                     use crossterm::{

@@ -11,9 +11,7 @@ use serde_derive::{Deserialize, Serialize};
 pub enum Block {
     Comment(Comment),
     Data(Data),
-    Preview(Preview),
     Spoiler(Spoiler),
-    CommandList(CommandList),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -170,94 +168,6 @@ impl Default for Data {
             media_type: media_type!(APPLICATION / OCTET_STREAM).into(),
             display: Default::default(),
         }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "type")]
-#[non_exhaustive]
-pub enum Preview {
-    #[serde(rename = "com.yozuk.preview.color")]
-    Color(ColorPreview),
-}
-
-impl From<Preview> for Block {
-    fn from(block: Preview) -> Self {
-        Self::Preview(block)
-    }
-}
-
-#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
-pub struct ColorPreview {
-    pub red: u8,
-    pub green: u8,
-    pub blue: u8,
-    pub alpha: u8,
-}
-
-#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
-pub struct CommandList {
-    pub commands: Vec<Command>,
-}
-
-impl From<CommandList> for Block {
-    fn from(block: CommandList) -> Self {
-        Self::CommandList(block)
-    }
-}
-
-impl CommandList {
-    pub fn new() -> Self {
-        Default::default()
-    }
-
-    pub fn add_command<T>(mut self, command: T) -> Self
-    where
-        T: Into<Command>,
-    {
-        self.commands.push(command.into());
-        self
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct Command {
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub title: String,
-
-    #[serde(skip_serializing_if = "String::is_empty")]
-    pub description: String,
-
-    pub tokens: Vec<String>,
-}
-
-impl Command {
-    pub fn new<I, T>(iter: I) -> Self
-    where
-        T: Into<String>,
-        I: IntoIterator<Item = T>,
-    {
-        Self {
-            title: String::new(),
-            description: String::new(),
-            tokens: iter.into_iter().map(Into::into).collect(),
-        }
-    }
-
-    pub fn set_title<T>(mut self, title: T) -> Self
-    where
-        T: Into<String>,
-    {
-        self.title = title.into();
-        self
-    }
-
-    pub fn set_description<T>(mut self, description: T) -> Self
-    where
-        T: Into<String>,
-    {
-        self.description = description.into();
-        self
     }
 }
 

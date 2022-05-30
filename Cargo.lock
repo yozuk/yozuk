@@ -2742,6 +2742,7 @@ dependencies = [
  "chardetng",
  "clap",
  "crossterm",
+ "css-color",
  "encoding_rs",
  "extrasafe",
  "hexyl",
