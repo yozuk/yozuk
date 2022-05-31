@@ -1,9 +1,14 @@
 use clap::Parser;
-use yozuk_helper_english::normalized_eq;
+use rand::Rng;
+use std::collections::HashSet;
+use yozuk_helper_english::normalize;
 use yozuk_sdk::prelude::*;
 
+mod script;
+use script::scripts;
+
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"bQ49wkMRKLOjoZ17U0-i9",
+    model_id: b"zl9hD8szURy_8p4Q5l21U",
     init: |_| {
         Skill::builder()
             .add_corpus(SmalltalkCorpus)
@@ -13,49 +18,21 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
+pub struct Script {
+    pub title: Option<&'static str>,
+    pub tokens: Vec<Vec<Token>>,
+    pub responses: &'static [&'static str],
+}
+
 #[derive(Debug)]
 pub struct SmalltalkCorpus;
 
 impl Corpus for SmalltalkCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        vec![
-            tk!([
-                "Life"; "keyword",
-                "universe"; "keyword",
-                "everything"; "keyword"
-            ]),
-            tk!([
-                "Life,"; "keyword",
-                "the",
-                "universe"; "keyword",
-                "and",
-                "everything"; "keyword"
-            ]),
-            tk!([
-                "The", "answer", "to",
-                "Life,"; "keyword",
-                "universe"; "keyword",
-                "and",
-                "everything"; "keyword"
-            ]),
-            tk!([
-                "The", "answer", "to",
-                "Life,"; "keyword",
-                "universe"; "keyword",
-                "and",
-                "everything"; "keyword"
-            ]),
-            tk!([
-                "The", "answer", "to",
-                "Life,"; "keyword",
-                "the",
-                "universe"; "keyword",
-                "and",
-                "everything"; "keyword"
-            ]),
-        ]
-        .into_iter()
-        .collect()
+        scripts()
+            .values()
+            .flat_map(|def| def.tokens.clone())
+            .collect()
     }
 }
 
@@ -63,25 +40,30 @@ impl Corpus for SmalltalkCorpus {
 pub struct SmalltalkTranslator;
 
 impl Translator for SmalltalkTranslator {
-    fn generate_command(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
-            .filter(|arg| arg.tag == "keyword")
-            .collect::<Vec<_>>();
-        if let [life, universe, everything] = keywords[..] {
-            if normalized_eq(life.as_str(), &["life"], 1)
-                && normalized_eq(universe.as_str(), &["universe"], 1)
-                && normalized_eq(everything.as_str(), &["everything"], 1)
-            {
-                return Some(CommandArgs::new().add_args(["--life-universe-everything"]));
-            }
-        }
-
-        if args.is_empty() && streams.is_empty() {
-            return Some(CommandArgs::new());
-        }
-
-        None
+            .filter(|arg| arg.tag.starts_with("keyword:"))
+            .map(|arg| normalize(arg.as_str()))
+            .collect::<HashSet<_>>();
+        let keys: HashSet<String> = args
+            .iter()
+            .map(|arg| arg.tag.clone())
+            .filter(|tag| tag.starts_with("keyword:"))
+            .map(|tag| tag.trim_start_matches("keyword:").to_string())
+            .collect();
+        keys.into_iter()
+            .filter_map(|key| scripts().get(key.as_str()).map(|item| (key, item)))
+            .find(|(_, item)| {
+                item.tokens.iter().any(|tokens| {
+                    tokens
+                        .iter()
+                        .filter(|arg| arg.tag.starts_with("keyword:"))
+                        .map(|arg| normalize(arg.as_str()))
+                        .all(|key| keywords.contains(&key))
+                })
+            })
+            .map(|(key, _)| CommandArgs::new().add_args(["--name".to_string(), key]))
     }
 }
 
@@ -96,15 +78,16 @@ impl Command for SmalltalkCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
-        if args.life_universe_everything {
+        if let Some(item) = scripts().get(args.name.as_str()) {
+            let mut csrng = rand::thread_rng();
+            let res = item.responses[csrng.gen_range(0..item.responses.len())];
             Ok(Output::new()
-                .set_title("Deep Thought")
-                .add_block(block::Comment::new().set_text(
-                "Computing the answer to your question will take a little while. Please ask me \
-                 again seven and a half million years later.",
-            )))
+                .set_title(item.title.unwrap_or("Yozuk"))
+                .add_block(block::Comment::new().set_text(res)))
         } else {
-            Ok(Output::new().add_block(block::Comment::new().set_text("Hi. I'm Yozuk.")))
+            Ok(Output::new()
+                .set_title("Yozuk")
+                .add_block(block::Comment::new().set_text("Hi. I'm Yozuk.")))
         }
     }
 
@@ -116,5 +99,5 @@ impl Command for SmalltalkCommand {
 #[derive(Parser)]
 pub struct Args {
     #[clap(long)]
-    pub life_universe_everything: bool,
+    pub name: String,
 }

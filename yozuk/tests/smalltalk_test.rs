@@ -1,14 +1,14 @@
 #![cfg(feature = "yozuk-skill-smalltalk")]
 
 mod common;
-use common::{cmd, yozuk_global};
+use common::cmd;
 use yozuk_sdk::prelude::*;
 
 #[test]
 fn deep_thought() {
     assert_eq!(
         cmd(tk!(["life", "universe", "everything"])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--life-universe-everything"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "42"]))
     );
     assert_eq!(
         cmd(tk!([
@@ -21,14 +21,18 @@ fn deep_thought() {
             "and",
             "everything"
         ])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--life-universe-everything"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "42"]))
     );
 }
 
 #[test]
-fn empty() {
+fn early_bird() {
     assert_eq!(
-        yozuk_global().get_commands(&[], &[]).into_iter().next(),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk"]))
+        cmd(tk!(["Do", "you", "wake", "up", "early?"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "early-bird"]))
+    );
+    assert_eq!(
+        cmd(tk!(["are", "you", "an", "early", "bird"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "early-bird"]))
     );
 }
