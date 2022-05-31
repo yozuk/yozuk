@@ -64,4 +64,5 @@ skills!(
     [qrcode, "yozuk-skill-qrcode"],
     [consts, "yozuk-skill-consts"],
     [time, "yozuk-skill-time"],
+    [ip, "yozuk-skill-ip"],
 );
