@@ -61,7 +61,7 @@ impl Corpus for DigestCorpus {
 pub struct DigestTranslator;
 
 impl Translator for DigestTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let input = args
             .iter()
             .filter(|arg| arg.tag == "input:data")

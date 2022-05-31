@@ -56,7 +56,7 @@ impl Corpus for PrimeCorpus {
 pub struct PrimeTranslator;
 
 impl Translator for PrimeTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let prime = args
             .iter()
             .any(|arg| arg.tag == "keyword" && normalized_eq(arg.as_str(), &["prime"], 1));

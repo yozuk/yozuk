@@ -16,7 +16,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct Bech32Translator;
 
 impl Translator for Bech32Translator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let is_bech32 =
             !args.is_empty() && args.iter().all(|arg| bech32::decode(arg.as_str()).is_ok());
         if is_bech32 {

@@ -38,7 +38,7 @@ impl Corpus for VersionCorpus {
 pub struct VersionTranslator;
 
 impl Translator for VersionTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
             .filter(|arg| arg.tag == "keyword")

@@ -97,7 +97,7 @@ pub enum CalcError {
 pub struct CalcTranslator;
 
 impl Translator for CalcTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let media_type = MediaType::parse("text/vnd.yozuk.calc").unwrap();
         if args.iter().any(|arg| arg.media_type != media_type) {
             return None;

@@ -17,7 +17,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct IpTranslator;
 
 impl Translator for IpTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let is_ipaddr = !args.is_empty()
             && args
                 .iter()

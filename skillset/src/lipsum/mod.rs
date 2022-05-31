@@ -106,7 +106,7 @@ impl Corpus for LipsumCorpus {
 pub struct LipsumTranslator;
 
 impl Translator for LipsumTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")

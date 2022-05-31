@@ -67,7 +67,7 @@ impl Corpus for Base64Corpus {
 pub struct Base64Translator;
 
 impl Translator for Base64Translator {
-    fn parse(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
         if args
             .iter()
             .any(|arg| arg.tag == "command" && normalized_eq(arg.as_str(), &["Base64"], 0))

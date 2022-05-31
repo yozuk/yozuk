@@ -17,7 +17,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct PunycodeTranslator;
 
 impl Translator for PunycodeTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let decode = !args.is_empty() && args.iter().all(|token| is_punycode(token.as_str()));
 
         if decode {

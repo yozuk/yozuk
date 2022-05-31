@@ -84,7 +84,7 @@ impl Corpus for ColorCorpus {
 pub struct ColorTranslator;
 
 impl Translator for ColorTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let inputs = args
             .iter()
             .filter(|arg| arg.tag == "input:data")

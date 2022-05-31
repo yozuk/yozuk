@@ -19,7 +19,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct BlurHashTranslator;
 
 impl Translator for BlurHashTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let is_blurhash =
             !args.is_empty() && args.iter().all(|arg| base83::validate_blurhash(&arg.data));
         if is_blurhash {

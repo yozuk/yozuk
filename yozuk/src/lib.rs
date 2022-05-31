@@ -90,7 +90,7 @@ impl Yozuk {
                 cache
                     .translators
                     .iter()
-                    .find_map(|tr| tr.parse(&args, streams))
+                    .find_map(|tr| tr.generate_command(&args, streams))
                     .map(|args| {
                         (
                             cache.command.priority(),

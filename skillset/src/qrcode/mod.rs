@@ -47,7 +47,7 @@ impl Corpus for QrCodeCorpus {
 pub struct QrCodeTranslator;
 
 impl Translator for QrCodeTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let command = args.iter().any(|arg| {
             arg.tag == "command" && normalized_eq(arg.as_str(), &["QR", "QRCode", "qrcode"], 0)
         });

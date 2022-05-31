@@ -36,7 +36,7 @@ impl Corpus for PasswordCorpus {
 pub struct PasswordTranslator;
 
 impl Translator for PasswordTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         if args.iter().any(|arg| {
             arg.tag == "command" && normalized_eq(arg.as_str(), &["password", "pwgen"], 0)
         }) {

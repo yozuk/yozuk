@@ -43,7 +43,7 @@ const TIMESTAMP_TOLERANCE_DAYS: i64 = 365 * 10;
 pub struct TimeTranslator;
 
 impl Translator for TimeTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
             .filter(|arg| arg.tag == "keyword")

@@ -63,7 +63,7 @@ impl Corpus for SmalltalkCorpus {
 pub struct SmalltalkTranslator;
 
 impl Translator for SmalltalkTranslator {
-    fn parse(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
             .filter(|arg| arg.tag == "keyword")

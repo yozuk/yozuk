@@ -198,7 +198,7 @@ pub enum DiceError {
 pub struct DiceTranslator;
 
 impl Translator for DiceTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")

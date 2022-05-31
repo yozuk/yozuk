@@ -37,7 +37,7 @@ impl Preprocessor for GeoPreprocessor {
 pub struct GeoTranslator;
 
 impl Translator for GeoTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let codes = args
             .iter()
             .filter(|arg| arg.tag == "geo:olc")

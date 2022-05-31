@@ -83,7 +83,7 @@ impl Corpus for UnitCorpus {
 pub struct UnitTranslator;
 
 impl Translator for UnitTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let values = args
             .iter()
             .filter(|arg| arg.tag == "input:value")

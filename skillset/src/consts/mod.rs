@@ -43,7 +43,7 @@ impl Corpus for ConstCorpus {
 pub struct ConstTranslator;
 
 impl Translator for ConstTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
             .filter(|arg| arg.tag.starts_with("keyword:"))

@@ -20,7 +20,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct JwtTranslator;
 
 impl Translator for JwtTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let is_jwt = !args.is_empty() && args.iter().all(|arg| decode_jwt(arg.as_str()).is_ok());
         if is_jwt {
             return Some(CommandArgs::new().add_args_iter(args.iter().map(|arg| arg.as_str())));

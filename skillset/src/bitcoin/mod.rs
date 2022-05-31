@@ -47,7 +47,7 @@ impl Corpus for BitcoinCorpus {
 pub struct BitcoinTranslator;
 
 impl Translator for BitcoinTranslator {
-    fn parse(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         if args
             .iter()
             .any(|arg| arg.tag == "command" && normalized_eq(arg.as_str(), &["bitcoin", "btc"], 0))
