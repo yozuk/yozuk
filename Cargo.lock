@@ -1249,6 +1249,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "once_cell"
+version = "1.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7709cef83f0c1f58f666e746a08b21e0085f7440fa6a29cc194d68aac97a4225"
+
+[[package]]
 name = "opaque-debug"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2603,8 +2609,8 @@ dependencies = [
  "const-sha1",
  "crfs",
  "distance",
- "lazy_static",
  "mediatype",
+ "once_cell",
  "rayon",
  "yozuk-core-skillset",
  "yozuk-helper-english",
@@ -2635,7 +2641,6 @@ dependencies = [
  "getrandom",
  "hex",
  "itertools",
- "lazy_static",
  "lipsum",
  "maplit",
  "md-5",
@@ -2643,6 +2648,7 @@ dependencies = [
  "miller_rabin",
  "nanoid",
  "num-bigint 0.4.3",
+ "once_cell",
  "open-location-code",
  "palette",
  "pest",
@@ -2737,8 +2743,8 @@ dependencies = [
 name = "yozuk-wasm"
 version = "0.1.0"
 dependencies = [
- "lazy_static",
  "mediatype",
+ "once_cell",
  "serde",
  "serde_derive",
  "serde_json",

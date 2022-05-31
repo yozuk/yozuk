@@ -83,7 +83,7 @@ yozuk-skill-time = ["yozuk-core-skillset/yozuk-skill-time"]
 yozuk-skill-ip = ["yozuk-core-skillset/yozuk-skill-ip"]
 
 [dev-dependencies]
-lazy_static = "1.4.0"
+once_cell = "1.12.0"
 
 [build-dependencies]
 anyhow = "1.0.56"

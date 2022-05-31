@@ -1,7 +1,7 @@
 #![cfg(feature = "yozuk-skill-smalltalk")]
 
 mod common;
-use common::{cmd, YOZUK};
+use common::{cmd, yozuk_global};
 use yozuk_sdk::prelude::*;
 
 #[test]
@@ -28,7 +28,7 @@ fn deep_thought() {
 #[test]
 fn empty() {
     assert_eq!(
-        YOZUK.get_commands(&[], &[]).into_iter().next(),
+        yozuk_global().get_commands(&[], &[]).into_iter().next(),
         Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk"]))
     );
 }

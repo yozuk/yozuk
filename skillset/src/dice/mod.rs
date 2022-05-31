@@ -1,6 +1,7 @@
 use bigdecimal::{ToPrimitive, Zero};
 use fraction::prelude::*;
 use fraction::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
+use once_cell::sync::OnceCell;
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
@@ -80,20 +81,18 @@ impl TokenParser for DiceTokenParser {
 #[grammar = "dice/dice.pest"]
 pub struct DiceParser;
 
-lazy_static::lazy_static! {
-    static ref PREC_CLIMBER: PrecClimber<Rule> = {
-        use Assoc::*;
-        use Rule::*;
-
-        PrecClimber::new(vec![
-            Operator::new(add, Left) | Operator::new(subtract, Left),
-            Operator::new(multiply, Left) | Operator::new(divide, Left),
-        ])
-    };
-}
-
 fn eval(expression: Pairs<Rule>) -> Result<Value, DiceError> {
-    PREC_CLIMBER.climb(
+    use Assoc::*;
+
+    static PREC_CLIMBER: OnceCell<PrecClimber<Rule>> = OnceCell::new();
+    let climber = PREC_CLIMBER.get_or_init(|| {
+        PrecClimber::new(vec![
+            Operator::new(Rule::add, Left) | Operator::new(Rule::subtract, Left),
+            Operator::new(Rule::multiply, Left) | Operator::new(Rule::divide, Left),
+        ])
+    });
+
+    climber.climb(
         expression,
         |pair: Pair<Rule>| match pair.as_rule() {
             Rule::num => Ok(Value::Sum(

@@ -4,7 +4,7 @@ use yozuk_helper_english::normalize;
 use yozuk_sdk::prelude::*;
 
 mod definition;
-use definition::*;
+use definition::definitions;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"NA7YShJlZRtndZH5FqXc2",
@@ -32,7 +32,7 @@ pub struct ConstCorpus;
 
 impl Corpus for ConstCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        DEFINITIONS
+        definitions()
             .values()
             .flat_map(|def| def.tokens.clone())
             .collect()
@@ -56,7 +56,7 @@ impl Translator for ConstTranslator {
             .map(|tag| tag.trim_start_matches("keyword:").to_string())
             .collect();
         keys.into_iter()
-            .filter_map(|key| DEFINITIONS.get(key.as_str()).map(|item| (key, item)))
+            .filter_map(|key| definitions().get(key.as_str()).map(|item| (key, item)))
             .find(|(_, item)| {
                 item.tokens.iter().any(|tokens| {
                     tokens
@@ -81,7 +81,7 @@ impl Command for ConstCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
-        let blocks = DEFINITIONS
+        let blocks = definitions()
             .get(args.name.as_str())
             .into_iter()
             .flat_map(|item| {

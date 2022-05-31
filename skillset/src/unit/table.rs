@@ -2,7 +2,7 @@ use super::conversion::*;
 use super::entry::UnitPrefix::*;
 use super::entry::*;
 use bigdecimal::BigDecimal;
-use lazy_static::lazy_static;
+use std::str::FromStr;
 use strum::Display;
 
 #[derive(Debug, Display, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -180,25 +180,6 @@ pub const ENTRIES: &[UnitEntry] = &[
     },
 ];
 
-lazy_static! {
-    static ref GRAM_OUNCE: BigDecimal = "28.349523125".parse().unwrap();
-    static ref GRAM_POUND: BigDecimal = "453.59237".parse().unwrap();
-    static ref METER_INCH: BigDecimal = "0.0254".parse().unwrap();
-    static ref METER_FEET: BigDecimal = "0.3048".parse().unwrap();
-    static ref METER_YARD: BigDecimal = "0.9144".parse().unwrap();
-    static ref METER_MILE: BigDecimal = "1609.344".parse().unwrap();
-    static ref KELVIN_CELSIUS: BigDecimal = "273.15".parse().unwrap();
-    static ref KELVIN_FAHRENHEIT_0: BigDecimal = "1.8".parse().unwrap();
-    static ref KELVIN_FAHRENHEIT_1: BigDecimal = "459.67".parse().unwrap();
-    static ref KPH_MPS: BigDecimal = "3.6".parse().unwrap();
-    static ref KPH_MPH: BigDecimal = "1.609344".parse().unwrap();
-    static ref KPH_KNOT: BigDecimal = "1.852".parse().unwrap();
-    static ref PASCAL_BAR: BigDecimal = "100000".parse().unwrap();
-    static ref PASCAL_ATMOSPHERE: BigDecimal = "101325".parse().unwrap();
-    static ref PASCAL_MMHG: BigDecimal = "133.322387415".parse().unwrap();
-    static ref JOULE_CALORIE: BigDecimal = "4.1868".parse().unwrap();
-}
-
 pub const TABLES: &[ConversionTable] = &[
     ConversionTable {
         base_unit: BaseUnit::Gram,
@@ -207,14 +188,14 @@ pub const TABLES: &[ConversionTable] = &[
             ConversionEntry {
                 base_unit: BaseUnit::Ounce,
                 base_prefixes: &[],
-                convert_to_base: |value| value * GRAM_OUNCE.clone(),
-                convert_from_base: |value| value / GRAM_OUNCE.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("28.349523125").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("28.349523125").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Pound,
                 base_prefixes: &[],
-                convert_to_base: |value| value * GRAM_POUND.clone(),
-                convert_from_base: |value| value / GRAM_POUND.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("453.59237").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("453.59237").unwrap(),
             },
         ],
     },
@@ -225,26 +206,26 @@ pub const TABLES: &[ConversionTable] = &[
             ConversionEntry {
                 base_unit: BaseUnit::Inch,
                 base_prefixes: &[],
-                convert_to_base: |value| value * METER_INCH.clone(),
-                convert_from_base: |value| value / METER_INCH.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("0.0254").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("0.0254").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Foot,
                 base_prefixes: &[],
-                convert_to_base: |value| value * METER_FEET.clone(),
-                convert_from_base: |value| value / METER_FEET.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("0.3048").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("0.3048").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Yard,
                 base_prefixes: &[],
-                convert_to_base: |value| value * METER_YARD.clone(),
-                convert_from_base: |value| value / METER_YARD.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("0.9144").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("0.9144").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Mile,
                 base_prefixes: &[],
-                convert_to_base: |value| value * METER_MILE.clone(),
-                convert_from_base: |value| value / METER_MILE.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("1609.344").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("1609.344").unwrap(),
             },
         ],
     },
@@ -260,17 +241,19 @@ pub const TABLES: &[ConversionTable] = &[
             ConversionEntry {
                 base_unit: BaseUnit::Celsius,
                 base_prefixes: &[],
-                convert_to_base: |value| value + KELVIN_CELSIUS.clone(),
-                convert_from_base: |value| value - KELVIN_CELSIUS.clone(),
+                convert_to_base: |value| value + BigDecimal::from_str("273.15").unwrap(),
+                convert_from_base: |value| value - BigDecimal::from_str("273.15").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Fahrenheit,
                 base_prefixes: &[],
                 convert_to_base: |value| {
-                    (value + KELVIN_FAHRENHEIT_1.clone()) / KELVIN_FAHRENHEIT_0.clone()
+                    (value + BigDecimal::from_str("459.67").unwrap())
+                        / BigDecimal::from_str("1.8").unwrap()
                 },
                 convert_from_base: |value| {
-                    (value * KELVIN_FAHRENHEIT_0.clone()) - KELVIN_FAHRENHEIT_1.clone()
+                    (value * BigDecimal::from_str("1.8").unwrap())
+                        - BigDecimal::from_str("459.67").unwrap()
                 },
             },
         ],
@@ -282,20 +265,20 @@ pub const TABLES: &[ConversionTable] = &[
             ConversionEntry {
                 base_unit: BaseUnit::MsPerSec,
                 base_prefixes: &[],
-                convert_to_base: |value| value * KPH_MPS.clone(),
-                convert_from_base: |value| value / KPH_MPS.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("3.6").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("3.6").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::MilesPerHour,
                 base_prefixes: &[],
-                convert_to_base: |value| value * KPH_MPH.clone(),
-                convert_from_base: |value| value / KPH_MPH.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("1.609344").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("1.609344").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Knot,
                 base_prefixes: &[],
-                convert_to_base: |value| value * KPH_KNOT.clone(),
-                convert_from_base: |value| value / KPH_KNOT.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("1.852").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("1.852").unwrap(),
             },
         ],
     },
@@ -306,20 +289,20 @@ pub const TABLES: &[ConversionTable] = &[
             ConversionEntry {
                 base_unit: BaseUnit::Bar,
                 base_prefixes: &[],
-                convert_to_base: |value| value * PASCAL_BAR.clone(),
-                convert_from_base: |value| value / PASCAL_BAR.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("100000").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("100000").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Atmosphere,
                 base_prefixes: &[],
-                convert_to_base: |value| value * PASCAL_ATMOSPHERE.clone(),
-                convert_from_base: |value| value / PASCAL_ATMOSPHERE.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("101325").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("101325").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::MmHg,
                 base_prefixes: &[],
-                convert_to_base: |value| value * PASCAL_MMHG.clone(),
-                convert_from_base: |value| value / PASCAL_MMHG.clone(),
+                convert_to_base: |value| value * BigDecimal::from_str("133.322387415").unwrap(),
+                convert_from_base: |value| value / BigDecimal::from_str("133.322387415").unwrap(),
             },
         ],
     },
@@ -334,8 +317,8 @@ pub const TABLES: &[ConversionTable] = &[
         entries: &[ConversionEntry {
             base_unit: BaseUnit::Calorie,
             base_prefixes: &[Kilo],
-            convert_to_base: |value| value * JOULE_CALORIE.clone(),
-            convert_from_base: |value| value / JOULE_CALORIE.clone(),
+            convert_to_base: |value| value * BigDecimal::from_str("4.1868").unwrap(),
+            convert_from_base: |value| value / BigDecimal::from_str("4.1868").unwrap(),
         }],
     },
 ];

@@ -1,10 +1,12 @@
 use super::Constant;
 use maplit::hashmap;
+use once_cell::sync::OnceCell;
 use std::collections::HashMap;
 use yozuk_sdk::prelude::*;
 
-lazy_static::lazy_static! {
-    pub static ref DEFINITIONS: HashMap<&'static str, Constant> = {
+pub fn definitions() -> &'static HashMap<&'static str, Constant> {
+    static INSTANCE: OnceCell<HashMap<&'static str, Constant>> = OnceCell::new();
+    INSTANCE.get_or_init(|| {
         hashmap![
             "pi" => Constant {
                 name: "π",
@@ -78,5 +80,5 @@ lazy_static::lazy_static! {
                 is_exact: true,
             },
         ]
-    };
+    })
 }
