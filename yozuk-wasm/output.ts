@@ -77,13 +77,7 @@ type ResultNoCoammnd = {
     type: "no_command";
 };
 
-type ResultError = {
-    type: "error";
-    message: string;
-};
-
 export type Result =
     | ResultOk
     | ResultFail
-    | ResultNoCoammnd
-    | ResultError;
+    | ResultNoCoammnd;

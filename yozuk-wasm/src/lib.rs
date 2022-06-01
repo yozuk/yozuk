@@ -47,7 +47,7 @@ fn run(input: JsonInput, buffer: Vec<Box<[u8]>>) -> JsonResult {
 
     match zuk.run_commands(commands, &mut streams, Some(&input.i18n)) {
         Ok(outputs) => JsonResult::Ok { outputs },
-        Err(errors) => JsonResult::Fail { outputs: errors },
+        Err(outputs) => JsonResult::Fail { outputs },
     }
 }
 
@@ -57,7 +57,6 @@ pub enum JsonResult {
     Ok { outputs: Vec<Output> },
     Fail { outputs: Vec<Output> },
     NoCommand,
-    Error { message: String },
 }
 
 #[derive(Clone, Deserialize)]
