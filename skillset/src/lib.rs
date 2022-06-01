@@ -65,4 +65,5 @@ skills!(
     [consts, "yozuk-skill-consts"],
     [time, "yozuk-skill-time"],
     [ip, "yozuk-skill-ip"],
+    [msgpack, "yozuk-skill-msgpack"],
 );
