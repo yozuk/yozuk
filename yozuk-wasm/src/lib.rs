@@ -1,4 +1,4 @@
-#![cfg(target_arch = "wasm32")]
+#![cfg(all(target_arch = "wasm32", target_os = "unknown"))]
 
 use mediatype::media_type;
 use once_cell::sync::OnceCell;
