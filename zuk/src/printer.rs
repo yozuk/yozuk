@@ -90,6 +90,7 @@ impl<'a> TerminalPrinter<'a> {
                         self.print_binary(&data.data)?;
                     }
                 }
+                #[cfg(not(target_arch = "wasm32"))]
                 Block::Spoiler(spoiler) => {
                     use crossterm::{
                         cursor::MoveToPreviousLine,

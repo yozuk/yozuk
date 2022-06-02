@@ -77,13 +77,17 @@ impl App {
 
         let repl = streams.is_empty() && self.args.query.is_empty();
         if repl {
-            self.args.verbose += 1;
-            println!("Hi. I'm Yozuk. How may I assist you?");
-            let mut repl = repl::Repl::new();
-            while let Some(line) = repl.readline() {
-                let tokens = Tokenizer::new().tokenize(&line);
-                if !tokens.is_empty() {
-                    self.exec_command(&tokens, &mut [])?;
+            #[cfg(not(target_arch = "wasm32"))]
+            {
+                self.args.verbose += 1;
+                println!("Hi. I'm Yozuk. How may I assist you?");
+
+                let mut repl = repl::Repl::new();
+                while let Some(line) = repl.readline() {
+                    let tokens = Tokenizer::new().tokenize(&line);
+                    if !tokens.is_empty() {
+                        self.exec_command(&tokens, &mut [])?;
+                    }
                 }
             }
             Ok(())
