@@ -14,7 +14,6 @@ use rustyline_derive::Helper;
 use std::borrow::Cow;
 use std::fs::File;
 use std::io;
-use sys_locale::get_locale;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
@@ -41,7 +40,7 @@ struct App {
 impl App {
     fn new(args: Args) -> Result<Self> {
         let i18n = I18n {
-            locale: get_locale(),
+            locale: yozuk_helper_platform::locale::locale(),
             timezone: yozuk_helper_platform::time::timezone(),
             ..Default::default()
         };

@@ -2737,6 +2737,7 @@ name = "yozuk-helper-platform"
 version = "0.17.2"
 dependencies = [
  "atty",
+ "sys-locale",
  "time",
  "time-tz",
  "wasi 0.11.0+wasi-snapshot-preview1",
@@ -2823,7 +2824,6 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "shell-words",
- "sys-locale",
  "syscalls",
  "tempfile",
  "yozuk",
