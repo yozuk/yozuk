@@ -2737,6 +2737,7 @@ name = "yozuk-helper-platform"
 version = "0.17.2"
 dependencies = [
  "time",
+ "time-tz",
  "wasm-bindgen",
 ]
 
@@ -2823,7 +2824,7 @@ dependencies = [
  "sys-locale",
  "syscalls",
  "tempfile",
- "time-tz",
  "yozuk",
+ "yozuk-helper-platform",
  "yozuk-sdk",
 ]
