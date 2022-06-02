@@ -3,15 +3,6 @@
 
 use anyhow::Result;
 use clap::Parser;
-use owo_colors::OwoColorize;
-use rustyline::completion::{Completer, Pair};
-use rustyline::error::ReadlineError;
-use rustyline::highlight::{Highlighter, MatchingBracketHighlighter};
-use rustyline::hint::{Hinter, HistoryHinter};
-use rustyline::validate::{self, Validator};
-use rustyline::{Context, Editor};
-use rustyline_derive::Helper;
-use std::borrow::Cow;
 use std::fs::File;
 use std::io;
 use yozuk::Yozuk;
@@ -19,6 +10,7 @@ use yozuk_sdk::prelude::*;
 
 mod args;
 mod printer;
+mod repl;
 mod rpc;
 
 use args::*;
@@ -84,7 +76,26 @@ impl App {
         let repl = streams.is_empty() && self.args.query.is_empty();
         if repl {
             self.args.verbose += 1;
-            self.start_repl()
+
+            #[cfg(not(target_arch = "wasm32"))]
+            {
+                println!("Hi. I'm Yozuk. How may I assist you?");
+
+                let mut repl = repl::Repl::new();
+                while let Some(line) = repl.readline() {
+                    let tokens = Tokenizer::new().tokenize(&line);
+                    if !tokens.is_empty() {
+                        self.exec_command(&tokens, &mut [])?;
+                    }
+                }
+            }
+
+            #[cfg(target_arch = "wasm32")]
+            {
+                self.exec_command(&[], &mut [])?;
+            }
+
+            Ok(())
         } else {
             let tokens = self
                 .args
@@ -139,102 +150,6 @@ impl App {
         }
 
         Ok(())
-    }
-
-    fn start_repl(&self) -> Result<()> {
-        let mut rl = Editor::new();
-
-        let prompt = "» ";
-        let helper = YozukHelper {
-            highlighter: MatchingBracketHighlighter::new(),
-            hinter: HistoryHinter {},
-            colored_prompt: "".to_owned(),
-        };
-        rl.set_helper(Some(helper));
-        rl.helper_mut().expect("No helper").colored_prompt = format!("{}", prompt.bold().blue());
-
-        println!("Hi. I'm Yozuk. How may I assist you?");
-        loop {
-            let readline = rl.readline(prompt);
-            match readline {
-                Ok(line) => {
-                    rl.add_history_entry(line.as_str());
-
-                    let tokens = Tokenizer::new().tokenize(&line);
-                    if !tokens.is_empty() {
-                        self.exec_command(&tokens, &mut [])?;
-                    }
-                }
-                Err(ReadlineError::Interrupted | ReadlineError::Eof) => {
-                    println!("Bye.");
-                    break;
-                }
-                Err(err) => {
-                    eprintln!("Error: {}", err);
-                    break;
-                }
-            }
-        }
-
-        Ok(())
-    }
-}
-
-#[derive(Helper)]
-struct YozukHelper {
-    highlighter: MatchingBracketHighlighter,
-    hinter: HistoryHinter,
-    colored_prompt: String,
-}
-
-impl Completer for YozukHelper {
-    type Candidate = Pair;
-}
-
-impl Hinter for YozukHelper {
-    type Hint = String;
-
-    fn hint(&self, line: &str, pos: usize, ctx: &Context<'_>) -> Option<String> {
-        self.hinter.hint(line, pos, ctx)
-    }
-}
-
-impl Highlighter for YozukHelper {
-    fn highlight_prompt<'b, 's: 'b, 'p: 'b>(
-        &'s self,
-        prompt: &'p str,
-        default: bool,
-    ) -> Cow<'b, str> {
-        if default {
-            Cow::Borrowed(&self.colored_prompt)
-        } else {
-            Cow::Borrowed(prompt)
-        }
-    }
-
-    fn highlight_hint<'h>(&self, hint: &'h str) -> Cow<'h, str> {
-        Cow::Owned("\x1b[1m".to_owned() + hint + "\x1b[m")
-    }
-
-    fn highlight<'l>(&self, line: &'l str, pos: usize) -> Cow<'l, str> {
-        self.highlighter.highlight(line, pos)
-    }
-
-    fn highlight_char(&self, line: &str, pos: usize) -> bool {
-        self.highlighter.highlight_char(line, pos)
-    }
-}
-
-impl Validator for YozukHelper {
-    fn validate(
-        &self,
-        _ctx: &mut validate::ValidationContext,
-    ) -> rustyline::Result<validate::ValidationResult> {
-        Ok(validate::ValidationResult::Valid(None))
-    }
-
-    fn validate_while_typing(&self) -> bool {
-        false
     }
 }
 

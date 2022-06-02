@@ -3,7 +3,6 @@ use anyhow::Result;
 use chardetng::EncodingDetector;
 use hexyl::{BorderStyle, Printer};
 use owo_colors::OwoColorize;
-use std::io::BufRead;
 use std::io::{self, Write};
 use std::str;
 use std::str::FromStr;
@@ -46,7 +45,6 @@ impl<'a> TerminalPrinter<'a> {
     pub fn print_result(&self, output: &Output) -> Result<()> {
         let mut stdout = io::stdout();
         let mut stderr = io::stderr();
-        let stdin = io::stdin();
 
         let title = if output.title.is_empty() {
             String::new()
@@ -89,12 +87,15 @@ impl<'a> TerminalPrinter<'a> {
                         self.print_binary(&data.data)?;
                     }
                 }
+                #[cfg(not(target_arch = "wasm32"))]
                 Block::Spoiler(spoiler) => {
                     use crossterm::{
                         cursor::MoveToPreviousLine,
                         execute,
                         terminal::{Clear, ClearType},
                     };
+                    use std::io::BufRead;
+                    let stdin = io::stdin();
                     write!(
                         &mut stderr,
                         "{} Press enter to show {}",
