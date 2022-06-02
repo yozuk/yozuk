@@ -2804,6 +2804,7 @@ name = "zuk"
 version = "0.18.0"
 dependencies = [
  "anyhow",
+ "atty",
  "base64",
  "chardetng",
  "clap",

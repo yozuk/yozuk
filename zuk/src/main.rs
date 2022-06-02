@@ -2,8 +2,8 @@
 #![deny(clippy::all)]
 
 use anyhow::Result;
+use atty::Stream;
 use clap::Parser;
-use crossterm::tty::IsTty;
 use std::fs::File;
 use std::io;
 use sys_locale::get_locale;
@@ -62,7 +62,7 @@ impl App {
         }
 
         let mut streams = vec![];
-        if !io::stdin().is_tty() {
+        if !atty::is(Stream::Stdin) {
             streams.push(InputStream::new(
                 io::stdin(),
                 media_type!(APPLICATION / OCTET_STREAM),
@@ -77,9 +77,10 @@ impl App {
 
         let repl = streams.is_empty() && self.args.query.is_empty();
         if repl {
+            self.args.verbose += 1;
+
             #[cfg(not(target_arch = "wasm32"))]
             {
-                self.args.verbose += 1;
                 println!("Hi. I'm Yozuk. How may I assist you?");
 
                 let mut repl = repl::Repl::new();
@@ -90,6 +91,12 @@ impl App {
                     }
                 }
             }
+
+            #[cfg(target_arch = "wasm32")]
+            {
+                self.exec_command(&[], &mut [])?;
+            }
+
             Ok(())
         } else {
             let tokens = self
