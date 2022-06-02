@@ -16,7 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
+      continue-on-error: true
       with:
         path: |
           ~/.cargo/bin/
