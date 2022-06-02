@@ -4,6 +4,7 @@
 [![GitHub license](https://img.shields.io/github/license/yozuk/yozuk.svg)](https://github.com/yozuk/yozuk/blob/main/LICENSE)
 [![Rust](https://github.com/yozuk/yozuk/actions/workflows/rust.yml/badge.svg)](https://github.com/yozuk/yozuk/actions/workflows/rust.yml)
 [![dependency status](https://deps.rs/repo/github/yozuk/yozuk/status.svg)](https://deps.rs/repo/github/yozuk/yozuk)
+[![WAPM package](https://wapm.io/package/yozuk/zuk/badge.svg?style=flat)](https://wapm.io/package/yozuk/zuk)
 [![Telegram: YozukBot](https://img.shields.io/badge/Telegram-@YozukBot-blue?logo=telegram)](https://t.me/YozukBot)
 </div>
 
@@ -36,6 +37,12 @@ https://yozuk.com
 ### Pre-built binaries
 
 [Pre-built binaries](https://github.com/yozuk/yozuk/releases) for x64 Windows, Linux and macOS are available.
+
+### WAPM
+
+```bash
+wapm install yozuk/zuk
+```
 
 ### Cargo
 
