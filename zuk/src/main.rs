@@ -3,7 +3,6 @@
 
 use anyhow::Result;
 use clap::Parser;
-use crossterm::tty::IsTty;
 use owo_colors::OwoColorize;
 use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
@@ -70,7 +69,7 @@ impl App {
         }
 
         let mut streams = vec![];
-        if !io::stdin().is_tty() {
+        if !yozuk_helper_platform::term::is_stdin_tty() {
             streams.push(InputStream::new(
                 io::stdin(),
                 media_type!(APPLICATION / OCTET_STREAM),

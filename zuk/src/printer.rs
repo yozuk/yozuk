@@ -1,7 +1,6 @@
 use crate::Args;
 use anyhow::Result;
 use chardetng::EncodingDetector;
-use crossterm::tty::IsTty;
 use hexyl::{BorderStyle, Printer};
 use owo_colors::OwoColorize;
 use std::io::BufRead;
@@ -171,7 +170,7 @@ impl<'a> TerminalPrinter<'a> {
 
     fn print_binary(&self, data: &[u8]) -> Result<()> {
         let mut stdout = io::stdout();
-        if stdout.is_tty() {
+        if yozuk_helper_platform::term::is_stdout_tty() {
             let show_color = true;
             let show_char_panel = true;
             let show_position_panel = true;
