@@ -26,7 +26,7 @@ pub struct Args {
     pub verbose: usize,
 
     /// Start RPC server
-    #[cfg(feature = "rpc")]
+    #[cfg(all(feature = "rpc", not(target_arch = "wasm32")))]
     #[clap(long)]
     pub rpc: bool,
 

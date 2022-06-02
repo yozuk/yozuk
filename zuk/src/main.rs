@@ -42,7 +42,7 @@ impl App {
     }
 
     fn run(mut self) -> Result<()> {
-        #[cfg(feature = "rpc")]
+        #[cfg(all(feature = "rpc", not(target_arch = "wasm32")))]
         if self.args.rpc {
             let stdin = io::stdin();
             let stdout = io::stdout();

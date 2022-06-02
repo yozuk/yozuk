@@ -1,4 +1,4 @@
-#![cfg(feature = "rpc")]
+#![cfg(all(feature = "rpc", not(target_arch = "wasm32")))]
 
 use anyhow::Result;
 use json_rpc2::{Request, Response, Server, Service};
