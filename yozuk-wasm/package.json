@@ -6,7 +6,7 @@
   "author": "picoHz <picoHz@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "install": "node scripts/install.js"
+    "post-install": "node scripts/download.js"
   },
   "sideEffects": false,
   "devDependencies": {
