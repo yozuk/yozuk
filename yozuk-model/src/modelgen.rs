@@ -85,6 +85,7 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
                             data: token.data,
                             media_type: token.media_type,
                             tag: token.tag,
+                            ..Default::default()
                         },
                         token.weight,
                     )
@@ -145,6 +146,7 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
                             data: token.data,
                             media_type: token.media_type,
                             tag: token.tag,
+                            ..Default::default()
                         },
                         token.weight,
                     )

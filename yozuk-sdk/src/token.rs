@@ -54,6 +54,9 @@ pub struct Token {
     )]
     pub data: Bytes,
 
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub raw_str: Option<String>,
+
     #[serde(default = "media_type_default")]
     pub media_type: MediaTypeBuf,
 
@@ -69,6 +72,7 @@ impl Default for Token {
     fn default() -> Self {
         Self {
             data: Bytes::new(),
+            raw_str: None,
             media_type: media_type_default(),
             tag: String::new(),
         }

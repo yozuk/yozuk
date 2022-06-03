@@ -37,6 +37,7 @@ impl TokenParser for ColorTokenParser {
             data: exp.into(),
             media_type: "text/vnd.yozuk.color".parse().unwrap(),
             tag,
+            ..Default::default()
         })
     }
 }

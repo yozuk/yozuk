@@ -31,23 +31,31 @@ impl Tokenizer {
 }
 
 fn parse_arg(arg: Pair<Rule>) -> Option<Token> {
-    let token = match arg.as_rule() {
-        Rule::string => arg.as_str().to_string(),
-        Rule::sq_string => arg
-            .into_inner()
-            .next()
-            .unwrap()
-            .as_str()
-            .replace("\\'", "'"),
-        Rule::dq_string => arg
-            .into_inner()
-            .next()
-            .unwrap()
-            .as_str()
-            .replace("\\\"", "\""),
+    let (raw_str, data) = match arg.as_rule() {
+        Rule::string => (None, arg.as_str().to_string()),
+        Rule::sq_string => (
+            Some(arg.as_str().to_string()),
+            arg.into_inner()
+                .next()
+                .unwrap()
+                .as_str()
+                .replace("\\'", "'"),
+        ),
+        Rule::dq_string => (
+            Some(arg.as_str().to_string()),
+            arg.into_inner()
+                .next()
+                .unwrap()
+                .as_str()
+                .replace("\\\"", "\""),
+        ),
         _ => return None,
     };
-    Some(tk!(token))
+    Some(Token {
+        data: data.into(),
+        raw_str,
+        ..Default::default()
+    })
 }
 
 #[cfg(test)]
@@ -63,20 +71,43 @@ mod tests {
         );
         assert_eq!(
             tokenizer.tokenize(r#" "Hello world" to md5 "#),
-            tk!(["Hello world", "to", "md5"])
+            vec![
+                Token {
+                    data: "Hello world".into(),
+                    raw_str: Some("\"Hello world\"".into()),
+                    ..Default::default()
+                },
+                tk!("to"),
+                tk!("md5")
+            ]
         );
         assert_eq!(
             tokenizer.tokenize(r#" (1 + 1) * 2 "#),
             tk!(["(1", "+", "1)", "*", "2"])
         );
-        assert_eq!(tokenizer.tokenize(r#" " \" \" " "#), tk!([" \" \" "]));
+        assert_eq!(
+            tokenizer.tokenize(r#" " \" \" " "#),
+            vec![Token {
+                data: " \" \" ".into(),
+                raw_str: Some(r#"" \" \" ""#.into()),
+                ..Default::default()
+            }]
+        );
         assert_eq!(tokenizer.tokenize(" #ffffff "), tk!(["#ffffff"]));
         assert_eq!(
             tokenizer.tokenize(
                 r#"　"Hello　world"
              to　md5　"#
             ),
-            tk!(["Hello　world", "to", "md5"])
+            vec![
+                Token {
+                    data: "Hello　world".into(),
+                    raw_str: Some("\"Hello　world\"".into()),
+                    ..Default::default()
+                },
+                tk!("to"),
+                tk!("md5")
+            ]
         );
     }
 }
