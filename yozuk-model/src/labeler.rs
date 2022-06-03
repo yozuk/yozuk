@@ -29,23 +29,24 @@ impl<'a> FeatureLabeler<'a> {
         #[cfg(not(feature = "rayon"))]
         let skill_features = iter.reduce(merge_features).unwrap_or_default();
 
-        let features = input
+        let token_features = input
             .iter()
-            .filter(|token| entropy::shannon_entropy(&token.data) <= MAXIMUM_SHANNON_ENTROPY)
-            .filter_map(|token| punycode::encode(&normalize(token.as_str())).ok())
-            .map(|text| {
-                if text.len() <= MAXIMUM_TOKEN_LENGTH {
-                    vec![Feature {
-                        name: format!("token:{}", text),
-                        ..Default::default()
-                    }]
-                } else {
-                    vec![]
+            .map(|token| {
+                if entropy::shannon_entropy(&token.data) <= MAXIMUM_SHANNON_ENTROPY
+                    && token.as_str().len() <= MAXIMUM_TOKEN_LENGTH
+                {
+                    if let Ok(text) = punycode::encode(&normalize(token.as_str())) {
+                        return vec![Feature {
+                            name: format!("token:{}", text),
+                            ..Default::default()
+                        }];
+                    }
                 }
+                vec![]
             })
             .collect::<Vec<_>>();
 
-        let features = merge_features(skill_features, features);
+        let features = merge_features(skill_features, token_features);
 
         let mut neighbors: Vec<Vec<Feature>> = vec![vec![]; features.len()];
 
