@@ -46,7 +46,30 @@ impl<'a> FeatureLabeler<'a> {
             })
             .collect::<Vec<_>>();
 
-        let features = merge_features(skill_features, token_features);
+        let quoted_features = input
+            .iter()
+            .map(|token| {
+                if let Some(raw_str) = &token.raw_str {
+                    if raw_str.starts_with('"') && raw_str.ends_with('"') {
+                        return vec![Feature {
+                            name: "quoted:double".into(),
+                            ..Default::default()
+                        }];
+                    } else if raw_str.starts_with('\'') && raw_str.ends_with('\'') {
+                        return vec![Feature {
+                            name: "quoted:single".into(),
+                            ..Default::default()
+                        }];
+                    }
+                }
+                vec![]
+            })
+            .collect::<Vec<_>>();
+
+        let features = merge_features(
+            skill_features,
+            merge_features(quoted_features, token_features),
+        );
 
         let mut neighbors: Vec<Vec<Feature>> = vec![vec![]; features.len()];
 

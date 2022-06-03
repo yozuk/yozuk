@@ -3,7 +3,7 @@
 
 use yozuk_sdk::prelude::*;
 
-const MODEL_ROOT_ID: &[u8] = b"mGlNou-ZjCRFNqOMwl9Pt";
+const MODEL_ROOT_ID: &[u8] = b"wX1dpA9hksOooO4DGfMNp";
 
 #[macro_export]
 macro_rules! skills {
