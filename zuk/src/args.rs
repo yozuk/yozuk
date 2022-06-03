@@ -1,7 +1,7 @@
 use clap::Parser;
 use std::path::PathBuf;
 
-/// Assistant Bot for Programmers
+/// Chatbot for Programmers
 #[derive(Parser)]
 #[clap(version, trailing_var_arg = true)]
 pub struct Args {
