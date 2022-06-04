@@ -41,6 +41,12 @@ pub fn parse_numeral(input: &str) -> Option<i32> {
             "ninety" => 90,
             _ => 0,
         };
+        if n.as_str() == "hundred" {
+            if sum == 0 {
+                sum = 1;
+            }
+            sum *= 100;
+        }
     }
     Some(sum)
 }
@@ -72,6 +78,11 @@ mod tests {
         assert_eq!(parse_numeral("twenty two"), Some(22));
         assert_eq!(parse_numeral("twentytwo"), Some(22));
         assert_eq!(parse_numeral("Twenty Two"), Some(22));
+        assert_eq!(parse_numeral("three hundred fourty seven"), Some(347));
+        assert_eq!(parse_numeral("a hundred"), Some(100));
+        assert_eq!(parse_numeral("a hundred and twelve"), Some(112));
+        assert_eq!(parse_numeral("zero hundred"), None);
+        assert_eq!(parse_numeral("fourty seven hundred"), None);
         assert_eq!(parse_numeral("twenty eleven"), None);
     }
 }
