@@ -31,13 +31,7 @@ struct App {
 
 impl App {
     fn new(args: Args) -> Result<Self> {
-        let i18n = I18n {
-            locale: yozuk_helper_platform::locale::locale(),
-            timezone: yozuk_helper_platform::time::timezone(),
-            ..Default::default()
-        };
-
-        let zuk = Yozuk::builder().set_i18n(i18n).build();
+        let zuk = Yozuk::builder().build();
         Ok(Self { args, zuk })
     }
 

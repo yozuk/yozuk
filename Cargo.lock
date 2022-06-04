@@ -2657,6 +2657,7 @@ dependencies = [
  "rayon",
  "yozuk-core-skillset",
  "yozuk-helper-english",
+ "yozuk-helper-platform",
  "yozuk-model",
  "yozuk-sdk",
 ]

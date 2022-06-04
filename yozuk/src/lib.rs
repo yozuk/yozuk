@@ -180,10 +180,22 @@ impl Yozuk {
     }
 }
 
-#[derive(Default)]
 pub struct YozukBuilder {
     i18n: I18n,
     redirections: Vec<(Vec<Token>, Vec<String>)>,
+}
+
+impl Default for YozukBuilder {
+    fn default() -> Self {
+        Self {
+            i18n: I18n {
+                locale: yozuk_helper_platform::locale::locale(),
+                timezone: yozuk_helper_platform::time::timezone(),
+                ..Default::default()
+            },
+            redirections: vec![],
+        }
+    }
 }
 
 impl YozukBuilder {
