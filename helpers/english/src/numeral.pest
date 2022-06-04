@@ -1,0 +1,8 @@
+zero = { "zero" }
+num_1to9 = { "one" | "two" | "three" | "four" | "five" | "six" | "seven" | "eight" | "nine" }
+num_10to19 = { "ten" | "eleven" | "twelve" | "thirteen" | "fourtteen" | "fifteen" | "sixteen" | "seventeen" | "eighteen" | "nineteen" }
+num_2xto9x = { "twenty" | "thirty" | "fourty" | "fifty" | "sixty" | "seventy" | "eighty" | "ninety" }
+separator = _{ ("-" | " ")? }
+num_x = _{ zero | num_10to19 | num_1to9 }
+num_xx = _{ num_2xto9x ~ (separator ~ num_1to9)? | num_x }
+num = { SOI ~ num_xx ~ EOI }

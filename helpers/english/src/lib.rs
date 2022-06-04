@@ -4,6 +4,9 @@
 use inflector::cases::snakecase;
 use std::borrow::Cow;
 
+mod numeral;
+pub use numeral::*;
+
 pub fn singularize(word: &str) -> String {
     singularize::singularize(word)
 }

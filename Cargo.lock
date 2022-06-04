@@ -2729,6 +2729,8 @@ dependencies = [
  "Inflector",
  "deunicode",
  "distance",
+ "pest",
+ "pest_derive",
  "singularize",
 ]
 
