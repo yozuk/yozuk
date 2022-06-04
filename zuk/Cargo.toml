@@ -29,7 +29,7 @@ serde_derive = { version = "1.0.137", optional = true }
 serde_json = { version = "1.0.81", optional = true }
 shell-words = "1.1.0"
 yozuk = "0.18.1"
-yozuk-sdk = "0.18.1"
+yozuk-sdk = "0.18.2"
 yozuk-helper-platform = "0.18.1"
 
 [target.'cfg(target_os = "linux")'.dependencies]

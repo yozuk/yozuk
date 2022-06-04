@@ -13,4 +13,4 @@ license = "MIT"
 readme = "README.md"
 
 [dependencies]
-yozuk-sdk = "0.18.1"
+yozuk-sdk = "0.18.2"
