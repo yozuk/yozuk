@@ -27,8 +27,8 @@ publishCrate() {
 
 publishCrate "yozuk-sdk" "yozuk-sdk"
 publishCrate "helpers/platform" "yozuk-helper-platform"
-publishCrate "helpers/english" "yozuk-helper-english"
 publishCrate "helpers/preprocessor" "yozuk-helper-preprocessor"
+publishCrate "helpers/english" "yozuk-helper-english"
 publishCrate "yozuk-model" "yozuk-model"
 publishCrate "skillset" "yozuk-core-skillset"
 publishCrate "yozuk" "yozuk"

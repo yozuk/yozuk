@@ -2,13 +2,15 @@ use bigdecimal::{BigDecimal, ToPrimitive};
 use clap::Parser;
 use num_bigint::ToBigInt;
 use std::str::FromStr;
-use yozuk_helper_english::normalized_eq;
+use yozuk_helper_english::{normalized_eq, NumeralTokenParser};
+use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"XCgzZKk_EgpTRQnDAvpwA",
     init: |_| {
         Skill::builder()
+            .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_corpus(PrimeCorpus)
             .add_translator(PrimeTranslator)
             .set_command(PrimeCommand)

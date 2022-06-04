@@ -1,4 +1,6 @@
 use pest::Parser;
+use yozuk_helper_preprocessor::TokenParser;
+use yozuk_sdk::prelude::*;
 
 #[derive(pest_derive::Parser)]
 #[grammar = "numeral.pest"]
@@ -40,6 +42,19 @@ pub fn parse_numeral(input: &str) -> Option<i32> {
         };
     }
     Some(sum)
+}
+
+pub struct NumeralTokenParser;
+
+impl TokenParser for NumeralTokenParser {
+    fn parse(&self, tokens: &[Token]) -> Option<Token> {
+        let exp = tokens
+            .iter()
+            .map(|token| token.as_str())
+            .collect::<Vec<_>>()
+            .join(" ");
+        parse_numeral(&exp).map(|num| tk!(num.to_string()))
+    }
 }
 
 #[cfg(test)]

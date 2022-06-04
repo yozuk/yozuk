@@ -2732,6 +2732,8 @@ dependencies = [
  "pest",
  "pest_derive",
  "singularize",
+ "yozuk-helper-preprocessor",
+ "yozuk-sdk",
 ]
 
 [[package]]

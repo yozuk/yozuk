@@ -2,6 +2,8 @@ use bigdecimal::BigDecimal;
 use bigdecimal::One;
 use clap::Parser;
 use std::str::FromStr;
+use yozuk_helper_english::NumeralTokenParser;
+use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
 
 mod conversion;
@@ -16,6 +18,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"FiANsDlUf9OI5fc3LTFA_",
     init: |_| {
         Skill::builder()
+            .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_preprocessor(UnitPreprocessor)
             .add_corpus(UnitCorpus)
             .add_translator(UnitTranslator)

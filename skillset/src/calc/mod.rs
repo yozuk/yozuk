@@ -6,6 +6,7 @@ use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
 use thiserror::Error;
+use yozuk_helper_english::NumeralTokenParser;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
@@ -13,6 +14,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"Bk4CKgQi8qhO3A0IBqK5t",
     init: |_| {
         Skill::builder()
+            .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_preprocessor(TokenMerger::new(CalcTokenParser))
             .add_translator(CalcTranslator)
             .set_command(CalcCommand)

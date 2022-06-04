@@ -9,6 +9,7 @@ use rand::Rng;
 use std::iter;
 use thiserror::Error;
 use yozuk_helper_english::normalized_eq;
+use yozuk_helper_english::NumeralTokenParser;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
@@ -20,6 +21,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_corpus(DiceCorpus)
+            .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_preprocessor(TokenMerger::new(DiceTokenParser))
             .add_translator(DiceTranslator)
             .set_command(DiceCommand)

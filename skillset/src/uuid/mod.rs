@@ -2,13 +2,15 @@ use clap::Parser;
 use itertools::iproduct;
 use std::iter;
 use uuid::Uuid;
-use yozuk_helper_english::{normalized_eq, pluralize};
+use yozuk_helper_english::{normalized_eq, pluralize, NumeralTokenParser};
+use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"tzUyypo_Lz2T95dun91YX",
     init: |_| {
         Skill::builder()
+            .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_labeler(UuidLabeler)
             .add_corpus(UuidCorpus)
             .add_suggests(UuidSuggests)

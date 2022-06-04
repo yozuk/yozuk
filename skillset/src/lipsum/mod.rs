@@ -1,12 +1,14 @@
 use clap::Parser;
 use lipsum::lipsum;
-use yozuk_helper_english::normalized_eq;
+use yozuk_helper_english::{normalized_eq, NumeralTokenParser};
+use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"WKQjgQTbySg0_NOxuUHBD",
     init: |_| {
         Skill::builder()
+            .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_corpus(LipsumCorpus)
             .add_translator(LipsumTranslator)
             .set_command(LipsumCommand)
