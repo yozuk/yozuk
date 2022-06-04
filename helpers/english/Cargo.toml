@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-helper-english"
-version = "0.17.1"
+version = "0.18.2"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "English NLP utilities for Yozuk"
