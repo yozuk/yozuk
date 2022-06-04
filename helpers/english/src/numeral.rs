@@ -7,7 +7,8 @@ use yozuk_sdk::prelude::*;
 struct NumeralParser;
 
 pub fn parse_numeral(input: &str) -> Option<i32> {
-    let mut num = NumeralParser::parse(Rule::num, input).ok()?;
+    let input = input.to_ascii_lowercase();
+    let mut num = NumeralParser::parse(Rule::num, &input).ok()?;
     let mut sum = 0;
     for n in num.next()?.into_inner() {
         sum += match n.as_str() {
@@ -70,6 +71,7 @@ mod tests {
         assert_eq!(parse_numeral("twenty-two"), Some(22));
         assert_eq!(parse_numeral("twenty two"), Some(22));
         assert_eq!(parse_numeral("twentytwo"), Some(22));
+        assert_eq!(parse_numeral("Twenty Two"), Some(22));
         assert_eq!(parse_numeral("twenty eleven"), None);
     }
 }
