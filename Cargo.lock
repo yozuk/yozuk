@@ -1848,17 +1848,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rmp-serde"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "25786b0d276110195fa3d6f3f31299900cf71dfbd6c28450f3f58a0e7f7a347e"
-dependencies = [
- "byteorder",
- "rmp",
- "serde",
-]
-
-[[package]]
 name = "rmpv"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2703,7 +2692,6 @@ dependencies = [
  "punycode",
  "qrcode-generator",
  "rand 0.8.5",
- "rmp-serde",
  "rmpv",
  "serde",
  "serde_derive",
