@@ -27,7 +27,7 @@ pub fn parse_numeral(input: &str) -> Option<i32> {
                 "eleven" => 11,
                 "twelve" => 12,
                 "thirteen" => 13,
-                "fourtteen" => 14,
+                "fourteen" => 14,
                 "fifteen" => 15,
                 "sixteen" => 16,
                 "seventeen" => 17,
@@ -35,7 +35,7 @@ pub fn parse_numeral(input: &str) -> Option<i32> {
                 "nineteen" => 19,
                 "twenty" => 20,
                 "thirty" => 30,
-                "fourty" => 40,
+                "forty" => 40,
                 "fifty" => 50,
                 "sixty" => 60,
                 "seventy" => 70,
@@ -83,25 +83,25 @@ mod tests {
         assert_eq!(parse_numeral("twenty two"), Some(22));
         assert_eq!(parse_numeral("twentytwo"), Some(22));
         assert_eq!(parse_numeral("Twenty Two"), Some(22));
-        assert_eq!(parse_numeral("three hundred fourty seven"), Some(347));
+        assert_eq!(parse_numeral("three hundred forty seven"), Some(347));
         assert_eq!(parse_numeral("a hundred"), Some(100));
         assert_eq!(parse_numeral("a hundred and twelve"), Some(112));
         assert_eq!(parse_numeral("zero hundred"), None);
-        assert_eq!(parse_numeral("fourty seven hundred"), None);
+        assert_eq!(parse_numeral("forty seven hundred"), None);
         assert_eq!(parse_numeral("twenty eleven"), None);
         assert_eq!(parse_numeral("a thousand"), Some(1000));
         assert_eq!(parse_numeral("a thousand and twelve"), Some(1012));
-        assert_eq!(parse_numeral("fourty seven thousand"), Some(47000));
+        assert_eq!(parse_numeral("forty seven thousand"), Some(47000));
         assert_eq!(
-            parse_numeral("three hundred fourty seven thousand"),
+            parse_numeral("three hundred forty seven thousand"),
             Some(347000)
         );
         assert_eq!(
-            parse_numeral("three hundred fourty seven thousand and three hundred fourty seven"),
+            parse_numeral("three hundred forty seven thousand and three hundred forty seven"),
             Some(347347)
         );
         assert_eq!(
-            parse_numeral("three hundred thousand and three hundred fourty seven thousand"),
+            parse_numeral("three hundred thousand and three hundred forty seven thousand"),
             None
         );
     }
