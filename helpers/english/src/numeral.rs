@@ -104,5 +104,9 @@ mod tests {
             parse_numeral("three hundred thousand and three hundred forty seven thousand"),
             None
         );
+        assert_eq!(
+            parse_numeral("two hundred and thirty four thousand, five hundred and sixty seven"),
+            Some(234567)
+        );
     }
 }
