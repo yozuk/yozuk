@@ -6,7 +6,7 @@ use yozuk_sdk::prelude::*;
 #[grammar = "numeral.pest"]
 struct NumeralParser;
 
-pub fn parse_numeral(input: &str) -> Option<i32> {
+pub fn parse_numeral(input: &str) -> Option<i64> {
     let input = input.to_ascii_lowercase();
     let mut num = NumeralParser::parse(Rule::num, &input).ok()?;
     let mut sum = 0;
@@ -43,14 +43,13 @@ pub fn parse_numeral(input: &str) -> Option<i32> {
                 "ninety" => 90,
                 _ => 0,
             };
-        match n.as_str() {
-            "hundred" => {
-                base *= 100;
-            }
-            "thousand" => {
-                base = 1000;
-            }
-            _ => (),
+        base = match n.as_str() {
+            "hundred" => base * 100,
+            "thousand" => 1000,
+            "million" => 1000000,
+            "billion" => 1000000000,
+            "trillion" => 1000000000000,
+            _ => base,
         }
     }
     Some(sum)
@@ -107,6 +106,18 @@ mod tests {
         assert_eq!(
             parse_numeral("two hundred and thirty four thousand, five hundred and sixty seven"),
             Some(234567)
+        );
+        assert_eq!(
+            parse_numeral("one hundred twenty million, four hundred and fifty six thousand, seven hundred and eighty nine"),
+            Some(120456789)
+        );
+        assert_eq!(
+            parse_numeral("six hundred twenty three billion, four hundred fifty six million, seven hundred and eighty nine thousand, one hundred and twenty three"),
+            Some(623456789123)
+        );
+        assert_eq!(
+            parse_numeral("one hundred twenty three trillion, four hundred fifty billion, seven hundred eighty nine million, one hundred and twenty three thousand, four hundred and fifty six"),
+            Some(123450789123456)
         );
     }
 }
