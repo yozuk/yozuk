@@ -10,42 +10,47 @@ pub fn parse_numeral(input: &str) -> Option<i32> {
     let input = input.to_ascii_lowercase();
     let mut num = NumeralParser::parse(Rule::num, &input).ok()?;
     let mut sum = 0;
-    for n in num.next()?.into_inner() {
-        sum += match n.as_str() {
-            "one" => 1,
-            "two" => 2,
-            "three" => 3,
-            "four" => 4,
-            "five" => 5,
-            "six" => 6,
-            "seven" => 7,
-            "eight" => 8,
-            "nine" => 9,
-            "ten" => 10,
-            "eleven" => 11,
-            "twelve" => 12,
-            "thirteen" => 13,
-            "fourtteen" => 14,
-            "fifteen" => 15,
-            "sixteen" => 16,
-            "seventeen" => 17,
-            "eighteen" => 18,
-            "nineteen" => 19,
-            "twenty" => 20,
-            "thirty" => 30,
-            "fourty" => 40,
-            "fifty" => 50,
-            "sixty" => 60,
-            "seventy" => 70,
-            "eighty" => 80,
-            "ninety" => 90,
-            _ => 0,
-        };
-        if n.as_str() == "hundred" {
-            if sum == 0 {
-                sum = 1;
+    let mut base = 1;
+    for n in num.next()?.into_inner().rev() {
+        sum += base
+            * match n.as_str() {
+                "one" | "a" => 1,
+                "two" => 2,
+                "three" => 3,
+                "four" => 4,
+                "five" => 5,
+                "six" => 6,
+                "seven" => 7,
+                "eight" => 8,
+                "nine" => 9,
+                "ten" => 10,
+                "eleven" => 11,
+                "twelve" => 12,
+                "thirteen" => 13,
+                "fourtteen" => 14,
+                "fifteen" => 15,
+                "sixteen" => 16,
+                "seventeen" => 17,
+                "eighteen" => 18,
+                "nineteen" => 19,
+                "twenty" => 20,
+                "thirty" => 30,
+                "fourty" => 40,
+                "fifty" => 50,
+                "sixty" => 60,
+                "seventy" => 70,
+                "eighty" => 80,
+                "ninety" => 90,
+                _ => 0,
+            };
+        match n.as_str() {
+            "hundred" => {
+                base *= 100;
             }
-            sum *= 100;
+            "thousand" => {
+                base = 1000;
+            }
+            _ => (),
         }
     }
     Some(sum)
@@ -84,5 +89,20 @@ mod tests {
         assert_eq!(parse_numeral("zero hundred"), None);
         assert_eq!(parse_numeral("fourty seven hundred"), None);
         assert_eq!(parse_numeral("twenty eleven"), None);
+        assert_eq!(parse_numeral("a thousand"), Some(1000));
+        assert_eq!(parse_numeral("a thousand and twelve"), Some(1012));
+        assert_eq!(parse_numeral("fourty seven thousand"), Some(47000));
+        assert_eq!(
+            parse_numeral("three hundred fourty seven thousand"),
+            Some(347000)
+        );
+        assert_eq!(
+            parse_numeral("three hundred fourty seven thousand and three hundred fourty seven"),
+            Some(347347)
+        );
+        assert_eq!(
+            parse_numeral("three hundred thousand and three hundred fourty seven thousand"),
+            None
+        );
     }
 }
