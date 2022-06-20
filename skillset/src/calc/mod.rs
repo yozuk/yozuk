@@ -23,7 +23,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 };
 
 type Decimal = GenericDecimal<u128, u8>;
-const DECIMAL_PRECISION: u8 = u8::MAX;
+const DECIMAL_PRECISION: u8 = 16;
 
 struct CalcTokenParser;
 
