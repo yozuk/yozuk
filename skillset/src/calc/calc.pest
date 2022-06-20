@@ -1,11 +1,12 @@
 num = @{ int ~ ("." ~ ASCII_DIGIT*)? ~ (^"e" ~ int)? }
     int = { ("+" | "-")? ~ ASCII_DIGIT+ }
 
-operation = _{ add | subtract | multiply | divide }
+operation = _{ power | add | subtract | multiply | divide }
     add      = { "+" }
     subtract = { "-" }
     multiply = { "*" }
     divide   = { "/" }
+    power    = { "^" | "**" }
 
 expr = { term ~ (operation ~ term)* }
 term = _{ num | "(" ~ expr ~ ")" }

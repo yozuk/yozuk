@@ -57,6 +57,7 @@ fn eval(expression: Pairs<Rule>) -> Result<Decimal, CalcError> {
         PrecClimber::new(vec![
             Operator::new(Rule::add, Left) | Operator::new(Rule::subtract, Left),
             Operator::new(Rule::multiply, Left) | Operator::new(Rule::divide, Left),
+            Operator::new(Rule::power, Right),
         ])
     });
 
@@ -79,6 +80,7 @@ fn eval(expression: Pairs<Rule>) -> Result<Decimal, CalcError> {
                 Rule::multiply => lhs.checked_mul(&rhs).ok_or(CalcError::Overflow)?,
                 Rule::divide if rhs.is_zero() => return Err(CalcError::DivisionByZero),
                 Rule::divide => lhs.checked_div(&rhs).ok_or(CalcError::Overflow)?,
+                Rule::power => (lhs.to_f64().unwrap().powf(rhs.to_f64().unwrap())).into(),
                 _ => unreachable!(),
             })
         },
