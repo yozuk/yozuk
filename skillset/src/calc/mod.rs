@@ -199,4 +199,18 @@ mod tests {
         ));
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn test_functions() {
+        let result = CalcCommand.run(
+            CommandArgs::new().add_args(["", "sin(0) - cos(atan2(0, 0)) * tanh(0) + sqrt(81)"]),
+            &mut [],
+            &Default::default(),
+        );
+        let expected = Ok(Output::new()
+            .set_title("Calculator")
+            .add_block(block::Data::new().set_text_data("9"))
+            .add_metadata(Metadata::value(9.0)));
+        assert_eq!(result, expected);
+    }
 }
