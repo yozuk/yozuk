@@ -8,8 +8,11 @@ operation = _{ power | add | subtract | multiply | divide }
     divide   = { "/" }
     power    = { "^" | "**" }
 
+ident = { ASCII_ALPHA ~ ASCII_ALPHANUMERIC* }
+func = { ident ~ "(" ~ ( expr? ~ ("," ~ expr)* ) ~ ")" }
+
 expr = { term ~ (operation ~ term)* }
-term = _{ num | "(" ~ expr ~ ")" }
+term = _{ num | func | "(" ~ expr ~ ")" }
 
 calculation = _{ SOI ~ expr ~ EOI }
 single_num = _{ SOI ~ num ~ EOI }

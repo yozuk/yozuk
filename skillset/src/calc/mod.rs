@@ -10,6 +10,8 @@ use yozuk_helper_english::NumeralTokenParser;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
+mod function;
+
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"Bk4CKgQi8qhO3A0IBqK5t",
     init: |_| {
@@ -68,6 +70,19 @@ fn eval(expression: Pairs<Rule>) -> Result<Decimal, CalcError> {
                 .as_str()
                 .parse::<Decimal>()
                 .map_err(|_| CalcError::Overflow)?),
+            Rule::func => {
+                let mut inner = pair.into_inner();
+                let name = inner.next().unwrap().as_str();
+                let func = match function::TABLE.get(name) {
+                    Some(func) => func,
+                    None => return Err(CalcError::NoSuchMethod(name.into())),
+                };
+                let mut args = Vec::new();
+                for arg in inner.map(|expr| eval(expr.into_inner())) {
+                    args.push(arg?);
+                }
+                func(&args)
+            }
             Rule::expr => eval(pair.into_inner()),
             _ => unreachable!(),
         },
@@ -94,6 +109,12 @@ pub enum CalcError {
 
     #[error("Overflow")]
     Overflow,
+
+    #[error("No such method: {0}")]
+    NoSuchMethod(String),
+
+    #[error("Wrong number of arguments")]
+    WrongNumberOfArguments,
 }
 
 #[derive(Debug)]
@@ -142,6 +163,10 @@ impl Command for CalcCommand {
                     .set_title("Calculator")
                     .add_block(block::Comment::new().set_text(format!("{}", err)))
             })?)
+    }
+
+    fn priority(&self) -> i32 {
+        -50
     }
 }
 
