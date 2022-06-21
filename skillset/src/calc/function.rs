@@ -21,6 +21,9 @@ pub static TABLE: phf::Map<&'static str, Func> = phf_map! {
     "asinh" => fn_asinh,
     "acosh" => fn_acosh,
     "atanh" => fn_atanh,
+    "log" => fn_log,
+    "log10" => fn_log10,
+    "log2" => fn_log2,
 };
 
 fn fn_abs(args: &[Decimal]) -> Result<Decimal, CalcError> {
@@ -105,6 +108,25 @@ fn fn_acosh(args: &[Decimal]) -> Result<Decimal, CalcError> {
 fn fn_atanh(args: &[Decimal]) -> Result<Decimal, CalcError> {
     check_args(1, args)?;
     Ok(args[0].to_f64().unwrap().atanh().into())
+}
+
+fn fn_log(args: &[Decimal]) -> Result<Decimal, CalcError> {
+    check_args(2, args)?;
+    Ok(args[0]
+        .to_f64()
+        .unwrap()
+        .log(args[1].to_f64().unwrap())
+        .into())
+}
+
+fn fn_log10(args: &[Decimal]) -> Result<Decimal, CalcError> {
+    check_args(1, args)?;
+    Ok(args[0].to_f64().unwrap().log10().into())
+}
+
+fn fn_log2(args: &[Decimal]) -> Result<Decimal, CalcError> {
+    check_args(1, args)?;
+    Ok(args[0].to_f64().unwrap().log2().into())
 }
 
 fn check_args(n: usize, args: &[Decimal]) -> Result<(), CalcError> {
