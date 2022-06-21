@@ -150,7 +150,7 @@ impl Yozuk {
             }
         }
 
-        if errors.is_empty() {
+        if primary.is_some() || errors.is_empty() {
             Ok(primary.into_iter().chain(results).collect())
         } else {
             Err(errors)
