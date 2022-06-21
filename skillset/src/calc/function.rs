@@ -129,10 +129,13 @@ fn fn_log2(args: &[Decimal]) -> Result<Decimal, CalcError> {
     Ok(args[0].to_f64().unwrap().log2().into())
 }
 
-fn check_args(n: usize, args: &[Decimal]) -> Result<(), CalcError> {
-    if n == args.len() {
+fn check_args(expected: usize, args: &[Decimal]) -> Result<(), CalcError> {
+    if expected == args.len() {
         Ok(())
     } else {
-        Err(CalcError::WrongNumberOfArguments)
+        Err(CalcError::WrongNumberOfArguments {
+            expected,
+            given: args.len(),
+        })
     }
 }

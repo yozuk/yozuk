@@ -113,8 +113,8 @@ pub enum CalcError {
     #[error("No such method: {0}")]
     NoSuchMethod(String),
 
-    #[error("Wrong number of arguments")]
-    WrongNumberOfArguments,
+    #[error("Wrong number of arguments: expected {expected} but given {given}")]
+    WrongNumberOfArguments { expected: usize, given: usize },
 }
 
 #[derive(Debug)]
