@@ -28,6 +28,7 @@ yozuk-model = "0.18.2"
 
 [features]
 default = ["default-skills"]
+wild = ["yozuk-core-skillset/wild"]
 rayon = ["dep:rayon", "yozuk-model/rayon", "yozuk-core-skillset/rayon"]
 default-skills = [
   "yozuk-skill-mediatype",

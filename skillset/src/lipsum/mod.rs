@@ -146,7 +146,11 @@ impl Translator for LipsumTranslator {
     }
 }
 
-const MAX_COUNT: usize = 300;
+#[cfg(feature = "wild")]
+const MAX_COUNT: usize = u16::MAX as _;
+
+#[cfg(not(feature = "wild"))]
+const MAX_COUNT: usize = 320;
 
 #[derive(Debug)]
 pub struct LipsumCommand;
