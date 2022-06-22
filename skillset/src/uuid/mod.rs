@@ -129,7 +129,11 @@ impl Translator for UuidTranslator {
     }
 }
 
-const MAX_COUNT: usize = 30;
+#[cfg(feature = "wild")]
+const MAX_COUNT: usize = u16::MAX as _;
+
+#[cfg(not(feature = "wild"))]
+const MAX_COUNT: usize = 32;
 
 #[derive(Debug)]
 pub struct UuidCommand;

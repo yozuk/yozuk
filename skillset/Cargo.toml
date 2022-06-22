@@ -74,6 +74,7 @@ phf = { version = "0.10.1", features = ["macros"] }
 [features]
 default = []
 rayon = ["miller_rabin?/rayon"]
+wild = []
 yozuk-skill-base64 = ["chardetng"]
 yozuk-skill-calc = ["pest", "pest_derive"]
 yozuk-skill-color = ["css-color", "palette"]

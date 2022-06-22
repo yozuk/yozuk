@@ -29,7 +29,11 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-const MAX_ROLLS: usize = 100;
+#[cfg(feature = "wild")]
+const MAX_ROLLS: usize = u16::MAX as _;
+
+#[cfg(not(feature = "wild"))]
+const MAX_ROLLS: usize = 256;
 
 #[derive(Debug)]
 pub struct DiceCorpus;
