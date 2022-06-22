@@ -35,16 +35,23 @@ https://yozuk.com
 
 [Pre-built binaries](https://github.com/yozuk/yozuk/releases) for x64 Windows, Linux and macOS are available.
 
-### WAPM
+### Homebrew
 
 ```bash
-wapm install yozuk/zuk
+brew tap yozuk/yozuk
+brew install zuk
 ```
 
 ### Cargo
 
 ```bash
 cargo install zuk
+```
+
+### WAPM
+
+```bash
+wapm install yozuk/zuk
 ```
 
 ### Build from Source
