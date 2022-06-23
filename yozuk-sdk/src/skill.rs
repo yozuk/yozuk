@@ -26,9 +26,7 @@ pub trait Corpus: fmt::Debug + Send + Sync + 'static {
 }
 
 pub trait Suggests: fmt::Debug + Send + Sync + 'static {
-    fn random_suggests(&self) -> Vec<String> {
-        vec![]
-    }
+    fn random_suggests(&self) -> Vec<String>;
 
     fn suggests(&self, _input: &[Token]) -> Vec<String> {
         vec![]
