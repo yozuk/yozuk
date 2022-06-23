@@ -12,10 +12,23 @@ pub const ENTRY: SkillEntry = SkillEntry {
         Skill::builder()
             .add_corpus(ConstCorpus)
             .add_translator(ConstTranslator)
+            .add_suggests(ConstSuggests)
             .set_command(ConstCommand)
             .build()
     },
 };
+
+#[derive(Debug)]
+pub struct ConstSuggests;
+
+impl Suggests for ConstSuggests {
+    fn random_suggests(&self) -> Vec<String> {
+        vec!["How fast the speed of light?"]
+            .into_iter()
+            .map(Into::into)
+            .collect()
+    }
+}
 
 #[derive(Default)]
 pub struct Constant {

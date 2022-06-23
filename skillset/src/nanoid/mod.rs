@@ -1,5 +1,6 @@
 use clap::Parser;
 use itertools::iproduct;
+use rand::Rng;
 use std::iter;
 use yozuk_helper_english::{normalized_eq, pluralize, NumeralTokenParser};
 use yozuk_helper_preprocessor::TokenMerger;
@@ -50,11 +51,10 @@ impl Corpus for NanoIdCorpus {
 pub struct NanoIdSuggests;
 
 impl Suggests for NanoIdSuggests {
-    fn suggests(&self, _input: &[Token]) -> Vec<String> {
-        ["NanoID", "Genarate NanoID", "New NanoID"]
-            .into_iter()
-            .map(Into::into)
-            .collect()
+    fn random_suggests(&self) -> Vec<String> {
+        let mut rng = rand::thread_rng();
+        let n: u32 = rng.gen_range(2..=10);
+        vec![format!("Generate {} NanoIDs", n)]
     }
 }
 

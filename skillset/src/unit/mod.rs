@@ -1,6 +1,8 @@
 use bigdecimal::BigDecimal;
 use bigdecimal::One;
 use clap::Parser;
+use rand::seq::SliceRandom;
+use rand::Rng;
 use std::str::FromStr;
 use yozuk_helper_english::NumeralTokenParser;
 use yozuk_helper_preprocessor::TokenMerger;
@@ -22,10 +24,23 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .add_preprocessor(UnitPreprocessor)
             .add_corpus(UnitCorpus)
             .add_translator(UnitTranslator)
+            .add_suggests(UnitSuggests)
             .set_command(UnitCommand)
             .build()
     },
 };
+
+#[derive(Debug)]
+pub struct UnitSuggests;
+
+impl Suggests for UnitSuggests {
+    fn random_suggests(&self) -> Vec<String> {
+        let mut rng = rand::thread_rng();
+        let n: u32 = rng.gen_range(10..=1000);
+        let unit = ["km", "in.", "hPa", "kg", "oz."].choose(&mut rng).unwrap();
+        vec![format!("Convert {}{}", n, unit)]
+    }
+}
 
 #[derive(Debug)]
 struct UnitPreprocessor;

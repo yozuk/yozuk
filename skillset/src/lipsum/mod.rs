@@ -1,5 +1,6 @@
 use clap::Parser;
 use lipsum::lipsum;
+use rand::Rng;
 use yozuk_helper_english::{normalized_eq, NumeralTokenParser};
 use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
@@ -12,9 +13,21 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .add_corpus(LipsumCorpus)
             .add_translator(LipsumTranslator)
             .set_command(LipsumCommand)
+            .add_suggests(LipsumSuggests)
             .build()
     },
 };
+
+#[derive(Debug)]
+pub struct LipsumSuggests;
+
+impl Suggests for LipsumSuggests {
+    fn random_suggests(&self) -> Vec<String> {
+        let mut rng = rand::thread_rng();
+        let n: u32 = rng.gen_range(5..=10) * 10;
+        vec![format!("{} words dummy text", n)]
+    }
+}
 
 #[derive(Debug)]
 pub struct LipsumCorpus;

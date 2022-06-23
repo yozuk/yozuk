@@ -163,12 +163,6 @@ impl<'a> TerminalPrinter<'a> {
         Ok(())
     }
 
-    pub fn print_suggest(&self, suggest: &str) -> Result<()> {
-        let mut stderr = io::stderr();
-        writeln!(&mut stderr, "Did you mean {} ?", suggest.italic())?;
-        Ok(())
-    }
-
     fn print_binary(&self, data: &[u8]) -> Result<()> {
         let mut stdout = io::stdout();
         if yozuk_helper_platform::term::is_stdout_tty() {

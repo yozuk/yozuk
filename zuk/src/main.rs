@@ -117,9 +117,6 @@ impl App {
 
         if commands.is_empty() {
             printer.print_error_str("Sorry, I can't understand your request.")?;
-            if let Some(suggest) = self.zuk.suggest(tokens) {
-                printer.print_suggest(&suggest)?;
-            }
         } else {
             if self.args.dry_run {
                 printer.print_commands(&commands)?;

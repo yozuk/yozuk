@@ -24,6 +24,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_preprocessor(TokenMerger::new(DiceTokenParser))
             .add_translator(DiceTranslator)
+            .add_suggests(DiceSuggests)
             .set_command(DiceCommand)
             .build()
     },
@@ -34,6 +35,17 @@ const MAX_ROLLS: usize = u16::MAX as _;
 
 #[cfg(not(feature = "wild"))]
 const MAX_ROLLS: usize = 256;
+
+#[derive(Debug)]
+pub struct DiceSuggests;
+
+impl Suggests for DiceSuggests {
+    fn random_suggests(&self) -> Vec<String> {
+        let mut rng = rand::thread_rng();
+        let n: u32 = rng.gen_range(2..=10);
+        vec![format!("Roll {} dice", n)]
+    }
+}
 
 #[derive(Debug)]
 pub struct DiceCorpus;
