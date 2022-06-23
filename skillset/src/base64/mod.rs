@@ -22,13 +22,16 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-const MINIMUM_ENTROPY_SCORE: f32 = 10.0;
-
 fn is_like_base64(data: &[u8]) -> bool {
-    if let Ok(decoded) = base64::decode(data) {
-        let score = entropy::shannon_entropy(&data) / entropy::shannon_entropy(&decoded)
-            * data.len() as f32;
-        return score >= MINIMUM_ENTROPY_SCORE;
+    if base64::decode(data).is_ok() {
+        let mut score = 0;
+        score += data.iter().any(|c| (b'a'..=b'f').contains(c)) as u8;
+        score += data.iter().any(|c| (b'A'..=b'F').contains(c)) as u8;
+        score += data.iter().any(|c| (b'g'..=b'z').contains(c)) as u8;
+        score += data.iter().any(|c| (b'G'..=b'Z').contains(c)) as u8;
+        score += data.iter().any(|c| (b'0'..=b'9').contains(c)) as u8;
+        score += data.iter().any(|&c| c == b'+' || c == b'/' || c == b'=') as u8;
+        return score >= 4;
     }
     false
 }

@@ -62,12 +62,4 @@ fn decode() {
                 .add_data([String::from("eWFtbA==")])
         )
     );
-    assert_eq!(
-        cmd(tk!(["YWE="])),
-        Some(
-            CommandArgs::new()
-                .add_args(["yozuk-skill-base64", "--mode", "decode"])
-                .add_data([String::from("YWE=")])
-        )
-    );
 }
