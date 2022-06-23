@@ -25,6 +25,7 @@ yozuk-helper-english = "0.18.3"
 yozuk-helper-platform = "0.18.1"
 yozuk-sdk = "0.18.2"
 yozuk-model = "0.18.2"
+rand = "0.8.5"
 
 [features]
 default = ["default-skills"]

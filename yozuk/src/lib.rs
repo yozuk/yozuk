@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
 
+use rand::seq::SliceRandom;
 use std::{iter, mem};
 use yozuk_model::FeatureLabeler;
 use yozuk_sdk::model::*;
@@ -155,6 +156,18 @@ impl Yozuk {
         } else {
             Err(errors)
         }
+    }
+
+    pub fn random_suggests(&self, amount: usize) -> Vec<String> {
+        let mut rng = &mut rand::thread_rng();
+        self.skills
+            .iter()
+            .flat_map(|cache| &cache.skill.suggests)
+            .collect::<Vec<_>>()
+            .choose_multiple(&mut rng, amount)
+            .map(|suggest| suggest.random_suggests())
+            .filter_map(|suggests| suggests.choose(&mut rng).cloned())
+            .collect()
     }
 
     pub fn suggest(&self, tokens: &[Token]) -> Option<String> {

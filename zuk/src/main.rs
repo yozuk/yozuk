@@ -32,6 +32,7 @@ struct App {
 impl App {
     fn new(args: Args) -> Result<Self> {
         let zuk = Yozuk::builder().build();
+        println!("{:?}", zuk.random_suggests(5));
         Ok(Self { args, zuk })
     }
 

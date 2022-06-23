@@ -2659,6 +2659,7 @@ dependencies = [
  "distance",
  "mediatype",
  "once_cell",
+ "rand 0.8.5",
  "rayon",
  "yozuk-core-skillset",
  "yozuk-helper-english",
