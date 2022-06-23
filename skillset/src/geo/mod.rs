@@ -1,5 +1,6 @@
 use anyhow::anyhow;
 use clap::Parser;
+use rand::Rng;
 use serde_derive::Serialize;
 use yozuk_sdk::prelude::*;
 
@@ -9,10 +10,24 @@ pub const ENTRY: SkillEntry = SkillEntry {
         Skill::builder()
             .add_preprocessor(GeoPreprocessor)
             .add_translator(GeoTranslator)
+            .add_suggests(GeoSuggests)
             .set_command(GeoCommand)
             .build()
     },
 };
+
+#[derive(Debug)]
+pub struct GeoSuggests;
+
+impl Suggests for GeoSuggests {
+    fn random_suggests(&self) -> Vec<String> {
+        let mut rng = rand::thread_rng();
+        let lat: f64 = rng.gen_range(-90.0..=90.0);
+        let lon: f64 = rng.gen_range(-180.0..=180.0);
+        let code = open_location_code::encode((lat, lon).into(), 10);
+        vec![code]
+    }
+}
 
 #[derive(Debug)]
 struct GeoPreprocessor;
