@@ -7,7 +7,7 @@ use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"RcVutnguDE51HEtdOHHC4",
+    model_id: b"NfqhgPyWBObz85VWwk1z9",
     init: |_| {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
@@ -42,6 +42,19 @@ impl Corpus for NanoIdCorpus {
                     },
                 ),
             )
+            .chain(
+                iproduct!(
+                    ["lower", "upper", "lowercase", "uppercase"],
+                    ["alphabet", "number"]
+                )
+                .flat_map(|(case, kind)| {
+                    vec![tk!([
+                        "nanoid"; "command",
+                        *case; "input:charset",
+                        *kind; "input:charset"
+                    ])]
+                }),
+            )
             .chain(["nanoid", "NanoID"].map(|name| tk!([name; "command"])))
             .collect()
     }
@@ -69,12 +82,52 @@ impl Translator for NanoIdTranslator {
         {
             return None;
         }
+
+        let lower = args.iter().any(|arg| {
+            arg.tag == "input:charset" && normalized_eq(arg.as_str(), &["lower", "lowercase"], 1)
+        });
+        let upper = args.iter().any(|arg| {
+            arg.tag == "input:charset" && normalized_eq(arg.as_str(), &["upper", "uppercase"], 1)
+        });
+        let alphabet = args
+            .iter()
+            .any(|arg| arg.tag == "input:charset" && normalized_eq(arg.as_str(), &["alphabet"], 1));
+        let number = args
+            .iter()
+            .any(|arg| arg.tag == "input:charset" && normalized_eq(arg.as_str(), &["number"], 1));
+
+        let charset = if lower && !upper {
+            if alphabet && !number {
+                "abcdefghijklmnopqrstuvwxyz"
+            } else {
+                "abcdefghijklmnopqrstuvwxyz0123456789"
+            }
+        } else if !lower && upper {
+            if alphabet && !number {
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            } else {
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+            }
+        } else if alphabet && !number {
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        } else if !alphabet && number {
+            "0123456789"
+        } else if alphabet && number {
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        } else {
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_~"
+        };
+
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")
             .and_then(|arg| arg.as_str().parse::<usize>().ok())
             .unwrap_or(1);
-        Some(CommandArgs::new().add_args(["-n".to_string(), count.to_string()]))
+        Some(
+            CommandArgs::new()
+                .add_args(["-n".to_string(), count.to_string()])
+                .add_args(["-c", charset]),
+        )
     }
 }
 
@@ -94,7 +147,7 @@ impl Command for NanoIdCommand {
         _streams: &mut [InputStream],
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
-        let args = Args::try_parse_from(args.args)?;
+        let mut args = Args::try_parse_from(args.args)?;
         if args.n > MAX_COUNT {
             return Err(Output::new()
                 .set_title("NanoID Generator")
@@ -104,7 +157,10 @@ impl Command for NanoIdCommand {
                 )))
                 .into());
         }
-        let list = iter::repeat_with(|| nanoid::nanoid!())
+
+        let len = args.len;
+        let charset = args.charset.drain(..).collect::<Vec<_>>();
+        let list = iter::repeat_with(|| nanoid::nanoid!(len, &charset))
             .take(args.n)
             .collect::<Vec<_>>();
 
@@ -125,4 +181,10 @@ impl Command for NanoIdCommand {
 pub struct Args {
     #[clap(short, default_value_t = 1)]
     pub n: usize,
+
+    #[clap(short, long, default_value_t = 21)]
+    pub len: usize,
+
+    #[clap(short, long)]
+    pub charset: String,
 }
