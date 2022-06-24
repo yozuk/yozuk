@@ -2749,6 +2749,7 @@ version = "0.18.3"
 dependencies = [
  "chardetng",
  "encoding_rs",
+ "mediatype",
 ]
 
 [[package]]

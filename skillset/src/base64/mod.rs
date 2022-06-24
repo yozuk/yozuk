@@ -1,9 +1,5 @@
 use clap::{ArgEnum, Parser};
 use itertools::iproduct;
-use mediatype::{
-    media_type,
-    names::{PLAIN, TEXT},
-};
 use std::io::Read;
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
@@ -137,12 +133,7 @@ impl Command for Base64Command {
                         .chain(streams)
                         .filter_map(|data| base64::decode(&data).ok())
                         .map(|data| {
-                            let mut media_type = media_type!(APPLICATION / OCTET_STREAM);
-                            if yozuk_helper_filetype::is_utf8_text(&data) {
-                                media_type.ty = TEXT;
-                                media_type.subty = PLAIN;
-                            }
-
+                            let media_type = yozuk_helper_filetype::guess_media_type(&data);
                             Block::Data(
                                 block::Data::new().set_data(data).set_media_type(media_type),
                             )
