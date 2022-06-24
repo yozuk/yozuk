@@ -20,3 +20,7 @@ where
         media_type!(APPLICATION / OCTET_STREAM)
     }
 }
+
+pub fn get_file_extension<T>(media_type: &MediaType) -> Option<&'static str> {
+    mime2ext::mime2ext(media_type.to_string())
+}
