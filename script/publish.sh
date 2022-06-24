@@ -26,6 +26,7 @@ publishCrate() {
 }
 
 publishCrate "yozuk-sdk" "yozuk-sdk"
+publishCrate "helpers/filetype" "yozuk-helper-filetype"
 publishCrate "helpers/platform" "yozuk-helper-platform"
 publishCrate "helpers/preprocessor" "yozuk-helper-preprocessor"
 publishCrate "helpers/english" "yozuk-helper-english"

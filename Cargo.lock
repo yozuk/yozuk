@@ -706,6 +706,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "file-format"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "45a7b307a00d9d87b0489711746871f7b4ddf37bae186d7ed8d45072d3e91fc4"
+
+[[package]]
 name = "find-crate"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1057,6 +1063,12 @@ dependencies = [
  "rand 0.8.5",
  "rayon",
 ]
+
+[[package]]
+name = "mime2ext"
+version = "0.1.52"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1a85a5069ebd40e64b1985773cc81addbe9d90d7ecf60e7b5475a57ad584c70"
 
 [[package]]
 name = "miniz_oxide"
@@ -2680,7 +2692,6 @@ dependencies = [
  "blake2",
  "blake3",
  "blurhash",
- "chardetng",
  "clap",
  "const-sha1",
  "crc_all",
@@ -2724,6 +2735,7 @@ dependencies = [
  "urlencoding",
  "uuid",
  "yozuk-helper-english",
+ "yozuk-helper-filetype",
  "yozuk-helper-platform",
  "yozuk-helper-preprocessor",
  "yozuk-sdk",
@@ -2741,6 +2753,17 @@ dependencies = [
  "singularize",
  "yozuk-helper-preprocessor",
  "yozuk-sdk",
+]
+
+[[package]]
+name = "yozuk-helper-filetype"
+version = "0.18.3"
+dependencies = [
+ "chardetng",
+ "encoding_rs",
+ "file-format",
+ "mediatype",
+ "mime2ext",
 ]
 
 [[package]]
@@ -2819,11 +2842,9 @@ version = "0.18.3"
 dependencies = [
  "anyhow",
  "base64",
- "chardetng",
  "clap",
  "crossterm",
  "css-color",
- "encoding_rs",
  "extrasafe",
  "hexyl",
  "json-rpc2",
@@ -2839,6 +2860,7 @@ dependencies = [
  "tempfile",
  "time-tz",
  "yozuk",
+ "yozuk-helper-filetype",
  "yozuk-helper-platform",
  "yozuk-sdk",
 ]
