@@ -1,6 +1,5 @@
 use crate::Args;
 use anyhow::Result;
-use chardetng::EncodingDetector;
 use hexyl::{BorderStyle, Printer};
 use owo_colors::OwoColorize;
 use std::io::{self, Write};
@@ -78,9 +77,7 @@ impl<'a> TerminalPrinter<'a> {
                     }
                 }
                 Block::Data(data) => {
-                    let mut detector = EncodingDetector::new();
-                    detector.feed(&data.data, true);
-                    if detector.guess(None, true) == encoding_rs::UTF_8 {
+                    if yozuk_helper_filetype::is_utf8_text(&data.data) {
                         stdout.write_all(&data.data)?;
                         writeln!(&mut stdout)?;
                     } else {

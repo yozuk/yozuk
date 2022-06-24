@@ -2680,7 +2680,6 @@ dependencies = [
  "blake2",
  "blake3",
  "blurhash",
- "chardetng",
  "clap",
  "const-sha1",
  "crc_all",
@@ -2724,6 +2723,7 @@ dependencies = [
  "urlencoding",
  "uuid",
  "yozuk-helper-english",
+ "yozuk-helper-filetype",
  "yozuk-helper-platform",
  "yozuk-helper-preprocessor",
  "yozuk-sdk",
@@ -2741,6 +2741,14 @@ dependencies = [
  "singularize",
  "yozuk-helper-preprocessor",
  "yozuk-sdk",
+]
+
+[[package]]
+name = "yozuk-helper-filetype"
+version = "0.18.3"
+dependencies = [
+ "chardetng",
+ "encoding_rs",
 ]
 
 [[package]]
@@ -2819,11 +2827,9 @@ version = "0.18.3"
 dependencies = [
  "anyhow",
  "base64",
- "chardetng",
  "clap",
  "crossterm",
  "css-color",
- "encoding_rs",
  "extrasafe",
  "hexyl",
  "json-rpc2",
@@ -2839,6 +2845,7 @@ dependencies = [
  "tempfile",
  "time-tz",
  "yozuk",
+ "yozuk-helper-filetype",
  "yozuk-helper-platform",
  "yozuk-sdk",
 ]

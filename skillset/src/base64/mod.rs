@@ -1,10 +1,8 @@
-use chardetng::EncodingDetector;
 use clap::{ArgEnum, Parser};
 use itertools::iproduct;
 use mediatype::{
     media_type,
-    names::{CHARSET, PLAIN, TEXT},
-    Value, WriteParams,
+    names::{PLAIN, TEXT},
 };
 use std::io::Read;
 use yozuk_helper_english::normalized_eq;
@@ -139,15 +137,10 @@ impl Command for Base64Command {
                         .chain(streams)
                         .filter_map(|data| base64::decode(&data).ok())
                         .map(|data| {
-                            let mut encdetector = EncodingDetector::new();
-                            encdetector.feed(&data, true);
-                            let (enc, likely) = encdetector.guess_assess(None, true);
-
                             let mut media_type = media_type!(APPLICATION / OCTET_STREAM);
-                            if likely {
+                            if yozuk_helper_filetype::is_utf8_text(&data) {
                                 media_type.ty = TEXT;
                                 media_type.subty = PLAIN;
-                                media_type.set_param(CHARSET, Value::new(enc.name()).unwrap());
                             }
 
                             Block::Data(
