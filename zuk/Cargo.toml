@@ -29,7 +29,7 @@ shell-words = "1.1.0"
 yozuk = "0.18.3"
 yozuk-sdk = "0.19.1"
 yozuk-helper-platform = "0.18.1"
-yozuk-helper-filetype = "0.18.3"
+yozuk-helper-filetype = "0.19.1"
 
 [target.'cfg(target_os = "linux")'.dependencies]
 extrasafe = { version = "0.1.2", optional = true }

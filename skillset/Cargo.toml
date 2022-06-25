@@ -65,7 +65,7 @@ uuid = { version = "1.0.0", features = ["v4"], optional = true }
 yozuk-helper-english = "0.18.3"
 yozuk-helper-preprocessor = "0.18.0"
 yozuk-helper-platform = "0.18.1"
-yozuk-helper-filetype = "0.18.3"
+yozuk-helper-filetype = "0.19.1"
 yozuk-sdk = "0.19.1"
 once_cell = "1.12.0"
 rmpv = { version = "1.0.0", optional = true, features = ["with-serde"] }
