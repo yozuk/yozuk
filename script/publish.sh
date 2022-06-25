@@ -6,7 +6,7 @@ NEXT_TAG=$1
 LAST_TAG=$(git describe --tags --abbrev=0)
 
 publishCrate() {
-    DIFF=$(git diff --name-only main..$LAST_TAG $1)
+    DIFF=$(git diff --name-only dev..$LAST_TAG $1)
     
     if [[ -n "$DIFF" ]]; then
         echo "$1: Changed"
