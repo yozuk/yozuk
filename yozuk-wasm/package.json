@@ -9,11 +9,9 @@
     "postinstall": "node scripts/download.js"
   },
   "sideEffects": false,
-  "devDependencies": {
-    "decompress": "^4.2.1",
-    "download": "^8.0.0"
-  },
   "dependencies": {
+    "decompress": "^4.2.1",
+    "download": "^8.0.0",
     "js-base64": "^3.7.2"
   }
 }
