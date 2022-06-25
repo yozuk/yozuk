@@ -27,4 +27,4 @@ time-tz = { version = "1.0.2", features = ["system"] }
 wasi = "0.11.0"
 
 [target.'cfg(not(target_os = "wasi"))'.dependencies]
-sys-locale = "0.2.0"
+sys-locale = "0.2.1"
