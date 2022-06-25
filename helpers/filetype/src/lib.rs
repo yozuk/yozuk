@@ -1,5 +1,6 @@
 use chardetng::EncodingDetector;
-use mediatype::{media_type, MediaType};
+use file_format::FileFormat;
+use mediatype::{media_type, MediaType, MediaTypeBuf};
 
 pub fn is_utf8_text<T>(data: T) -> bool
 where
@@ -10,14 +11,15 @@ where
     detector.guess(None, true) == encoding_rs::UTF_8
 }
 
-pub fn guess_media_type<T>(data: T) -> MediaType<'static>
+pub fn guess_media_type<T>(data: T) -> MediaTypeBuf
 where
     T: AsRef<[u8]>,
 {
-    if is_utf8_text(data) {
-        media_type!(TEXT / PLAIN)
-    } else {
-        media_type!(APPLICATION / OCTET_STREAM)
+    let format = FileFormat::from_bytes(data.as_ref());
+    match format {
+        FileFormat::ArbitraryBinaryData if is_utf8_text(data) => media_type!(TEXT / PLAIN).into(),
+        FileFormat::ArbitraryBinaryData => media_type!(APPLICATION / OCTET_STREAM).into(),
+        _ => format.media_type().parse().unwrap(),
     }
 }
 

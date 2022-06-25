@@ -706,6 +706,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "file-format"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "45a7b307a00d9d87b0489711746871f7b4ddf37bae186d7ed8d45072d3e91fc4"
+
+[[package]]
 name = "find-crate"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2755,6 +2761,7 @@ version = "0.18.3"
 dependencies = [
  "chardetng",
  "encoding_rs",
+ "file-format",
  "mediatype",
  "mime2ext",
 ]
