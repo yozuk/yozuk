@@ -21,7 +21,7 @@ distance = "0.4.0"
 mediatype = "0.19.3"
 rayon = { version = "1.5.1", optional = true }
 yozuk-core-skillset = "0.18.3"
-yozuk-helper-english = "0.18.3"
+yozuk-helper-english = "0.19.1"
 yozuk-helper-platform = "0.18.1"
 yozuk-sdk = "0.19.1"
 yozuk-model = "0.18.2"
