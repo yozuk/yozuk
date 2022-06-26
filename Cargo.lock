@@ -2770,7 +2770,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-platform"
-version = "0.18.1"
+version = "0.19.2"
 dependencies = [
  "atty",
  "sys-locale",
