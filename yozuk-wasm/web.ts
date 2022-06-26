@@ -1,5 +1,5 @@
 import init, { exec, random_suggests, push_stream } from './wasm-web/yozuk_wasm'
-import { Base64 } from "js-base64";
+import { decode } from 'base64-arraybuffer';
 import { Result, Output } from './output'
 
 let initialized: boolean = false;
@@ -22,12 +22,18 @@ export class Yozuk {
             push_stream(stream);
         }
         const result = JSON.parse(exec(command, JSON.stringify(i18n)));
+        const textDecoder = new TextDecoder('utf-8', { fatal: true });
         if (result.outputs) {
             result.outputs.forEach((output) => {
                 output.blocks.forEach((block) => {
                     const { data } = block;
                     if (data) {
-                        block.data = Base64.decode(data);
+                        const decoded = decode(data);
+                        try {
+                            block.data = textDecoder.decode(decoded);
+                        } catch {
+                            block.data = decoded;
+                        }
                     }
                 });
             });
