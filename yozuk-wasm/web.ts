@@ -1,4 +1,4 @@
-import init, { exec, push_stream } from './wasm-web-debug/yozuk_wasm'
+import init, { exec, random_suggests, push_stream } from './wasm-web-debug/yozuk_wasm'
 import { Base64 } from "js-base64";
 import { Result, Output } from './output'
 
@@ -33,5 +33,10 @@ export class Yozuk {
             });
         }
         return result;
+    }
+
+    async random_suggests(amount: number = 5): Promise<String[]> {
+        await init_once();
+        return JSON.parse(random_suggests(amount));
     }
 }
