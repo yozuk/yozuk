@@ -1,4 +1,4 @@
-import init, { exec, random_suggests, push_stream } from './wasm-web-debug/yozuk_wasm'
+import init, { exec, random_suggests, push_stream } from './wasm-web/yozuk_wasm'
 import { Base64 } from "js-base64";
 import { Result, Output } from './output'
 
