@@ -7,7 +7,7 @@ type CommentBlock = {
 
 type DataBlock = {
     type: "data";
-    data: Uint8Array;
+    data: string | ArrayBuffer;
     title?: string;
     file_name?: string;
     media_type: string;
