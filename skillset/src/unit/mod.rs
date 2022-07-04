@@ -37,7 +37,9 @@ impl Suggests for UnitSuggests {
     fn random_suggests(&self) -> Vec<String> {
         let mut rng = rand::thread_rng();
         let n: u32 = rng.gen_range(10..=1000);
-        let unit = ["km", "in.", "hPa", "kg", "oz."].choose(&mut rng).unwrap();
+        let unit = ["km", "in", "hPa", "kg", "oz.", "KiB", "mph", "°F"]
+            .choose(&mut rng)
+            .unwrap();
         vec![format!("Convert {}{}", n, unit)]
     }
 }
