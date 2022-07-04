@@ -1,6 +1,5 @@
 import init, { exec, random_suggests, push_stream } from './wasm-web/yozuk_wasm'
-import { decode } from 'base64-arraybuffer';
-import { Result, Output } from './output'
+import { YozukBase, I18n } from './yozuk'
 
 let initialized: boolean = false;
 
@@ -11,38 +10,23 @@ async function init_once() {
     }
 }
 
-export class Yozuk {
-    async exec(command: string, streams: Uint8Array[] = []): Promise<Result> {
-        await init_once();
-        const i18n = {
+export class Yozuk extends YozukBase {
+    exec_impl(command: string, i18n: string): Promise<string> {
+        return init_once().then(() => exec(command, i18n));
+    }
+
+    push_stream_impl(stream: Uint8Array): Promise<void> {
+        return init_once().then(() => push_stream(stream));
+    }
+
+    random_suggests_impl(amount: number): Promise<string> {
+        return init_once().then(() => random_suggests(amount));
+    }
+
+    i18n(): I18n {
+        return {
             locale: navigator.language,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         };
-        for (const stream of streams) {
-            push_stream(stream);
-        }
-        const result = JSON.parse(exec(command, JSON.stringify(i18n)));
-        const textDecoder = new TextDecoder('utf-8', { fatal: true });
-        if (result.outputs) {
-            result.outputs.forEach((output) => {
-                output.blocks.forEach((block) => {
-                    const { data } = block;
-                    if (data) {
-                        const decoded = decode(data);
-                        try {
-                            block.data = textDecoder.decode(decoded);
-                        } catch {
-                            block.data = decoded;
-                        }
-                    }
-                });
-            });
-        }
-        return result;
-    }
-
-    async random_suggests(amount: number = 5): Promise<String[]> {
-        await init_once();
-        return JSON.parse(random_suggests(amount));
     }
 }

@@ -19,3 +19,5 @@ function build(out, target, profile, env = {}) {
 
 build('wasm-web', 'web', 'release', { "RUSTFLAGS": "-C opt-level=z" });
 build('wasm-web-debug', 'web', 'debug');
+build('wasm-node', 'nodejs', 'release', { "RUSTFLAGS": "-C opt-level=z" });
+build('wasm-node-debug', 'nodejs', 'debug');

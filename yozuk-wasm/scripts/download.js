@@ -6,6 +6,8 @@ const root = 'https://github.com/yozuk/yozuk/releases/download';
 const files = [
     `${root}/v${version}/yozuk-wasm-web.tar.gz`,
     `${root}/v${version}/yozuk-wasm-web-debug.tar.gz`,
+    `${root}/v${version}/yozuk-wasm-node.tar.gz`,
+    `${root}/v${version}/yozuk-wasm-node-debug.tar.gz`,
 ];
 
 (async () => {
