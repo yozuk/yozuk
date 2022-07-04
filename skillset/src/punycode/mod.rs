@@ -1,4 +1,5 @@
 use clap::{ArgEnum, Parser};
+use rand::seq::SliceRandom;
 use yozuk_sdk::prelude::*;
 
 mod tld;
@@ -7,11 +8,23 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"9Kr7qeDGzvzR8ph-ZyuQm",
     init: |_| {
         Skill::builder()
+            .add_suggests(PunycodeSuggests)
             .add_translator(PunycodeTranslator)
             .set_command(PunycodeCommand)
             .build()
     },
 };
+
+#[derive(Debug)]
+pub struct PunycodeSuggests;
+
+impl Suggests for PunycodeSuggests {
+    fn random_suggests(&self) -> Vec<String> {
+        let mut rng = rand::thread_rng();
+        let emoji = ["🦊", "🐼", "🐰", "🐶", "🐯"].choose(&mut rng).unwrap();
+        vec![format!("{emoji}.example.com")]
+    }
+}
 
 #[derive(Debug)]
 pub struct PunycodeTranslator;
