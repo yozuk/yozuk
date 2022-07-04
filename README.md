@@ -26,11 +26,11 @@
 
 ### Documentation
 
-https://yozuk.com
+https://docs.yozuk.com
 
 ### Online Demo
 
- - Web App https://app.yozuk.com
+ - Web App https://yozuk.com
  - Telegram Bot (https://t.me/YozukBot)
 
 ### Pre-built binaries
