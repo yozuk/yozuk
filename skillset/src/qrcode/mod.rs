@@ -9,12 +9,25 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"bAy_Du64C8aBhMa_VvVrm",
     init: |_| {
         Skill::builder()
+            .add_suggests(QrCodeSuggests)
             .add_corpus(QrCodeCorpus)
             .add_translator(QrCodeTranslator)
             .set_command(QrCodeCommand)
             .build()
     },
 };
+
+#[derive(Debug)]
+pub struct QrCodeSuggests;
+
+impl Suggests for QrCodeSuggests {
+    fn random_suggests(&self) -> Vec<String> {
+        vec!["https://yozuk.com to qr", "\"Hello world!\" to QRCode"]
+            .into_iter()
+            .map(Into::into)
+            .collect()
+    }
+}
 
 #[derive(Debug)]
 pub struct QrCodeCorpus;
