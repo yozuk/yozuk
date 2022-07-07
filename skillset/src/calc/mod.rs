@@ -5,6 +5,8 @@ use once_cell::sync::OnceCell;
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
+use rand::prelude::SliceRandom;
+use rand::Rng;
 use thiserror::Error;
 use yozuk_helper_english::NumeralTokenParser;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
@@ -16,6 +18,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"Bk4CKgQi8qhO3A0IBqK5t",
     init: |_| {
         Skill::builder()
+            .add_suggests(CalcSuggests)
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_preprocessor(TokenMerger::new(CalcTokenParser))
             .add_translator(CalcTranslator)
@@ -26,6 +29,30 @@ pub const ENTRY: SkillEntry = SkillEntry {
 
 type Decimal = GenericDecimal<u128, u8>;
 const DECIMAL_PRECISION: u8 = 16;
+
+#[derive(Debug)]
+pub struct CalcSuggests;
+
+impl Suggests for CalcSuggests {
+    fn random_suggests(&self) -> Vec<String> {
+        let mut rng = rand::thread_rng();
+        let n: f64 = rng.gen_range(-10.0..10.0);
+        let operands = [
+            "atan2(0.5, 0.2)",
+            "25.0",
+            "sin(1.2)",
+            "sqrt(2)",
+            "100",
+            "log2(256)",
+            "1",
+            "abs(-8)",
+            "123.45",
+        ]
+        .choose_multiple(&mut rng, 2)
+        .collect::<Vec<_>>();
+        vec![format!("({} + {}) * {}", operands[0], operands[1], n)]
+    }
+}
 
 struct CalcTokenParser;
 
