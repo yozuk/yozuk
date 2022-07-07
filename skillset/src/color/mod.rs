@@ -5,6 +5,8 @@ use std::str::FromStr;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
+mod keywords;
+
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"fYemWbybyq3U8v_aB9eWYc",
     init: |_| {
@@ -157,6 +159,12 @@ fn render_color(color: &Srgba) -> Vec<Block> {
     let rgba_u8: Srgba<u8> = (*color).into_format();
 
     colors.push(hex_color(color));
+
+    let color_u32 =
+        ((rgba_u8.red as u32) << 16) + ((rgba_u8.green as u32) << 8) + rgba_u8.blue as u32;
+    if let Some(name) = keywords::KEYWORDS.get(&color_u32) {
+        colors.push(name.to_string());
+    }
 
     colors.push(if color.alpha == 1.0 {
         format!(
