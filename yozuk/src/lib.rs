@@ -159,15 +159,23 @@ impl Yozuk {
     }
 
     pub fn random_suggests(&self, amount: usize) -> Vec<String> {
-        let mut rng = &mut rand::thread_rng();
-        self.skills
+        let mut suggests = Vec::with_capacity(amount);
+        let mut skills = self
+            .skills
             .iter()
             .flat_map(|cache| &cache.skill.suggests)
-            .collect::<Vec<_>>()
-            .choose_multiple(&mut rng, amount)
-            .map(|suggest| suggest.random_suggests())
-            .filter_map(|suggests| suggests.choose(&mut rng).cloned())
-            .collect()
+            .collect::<Vec<_>>();
+        let mut rng = &mut rand::thread_rng();
+        skills.shuffle(&mut rng);
+        for skill in skills {
+            if suggests.len() >= amount {
+                break;
+            }
+            if let Some(suggest) = skill.random_suggests().choose_mut(&mut rng) {
+                suggests.push(mem::take(suggest));
+            }
+        }
+        suggests
     }
 }
 

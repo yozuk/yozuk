@@ -15,6 +15,7 @@ pub fn yozuk_global() -> &'static Yozuk {
     })
 }
 
+#[allow(dead_code)]
 pub fn cmd(tokens: Vec<Token>) -> Option<CommandArgs> {
     let stream = InputStream::new(io::empty(), media_type!(APPLICATION / OCTET_STREAM));
     yozuk_global()
