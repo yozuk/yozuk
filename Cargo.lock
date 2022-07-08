@@ -2670,6 +2670,7 @@ dependencies = [
  "bytes",
  "const-sha1",
  "crfs",
+ "deunicode",
  "distance",
  "mediatype",
  "once_cell",

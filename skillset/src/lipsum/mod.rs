@@ -22,7 +22,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct LipsumSuggests;
 
 impl Suggests for LipsumSuggests {
-    fn random_suggests(&self) -> Vec<String> {
+    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = rand::thread_rng();
         let n: u32 = rng.gen_range(5..=10) * 10;
         vec![format!("{} words dummy text", n)]

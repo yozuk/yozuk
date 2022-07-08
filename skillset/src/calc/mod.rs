@@ -34,7 +34,7 @@ const DECIMAL_PRECISION: u8 = 16;
 pub struct CalcSuggests;
 
 impl Suggests for CalcSuggests {
-    fn random_suggests(&self) -> Vec<String> {
+    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = rand::thread_rng();
         let n: f64 = rng.gen_range(-10.0..10.0);
         let operands = [

@@ -20,7 +20,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct GeoSuggests;
 
 impl Suggests for GeoSuggests {
-    fn random_suggests(&self) -> Vec<String> {
+    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = rand::thread_rng();
         let lat: f64 = rng.gen_range(-90.0..=90.0);
         let lon: f64 = rng.gen_range(-180.0..=180.0);

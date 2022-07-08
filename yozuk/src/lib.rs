@@ -171,11 +171,55 @@ impl Yozuk {
             if suggests.len() >= amount {
                 break;
             }
-            if let Some(suggest) = skill.random_suggests().choose_mut(&mut rng) {
+            if let Some(suggest) = skill.suggests(&[], &[]).choose_mut(&mut rng) {
                 suggests.push(mem::take(suggest));
             }
         }
         suggests
+    }
+
+    pub fn suggests(&self, amount: usize, args: &[Token], streams: &[InputStream]) -> Vec<String> {
+        let tokens = args.iter().map(|arg| arg.as_str()).collect::<Vec<_>>();
+        let inputs = deunicode::deunicode(&tokens.join(" ")).to_ascii_lowercase();
+
+        #[cfg(feature = "rayon")]
+        let iter = self.skills.par_iter();
+        #[cfg(not(feature = "rayon"))]
+        let iter = self.skills.iter();
+
+        let mut suggests = iter
+            .flat_map(|cache| {
+                cache
+                    .skill
+                    .suggests
+                    .iter()
+                    .flat_map(|skill| skill.suggests(args, streams))
+                    .enumerate()
+                    .collect::<Vec<_>>()
+            })
+            .collect::<Vec<_>>();
+
+        #[cfg(feature = "rayon")]
+        suggests.par_sort_by_key(|item| item.0);
+
+        #[cfg(not(feature = "rayon"))]
+        suggests.sort_by_key(|item| item.0);
+
+        #[cfg(feature = "rayon")]
+        suggests.par_sort_by_key(|item| {
+            distance::damerau_levenshtein(&item.1.to_ascii_lowercase(), &inputs)
+        });
+
+        #[cfg(not(feature = "rayon"))]
+        suggests.sort_by_key(|item| {
+            distance::damerau_levenshtein(&item.1.to_ascii_lowercase(), &inputs)
+        });
+
+        suggests
+            .into_iter()
+            .take(amount)
+            .map(|item| item.1)
+            .collect()
     }
 }
 

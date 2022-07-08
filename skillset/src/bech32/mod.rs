@@ -17,7 +17,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct Bech32Suggests;
 
 impl Suggests for Bech32Suggests {
-    fn random_suggests(&self) -> Vec<String> {
+    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         vec![
             "b321fpjkcmr0yptk7unvvsss8ctgvx",
             "b32m1fpjkcmr0yptk7unvvssserxuym",

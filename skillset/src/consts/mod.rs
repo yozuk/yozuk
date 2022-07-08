@@ -22,7 +22,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct ConstSuggests;
 
 impl Suggests for ConstSuggests {
-    fn random_suggests(&self) -> Vec<String> {
+    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         vec!["How fast the speed of light?"]
             .into_iter()
             .map(Into::into)

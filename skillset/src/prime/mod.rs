@@ -24,7 +24,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct PrimeSuggests;
 
 impl Suggests for PrimeSuggests {
-    fn random_suggests(&self) -> Vec<String> {
+    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = rand::thread_rng();
         let n: u32 = rng.gen();
         vec![format!("Is {} a prime number?", n)]

@@ -19,7 +19,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct PunycodeSuggests;
 
 impl Suggests for PunycodeSuggests {
-    fn random_suggests(&self) -> Vec<String> {
+    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = rand::thread_rng();
         let emoji = ["🦊", "🐼", "🐰", "🐶", "🐯"].choose(&mut rng).unwrap();
         vec![format!("{emoji}.example.com")]

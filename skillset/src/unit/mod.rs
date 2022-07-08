@@ -34,7 +34,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct UnitSuggests;
 
 impl Suggests for UnitSuggests {
-    fn random_suggests(&self) -> Vec<String> {
+    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = rand::thread_rng();
         let n: u32 = rng.gen_range(10..=1000);
         let unit = ["km", "in", "hPa", "kg", "oz.", "KiB", "mph", "°F"]
