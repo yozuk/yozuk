@@ -37,7 +37,6 @@ impl TokenParser for ColorTokenParser {
         }
         css_color::Srgb::from_str(&exp).ok().map(|_| Token {
             data: exp.into(),
-            media_type: "text/vnd.yozuk.color".parse().unwrap(),
             tag,
             ..Default::default()
         })

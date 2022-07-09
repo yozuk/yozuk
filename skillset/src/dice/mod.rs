@@ -89,7 +89,7 @@ impl TokenParser for DiceTokenParser {
                     .flatten()
                     .any(|pair| pair.as_rule() == Rule::dice) =>
             {
-                Some(tk!(exp, "text/vnd.yozuk.dice"))
+                Some(tk!(exp; "input:notation"))
             }
             _ => None,
         }
@@ -234,13 +234,12 @@ impl Translator for DiceTranslator {
             }
         }
 
-        let media_type = MediaType::parse("text/vnd.yozuk.dice").unwrap();
-        if args.iter().any(|arg| arg.media_type != media_type) {
+        if args.iter().any(|arg| arg.tag != "input:notation") {
             return None;
         }
         let exp = args
             .iter()
-            .filter(|arg| arg.media_type == media_type)
+            .filter(|arg| arg.tag == "input:notation")
             .map(|arg| arg.as_str())
             .collect::<Vec<_>>();
         if exp.len() == 1 {

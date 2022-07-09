@@ -68,7 +68,7 @@ impl TokenParser for CalcTokenParser {
         if CalcParser::parse(Rule::calculation, &exp).is_ok()
             && (tokens.len() >= 2 || CalcParser::parse(Rule::single_num, &exp).is_err())
         {
-            Some(tk!(exp, "text/vnd.yozuk.calc"))
+            Some(tk!(exp; "input:exp"))
         } else {
             None
         }
@@ -150,13 +150,12 @@ pub struct CalcTranslator;
 
 impl Translator for CalcTranslator {
     fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
-        let media_type = MediaType::parse("text/vnd.yozuk.calc").unwrap();
-        if args.iter().any(|arg| arg.media_type != media_type) {
+        if args.iter().any(|arg| arg.tag != "input:exp") {
             return None;
         }
         let exp = args
             .iter()
-            .filter(|arg| arg.media_type == media_type)
+            .filter(|arg| arg.tag == "input:exp")
             .map(|arg| arg.as_str())
             .collect::<Vec<_>>();
         if exp.len() == 1 {
