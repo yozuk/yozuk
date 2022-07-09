@@ -2548,7 +2548,6 @@ dependencies = [
  "crc_all",
  "css-color",
  "digest 0.10.3",
- "entropy",
  "fraction",
  "getrandom",
  "hex",
