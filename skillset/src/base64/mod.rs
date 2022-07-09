@@ -10,6 +10,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_corpus(Base64Corpus)
+            .add_suggests(Base64Suggests)
             .add_translator(Base64Translator)
             .set_command(Base64Command)
             .build()
@@ -28,6 +29,19 @@ fn is_like_base64(data: &[u8]) -> bool {
         return score >= 4;
     }
     false
+}
+
+#[derive(Debug)]
+pub struct Base64Suggests;
+
+impl Suggests for Base64Suggests {
+    fn suggests(&self, _args: &[Token], streams: &[InputStream]) -> Vec<String> {
+        if streams.is_empty() {
+            vec![]
+        } else {
+            vec!["Base64".to_string()]
+        }
+    }
 }
 
 #[derive(Debug)]
