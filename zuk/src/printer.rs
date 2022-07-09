@@ -161,11 +161,9 @@ impl<'a> TerminalPrinter<'a> {
     }
 
     fn print_image(&self, data: &[u8], media_type: &MediaTypeBuf) -> Result<bool> {
-        if media_type == &media_type!(IMAGE / PNG) {
-            if yozuk_helper_platform::term::is_kitty_image_supported() {
-                yozuk_helper_platform::term::kitty_image_show_png(data)?;
-                return Ok(true);
-            }
+        if media_type == &media_type!(IMAGE / PNG) && yozuk_helper_platform::term::is_kitty_image_supported() {
+            yozuk_helper_platform::term::kitty_image_show_png(data)?;
+            return Ok(true);
         }
         Ok(false)
     }
