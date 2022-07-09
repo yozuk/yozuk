@@ -1,7 +1,8 @@
 use bigdecimal::{BigDecimal, ToPrimitive};
 use clap::Parser;
 use num_bigint::ToBigInt;
-use rand::Rng;
+use rand::rngs::StdRng;
+use rand::{Rng, SeedableRng};
 use std::str::FromStr;
 use yozuk_helper_english::{normalized_eq, NumeralTokenParser};
 use yozuk_helper_preprocessor::TokenMerger;
@@ -24,8 +25,8 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct PrimeSuggests;
 
 impl Suggests for PrimeSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        let mut rng = rand::thread_rng();
+    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let mut rng = StdRng::seed_from_u64(seed);
         let n: u32 = rng.gen();
         vec![format!("Is {} a prime number?", n)]
     }

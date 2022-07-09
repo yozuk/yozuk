@@ -1,6 +1,7 @@
 use clap::Parser;
 use lipsum::lipsum;
-use rand::Rng;
+use rand::rngs::StdRng;
+use rand::{Rng, SeedableRng};
 use yozuk_helper_english::{normalized_eq, NumeralTokenParser};
 use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
@@ -22,8 +23,8 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct LipsumSuggests;
 
 impl Suggests for LipsumSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        let mut rng = rand::thread_rng();
+    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let mut rng = StdRng::seed_from_u64(seed);
         let n: u32 = rng.gen_range(5..=10) * 10;
         vec![format!("{} words dummy text", n)]
     }

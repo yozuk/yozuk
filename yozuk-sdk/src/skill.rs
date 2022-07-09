@@ -26,7 +26,7 @@ pub trait Corpus: fmt::Debug + Send + Sync + 'static {
 }
 
 pub trait Suggests: fmt::Debug + Send + Sync + 'static {
-    fn suggests(&self, args: &[Token], streams: &[InputStream]) -> Vec<String>;
+    fn suggests(&self, seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String>;
 }
 
 pub trait Preprocessor: fmt::Debug + Send + Sync + 'static {

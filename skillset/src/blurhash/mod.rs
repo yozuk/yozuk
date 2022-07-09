@@ -20,7 +20,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct BlurHashSuggests;
 
 impl Suggests for BlurHashSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+    fn suggests(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         vec![
             "BLDdqP~BS16_Efr@",
             "BcNS{u7gO=?^jDV@",

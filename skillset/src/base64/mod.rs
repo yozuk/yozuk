@@ -35,7 +35,7 @@ fn is_like_base64(data: &[u8]) -> bool {
 pub struct Base64Suggests;
 
 impl Suggests for Base64Suggests {
-    fn suggests(&self, _args: &[Token], streams: &[InputStream]) -> Vec<String> {
+    fn suggests(&self, _seed: u64, _args: &[Token], streams: &[InputStream]) -> Vec<String> {
         if streams.is_empty() {
             vec![]
         } else {

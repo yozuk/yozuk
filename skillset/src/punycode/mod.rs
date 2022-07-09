@@ -1,5 +1,7 @@
 use clap::{ArgEnum, Parser};
+use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
+use rand::SeedableRng;
 use yozuk_sdk::prelude::*;
 
 mod tld;
@@ -19,8 +21,8 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct PunycodeSuggests;
 
 impl Suggests for PunycodeSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        let mut rng = rand::thread_rng();
+    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let mut rng = StdRng::seed_from_u64(seed);
         let emoji = ["🦊", "🐼", "🐰", "🐶", "🐯"].choose(&mut rng).unwrap();
         vec![format!("{emoji}.example.com")]
     }

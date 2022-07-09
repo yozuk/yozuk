@@ -62,7 +62,7 @@ impl Corpus for DigestCorpus {
 pub struct DigestSuggests;
 
 impl Suggests for DigestSuggests {
-    fn suggests(&self, _args: &[Token], streams: &[InputStream]) -> Vec<String> {
+    fn suggests(&self, _seed: u64, _args: &[Token], streams: &[InputStream]) -> Vec<String> {
         if streams.is_empty() {
             vec![]
         } else {

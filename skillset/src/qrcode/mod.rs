@@ -21,7 +21,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct QrCodeSuggests;
 
 impl Suggests for QrCodeSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+    fn suggests(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         vec!["https://yozuk.com to qr", "\"Hello world!\" to QRCode"]
             .into_iter()
             .map(Into::into)

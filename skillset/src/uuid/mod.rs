@@ -1,6 +1,7 @@
 use clap::Parser;
 use itertools::iproduct;
-use rand::Rng;
+use rand::rngs::StdRng;
+use rand::{Rng, SeedableRng};
 use std::iter;
 use uuid::Uuid;
 use yozuk_helper_english::{normalized_eq, pluralize, NumeralTokenParser};
@@ -83,8 +84,8 @@ impl Corpus for UuidCorpus {
 pub struct UuidSuggests;
 
 impl Suggests for UuidSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        let mut rng = rand::thread_rng();
+    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let mut rng = StdRng::seed_from_u64(seed);
         let n: u32 = rng.gen_range(2..=10);
         vec![format!("Generate {} UUIDs", n)]
     }

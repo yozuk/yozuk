@@ -5,7 +5,8 @@ use once_cell::sync::OnceCell;
 use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
-use rand::Rng;
+use rand::rngs::StdRng;
+use rand::{Rng, SeedableRng};
 use std::iter;
 use thiserror::Error;
 use yozuk_helper_english::normalized_eq;
@@ -40,8 +41,8 @@ const MAX_ROLLS: usize = 256;
 pub struct DiceSuggests;
 
 impl Suggests for DiceSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        let mut rng = rand::thread_rng();
+    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let mut rng = StdRng::seed_from_u64(seed);
         let n: u32 = rng.gen_range(2..=10);
         vec![format!("Roll {} dice", n)]
     }

@@ -1,7 +1,9 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
 
+use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
+use rand::SeedableRng;
 use std::{iter, mem};
 use yozuk_model::FeatureLabeler;
 use yozuk_sdk::model::*;
@@ -30,6 +32,7 @@ pub struct Yozuk {
     labelers: Vec<Box<dyn Labeler>>,
     commands: Vec<Option<CommandCache>>,
     redirections: Vec<(Vec<Token>, Vec<String>)>,
+    seed: u64,
 }
 
 impl Yozuk {
@@ -165,13 +168,13 @@ impl Yozuk {
             .iter()
             .flat_map(|cache| &cache.skill.suggests)
             .collect::<Vec<_>>();
-        let mut rng = &mut rand::thread_rng();
+        let mut rng = StdRng::seed_from_u64(self.seed);
         skills.shuffle(&mut rng);
         for skill in skills {
             if suggests.len() >= amount {
                 break;
             }
-            if let Some(suggest) = skill.suggests(&[], &[]).choose_mut(&mut rng) {
+            if let Some(suggest) = skill.suggests(self.seed, &[], &[]).choose_mut(&mut rng) {
                 suggests.push(mem::take(suggest));
             }
         }
@@ -193,7 +196,7 @@ impl Yozuk {
                     .skill
                     .suggests
                     .iter()
-                    .flat_map(|skill| skill.suggests(args, streams))
+                    .flat_map(|skill| skill.suggests(self.seed, args, streams))
                     .enumerate()
                     .collect::<Vec<_>>()
             })
@@ -316,6 +319,7 @@ impl YozukBuilder {
             labelers,
             commands,
             redirections: self.redirections,
+            seed: rand::random(),
         }
     }
 }

@@ -1,6 +1,7 @@
 use anyhow::anyhow;
 use clap::Parser;
-use rand::Rng;
+use rand::rngs::StdRng;
+use rand::{Rng, SeedableRng};
 use serde_derive::Serialize;
 use yozuk_sdk::prelude::*;
 
@@ -20,8 +21,8 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct GeoSuggests;
 
 impl Suggests for GeoSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        let mut rng = rand::thread_rng();
+    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let mut rng = StdRng::seed_from_u64(seed);
         let lat: f64 = rng.gen_range(-90.0..=90.0);
         let lon: f64 = rng.gen_range(-180.0..=180.0);
         let code = open_location_code::encode((lat, lon).into(), 10);

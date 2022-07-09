@@ -1,8 +1,9 @@
 use bigdecimal::BigDecimal;
 use bigdecimal::One;
 use clap::Parser;
+use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
-use rand::Rng;
+use rand::{Rng, SeedableRng};
 use std::str::FromStr;
 use yozuk_helper_english::NumeralTokenParser;
 use yozuk_helper_preprocessor::TokenMerger;
@@ -34,8 +35,8 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct UnitSuggests;
 
 impl Suggests for UnitSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        let mut rng = rand::thread_rng();
+    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let mut rng = StdRng::seed_from_u64(seed);
         let n: u32 = rng.gen_range(10..=1000);
         let unit = ["km", "in", "hPa", "kg", "oz.", "KiB", "mph", "°F"]
             .choose(&mut rng)

@@ -6,7 +6,8 @@ use pest::iterators::{Pair, Pairs};
 use pest::prec_climber::*;
 use pest::Parser;
 use rand::prelude::SliceRandom;
-use rand::Rng;
+use rand::rngs::StdRng;
+use rand::{Rng, SeedableRng};
 use thiserror::Error;
 use yozuk_helper_english::NumeralTokenParser;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
@@ -34,8 +35,8 @@ const DECIMAL_PRECISION: u8 = 16;
 pub struct CalcSuggests;
 
 impl Suggests for CalcSuggests {
-    fn suggests(&self, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        let mut rng = rand::thread_rng();
+    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let mut rng = StdRng::seed_from_u64(seed);
         let n: f64 = rng.gen_range(-10.0..10.0);
         let operands = [
             "atan2(0.5, 0.2)",
