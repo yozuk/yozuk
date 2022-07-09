@@ -10,6 +10,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_corpus(DigestCorpus)
+            .add_suggests(DigestSuggests)
             .add_translator(DigestTranslator)
             .set_command(DigestCommand)
             .build()
@@ -54,6 +55,23 @@ impl Corpus for DigestCorpus {
                 }),
         )
         .collect()
+    }
+}
+
+#[derive(Debug)]
+pub struct DigestSuggests;
+
+impl Suggests for DigestSuggests {
+    fn suggests(&self, _args: &[Token], streams: &[InputStream]) -> Vec<String> {
+        if streams.is_empty() {
+            vec![]
+        } else {
+            ENTRIES
+                .iter()
+                .filter_map(|entry| entry.keywords.iter().next())
+                .map(|s| s.to_string())
+                .collect()
+        }
     }
 }
 
