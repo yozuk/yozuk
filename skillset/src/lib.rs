@@ -55,7 +55,6 @@ skills!(
     [unit, "yozuk-skill-unit"],
     [geo, "yozuk-skill-geo"],
     [password, "yozuk-skill-password"],
-    [bitcoin, "yozuk-skill-bitcoin"],
     [urlencode, "yozuk-skill-urlencode"],
     [bech32, "yozuk-skill-bech32"],
     [prime, "yozuk-skill-prime"],
