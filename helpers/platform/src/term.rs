@@ -190,7 +190,7 @@ mod term_iterm2_image {
         false
     }
 
-    pub fn iterm2_image_show(_data: &[u8]) -> std::io::Result<()> {
+    pub fn iterm2_image_show(_data: &[u8], _name: Option<&str>) -> std::io::Result<()> {
         Ok(())
     }
 }
