@@ -88,9 +88,23 @@ mod term_kitty_image {
         stdout.write_all(APC_QUERY)?;
         stdout.write_all(ATTR_QUERY)?;
         stdout.flush()?;
-        let mut apc_buf = vec![0u8; 128];
-        let n = stdin.read(&mut apc_buf)?;
-        apc_buf.resize(n, 0);
+
+        let mut apc_buf = vec![0u8; 0];
+        loop {
+            let len = apc_buf.len();
+            apc_buf.resize(len + 128, 0);
+
+            let n = stdin.read(&mut apc_buf[len..])?;
+            apc_buf.resize(len + n, 0);
+
+            if attr_buf
+                .iter()
+                .rev()
+                .eq(apc_buf.iter().rev().take(attr_buf.len()))
+            {
+                break;
+            }
+        }
 
         disable_raw_mode()?;
 
