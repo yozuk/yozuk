@@ -81,7 +81,7 @@ impl<'a> TerminalPrinter<'a> {
                         stdout.write_all(&data.data)?;
                         writeln!(&mut stdout)?;
                     } else {
-                        self.print_binary(&data.data, &data.media_type)?;
+                        self.print_binary(&data.data, &data.file_name, &data.media_type)?;
                     }
                 }
                 #[cfg(not(target_arch = "wasm32"))]
@@ -160,18 +160,28 @@ impl<'a> TerminalPrinter<'a> {
         Ok(())
     }
 
-    fn print_image(&self, data: &[u8], media_type: &MediaTypeBuf) -> Result<bool> {
-        if media_type == &media_type!(IMAGE / PNG) && yozuk_helper_platform::term::is_kitty_image_supported() {
+    fn print_image(&self, data: &[u8], file_name: &str, media_type: &MediaTypeBuf) -> Result<bool> {
+        if (media_type == &media_type!(IMAGE / PNG)
+            || media_type == &media_type!(IMAGE / GIF)
+            || media_type == &media_type!(IMAGE / JPEG))
+            && yozuk_helper_platform::term::is_iterm2_image_supported()
+        {
+            yozuk_helper_platform::term::iterm2_image_show(data, Some(file_name))?;
+            return Ok(true);
+        }
+        if media_type == &media_type!(IMAGE / PNG)
+            && yozuk_helper_platform::term::is_kitty_image_supported()
+        {
             yozuk_helper_platform::term::kitty_image_show_png(data)?;
             return Ok(true);
         }
         Ok(false)
     }
 
-    fn print_binary(&self, data: &[u8], media_type: &MediaTypeBuf) -> Result<()> {
+    fn print_binary(&self, data: &[u8], file_name: &str, media_type: &MediaTypeBuf) -> Result<()> {
         let mut stdout = io::stdout();
         if yozuk_helper_platform::term::is_stdout_tty() {
-            if self.print_image(data, media_type)? {
+            if self.print_image(data, file_name, media_type)? {
                 return Ok(());
             }
             let show_color = true;
