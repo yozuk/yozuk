@@ -42,9 +42,9 @@ mod term_kitty_image {
     use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
     use std::io::{stdin, stdout, Read, Write};
 
-    const ATTR_QUERY: &[u8] = b"\x1b[c";
-    const APC_QUERY: &[u8] = b"\x1b_Gi=31,s=1,v=1,a=q,t=d,f=24;AAAA\x1b\\";
+    const KITTY_QUERY: &[u8] = b"\x1b_Gi=31,s=1,v=1,a=q,t=d,f=24;AAAA\x1b\\\x1b[5n";
     const OK: &str = ";OK\x1b\\";
+    const SUFFIX: &[u8] = b"\x1b[0n";
 
     pub fn is_kitty_image_supported() -> bool {
         is_kitty_image_supported_impl().unwrap_or(false)
@@ -77,40 +77,25 @@ mod term_kitty_image {
 
         enable_raw_mode()?;
 
-        stdout.write_all(ATTR_QUERY)?;
-        stdout.flush()?;
-        let mut attr_buf = vec![0u8; 128];
-        let n = stdin.read(&mut attr_buf)?;
-        attr_buf.resize(n, 0);
-
-        stdout.write_all(APC_QUERY)?;
-        stdout.write_all(ATTR_QUERY)?;
+        stdout.write_all(KITTY_QUERY)?;
         stdout.flush()?;
 
-        let mut apc_buf = vec![0u8; 0];
+        let mut buf = vec![0u8; 0];
         loop {
-            let len = apc_buf.len();
-            apc_buf.resize(len + 128, 0);
+            let len = buf.len();
+            buf.resize(len + 128, 0);
 
-            let n = stdin.read(&mut apc_buf[len..])?;
-            apc_buf.resize(len + n, 0);
+            let n = stdin.read(&mut buf[len..])?;
+            buf.resize(len + n, 0);
 
-            if attr_buf
-                .iter()
-                .rev()
-                .eq(apc_buf.iter().rev().take(attr_buf.len()))
-            {
+            if buf.iter().rev().take(SUFFIX.len()).eq(SUFFIX.iter().rev()) {
                 break;
             }
         }
 
         disable_raw_mode()?;
 
-        if apc_buf.len() <= attr_buf.len() {
-            return Ok(false);
-        }
-
-        Ok(String::from_utf8(apc_buf)
+        Ok(String::from_utf8(buf)
             .ok()
             .and_then(|s| s.find(OK))
             .is_some())
