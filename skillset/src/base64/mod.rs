@@ -134,6 +134,7 @@ impl Command for Base64Command {
                 .collect::<Bytes>()
         });
         let options = Options::try_parse_from(args.args)?;
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/base64/")?;
         match options.mode {
             Mode::Decode => {
                 let mut blocks = vec![Block::Comment(
@@ -157,14 +158,18 @@ impl Command for Base64Command {
 
                 Ok(Output::new()
                     .set_title("Base64 Decoder")
-                    .add_blocks_iter(blocks))
+                    .add_blocks_iter(blocks)
+                    .add_metadata(docs))
             }
-            Mode::Encode => Ok(Output::new().set_title("Base64 Encoder").add_blocks_iter(
-                args.data
-                    .into_iter()
-                    .chain(streams)
-                    .map(|data| block::Data::new().set_text_data(base64::encode(data))),
-            )),
+            Mode::Encode => Ok(Output::new()
+                .set_title("Base64 Encoder")
+                .add_blocks_iter(
+                    args.data
+                        .into_iter()
+                        .chain(streams)
+                        .map(|data| block::Data::new().set_text_data(base64::encode(data))),
+                )
+                .add_metadata(docs)),
         }
     }
 

@@ -143,21 +143,23 @@ impl Command for DigestCommand {
             }
         }
 
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/digest/")?;
         if let [input, ..] = &args.input[..] {
             let mut input = input.as_bytes();
             if let Some(output) = compute_hash(&mut input, entries) {
-                return Ok(output);
+                return Ok(output.add_metadata(docs));
             }
         } else if let [stream, ..] = streams {
             let mut reader = BufReader::new(stream);
             if let Some(output) = compute_hash(&mut reader, entries) {
-                return Ok(output);
+                return Ok(output.add_metadata(docs));
             }
         }
 
         Err(Output::new()
             .set_title("Digest")
             .add_block(block::Comment::new().set_text("No valid input source provided"))
+            .add_metadata(docs)
             .into())
     }
 }

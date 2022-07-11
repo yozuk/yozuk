@@ -70,6 +70,7 @@ impl Command for PunycodeCommand {
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
 
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/punycode/")?;
         match args.mode {
             Mode::Decode => {
                 let output = args
@@ -82,7 +83,8 @@ impl Command for PunycodeCommand {
                     .add_blocks_iter(vec![
                         Block::Comment(block::Comment::new().set_text("Decoding punycode")),
                         Block::Data(block::Data::new().set_text_data(output.join("\n"))),
-                    ]))
+                    ])
+                    .add_metadata(docs))
             }
             Mode::Encode => {
                 let output = args
@@ -96,7 +98,8 @@ impl Command for PunycodeCommand {
                     .add_blocks_iter(vec![
                         Block::Comment(block::Comment::new().set_text("Encoding punycode")),
                         Block::Data(block::Data::new().set_text_data(output.join("\n"))),
-                    ]))
+                    ])
+                    .add_metadata(docs))
             }
         }
     }

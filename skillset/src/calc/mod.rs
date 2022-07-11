@@ -177,6 +177,7 @@ impl Command for CalcCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let rule = CalcParser::parse(Rule::calculation, &args.args[1])?;
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/calc/")?;
         Ok(eval(rule)
             .map(|result| {
                 let result = result.calc_precision(Some(DECIMAL_PRECISION));
@@ -184,11 +185,13 @@ impl Command for CalcCommand {
                     .set_title("Calculator")
                     .add_block(block::Data::new().set_text_data(format!("{}", result)))
                     .add_metadata_iter(result.to_f64().map(Metadata::value))
+                    .add_metadata(docs.clone())
             })
             .map_err(|err| {
                 Output::new()
                     .set_title("Calculator")
                     .add_block(block::Comment::new().set_text(format!("{}", err)))
+                    .add_metadata(docs)
             })?)
     }
 
@@ -211,7 +214,8 @@ mod tests {
         let expected = Ok(Output::new()
             .set_title("Calculator")
             .add_block(block::Data::new().set_text_data("-140742.75"))
-            .add_metadata(Metadata::value(-140742.75)));
+            .add_metadata(Metadata::value(-140742.75))
+            .add_metadata(Metadata::docs("https://docs.yozuk.com/docs/skills/calc/").unwrap()));
         assert_eq!(result, expected);
 
         let result = CalcCommand.run(
@@ -222,7 +226,8 @@ mod tests {
         let expected = Err(CommandError::Output(
             Output::new()
                 .set_title("Calculator")
-                .add_block(block::Comment::new().set_text("Division by zero")),
+                .add_block(block::Comment::new().set_text("Division by zero"))
+                .add_metadata(Metadata::docs("https://docs.yozuk.com/docs/skills/calc/").unwrap()),
         ));
         assert_eq!(result, expected);
     }
@@ -237,7 +242,8 @@ mod tests {
         let expected = Ok(Output::new()
             .set_title("Calculator")
             .add_block(block::Data::new().set_text_data("9"))
-            .add_metadata(Metadata::value(9.0)));
+            .add_metadata(Metadata::value(9.0))
+            .add_metadata(Metadata::docs("https://docs.yozuk.com/docs/skills/calc/").unwrap()));
         assert_eq!(result, expected);
     }
 }

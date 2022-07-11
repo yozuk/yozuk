@@ -69,9 +69,11 @@ impl Command for Bech32Command {
                     Block::Data(block::Data::new().set_data(data)),
                 ]
             });
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/bech32/")?;
         Ok(Output::new()
             .set_title("Bech32 Decoder")
-            .add_blocks_iter(blocks))
+            .add_blocks_iter(blocks)
+            .add_metadata(docs))
     }
 
     fn priority(&self) -> i32 {

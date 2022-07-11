@@ -88,10 +88,14 @@ impl Command for GeoCommand {
             center: (code.center.x(), code.center.y()),
         };
 
-        Ok(Output::new().set_title("Geo").add_blocks_iter(vec![
-            Block::Comment(block::Comment::new().set_text("Decoding Open Location Code")),
-            Block::Data(block::Data::new().set_json_data(&code)?),
-        ]))
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/geo/")?;
+        Ok(Output::new()
+            .set_title("Geo")
+            .add_blocks_iter(vec![
+                Block::Comment(block::Comment::new().set_text("Decoding Open Location Code")),
+                Block::Data(block::Data::new().set_json_data(&code)?),
+            ])
+            .add_metadata(docs))
     }
 }
 

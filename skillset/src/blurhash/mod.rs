@@ -88,9 +88,11 @@ impl Command for BlurHashCommand {
                 ),
             ]
         });
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/blurhash/")?;
         Ok(Output::new()
             .set_title("BlurHash Decoder")
-            .add_blocks_iter(blocks))
+            .add_blocks_iter(blocks)
+            .add_metadata(docs))
     }
 
     fn priority(&self) -> i32 {

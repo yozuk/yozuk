@@ -62,9 +62,11 @@ impl Command for MsgpackCommand {
                     ),
                 ]
             });
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/msgpack/")?;
         Ok(Output::new()
             .set_title("Msgpack Decoder")
-            .add_blocks_iter(blocks))
+            .add_blocks_iter(blocks)
+            .add_metadata(docs))
     }
 
     fn priority(&self) -> i32 {

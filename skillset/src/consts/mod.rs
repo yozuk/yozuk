@@ -117,7 +117,8 @@ impl Command for ConstCommand {
                     Block::Data(block::Data::new().set_text_data(value)),
                 ]
             });
-        Ok(Output::new().add_blocks_iter(blocks))
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/consts/")?;
+        Ok(Output::new().add_blocks_iter(blocks).add_metadata(docs))
     }
 }
 

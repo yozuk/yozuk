@@ -140,6 +140,7 @@ impl Command for UuidCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/uuid/")?;
         if args.n > MAX_COUNT {
             return Err(Output::new()
                 .set_title("UUID Generator")
@@ -147,6 +148,7 @@ impl Command for UuidCommand {
                     "Too large number of the requested UUIDs (Limit: {}).",
                     MAX_COUNT
                 )))
+                .add_metadata(docs)
                 .into());
         }
         let list = iter::repeat_with(|| format!("{}", Uuid::new_v4()))
@@ -161,7 +163,8 @@ impl Command for UuidCommand {
                     pluralize("UUID", args.n)
                 ))),
                 Block::Data(block::Data::new().set_text_data(list.join("\n"))),
-            ]))
+            ])
+            .add_metadata(docs))
     }
 }
 

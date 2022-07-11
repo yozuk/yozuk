@@ -67,9 +67,11 @@ impl Command for PasswordCommand {
             password.push_str(&CHARACTERS[index..index + 1]);
         }
 
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/password/")?;
         Ok(Output::new()
             .set_title("NanoID Generator")
-            .add_block(block::Spoiler::new("Password", password)))
+            .add_block(block::Spoiler::new("Password", password))
+            .add_metadata(docs))
     }
 }
 

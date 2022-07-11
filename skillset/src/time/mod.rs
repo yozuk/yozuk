@@ -66,9 +66,7 @@ impl Translator for TimeTranslator {
                     .chain(OffsetDateTime::from_unix_timestamp_nanos(ts as i128 * 1000000).ok())
                     .chain(OffsetDateTime::from_unix_timestamp_nanos(ts as i128).ok())
             })
-            .filter(|&ts| {
-                (now_utc() - ts).whole_days().abs() <= TIMESTAMP_TOLERANCE_DAYS
-            })
+            .filter(|&ts| (now_utc() - ts).whole_days().abs() <= TIMESTAMP_TOLERANCE_DAYS)
             .collect::<Vec<_>>();
 
         if let [ts] = timestamps[..] {
@@ -98,17 +96,22 @@ impl Command for TimeCommand {
             .and_then(|tz| timezones::get_by_name(tz))
             .unwrap_or(timezones::db::UTC);
 
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/time/")?;
         if let Some(unix) = args.timestamp {
             let ts = OffsetDateTime::from_unix_timestamp_nanos(unix)?;
             let offset = tz.get_offset_utc(&ts);
             let ts = ts.to_offset(offset.to_utc());
-            Ok(Output::new().add_block(block::Data::new().set_text_data(ts.format(&Rfc3339)?)))
+            Ok(Output::new()
+                .add_block(block::Data::new().set_text_data(ts.format(&Rfc3339)?))
+                .add_metadata(docs))
         } else {
             let now = now_utc();
             let offset = tz.get_offset_utc(&now);
             let now = now.to_offset(offset.to_utc());
             let text = format!("{}\n{}", now.unix_timestamp(), now.format(&Rfc3339)?);
-            Ok(Output::new().add_block(block::Data::new().set_text_data(text)))
+            Ok(Output::new()
+                .add_block(block::Data::new().set_text_data(text))
+                .add_metadata(docs))
         }
     }
 }

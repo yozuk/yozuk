@@ -60,9 +60,11 @@ impl Command for JwtCommand {
                     Block::Data(block::Data::new().set_data(sig)),
                 ]
             });
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/jwt/")?;
         Ok(Output::new()
             .set_title("JWT Decoder")
-            .add_blocks_iter(blocks))
+            .add_blocks_iter(blocks)
+            .add_metadata(docs))
     }
 }
 

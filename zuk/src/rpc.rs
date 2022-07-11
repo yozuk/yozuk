@@ -273,21 +273,36 @@ mod tests {
                 RunCommandsResponse::Ok(vec![Output::new()
                     .set_title("Calculator")
                     .add_block(block::Data::new().set_text_data("2"))
-                    .add_metadata(Metadata::value(2.0))]),
+                    .add_metadata(Metadata::value(2.0))
+                    .add_metadata(
+                        Metadata::docs("https://docs.yozuk.com/docs/skills/calc/").unwrap(),
+                    )]),
             ),
             Response::new(4, serde_json::Value::Null),
             Response::new(
                 5,
-                RunCommandsResponse::Ok(vec![Output::new().set_title("Digest").add_block(
-                    block::Data::new().set_text_data("7b502c3a1f48c8609ae212cdfb639dee39673f5e"),
-                )]),
+                RunCommandsResponse::Ok(vec![Output::new()
+                    .set_title("Digest")
+                    .add_block(
+                        block::Data::new()
+                            .set_text_data("7b502c3a1f48c8609ae212cdfb639dee39673f5e"),
+                    )
+                    .add_metadata(
+                        Metadata::docs("https://docs.yozuk.com/docs/skills/digest/").unwrap(),
+                    )]),
             ),
             Response::new(6, serde_json::Value::Null),
             Response::new(
                 7,
-                RunCommandsResponse::Ok(vec![Output::new().set_title("Digest").add_block(
-                    block::Data::new().set_text_data("357e04830e05f3c37ca86e491dce8acfa447efeb"),
-                )]),
+                RunCommandsResponse::Ok(vec![Output::new()
+                    .set_title("Digest")
+                    .add_block(
+                        block::Data::new()
+                            .set_text_data("357e04830e05f3c37ca86e491dce8acfa447efeb"),
+                    )
+                    .add_metadata(
+                        Metadata::docs("https://docs.yozuk.com/docs/skills/digest/").unwrap(),
+                    )]),
             ),
         ];
 

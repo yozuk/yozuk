@@ -187,9 +187,11 @@ impl Command for LipsumCommand {
                 .into());
         }
 
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/lipsum/")?;
         Ok(Output::new()
             .set_title("Lorem ipsum")
-            .add_block(block::Data::new().set_text_data(lipsum(args.n))))
+            .add_block(block::Data::new().set_text_data(lipsum(args.n)))
+            .add_metadata(docs))
     }
 }
 

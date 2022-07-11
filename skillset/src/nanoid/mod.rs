@@ -165,6 +165,7 @@ impl Command for NanoIdCommand {
             .take(args.n)
             .collect::<Vec<_>>();
 
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/nanoid/")?;
         Ok(Output::new()
             .set_title("NanoID Generator")
             .add_blocks_iter(vec![
@@ -174,7 +175,8 @@ impl Command for NanoIdCommand {
                     pluralize("NanoID", args.n)
                 ))),
                 Block::Data(block::Data::new().set_text_data(list.join("\n"))),
-            ]))
+            ])
+            .add_metadata(docs))
     }
 }
 

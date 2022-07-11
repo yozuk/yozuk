@@ -261,6 +261,7 @@ impl Command for DiceCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let rule = DiceParser::parse(Rule::calculation, &args.args[1])?;
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/dice/")?;
         Ok(eval(rule)
             .map(|result| {
                 let result = result.calc_precision();
@@ -268,11 +269,13 @@ impl Command for DiceCommand {
                     .set_title("Dice")
                     .add_block(block::Data::new().set_text_data(result.to_string()))
                     .add_metadata_iter(result.metadata())
+                    .add_metadata(docs.clone())
             })
             .map_err(|err| {
                 Output::new()
                     .set_title("Dice")
                     .add_block(block::Comment::new().set_text(format!("{}", err)))
+                    .add_metadata(docs)
             })?)
     }
 }

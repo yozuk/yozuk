@@ -45,9 +45,12 @@ impl Command for IpCommand {
             .into_iter()
             .map(|input| expand_addrs(&input))
             .map(|addrs| Block::Data(block::Data::new().set_text_data(addrs.join("\n"))));
+
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/ip/")?;
         Ok(Output::new()
             .set_title("IPAddress converter")
-            .add_blocks_iter(blocks))
+            .add_blocks_iter(blocks)
+            .add_metadata(docs))
     }
 }
 

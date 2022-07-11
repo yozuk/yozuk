@@ -48,10 +48,12 @@ impl Command for UrlEncodeCommand {
             .iter()
             .filter_map(|arg| urlencoding::decode(arg).ok())
             .map(|data| block::Data::new().set_text_data(data));
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/urlencode/")?;
         Ok(Output::new()
             .set_title("URL Decoder")
             .add_block(block::Comment::new().set_text("Decoding URL encoding"))
-            .add_blocks_iter(blocks))
+            .add_blocks_iter(blocks)
+            .add_metadata(docs))
     }
 
     fn priority(&self) -> i32 {

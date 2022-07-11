@@ -115,10 +115,12 @@ impl Command for NumericCommand {
                 )
             })
             .unzip();
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/numeric/")?;
         Ok(Output::new()
             .add_blocks_iter(blocks)
             .add_metadata_iter(metadata)
-            .set_mode(OutputMode::Attachment))
+            .set_mode(OutputMode::Attachment)
+            .add_metadata(docs))
     }
 
     fn priority(&self) -> i32 {

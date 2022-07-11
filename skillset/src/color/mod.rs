@@ -127,6 +127,7 @@ impl Command for ColorCommand {
             })
             .unzip();
 
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/color/")?;
         Ok(Output::new()
             .set_title("Color")
             .add_blocks_iter(colors.into_iter().flat_map(|color| render_color(&color)))
@@ -134,7 +135,8 @@ impl Command for ColorCommand {
                 metadata
                     .into_iter()
                     .flat_map(|color| [Metadata::value(color.clone()), Metadata::color(color)]),
-            ))
+            )
+            .add_metadata(docs))
     }
 }
 

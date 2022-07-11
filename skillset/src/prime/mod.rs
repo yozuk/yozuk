@@ -118,10 +118,12 @@ impl Command for PrimeCommand {
         } else {
             Primality::No
         };
+        let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/prime/")?;
         Ok(Output::new()
             .set_title("Primality Test")
             .add_block(block::Data::new().set_text_data(primality.to_string(&args.test)))
-            .add_metadata(Metadata::value(primality != Primality::No)))
+            .add_metadata(Metadata::value(primality != Primality::No))
+            .add_metadata(docs))
     }
 }
 
