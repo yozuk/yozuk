@@ -95,7 +95,18 @@ impl Command for GeoCommand {
                 Block::Comment(block::Comment::new().set_text("Decoding Open Location Code")),
                 Block::Data(block::Data::new().set_json_data(&code)?),
             ])
-            .add_metadata(docs))
+            .add_metadata(docs)
+            .add_metadata(Metadata::link(
+                "Geo URI",
+                format!("geo:{},{}", code.center.0, code.center.1),
+            )?)
+            .add_metadata(Metadata::link(
+                "OpenStreetMap",
+                format!(
+                    "https://www.openstreetmap.org/#map=10/{}/{}",
+                    code.center.0, code.center.1
+                ),
+            )?))
     }
 }
 
