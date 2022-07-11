@@ -25,13 +25,14 @@ type Block =
     | DataBlock
     | SpoilerBlock;
 
-type DocsMetadata = {
-    type: "docs";
+type LinkMetadata = {
+    type: "link";
+    title: string;
     url: string;
 };
 
-type ShareMetadata = {
-    type: "share";
+type DocsMetadata = {
+    type: "docs";
     url: string;
 };
 
@@ -46,8 +47,8 @@ type ColorMetadata = {
 };
 
 type Metadata =
+    | LinkMetadata
     | DocsMetadata
-    | ShareMetadata
     | ValueMetadata
     | ColorMetadata;
 
