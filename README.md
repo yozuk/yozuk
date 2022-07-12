@@ -31,8 +31,9 @@ https://docs.yozuk.com
 
 ### Online Demo
 
- - Web App https://yozuk.com
- - Telegram Bot (https://t.me/YozukBot)
+ - Web App: https://yozuk.com
+ - Telegram Bot: [![Telegram: YozukBot](https://img.shields.io/badge/Telegram-@YozukBot-blue?logo=telegram)](https://t.me/YozukBot)
+ - Discord Bot: [![Discord: Yozuk#6060](https://img.shields.io/badge/Bot-Yozuk%236060-white?color=5865F2&logo=discord&logoColor=white)](https://discord.com/api/oauth2/authorize?client_id=989503720473636914&permissions=100352&scope=bot)
 
 ### Pre-built binaries
 
