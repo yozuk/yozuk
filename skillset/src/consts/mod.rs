@@ -7,7 +7,7 @@ mod definition;
 use definition::definitions;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"NA7YShJlZRtndZH5FqXc2",
+    model_id: b"c0FBNukgxcKvGJ9stDZ8K",
     init: |_| {
         Skill::builder()
             .add_corpus(ConstCorpus)

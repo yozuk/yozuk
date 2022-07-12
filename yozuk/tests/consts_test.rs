@@ -43,3 +43,63 @@ fn electron_mass() {
         Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "electron-mass"]))
     );
 }
+
+#[test]
+fn proton_mass() {
+    assert_eq!(
+        cmd(tk!(["Proton", "Mass"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "proton-mass"]))
+    );
+    assert_eq!(
+        cmd(tk!(["mass", "of", "proton"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "proton-mass"]))
+    );
+}
+
+#[test]
+fn neutron_mass() {
+    assert_eq!(
+        cmd(tk!(["Neutron", "Mass"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "neutron-mass"]))
+    );
+    assert_eq!(
+        cmd(tk!(["mass", "of", "neutron"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "neutron-mass"]))
+    );
+}
+
+#[test]
+fn muon_mass() {
+    assert_eq!(
+        cmd(tk!(["Muon", "Mass"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "muon-mass"]))
+    );
+    assert_eq!(
+        cmd(tk!(["mass", "of", "muon"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "muon-mass"]))
+    );
+}
+
+#[test]
+fn tau_mass() {
+    assert_eq!(
+        cmd(tk!(["Tau", "Mass"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "tau-mass"]))
+    );
+    assert_eq!(
+        cmd(tk!(["mass", "of", "tau"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "tau-mass"]))
+    );
+}
+
+#[test]
+fn top_quark_mass() {
+    assert_eq!(
+        cmd(tk!(["Top", "Quark", "Mass"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "top-quark-mass"]))
+    );
+    assert_eq!(
+        cmd(tk!(["mass", "of", "top", "quark"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-consts", "--name", "top-quark-mass"]))
+    );
+}

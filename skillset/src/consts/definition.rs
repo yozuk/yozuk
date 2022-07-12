@@ -79,6 +79,134 @@ pub fn definitions() -> &'static HashMap<&'static str, Constant> {
                 unit: Some("kg"),
                 is_exact: true,
             },
+            "proton-mass" => Constant {
+                name: "Proton mass",
+                tokens: vec![
+                    tk!([
+                        "proton"; "keyword:proton-mass",
+                        "mass"; "keyword:proton-mass"
+                    ]),
+                    tk!([
+                        "mass"; "keyword:proton-mass",
+                        "of",
+                        "proton"; "keyword:proton-mass"
+                    ]),
+                    tk!([
+                        "a",
+                        "mass"; "keyword:proton-mass",
+                        "of",
+                        "a",
+                        "proton"; "keyword:proton-mass"
+                    ])
+                ],
+                value: "1.6726219236951",
+                scale: -27,
+                unit: Some("kg"),
+                is_exact: true,
+            },
+            "neutron-mass" => Constant {
+                name: "Neutron mass",
+                tokens: vec![
+                    tk!([
+                        "neutron"; "keyword:neutron-mass",
+                        "mass"; "keyword:neutron-mass"
+                    ]),
+                    tk!([
+                        "mass"; "keyword:neutron-mass",
+                        "of",
+                        "neutron"; "keyword:neutron-mass"
+                    ]),
+                    tk!([
+                        "a",
+                        "mass"; "keyword:neutron-mass",
+                        "of",
+                        "a",
+                        "neutron"; "keyword:neutron-mass"
+                    ])
+                ],
+                value: "1.6749274980495",
+                scale: -27,
+                unit: Some("kg"),
+                is_exact: true,
+            },
+            "muon-mass" => Constant {
+                name: "Muon mass",
+                tokens: vec![
+                    tk!([
+                        "muon"; "keyword:muon-mass",
+                        "mass"; "keyword:muon-mass"
+                    ]),
+                    tk!([
+                        "mass"; "keyword:muon-mass",
+                        "of",
+                        "muon"; "keyword:muon-mass"
+                    ]),
+                    tk!([
+                        "a",
+                        "mass"; "keyword:muon-mass",
+                        "of",
+                        "a",
+                        "muon"; "keyword:muon-mass"
+                    ])
+                ],
+                value: "1.88353162742",
+                scale: -28,
+                unit: Some("kg"),
+                is_exact: true,
+            },
+            "tau-mass" => Constant {
+                name: "Tau mass",
+                tokens: vec![
+                    tk!([
+                        "tau"; "keyword:tau-mass",
+                        "mass"; "keyword:tau-mass"
+                    ]),
+                    tk!([
+                        "mass"; "keyword:tau-mass",
+                        "of",
+                        "tau"; "keyword:tau-mass"
+                    ]),
+                    tk!([
+                        "a",
+                        "mass"; "keyword:tau-mass",
+                        "of",
+                        "a",
+                        "tau"; "keyword:tau-mass"
+                    ])
+                ],
+                value: "3.1675421",
+                scale: -27,
+                unit: Some("kg"),
+                is_exact: true,
+            },
+            "top-quark-mass" => Constant {
+                name: "Top quark mass",
+                tokens: vec![
+                    tk!([
+                        "top"; "keyword:top-quark-mass",
+                        "quark"; "keyword:top-quark-mass",
+                        "mass"; "keyword:top-quark-mass"
+                    ]),
+                    tk!([
+                        "mass"; "keyword:top-quark-mass",
+                        "of",
+                        "top"; "keyword:top-quark-mass",
+                        "quark"; "keyword:top-quark-mass"
+                    ]),
+                    tk!([
+                        "a",
+                        "mass"; "keyword:top-quark-mass",
+                        "of",
+                        "a",
+                        "top"; "keyword:top-quark-mass",
+                        "quark"; "keyword:top-quark-mass"
+                    ])
+                ],
+                value: "3.078453",
+                scale: -25,
+                unit: Some("kg"),
+                is_exact: true,
+            },
         ]
     })
 }
