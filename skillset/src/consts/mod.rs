@@ -112,10 +112,10 @@ impl Command for ConstCommand {
                     .unit
                     .map(|unit| format!("{}{} {}", item.value, scale, unit))
                     .unwrap_or_else(|| item.value.to_string());
-                vec![
-                    Block::Comment(block::Comment::new().set_text(comment)),
-                    Block::Data(block::Data::new().set_text_data(value)),
-                ]
+                vec![Block::Data(block::Data::new().set_highlighted_text_data(
+                    format!("{}\n`{}`", comment, value),
+                    &Default::default(),
+                ))]
             });
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/consts/")?;
         Ok(Output::new().add_blocks_iter(blocks).add_metadata(docs))
