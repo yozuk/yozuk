@@ -11,6 +11,7 @@ mod term_is_tty {
     }
 }
 
+#[allow(unsafe_code)]
 #[cfg(target_os = "wasi")]
 mod term_is_tty {
     fn is_tty(fd: wasi::Fd) -> bool {

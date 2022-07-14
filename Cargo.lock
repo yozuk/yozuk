@@ -2967,7 +2967,6 @@ dependencies = [
  "sys-locale",
  "time",
  "time-tz",
- "wasi 0.11.0+wasi-snapshot-preview1",
  "wasm-bindgen",
 ]
 
@@ -3056,6 +3055,7 @@ dependencies = [
  "syscalls",
  "tempfile",
  "time-tz",
+ "wasi 0.11.0+wasi-snapshot-preview1",
  "yozuk",
  "yozuk-helper-filetype",
  "yozuk-helper-platform",
