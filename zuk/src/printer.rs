@@ -174,6 +174,57 @@ impl<'a> TerminalPrinter<'a> {
             term::kitty_image_show_png(data)?;
             return Ok(true);
         }
+
+        #[cfg(not(target_arch = "wasm32"))]
+        if let Ok((width, height)) = hanbun::size() {
+            if let Ok(image) = image::load_from_memory(data) {
+                use hanbun::Color;
+
+                let ratio_x = (image.width() as f64 / width as f64).ceil() as u32;
+                let ratio_y = (image.height() as f64 / height as f64).ceil() as u32;
+                let ratio_x = if ratio_x % 2 == 1 {
+                    ratio_x + 1
+                } else {
+                    ratio_x
+                };
+                let ratio_y = if ratio_y % 2 == 1 {
+                    ratio_y + 1
+                } else {
+                    ratio_y
+                };
+                let ratio = ratio_x.min(ratio_y);
+                let resized_image = image.resize_exact(
+                    (image.width() as f64 / ratio as f64) as u32,
+                    (image.height() as f64 / ratio as f64) as u32,
+                    image::imageops::FilterType::Nearest,
+                );
+
+                let mut buffer = hanbun::Buffer::new(
+                    resized_image.width() as _,
+                    (resized_image.height() / 2) as _,
+                    ' ',
+                );
+                for (y, row) in resized_image.to_rgb8().rows().enumerate() {
+                    for (x, pixel) in row.enumerate() {
+                        hanbun::Buffer::color(
+                            &mut buffer,
+                            x,
+                            y,
+                            Color::Rgb {
+                                r: pixel[0],
+                                g: pixel[1],
+                                b: pixel[2],
+                            },
+                        );
+                    }
+                }
+                buffer.draw();
+                buffer.clear(' ');
+
+                return Ok(true);
+            }
+        }
+
         Ok(false)
     }
 
