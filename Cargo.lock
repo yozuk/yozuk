@@ -2951,7 +2951,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-filetype"
-version = "0.19.1"
+version = "0.20.2"
 dependencies = [
  "chardetng",
  "encoding_rs",
