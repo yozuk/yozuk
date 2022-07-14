@@ -190,13 +190,34 @@ impl Yozuk {
         #[cfg(not(feature = "rayon"))]
         let iter = self.commands.iter();
 
+        let labeler = FeatureLabeler::new(&self.labelers);
+
         let mut suggests = iter
             .filter_map(|cache| cache.as_ref())
-            .flat_map(|cache| {
+            .map(|cache| {
+                (
+                    cache,
+                    cache
+                        .preprocessors
+                        .iter()
+                        .fold(args.to_vec(), |tokens, prep| prep.preprocess(tokens)),
+                )
+            })
+            .map(|(cache, tokens)| {
+                (
+                    cache,
+                    if let Some(model) = &cache.model {
+                        model.tag_tokens(&labeler, &tokens)
+                    } else {
+                        tokens
+                    },
+                )
+            })
+            .flat_map(|(cache, tokens)| {
                 cache
                     .suggests
                     .iter()
-                    .flat_map(|skill| skill.suggests(self.seed, args, streams))
+                    .flat_map(|skill| skill.suggests(self.seed, &tokens, streams))
                     .enumerate()
                     .collect::<Vec<_>>()
             })
