@@ -158,16 +158,15 @@ impl Command for UnitCommand {
         let converted = converted
             .into_iter()
             .filter(|unit| unit.base != base_unit.base || unit.prefix != base_unit.prefix)
-            .map(|unit| unit.normalized().to_string())
+            .map(|unit| format!("`{}`", unit.normalized().to_string()))
             .collect::<Vec<_>>();
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/unit/")?;
         Ok(Output::new()
             .set_title("Unit Converter")
-            .add_block(block::Data::new().set_text_data(format!(
-                "{} =\n{}",
-                base_unit.to_string(),
-                converted.join("\n")
-            )))
+            .add_block(block::Data::new().set_highlighted_text_data(
+                format!("{} =\n{}", base_unit.to_string(), converted.join("\n")),
+                &Default::default(),
+            ))
             .add_metadata(docs))
     }
 
