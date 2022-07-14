@@ -107,14 +107,24 @@ impl Command for TimeCommand {
             now.to_offset(offset.to_utc())
         };
 
-        let text = format!(
-            "unix: `{}`\nntp: `{}`\nrfc3339: `{}`",
-            ts.unix_timestamp(),
-            ts.unix_timestamp() + NTP_OFFSET,
-            ts.format(&Rfc3339)?
-        );
+        let unix = ts.unix_timestamp();
+        let mut formats = vec![
+            format!("unix: `{}`", unix),
+            format!("ntp: `{}`", unix + NTP_OFFSET),
+            format!("rfc3339: `{}`", ts.format(&Rfc3339)?),
+        ];
+        if let Some(tai64) = unix_to_tai64(unix) {
+            formats.push(format!(
+                "tai64: `@{}`",
+                hex::encode((tai64 + TAI64_LABEL_OFFSET).to_be_bytes())
+            ));
+        }
+
         Ok(Output::new()
-            .add_block(block::Data::new().set_highlighted_text_data(text, &Default::default()))
+            .add_block(
+                block::Data::new()
+                    .set_highlighted_text_data(formats.join("\n"), &Default::default()),
+            )
             .add_metadata(docs))
     }
 }
@@ -126,3 +136,46 @@ pub struct Args {
 }
 
 const NTP_OFFSET: i64 = 2208988800;
+const TAI64_LABEL_OFFSET: u64 = 0x4000000000000000 - NTP_OFFSET as u64;
+
+fn unix_to_tai64(unix: i64) -> Option<u64> {
+    let ntp = (unix + NTP_OFFSET) as u64;
+    let index = match TAI64_LEAP_SECONDS.binary_search_by_key(&ntp, |(ts, _)| *ts) {
+        Ok(n) => n,
+        Err(n) => n,
+    };
+    TAI64_LEAP_SECONDS.get(index).map(|(_, leap)| ntp + leap)
+}
+
+// https://www.ietf.org/timezones/data/leap-seconds.list
+const TAI64_LEAP_SECONDS: &[(u64, u64)] = &[
+    (2272060800, 10),
+    (2287785600, 11),
+    (2303683200, 12),
+    (2335219200, 13),
+    (2366755200, 14),
+    (2398291200, 15),
+    (2429913600, 16),
+    (2461449600, 17),
+    (2492985600, 18),
+    (2524521600, 19),
+    (2571782400, 20),
+    (2603318400, 21),
+    (2634854400, 22),
+    (2698012800, 23),
+    (2776982400, 24),
+    (2840140800, 25),
+    (2871676800, 26),
+    (2918937600, 27),
+    (2950473600, 28),
+    (2982009600, 29),
+    (3029443200, 30),
+    (3076704000, 31),
+    (3124137600, 32),
+    (3345062400, 33),
+    (3439756800, 34),
+    (3550089600, 35),
+    (3644697600, 36),
+    (3692217600, 37),
+    (3881174400 - 1, 37),
+];

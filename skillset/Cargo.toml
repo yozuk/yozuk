@@ -29,7 +29,7 @@ css-color = { version = "0.2.4", optional = true }
 digest = { version = "0.10.3", optional = true }
 fraction = "0.11.0"
 getrandom = { version = "0.2.5", features = ["js"] }
-hex = { version = "0.4.3", optional = true }
+hex = "0.4.3"
 itertools = "0.10.3"
 lipsum = { version = "0.8.0", optional = true }
 maplit = "1.0.2"
@@ -79,7 +79,6 @@ yozuk-skill-color = ["css-color", "palette"]
 yozuk-skill-dice = ["rand", "pest", "pest_derive"]
 yozuk-skill-digest = [
   "digest",
-  "hex",
   "md-5",
   "sha1",
   "sha2",
