@@ -9,10 +9,6 @@ mod term_is_tty {
     pub fn is_stdout_tty() -> bool {
         atty::is(Stream::Stdout)
     }
-
-    pub fn is_stderr_tty() -> bool {
-        atty::is(Stream::Stderr)
-    }
 }
 
 #[cfg(target_os = "wasi")]
@@ -29,10 +25,6 @@ mod term_is_tty {
 
     pub fn is_stdout_tty() -> bool {
         is_tty(wasi::FD_STDOUT)
-    }
-
-    pub fn is_stderr_tty() -> bool {
-        is_tty(wasi::FD_STDERR)
     }
 }
 

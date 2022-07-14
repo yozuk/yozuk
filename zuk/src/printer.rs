@@ -1,3 +1,4 @@
+use crate::term;
 use crate::Args;
 use anyhow::Result;
 use hexyl::{BorderStyle, Printer};
@@ -164,15 +165,13 @@ impl<'a> TerminalPrinter<'a> {
         if (media_type == media_type!(IMAGE / PNG)
             || media_type == media_type!(IMAGE / GIF)
             || media_type == media_type!(IMAGE / JPEG))
-            && yozuk_helper_platform::term::is_iterm2_image_supported()
+            && term::is_iterm2_image_supported()
         {
-            yozuk_helper_platform::term::iterm2_image_show(data, Some(file_name))?;
+            term::iterm2_image_show(data, Some(file_name))?;
             return Ok(true);
         }
-        if media_type == media_type!(IMAGE / PNG)
-            && yozuk_helper_platform::term::is_kitty_image_supported()
-        {
-            yozuk_helper_platform::term::kitty_image_show_png(data)?;
+        if media_type == media_type!(IMAGE / PNG) && term::is_kitty_image_supported() {
+            term::kitty_image_show_png(data)?;
             return Ok(true);
         }
         Ok(false)
@@ -180,7 +179,7 @@ impl<'a> TerminalPrinter<'a> {
 
     fn print_binary(&self, data: &[u8], file_name: &str, media_type: &MediaTypeBuf) -> Result<()> {
         let mut stdout = io::stdout();
-        if yozuk_helper_platform::term::is_stdout_tty() {
+        if term::is_stdout_tty() {
             if self.print_image(data, file_name, media_type)? {
                 return Ok(());
             }

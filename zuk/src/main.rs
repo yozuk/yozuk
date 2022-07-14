@@ -12,6 +12,7 @@ mod args;
 mod printer;
 mod repl;
 mod rpc;
+mod term;
 
 use args::*;
 use printer::*;
@@ -54,7 +55,7 @@ impl App {
         }
 
         let mut streams = vec![];
-        if !yozuk_helper_platform::term::is_stdin_tty() {
+        if !term::is_stdin_tty() {
             streams.push(InputStream::new(
                 io::stdin(),
                 media_type!(APPLICATION / OCTET_STREAM),
