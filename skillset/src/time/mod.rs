@@ -97,22 +97,25 @@ impl Command for TimeCommand {
             .unwrap_or(timezones::db::UTC);
 
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/time/")?;
-        if let Some(unix) = args.timestamp {
+        let ts = if let Some(unix) = args.timestamp {
             let ts = OffsetDateTime::from_unix_timestamp_nanos(unix)?;
             let offset = tz.get_offset_utc(&ts);
-            let ts = ts.to_offset(offset.to_utc());
-            Ok(Output::new()
-                .add_block(block::Data::new().set_text_data(ts.format(&Rfc3339)?))
-                .add_metadata(docs))
+            ts.to_offset(offset.to_utc())
         } else {
             let now = now_utc();
             let offset = tz.get_offset_utc(&now);
-            let now = now.to_offset(offset.to_utc());
-            let text = format!("{}\n{}", now.unix_timestamp(), now.format(&Rfc3339)?);
-            Ok(Output::new()
-                .add_block(block::Data::new().set_text_data(text))
-                .add_metadata(docs))
-        }
+            now.to_offset(offset.to_utc())
+        };
+
+        let text = format!(
+            "unix: `{}`\nntp: `{}`\nrfc3339: `{}`",
+            ts.unix_timestamp(),
+            ts.unix_timestamp() + NTP_OFFSET,
+            ts.format(&Rfc3339)?
+        );
+        Ok(Output::new()
+            .add_block(block::Data::new().set_highlighted_text_data(text, &Default::default()))
+            .add_metadata(docs))
     }
 }
 
@@ -121,3 +124,5 @@ pub struct Args {
     #[clap(short, long)]
     pub timestamp: Option<i128>,
 }
+
+const NTP_OFFSET: i64 = 2208988800;
