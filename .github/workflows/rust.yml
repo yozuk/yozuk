@@ -36,5 +36,3 @@ jobs:
       run: cargo clippy --all-features
     - name: Run test
       run: cargo nextest run --all-features
-    - name: Run test without rayon
-      run: cargo nextest run -p yozuk
