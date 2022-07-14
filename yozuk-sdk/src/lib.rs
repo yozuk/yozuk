@@ -8,6 +8,7 @@ pub mod block;
 pub mod display;
 pub mod env;
 pub mod feature;
+pub mod highlight;
 pub mod i18n;
 pub mod metadata;
 pub mod model;

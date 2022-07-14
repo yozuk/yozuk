@@ -1,4 +1,5 @@
 use crate::display::*;
+use crate::highlight::*;
 use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
 use mediatype::{media_type, MediaTypeBuf};
@@ -117,6 +118,17 @@ impl Data {
     {
         self.data = text.into().into();
         self.media_type = media_type!(TEXT / PLAIN).into();
+        self
+    }
+
+    pub fn set_highlighed_text_data<T>(mut self, text: T, highlighter: &Highlighter) -> Self
+    where
+        T: Into<String>,
+    {
+        let (plain, highlights) = highlighter.highlight(&text.into());
+        self.data = plain.into();
+        self.media_type = media_type!(TEXT / PLAIN).into();
+        self.highlights = highlights;
         self
     }
 

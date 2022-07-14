@@ -3,6 +3,7 @@ pub use super::block::{self, Block};
 pub use super::display::*;
 pub use super::env::*;
 pub use super::feature::*;
+pub use super::highlight::*;
 pub use super::i18n::*;
 pub use super::metadata::*;
 pub use super::output::*;

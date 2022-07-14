@@ -1,5 +1,4 @@
 use serde_derive::{Deserialize, Serialize};
-use std::ops::Range;
 
 #[derive(Debug, Copy, Clone, Default, Serialize, Deserialize, PartialEq)]
 pub struct DisplaySuggestion {
@@ -31,18 +30,4 @@ pub enum BinaryDisplay {
 pub enum ImageDisplay {
     Smooth,
     Pixelated,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub struct Highlight {
-    pub kind: HighlightKind,
-    pub range: Range<usize>,
-}
-
-#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "snake_case")]
-#[non_exhaustive]
-pub enum HighlightKind {
-    Value,
 }
