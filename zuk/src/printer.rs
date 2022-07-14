@@ -79,7 +79,23 @@ impl<'a> TerminalPrinter<'a> {
                 }
                 Block::Data(data) => {
                     if yozuk_helper_filetype::is_utf8_text(&data.data) {
-                        stdout.write_all(&data.data)?;
+                        if data.highlights.is_empty() {
+                            stdout.write_all(&data.data)?;
+                        } else {
+                            let mut offset = 0;
+                            for hl in &data.highlights {
+                                if let Ok(s) =
+                                    std::str::from_utf8(&data.data[offset..hl.range.start])
+                                {
+                                    write!(&mut stdout, "{}", s.dimmed())?;
+                                }
+                                stdout.write_all(&data.data[hl.range.clone()])?;
+                                offset = hl.range.end;
+                            }
+                            if let Ok(s) = std::str::from_utf8(&data.data[offset..]) {
+                                write!(&mut stdout, "{}", s.dimmed())?;
+                            }
+                        }
                         writeln!(&mut stdout)?;
                     } else {
                         self.print_binary(&data.data, &data.file_name, &data.media_type)?;
