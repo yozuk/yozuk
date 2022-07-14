@@ -18,7 +18,7 @@ type Decimal = GenericDecimal<u64, u8>;
 const DECIMAL_PRECISION: u8 = 16;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"Szq9sPvc3_bTUeMJSGjnC",
+    model_id: b"Zy6NC4m5byQvmMEha3jNT",
     init: |_| {
         Skill::builder()
             .add_corpus(DiceCorpus)
@@ -58,6 +58,7 @@ impl Corpus for DiceCorpus {
             tk!(["🎲"; "command"]),
             tk!([
                 "roll",
+                "a",
                 "die"; "command"
             ]),
             tk!([
