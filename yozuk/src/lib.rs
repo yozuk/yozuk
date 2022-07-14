@@ -28,7 +28,6 @@ const MAX_ARG_BYTES_LEN: usize = 1024;
 pub struct Yozuk {
     model: ModelSet,
     i18n: I18n,
-    skills: Vec<SkillCache>,
     labelers: Vec<Box<dyn Labeler>>,
     commands: Vec<Option<CommandCache>>,
     redirections: Vec<(Vec<Token>, Vec<String>)>,
@@ -164,9 +163,10 @@ impl Yozuk {
     pub fn random_suggests(&self, amount: usize) -> Vec<String> {
         let mut suggests = Vec::with_capacity(amount);
         let mut skills = self
-            .skills
+            .commands
             .iter()
-            .flat_map(|cache| &cache.skill.suggests)
+            .filter_map(|cache| cache.as_ref())
+            .flat_map(|cache| &cache.suggests)
             .collect::<Vec<_>>();
         let mut rng = StdRng::seed_from_u64(self.seed);
         skills.shuffle(&mut rng);
@@ -186,14 +186,14 @@ impl Yozuk {
         let inputs = deunicode::deunicode(&tokens.join(" ")).to_ascii_lowercase();
 
         #[cfg(feature = "rayon")]
-        let iter = self.skills.par_iter();
+        let iter = self.commands.par_iter();
         #[cfg(not(feature = "rayon"))]
-        let iter = self.skills.iter();
+        let iter = self.commands.iter();
 
         let mut suggests = iter
+            .filter_map(|cache| cache.as_ref())
             .flat_map(|cache| {
                 cache
-                    .skill
                     .suggests
                     .iter()
                     .flat_map(|skill| skill.suggests(self.seed, args, streams))
@@ -276,12 +276,7 @@ impl YozukBuilder {
         let iter = skill::SKILLS.iter();
 
         let results = iter
-            .map(|entry| {
-                Ok(SkillCache {
-                    entry,
-                    skill: (entry.entry.init)(&env).map_err(|err| (entry, err))?,
-                })
-            })
+            .map(|entry| Ok((entry, (entry.entry.init)(&env).map_err(|err| (entry, err))?)))
             .collect::<Vec<Result<_, (&NamedSkillEntry, _)>>>();
 
         let mut skills = results
@@ -291,21 +286,22 @@ impl YozukBuilder {
 
         let labelers = skills
             .iter_mut()
-            .flat_map(|cache| std::mem::take(&mut cache.skill.labelers))
+            .flat_map(|cache| std::mem::take(&mut cache.1.labelers))
             .collect::<Vec<_>>();
 
         let mut commands = Vec::new();
-        for skill in &mut skills {
-            if let Some(index) = model.get_index(skill.entry.key) {
-                if let Some(command) = skill.skill.command.take() {
+        for (entry, skill) in &mut skills {
+            if let Some(index) = model.get_index(entry.key) {
+                if let Some(command) = skill.command.take() {
                     if commands.len() <= index {
                         commands.resize_with(index + 1, || None);
                     }
                     commands[index] = Some(CommandCache {
-                        name: skill.entry.key,
-                        model: model.get(skill.entry.key).map(ModelEntry::new),
-                        translators: mem::take(&mut skill.skill.translators),
-                        preprocessors: mem::take(&mut skill.skill.preprocessors),
+                        name: entry.key,
+                        model: model.get(entry.key).map(ModelEntry::new),
+                        translators: mem::take(&mut skill.translators),
+                        preprocessors: mem::take(&mut skill.preprocessors),
+                        suggests: mem::take(&mut skill.suggests),
                         command,
                     });
                 }
@@ -315,7 +311,6 @@ impl YozukBuilder {
         Yozuk {
             model,
             i18n: self.i18n,
-            skills,
             labelers,
             commands,
             redirections: self.redirections,
@@ -324,15 +319,11 @@ impl YozukBuilder {
     }
 }
 
-struct SkillCache {
-    entry: &'static NamedSkillEntry,
-    skill: Skill,
-}
-
 struct CommandCache {
     name: &'static str,
     model: Option<ModelEntry>,
     preprocessors: Vec<Box<dyn Preprocessor>>,
     translators: Vec<Box<dyn Translator>>,
+    suggests: Vec<Box<dyn Suggests>>,
     command: Box<dyn Command>,
 }
