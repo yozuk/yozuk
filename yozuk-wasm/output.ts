@@ -12,6 +12,7 @@ type DataBlock = {
     file_name?: string;
     media_type: string;
     display?: DisplaySuggestion;
+    highlights?: Highlight[];
 };
 
 type SpoilerBlock = {
@@ -55,6 +56,11 @@ type Metadata =
 type DisplaySuggestion = {
     binary?: "viewer" | "base64" | "hex";
     iamge?: "smooth" | "pixelated";
+};
+
+type Highlight = {
+    kind: "value";
+    range: [number, number];
 };
 
 export type Output = {

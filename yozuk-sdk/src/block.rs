@@ -87,6 +87,9 @@ pub struct Data {
 
     #[serde(skip_serializing_if = "DisplaySuggestion::is_default")]
     pub display: DisplaySuggestion,
+
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub highlights: Vec<Highlight>,
 }
 
 impl From<Data> for Block {
@@ -157,6 +160,14 @@ impl Data {
         self.display = display.into();
         self
     }
+
+    pub fn set_highlights<I>(mut self, iter: I) -> Self
+    where
+        I: IntoIterator<Item = Highlight>,
+    {
+        self.highlights = iter.into_iter().collect();
+        self
+    }
 }
 
 impl Default for Data {
@@ -167,6 +178,7 @@ impl Default for Data {
             file_name: String::new(),
             media_type: media_type!(APPLICATION / OCTET_STREAM).into(),
             display: Default::default(),
+            highlights: Vec::new(),
         }
     }
 }
