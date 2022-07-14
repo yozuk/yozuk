@@ -121,7 +121,7 @@ impl Data {
         self
     }
 
-    pub fn set_highlighed_text_data<T>(mut self, text: T, highlighter: &Highlighter) -> Self
+    pub fn set_highlighted_text_data<T>(mut self, text: T, highlighter: &Highlighter) -> Self
     where
         T: Into<String>,
     {
