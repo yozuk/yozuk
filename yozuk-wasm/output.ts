@@ -55,7 +55,7 @@ type Metadata =
 
 type DisplaySuggestion = {
     binary?: "viewer" | "base64" | "hex";
-    iamge?: "smooth" | "pixelated";
+    image?: "smooth" | "pixelated";
 };
 
 type Highlight = {
