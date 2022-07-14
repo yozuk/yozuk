@@ -181,14 +181,15 @@ fn compute_hash(
             } else {
                 entries
                     .into_iter()
-                    .map(|(name, mut hash)| format!("{}: {}", name, hex::encode(hash.finalize())))
+                    .map(|(name, mut hash)| format!("{}: `{}`", name, hex::encode(hash.finalize())))
                     .collect::<Vec<_>>()
             };
 
             return Some(
-                Output::new()
-                    .set_title("Digest")
-                    .add_block(block::Data::new().set_text_data(result.join("\n"))),
+                Output::new().set_title("Digest").add_block(
+                    block::Data::new()
+                        .set_highlighted_text_data(result.join("\n"), &Default::default()),
+                ),
             );
         }
     }
