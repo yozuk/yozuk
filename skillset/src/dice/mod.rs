@@ -1,4 +1,4 @@
-use bigdecimal::{ToPrimitive, Zero};
+use bigdecimal::Zero;
 use fraction::prelude::*;
 use fraction::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub};
 use once_cell::sync::OnceCell;
@@ -166,17 +166,6 @@ impl Value {
         }
     }
 
-    fn metadata(&self) -> Vec<Metadata> {
-        match self {
-            Self::Dice(dice) => dice
-                .iter()
-                .filter_map(|val| val.to_u64())
-                .map(Metadata::value)
-                .collect(),
-            Self::Sum(sum) => sum.to_f64().map(Metadata::value).into_iter().collect(),
-        }
-    }
-
     fn calc_precision(self) -> Self {
         match self {
             Self::Dice(dice) => Self::Dice(dice),
@@ -189,11 +178,11 @@ impl ToString for Value {
     fn to_string(&self) -> String {
         match self {
             Self::Dice(dice) if dice.len() == 1 => {
-                format!("🎲 {}", self.sum())
+                format!("{}", self.sum())
             }
             Self::Dice(dice) => {
                 let history = dice.iter().map(ToString::to_string).collect::<Vec<_>>();
-                format!("🎲 {}\nsum: {}", history.join(" "), self.sum())
+                format!("`{}`\nsum: `{}`", history.join(" "), self.sum())
             }
             Self::Sum(sum) => sum.to_string(),
         }
@@ -267,8 +256,10 @@ impl Command for DiceCommand {
                 let result = result.calc_precision();
                 Output::new()
                     .set_title("Dice")
-                    .add_block(block::Data::new().set_text_data(result.to_string()))
-                    .add_metadata_iter(result.metadata())
+                    .add_block(
+                        block::Data::new()
+                            .set_highlighted_text_data(result.to_string(), &Default::default()),
+                    )
                     .add_metadata(docs.clone())
             })
             .map_err(|err| {
