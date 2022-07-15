@@ -68,6 +68,27 @@ impl App {
             ));
         }
 
+        let tokens = self
+            .args
+            .query
+            .iter()
+            .map(|token| tk!(token.clone()))
+            .collect::<Vec<_>>();
+
+        #[cfg(debug_assertions)]
+        if self.args.suggests > 0 {
+            let suggests = if tokens.is_empty() && streams.is_empty() {
+                self.zuk.random_suggests(self.args.suggests as _)
+            } else {
+                self.zuk
+                    .suggests(self.args.suggests as _, &tokens, &streams)
+            };
+            for suggest in suggests {
+                println!("{}", suggest);
+            }
+            return Ok(());
+        }
+
         let repl = streams.is_empty() && self.args.query.is_empty();
         if repl {
             self.args.verbose += 1;
@@ -92,13 +113,6 @@ impl App {
 
             Ok(())
         } else {
-            let tokens = self
-                .args
-                .query
-                .iter()
-                .map(|token| tk!(token.clone()))
-                .collect::<Vec<_>>();
-
             self.exec_command(&tokens, &mut streams)
         }
     }
