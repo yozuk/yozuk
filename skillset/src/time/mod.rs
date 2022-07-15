@@ -67,6 +67,10 @@ impl Translator for TimeTranslator {
                     .chain(OffsetDateTime::from_unix_timestamp_nanos(ts as i128).ok())
             })
             .filter(|&ts| (now_utc() - ts).whole_days().abs() <= TIMESTAMP_TOLERANCE_DAYS)
+            .chain(
+                args.iter()
+                    .filter_map(|arg| OffsetDateTime::parse(arg.as_str(), &Rfc3339).ok()),
+            )
             .collect::<Vec<_>>();
 
         if let [ts] = timestamps[..] {
