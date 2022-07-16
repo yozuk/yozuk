@@ -23,9 +23,14 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct LipsumSuggests;
 
 impl Suggests for LipsumSuggests {
-    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+    fn suggests(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let count = args
+            .iter()
+            .find(|arg| arg.tag == "input:count")
+            .and_then(|arg| arg.as_str().parse::<u16>().ok())
+            .filter(|&n| n >= 10);
         let mut rng = StdRng::seed_from_u64(seed);
-        let n: u32 = rng.gen_range(5..=10) * 10;
+        let n = count.unwrap_or_else(|| rng.gen_range(5..=10) * 10);
         vec![format!("{} words dummy text", n)]
     }
 }

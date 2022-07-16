@@ -1,4 +1,4 @@
-use bigdecimal::{BigDecimal, ToPrimitive};
+use bigdecimal::{BigDecimal, FromPrimitive, ToPrimitive};
 use clap::Parser;
 use num_bigint::ToBigInt;
 use rand::rngs::StdRng;
@@ -25,9 +25,14 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct PrimeSuggests;
 
 impl Suggests for PrimeSuggests {
-    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+    fn suggests(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let number = args
+            .iter()
+            .filter(|arg| arg.tag == "input:number")
+            .filter_map(|arg| BigDecimal::from_str(arg.as_str()).ok())
+            .next();
         let mut rng = StdRng::seed_from_u64(seed);
-        let n: u32 = rng.gen();
+        let n = number.unwrap_or_else(|| BigDecimal::from_u32(rng.gen()).unwrap());
         vec![format!("Is {} a prime number?", n)]
     }
 }

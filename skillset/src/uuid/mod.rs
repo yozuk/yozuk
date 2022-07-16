@@ -84,9 +84,14 @@ impl Corpus for UuidCorpus {
 pub struct UuidSuggests;
 
 impl Suggests for UuidSuggests {
-    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+    fn suggests(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let count = args
+            .iter()
+            .find(|arg| arg.tag == "input:count")
+            .and_then(|arg| arg.as_str().parse::<u8>().ok())
+            .filter(|&n| n > 0);
         let mut rng = StdRng::seed_from_u64(seed);
-        let n: u32 = rng.gen_range(2..=10);
+        let n = count.unwrap_or_else(|| rng.gen_range(2..=10));
         vec![format!("Generate {} UUIDs", n)]
     }
 }
