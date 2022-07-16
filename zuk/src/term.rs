@@ -32,7 +32,11 @@ mod term_is_tty {
 #[cfg(not(target_arch = "wasm32"))]
 mod term_kitty_image {
     use anyhow::Result;
-    use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
+    use crossterm::{
+        cursor::{RestorePosition, SavePosition},
+        terminal::{disable_raw_mode, enable_raw_mode},
+        QueueableCommand,
+    };
     use std::io::{stdin, stdout, Read, Write};
 
     const KITTY_QUERY: &[u8] = b"\x1b_Gi=31,s=1,v=1,a=q,t=d,f=24;AAAA\x1b\\\x1b[5n";
@@ -70,7 +74,9 @@ mod term_kitty_image {
 
         enable_raw_mode()?;
 
+        stdout.queue(SavePosition)?;
         stdout.write_all(KITTY_QUERY)?;
+        stdout.queue(RestorePosition)?;
         stdout.flush()?;
 
         let mut buf = vec![0u8; 0];
@@ -110,7 +116,11 @@ mod term_kitty_image {
 mod term_iterm2_image {
     use anyhow::Result;
     use base64::write::EncoderWriter;
-    use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
+    use crossterm::{
+        cursor::{RestorePosition, SavePosition},
+        terminal::{disable_raw_mode, enable_raw_mode},
+        QueueableCommand,
+    };
     use semver::{Version, VersionReq};
     use std::io::{stdin, stdout, Read, Write};
 
@@ -132,7 +142,9 @@ mod term_iterm2_image {
 
         enable_raw_mode()?;
 
+        stdout.queue(SavePosition)?;
         stdout.write_all(ITERM2_QUERY)?;
+        stdout.queue(RestorePosition)?;
         stdout.flush()?;
 
         let mut buf = vec![0u8; 0];
