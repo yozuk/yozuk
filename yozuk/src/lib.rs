@@ -193,6 +193,7 @@ impl Yozuk {
         let iter = self.commands.iter();
 
         let labeler = FeatureLabeler::new(&self.labelers);
+        let matcher = SkimMatcherV2::default();
 
         let mut suggests = iter
             .filter_map(|cache| cache.as_ref())
@@ -221,36 +222,31 @@ impl Yozuk {
                     .iter()
                     .flat_map(|skill| skill.suggests(self.seed, &tokens, streams))
                     .enumerate()
+                    .filter_map(|(index, text)| {
+                        matcher
+                            .fuzzy_match(&text.to_ascii_lowercase(), &inputs)
+                            .map(|score| (index, score, text))
+                    })
                     .collect::<Vec<_>>()
             })
             .collect::<Vec<_>>();
 
         #[cfg(feature = "rayon")]
-        suggests.par_sort_by_key(|item| item.0);
+        suggests.par_sort_by_key(|(index, _, _)| *index);
 
         #[cfg(not(feature = "rayon"))]
-        suggests.sort_by_key(|item| item.0);
-
-        let matcher = SkimMatcherV2::default();
+        suggests.sort_by_key(|(index, _, _)| *index);
 
         #[cfg(feature = "rayon")]
-        suggests.par_sort_by_key(|item| {
-            -matcher
-                .fuzzy_match(&item.1.to_ascii_lowercase(), &inputs)
-                .unwrap_or(0)
-        });
+        suggests.par_sort_by_key(|(_, score, _)| -score);
 
         #[cfg(not(feature = "rayon"))]
-        suggests.sort_by_key(|item| {
-            -matcher
-                .fuzzy_match(&item.1.to_ascii_lowercase(), &inputs)
-                .unwrap_or(0)
-        });
+        suggests.sort_by_key(|(_, score, _)| -score);
 
         suggests
             .into_iter()
             .take(amount)
-            .map(|item| item.1)
+            .map(|(_, _, text)| text)
             .collect()
     }
 }

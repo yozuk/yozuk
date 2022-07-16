@@ -14,6 +14,6 @@ fn test_suggests() {
         yozuk_global()
             .suggests(5, &tk!(["Generate", "2", "UUIDs"]), &[])
             .len(),
-        5
+        1
     );
 }
