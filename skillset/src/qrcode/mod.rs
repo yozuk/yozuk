@@ -21,11 +21,17 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct QrCodeSuggests;
 
 impl Suggests for QrCodeSuggests {
-    fn suggests(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        vec!["https://yozuk.com to qr", "\"Hello world!\" to QRCode"]
-            .into_iter()
-            .map(Into::into)
-            .collect()
+    fn suggests(&self, _seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let inputs = args
+            .iter()
+            .filter(|arg| arg.tag == "input:data")
+            .map(|arg| arg.as_str())
+            .collect::<Vec<_>>();
+        if inputs.is_empty() {
+            vec![format!("{} to QRCode", "https://yozuk.com")]
+        } else {
+            vec![format!("{} to QRCode", shell_words::join(inputs))]
+        }
     }
 }
 

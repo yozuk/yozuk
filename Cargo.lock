@@ -2794,6 +2794,7 @@ dependencies = [
  "sha1",
  "sha2",
  "sha3",
+ "shell-words",
  "strum",
  "thiserror",
  "time",
