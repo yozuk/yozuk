@@ -51,3 +51,15 @@ fn timestamp() {
         ]))
     );
 }
+
+#[test]
+fn rfc2822() {
+    assert_eq!(
+        cmd(tk!(["Sat, 12 Jun 1993 13:25:19 GMT"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-time",
+            "--timestamp",
+            "739891519000000000"
+        ]))
+    );
+}

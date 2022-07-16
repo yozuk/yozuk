@@ -1,9 +1,10 @@
 use clap::Parser;
-use time::format_description::well_known::Rfc3339;
+use time::format_description::well_known::{Rfc2822, Rfc3339};
 use time::OffsetDateTime;
 use time_tz::{timezones, Offset, TimeZone};
 use yozuk_helper_english::normalized_eq;
 use yozuk_helper_platform::time::now_utc;
+use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
@@ -11,6 +12,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_corpus(TimeCorpus)
+            .add_preprocessor(TokenMerger::new(TimeTokenParser))
             .add_translator(TimeTranslator)
             .set_command(TimeCommand)
             .build()
@@ -34,6 +36,28 @@ impl Corpus for TimeCorpus {
         ]
         .into_iter()
         .collect()
+    }
+}
+
+struct TimeTokenParser;
+
+impl TokenParser for TimeTokenParser {
+    fn parse(&self, tokens: &[Token]) -> Option<Token> {
+        let exp = tokens
+            .iter()
+            .map(|token| token.as_str())
+            .collect::<Vec<_>>()
+            .join(" ");
+        let tag = tokens
+            .iter()
+            .map(|token| token.tag.clone())
+            .find(|tag| !tag.is_empty())
+            .unwrap_or_default();
+        OffsetDateTime::parse(&exp, &Rfc2822).ok().map(|_| Token {
+            data: exp.into(),
+            tag,
+            ..Default::default()
+        })
     }
 }
 
@@ -70,6 +94,10 @@ impl Translator for TimeTranslator {
             .chain(
                 args.iter()
                     .filter_map(|arg| OffsetDateTime::parse(arg.as_str(), &Rfc3339).ok()),
+            )
+            .chain(
+                args.iter()
+                    .filter_map(|arg| OffsetDateTime::parse(arg.as_str(), &Rfc2822).ok()),
             )
             .collect::<Vec<_>>();
 
@@ -115,6 +143,7 @@ impl Command for TimeCommand {
         let mut formats = vec![
             format!("unix: `{}`", unix),
             format!("ntp: `{}`", unix + NTP_OFFSET),
+            format!("rfc2822: `{}`", ts.format(&Rfc2822)?),
             format!("rfc3339: `{}`", ts.format(&Rfc3339)?),
         ];
         if let Some(tai64) = unix_to_tai64(unix) {
