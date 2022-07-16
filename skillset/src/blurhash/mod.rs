@@ -10,29 +10,10 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_translator(BlurHashTranslator)
-            .add_suggests(BlurHashSuggests)
             .set_command(BlurHashCommand)
             .build()
     },
 };
-
-#[derive(Debug)]
-pub struct BlurHashSuggests;
-
-impl Suggests for BlurHashSuggests {
-    fn suggests(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        vec![
-            "BLDdqP~BS16_Efr@",
-            "BcNS{u7gO=?^jDV@",
-            "BeIFDD?bVY~Tx]xA",
-            "B58|-gTA009D?0PE",
-            "BUK^K$01Im~pMeSc",
-        ]
-        .into_iter()
-        .map(Into::into)
-        .collect()
-    }
-}
 
 #[derive(Debug)]
 pub struct BlurHashTranslator;

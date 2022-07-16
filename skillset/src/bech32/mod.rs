@@ -7,26 +7,10 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_translator(Bech32Translator)
-            .add_suggests(Bech32Suggests)
             .set_command(Bech32Command)
             .build()
     },
 };
-
-#[derive(Debug)]
-pub struct Bech32Suggests;
-
-impl Suggests for Bech32Suggests {
-    fn suggests(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        vec![
-            "b321fpjkcmr0yptk7unvvsss8ctgvx",
-            "b32m1fpjkcmr0yptk7unvvssserxuym",
-        ]
-        .into_iter()
-        .map(Into::into)
-        .collect()
-    }
-}
 
 #[derive(Debug)]
 pub struct Bech32Translator;
