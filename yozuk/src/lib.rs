@@ -1,6 +1,8 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
 
+use fuzzy_matcher::skim::SkimMatcherV2;
+use fuzzy_matcher::FuzzyMatcher;
 use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
 use rand::SeedableRng;
@@ -229,14 +231,20 @@ impl Yozuk {
         #[cfg(not(feature = "rayon"))]
         suggests.sort_by_key(|item| item.0);
 
+        let matcher = SkimMatcherV2::default();
+
         #[cfg(feature = "rayon")]
         suggests.par_sort_by_key(|item| {
-            distance::damerau_levenshtein(&item.1.to_ascii_lowercase(), &inputs)
+            -matcher
+                .fuzzy_match(&item.1.to_ascii_lowercase(), &inputs)
+                .unwrap_or(0)
         });
 
         #[cfg(not(feature = "rayon"))]
         suggests.sort_by_key(|item| {
-            distance::damerau_levenshtein(&item.1.to_ascii_lowercase(), &inputs)
+            -matcher
+                .fuzzy_match(&item.1.to_ascii_lowercase(), &inputs)
+                .unwrap_or(0)
         });
 
         suggests
