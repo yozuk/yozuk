@@ -7,7 +7,7 @@ use pest::prec_climber::*;
 use pest::Parser;
 use rand::prelude::SliceRandom;
 use rand::rngs::StdRng;
-use rand::{Rng, SeedableRng};
+use rand::SeedableRng;
 use thiserror::Error;
 use yozuk_helper_english::NumeralTokenParser;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
@@ -37,7 +37,6 @@ pub struct CalcSuggests;
 impl Suggests for CalcSuggests {
     fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = StdRng::seed_from_u64(seed);
-        let n: f64 = rng.gen_range(-10.0..10.0);
         let operands = [
             "atan2(0.5, 0.2)",
             "25.0",
@@ -51,7 +50,7 @@ impl Suggests for CalcSuggests {
         ]
         .choose_multiple(&mut rng, 2)
         .collect::<Vec<_>>();
-        vec![format!("({} + {}) * {}", operands[0], operands[1], n)]
+        vec![format!("{} + {}", operands[0], operands[1])]
     }
 }
 
