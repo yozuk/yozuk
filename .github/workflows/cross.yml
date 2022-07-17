@@ -13,10 +13,10 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:    
+  test-cross:    
     strategy:
       matrix:
-        toolchain: [aarch64-unknown-linux-gnu, armv7-linux-androideabi, wasm32-unknown-unknown, wasm32-wasi]
+        toolchain: [armv7-unknown-linux-gnueabihf, aarch64-unknown-linux-gnu, aarch64-linux-android]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -30,27 +30,37 @@ jobs:
           ~/.cargo/git/db/
           target/
         key: ${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
-    - uses: nttld/setup-ndk@v1
-      id: setup-ndk
+    - name: Install cross
+      run: cargo install cross --git https://github.com/cross-rs/cross
+      continue-on-error: true
+    - name: Run test
+      run: cross test --target ${{ matrix.toolchain }} --all-features
+
+  test-wasm:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v3
+      continue-on-error: true
       with:
-        ndk-version: r23b
-      if: ${{ matrix.toolchain == 'armv7-linux-androideabi' }}
-    - name: Add NDK Path
-      run: echo ${{ steps.setup-ndk.outputs.ndk-path }}/toolchains/llvm/prebuilt/linux-x86_64/bin >> $GITHUB_PATH
-      if: ${{ matrix.toolchain == 'armv7-linux-androideabi' }}
-    - name: Install GCC
-      run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
-      if: ${{ matrix.toolchain == 'aarch64-unknown-linux-gnu' }}
-    - name: Install toolchain
-      run: rustup target add ${{ matrix.toolchain }}
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-stable-wasi-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Install wasmtime
+      run: curl -sL https://github.com/bytecodealliance/wasmtime/releases/download/v0.37.0/wasmtime-v0.37.0-x86_64-linux.tar.xz | tar Jxv
+    - name: Add PATH
+      run: echo "$PWD/wasmtime-v0.37.0-x86_64-linux" >> $GITHUB_PATH
+    - name: Install cargo-wasi
+      run: cargo install cargo-wasi
+      continue-on-error: true
     - name: Build
-      run: cargo build -p yozuk --target=${{ matrix.toolchain }}
-      if: ${{ startsWith(matrix.toolchain, 'wasm32-') }}
-    - name: Build
-      run: cargo build -p yozuk --target=${{ matrix.toolchain }} --all-features
-      if: ${{ !startsWith(matrix.toolchain, 'wasm32-') }}
-      env:
-        AR_armv7-linux-androideabi: llvm-ar
+      run: cargo wasi build
+    - name: Run test
+      run: cargo wasi test
 
   build-macos:
     strategy:
