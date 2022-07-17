@@ -159,7 +159,11 @@ impl App {
     }
 }
 
-#[cfg(all(target_os = "linux", feature = "secure-context"))]
+#[cfg(all(
+    target_os = "linux",
+    target_arch = "x86_64",
+    feature = "secure-context"
+))]
 fn enter_secure_context() -> Result<()> {
     use extrasafe::builtins::{danger_zone::Threads, SystemIO};
     use extrasafe::{Rule, RuleSet, SafetyContext};
@@ -198,7 +202,11 @@ fn enter_secure_context() -> Result<()> {
     Ok(())
 }
 
-#[cfg(not(all(target_os = "linux", feature = "secure-context")))]
+#[cfg(not(all(
+    target_os = "linux",
+    target_arch = "x86_64",
+    feature = "secure-context"
+)))]
 fn enter_secure_context() -> Result<()> {
     Ok(())
 }
