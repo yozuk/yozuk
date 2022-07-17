@@ -16,7 +16,7 @@ jobs:
   build:    
     strategy:
       matrix:
-        toolchain: [armv7-linux-androideabi, wasm32-unknown-unknown, wasm32-wasi]
+        toolchain: [aarch64-unknown-linux-gnu, armv7-linux-androideabi, wasm32-unknown-unknown, wasm32-wasi]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -38,14 +38,17 @@ jobs:
     - name: Add NDK Path
       run: echo ${{ steps.setup-ndk.outputs.ndk-path }}/toolchains/llvm/prebuilt/linux-x86_64/bin >> $GITHUB_PATH
       if: ${{ matrix.toolchain == 'armv7-linux-androideabi' }}
+    - name: Install GCC
+      run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+      if: ${{ matrix.toolchain == 'aarch64-unknown-linux-gnu' }}
     - name: Install toolchain
       run: rustup target add ${{ matrix.toolchain }}
     - name: Build
       run: cargo build -p yozuk --target=${{ matrix.toolchain }}
-      if: ${{ matrix.toolchain != 'armv7-linux-androideabi' }}
+      if: ${{ startsWith(matrix.toolchain, 'wasm32-') }}
     - name: Build
       run: cargo build -p yozuk --target=${{ matrix.toolchain }} --all-features
-      if: ${{ matrix.toolchain == 'armv7-linux-androideabi' }}
+      if: ${{ !startsWith(matrix.toolchain, 'wasm32-') }}
       env:
         AR_armv7-linux-androideabi: llvm-ar
 
