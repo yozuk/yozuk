@@ -9,12 +9,9 @@ env:
   CARGO_TERM_COLOR: always
     
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
-    name: Upload Release Asset
-    runs-on: ${{ matrix.os }}
+  release-linux:
+    name: Upload Release Asset (Linux)
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -31,27 +28,10 @@ jobs:
       - uses: rui314/setup-mold@v1
       - name: Install apt packages
         run: sudo apt-get install -y libseccomp-dev
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-      - name: Install wasm-pack
-        run: sudo npm install -g wasm-pack
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-      - name: Set Env
-        run: node -p "'platform=' + process.argv[1].toLowerCase()" ${{ runner.os }}-${{ runner.arch }} >> $GITHUB_ENV
-        if: ${{ matrix.os != 'windows-latest' }}
-      - name: Set Env
-        run: node -p "'platform=' + process.argv[1].toLowerCase()" ${{ runner.os }}-${{ runner.arch }} >> $env:GITHUB_ENV
-        if: ${{ matrix.os == 'windows-latest' }}
       - name: Build project
         run: cargo b --bin zuk --release
       - name: Make archive
-        run: tar -C target/release -Jcvf zuk-${{ env.platform }}.tar.xz zuk
-        if: ${{ matrix.os != 'windows-latest' }}
-      - name: Make archive
-        run: tar -C target/release -acf zuk-${{ env.platform }}.zip zuk.exe
-        if: ${{ matrix.os == 'windows-latest' }}
-      - name: Make WASM archive
-        run: node script/wasm-pack.js
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: tar -C target/release -Jcvf zuk-x86_64-unknown-linux-gnu.tar.xz zuk
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -61,9 +41,129 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload ${{ github.ref_name }} *.tar.*
-        if: ${{ matrix.os != 'windows-latest' }}
+
+  release-windows:
+    name: Upload Release Asset (Windows)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        continue-on-error: true
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Build project
+        run: cargo b --bin zuk --release
+      - name: Make archive
+        run: tar -C target/release -acf zuk-x86_64-pc-windows-msvc.zip zuk.exe
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ github.ref_name }} --generate-notes
+        continue-on-error: true
       - name: Upload archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.ref_name }} zuk-${{ env.platform }}.zip
-        if: ${{ matrix.os == 'windows-latest' }}
+        run: gh release upload ${{ github.ref_name }} zuk-x86_64-pc-windows-msvc.zip
+
+  release-macos:
+    name: Upload Release Asset (macOS)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        continue-on-error: true
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Build project
+        run: cargo b --bin zuk --release
+      - name: Make archive
+        run: tar -C target/release -Jcvf zuk-x86_64-apple-darwin.tar.xz zuk
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ github.ref_name }} --generate-notes
+        continue-on-error: true
+      - name: Upload archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} *.tar.*
+    
+  release-wasm:
+    name: Upload Release Asset (WASM)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        continue-on-error: true
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-wasm-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install wasm-pack
+        run: sudo npm install -g wasm-pack
+      - name: Make WASM archive
+        run: node script/wasm-pack.js
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ github.ref_name }} --generate-notes
+        continue-on-error: true
+      - name: Upload archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} *.tar.*
+
+  release-cross:
+    strategy:
+      matrix:
+        toolchain: [armv7-unknown-linux-gnueabihf, aarch64-unknown-linux-gnu, aarch64-linux-android]
+    name: Upload Release Asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        continue-on-error: true
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install cross
+        run: cargo install cross --git https://github.com/cross-rs/cross
+        continue-on-error: true
+      - name: Build project
+        run: cross build -p zuk --release --target ${{ matrix.toolchain }}
+      - name: Make archive
+        run: tar -C target/${{ matrix.toolchain }}/release -Jcvf zuk-${{ matrix.toolchain }}.tar.xz zuk
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ github.ref_name }} --generate-notes
+        continue-on-error: true
+      - name: Upload archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} *.tar.*
