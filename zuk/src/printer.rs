@@ -98,7 +98,7 @@ impl<'a> TerminalPrinter<'a> {
                         }
                         writeln!(&mut stdout)?;
                     } else {
-                        self.print_binary(&data.data, &data.file_name, &data.media_type)?;
+                        self.print_binary(data)?;
                     }
                 }
                 #[cfg(not(target_arch = "wasm32"))]
@@ -177,24 +177,26 @@ impl<'a> TerminalPrinter<'a> {
         Ok(())
     }
 
-    fn print_image(&self, data: &[u8], file_name: &str, media_type: &MediaTypeBuf) -> Result<bool> {
+    fn print_image(&self, data: &block::Data) -> Result<bool> {
+        let media_type = &data.media_type;
         if (media_type == media_type!(IMAGE / PNG)
             || media_type == media_type!(IMAGE / GIF)
             || media_type == media_type!(IMAGE / JPEG))
             && term::is_iterm2_image_supported()
         {
-            term::iterm2_image_show(data, Some(file_name))?;
+            term::iterm2_image_show(&*data.data, Some(&data.file_name))?;
             return Ok(true);
         }
         if media_type == media_type!(IMAGE / PNG) && term::is_kitty_image_supported() {
-            term::kitty_image_show_png(data)?;
+            term::kitty_image_show_png(&*data.data)?;
             return Ok(true);
         }
 
         #[cfg(not(target_arch = "wasm32"))]
         if let Ok((width, height)) = hanbun::size() {
-            if let Ok(image) = image::load_from_memory(data) {
+            if let Ok(image) = image::load_from_memory(&*data.data) {
                 use hanbun::Color;
+                use image::imageops::FilterType;
 
                 let ratio_x = (image.width() as f64 / width as f64).ceil() as u32;
                 let ratio_y = (image.height() as f64 / height as f64).ceil() as u32;
@@ -208,11 +210,18 @@ impl<'a> TerminalPrinter<'a> {
                 } else {
                     ratio_y
                 };
+
+                let filter = if data.display.image == Some(ImageDisplay::Pixelated) {
+                    FilterType::Nearest
+                } else {
+                    FilterType::Lanczos3
+                };
+
                 let ratio = ratio_x.min(ratio_y);
                 let resized_image = image.resize_exact(
                     (image.width() as f64 / ratio as f64) as u32,
                     (image.height() as f64 / ratio as f64) as u32,
-                    image::imageops::FilterType::Nearest,
+                    filter,
                 );
 
                 let mut buffer = hanbun::Buffer::new(
@@ -245,10 +254,10 @@ impl<'a> TerminalPrinter<'a> {
         Ok(false)
     }
 
-    fn print_binary(&self, data: &[u8], file_name: &str, media_type: &MediaTypeBuf) -> Result<()> {
+    fn print_binary(&self, data: &block::Data) -> Result<()> {
         let mut stdout = io::stdout();
         if term::is_stdout_tty() {
-            if self.print_image(data, file_name, media_type)? {
+            if self.print_image(data)? {
                 return Ok(());
             }
             let show_color = true;
@@ -264,9 +273,9 @@ impl<'a> TerminalPrinter<'a> {
                 border_style,
                 use_squeezing,
             );
-            printer.print_all(data).unwrap();
+            printer.print_all(&*data.data).unwrap();
         } else {
-            stdout.write_all(data)?;
+            stdout.write_all(&*data.data)?;
         }
         Ok(())
     }
