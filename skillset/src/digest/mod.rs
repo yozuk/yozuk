@@ -62,15 +62,27 @@ impl Corpus for DigestCorpus {
 pub struct DigestSuggests;
 
 impl Suggests for DigestSuggests {
-    fn suggests(&self, _seed: u64, _args: &[Token], streams: &[InputStream]) -> Vec<String> {
-        if streams.is_empty() {
-            vec![]
-        } else {
+    fn suggests(&self, _seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String> {
+        let inputs = args
+            .iter()
+            .filter(|arg| arg.tag == "input:data")
+            .map(|arg| arg.as_str())
+            .collect::<Vec<_>>();
+        if !inputs.is_empty() {
+            let joined = shell_words::join(inputs);
+            ENTRIES
+                .iter()
+                .filter_map(|entry| entry.keywords.iter().next())
+                .map(|s| format!("{joined} to {s}"))
+                .collect()
+        } else if !streams.is_empty() {
             ENTRIES
                 .iter()
                 .filter_map(|entry| entry.keywords.iter().next())
                 .map(|s| s.to_string())
                 .collect()
+        } else {
+            vec![]
         }
     }
 }
