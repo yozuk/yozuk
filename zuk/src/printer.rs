@@ -217,7 +217,7 @@ impl<'a> TerminalPrinter<'a> {
 
                 let mut buffer = hanbun::Buffer::new(
                     resized_image.width() as _,
-                    (resized_image.height() / 2) as _,
+                    ((resized_image.height() + 1) / 2) as _,
                     ' ',
                 );
                 for (y, row) in resized_image.to_rgb8().rows().enumerate() {
@@ -235,7 +235,6 @@ impl<'a> TerminalPrinter<'a> {
                     }
                 }
                 buffer.draw();
-                buffer.clear(' ');
 
                 return Ok(true);
             }
