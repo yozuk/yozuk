@@ -27,7 +27,7 @@ serde = { version = "1.0.137", optional = true }
 serde_derive = { version = "1.0.137", optional = true }
 serde_json = { version = "1.0.81", optional = true }
 shell-words = "1.1.0"
-yozuk = "0.20.3"
+yozuk = "0.20.4"
 yozuk-sdk = "0.20.2"
 yozuk-helper-platform = "0.20.2"
 yozuk-helper-filetype = "0.20.2"
@@ -44,7 +44,7 @@ image = { version = "0.24.2", default-features = false, features = ["png"] }
 time-tz = { version = "1.0.2", features = ["system"] }
 rustyline = "9.1.2"
 rustyline-derive = "0.6.0"
-yozuk = { version = "0.20.3", features = ["rayon", "wild"] }
+yozuk = { version = "0.20.4", features = ["rayon", "wild"] }
 
 [target.'cfg(target_os = "wasi")'.dependencies]
 wasi = "0.11.0"
