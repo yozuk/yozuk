@@ -39,9 +39,7 @@ impl Repl {
                 self.editor.add_history_entry(line.as_str());
                 return Some(line);
             }
-            Err(ReadlineError::Interrupted | ReadlineError::Eof) => {
-                println!("Bye.");
-            }
+            Err(ReadlineError::Interrupted | ReadlineError::Eof) => {}
             Err(err) => {
                 eprintln!("Error: {}", err);
             }

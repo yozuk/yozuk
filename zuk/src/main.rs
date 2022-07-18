@@ -32,7 +32,10 @@ struct App {
 
 impl App {
     fn new(args: Args) -> Result<Self> {
-        let zuk = Yozuk::builder().build();
+        let zuk = Yozuk::builder()
+            .add_redirection(tk!(["exit"]), vec!["exit"])
+            .add_redirection(tk!(["bye"]), vec!["exit"])
+            .build();
         Ok(Self { args, zuk })
     }
 
@@ -100,24 +103,25 @@ impl App {
                 let mut repl = repl::Repl::new();
                 while let Some(line) = repl.readline() {
                     let tokens = Tokenizer::new().tokenize(&line);
-                    if !tokens.is_empty() {
-                        self.exec_command(&tokens, &mut [])?;
+                    if !tokens.is_empty() && !self.exec_command(&tokens, &mut [])? {
+                        break;
                     }
                 }
+
+                println!("Bye.");
             }
 
             #[cfg(target_arch = "wasm32")]
             {
                 self.exec_command(&[], &mut [])?;
             }
-
-            Ok(())
         } else {
-            self.exec_command(&tokens, &mut streams)
+            self.exec_command(&tokens, &mut streams)?;
         }
+        Ok(())
     }
 
-    fn exec_command(&self, tokens: &[Token], streams: &mut [InputStream]) -> Result<()> {
+    fn exec_command(&self, tokens: &[Token], streams: &mut [InputStream]) -> Result<bool> {
         for stream in streams.iter_mut() {
             stream.read_header()?;
         }
@@ -130,12 +134,20 @@ impl App {
             self.zuk.get_commands(tokens, streams)
         };
 
+        if let [cmd] = &commands[..] {
+            if let [name, kind] = &cmd.args[..] {
+                if name == "yozuk-redirect" && kind == "exit" {
+                    return Ok(false);
+                }
+            }
+        }
+
         if commands.is_empty() {
             printer.print_error_str("Sorry, I can't understand your request.")?;
         } else {
             if self.args.dry_run {
                 printer.print_commands(&commands)?;
-                return Ok(());
+                return Ok(true);
             }
 
             let result = self.zuk.run_commands(commands, streams, None);
@@ -155,7 +167,7 @@ impl App {
             }
         }
 
-        Ok(())
+        Ok(true)
     }
 }
 
