@@ -103,14 +103,13 @@ impl Command for NumericCommand {
                 let original = radix.format(num);
                 let redixes = Radix::iter()
                     .filter(|&r| r != radix)
-                    .map(|radix| radix.format(num))
+                    .map(|radix| format!("`{}`", radix.format(num)))
                     .collect::<Vec<_>>();
                 (
-                    block::Data::new().set_text_data(format!(
-                        "{} =\n{}",
-                        original,
-                        redixes.join("\n")
-                    )),
+                    block::Data::new().set_highlighted_text_data(
+                        format!("{} =\n{}", original, redixes.join("\n")),
+                        &Default::default(),
+                    ),
                     Metadata::value(num),
                 )
             })
