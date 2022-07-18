@@ -234,7 +234,9 @@ impl<'a> TerminalPrinter<'a> {
                         );
                     }
                 }
+
                 buffer.draw();
+                println!();
 
                 return Ok(true);
             }
