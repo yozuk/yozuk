@@ -72,6 +72,41 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload ${{ github.ref_name }} zuk-x86_64-pc-windows-msvc.zip
 
+  release-windows-cross:
+    name: Upload Release Asset (Windows)
+    strategy:
+      matrix:
+        toolchain: [aarch64-pc-windows-msvc]
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        continue-on-error: true
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install toolchain
+        run: rustup target add ${{ matrix.toolchain }}
+      - name: Build project
+        run: cargo b --bin zuk --release --target ${{ matrix.toolchain }}
+      - name: Make archive
+        run: tar -C target/${{ matrix.toolchain }}/release -acf zuk-${{ matrix.toolchain }}.zip zuk.exe
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ github.ref_name }} --generate-notes
+        continue-on-error: true
+      - name: Upload archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} zuk-${{ matrix.toolchain }}.zip
+
   release-macos:
     name: Upload Release Asset (macOS)
     runs-on: macos-latest
