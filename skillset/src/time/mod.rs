@@ -164,7 +164,7 @@ impl Command for TimeCommand {
 
 #[derive(Parser)]
 pub struct Args {
-    #[clap(short, long)]
+    #[clap(short, long, allow_hyphen_values = true)]
     pub timestamp: Option<i128>,
 }
 
