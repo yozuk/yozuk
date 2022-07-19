@@ -17,7 +17,7 @@ anyhow = "1.0.56"
 bytes = "1.1.0"
 const-sha1 = "0.2.0"
 crfs = "0.2.0"
-mediatype = "0.19.4"
+mediatype = "0.19.5"
 rayon = { version = "1.5.1", optional = true }
 yozuk-core-skillset = "0.20.5"
 yozuk-helper-english = "0.20.2"
