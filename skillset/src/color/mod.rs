@@ -1,6 +1,8 @@
 use clap::Parser;
 use itertools::iproduct;
 use palette::{Hsla, Hsva, Hwba, IntoColor, Srgba};
+use rand::rngs::StdRng;
+use rand::{Rng, SeedableRng};
 use std::str::FromStr;
 use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
@@ -11,6 +13,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"fYemWbybyq3U8v_aB9eWYc",
     init: |_| {
         Skill::builder()
+            .add_suggests(ColorSuggests)
             .add_preprocessor(TokenMerger::new(ColorTokenParser))
             .add_labeler(ColorLabeler)
             .add_corpus(ColorCorpus)
@@ -19,6 +22,24 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .build()
     },
 };
+
+#[derive(Debug)]
+pub struct ColorSuggests;
+
+impl Suggests for ColorSuggests {
+    fn suggests(&self, seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String> {
+        if args.is_empty() && streams.is_empty() {
+            let mut rng = StdRng::seed_from_u64(seed);
+            let [r, g, b]: [u8; 3] = rng.gen();
+            let h = rng.gen_range(0..360);
+            let s = rng.gen_range(0..=100);
+            let l = rng.gen_range(0..=100);
+            vec![format!("rgb({r}, {g}, {b})"), format!("hsl({h} {s}% {l}%)")]
+        } else {
+            vec![]
+        }
+    }
+}
 
 struct ColorTokenParser;
 
