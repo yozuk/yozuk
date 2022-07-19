@@ -58,10 +58,13 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: msys2/setup-msys2@v2
       - name: Build project
         run: cargo b --bin zuk --release
       - name: Make archive
         run: tar -C target/release -acf zuk-x86_64-pc-windows-msvc.zip zuk.exe
+      - name: Make archive
+        run: msys2 -c 'cp target/release/zuk.exe . && tar cf zuk-x86_64-pc-windows-msvc.tar zuk.exe && xz *.tar'
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +73,7 @@ jobs:
       - name: Upload archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.ref_name }} zuk-x86_64-pc-windows-msvc.zip
+        run: gh release upload ${{ github.ref_name }} zuk-x86_64-pc-windows-msvc.zip zuk-x86_64-pc-windows-msvc.tar.xz
 
   release-windows-cross:
     name: Upload Release Asset (Windows)
@@ -91,12 +94,15 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: msys2/setup-msys2@v2
       - name: Install toolchain
         run: rustup target add ${{ matrix.toolchain }}
       - name: Build project
         run: cargo b --bin zuk --release --target ${{ matrix.toolchain }}
       - name: Make archive
         run: tar -C target/${{ matrix.toolchain }}/release -acf zuk-${{ matrix.toolchain }}.zip zuk.exe
+      - name: Make archive
+        run: msys2 -c 'cp target/${{ matrix.toolchain }}/release/zuk.exe . && tar cf zuk-${{ matrix.toolchain }}.tar zuk.exe && xz *.tar'
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -105,7 +111,7 @@ jobs:
       - name: Upload archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.ref_name }} zuk-${{ matrix.toolchain }}.zip
+        run: gh release upload ${{ github.ref_name }} zuk-${{ matrix.toolchain }}.zip zuk-${{ matrix.toolchain }}.tar.xz
 
   release-macos:
     name: Upload Release Asset (macOS)
