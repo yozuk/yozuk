@@ -63,21 +63,21 @@ impl Command for UnicodeCommand {
                         CodePoints::from(&mut data).collect::<Vec<_>>()
                     })
                     .filter_map(|c| c.ok())
-                    .map(|c| format!("U+{:04X}", c as u32))
+                    .map(|c| format!("`{c}` (U+{:04X})", c as u32))
                     .collect::<Vec<_>>();
                 let utf8 = hex::encode(graph.as_bytes());
                 let utf16 = graph
                     .encode_utf16()
-                    .map(|u| format!("{u:x}"))
+                    .map(|u| format!("{u:04x}"))
                     .collect::<Vec<_>>();
                 format!(
-                    "\"{}\"\n{}\nUTF-8: {utf8}\nUTF-16: {}",
+                    "`\"{}\"`\n{}\nUTF-8: `{utf8}`\nUTF-16: `{}`",
                     escaped.join(""),
                     codepoints.join(" "),
                     utf16.join(""),
                 )
             })
-            .map(|data| block::Data::new().set_text_data(data));
+            .map(|data| block::Data::new().set_highlighted_text_data(data, &Default::default()));
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/unicode/")?;
         Ok(Output::new()
             .set_title("Unicode Decoder")

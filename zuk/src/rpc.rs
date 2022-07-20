@@ -259,13 +259,19 @@ mod tests {
             Response::new(
                 1,
                 GetCommandsResponse {
-                    commands: vec![CommandArgs::new().add_args(["yozuk-skill-calc", "1+1"])],
+                    commands: vec![
+                        CommandArgs::new().add_args(["yozuk-skill-calc", "1+1"]),
+                        CommandArgs::new().add_args(["yozuk-skill-unicode", "1", "+", "1"]),
+                    ],
                 },
             ),
             Response::new(
                 2,
                 GetCommandsResponse {
-                    commands: vec![CommandArgs::new().add_args(["yozuk-skill-calc", "2*3"])],
+                    commands: vec![
+                        CommandArgs::new().add_args(["yozuk-skill-calc", "2*3"]),
+                        CommandArgs::new().add_args(["yozuk-skill-unicode", "2", "*", "3"]),
+                    ],
                 },
             ),
             Response::new(
