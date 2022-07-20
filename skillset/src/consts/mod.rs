@@ -1,5 +1,6 @@
 use clap::Parser;
 use std::collections::HashSet;
+use thousands::Separable;
 use yozuk_helper_english::normalize;
 use yozuk_sdk::prelude::*;
 
@@ -110,8 +111,8 @@ impl Command for ConstCommand {
                 };
                 let value = item
                     .unit
-                    .map(|unit| format!("{}{} {}", item.value, scale, unit))
-                    .unwrap_or_else(|| item.value.to_string());
+                    .map(|unit| format!("{}{} {}", item.value.separate_with_commas(), scale, unit))
+                    .unwrap_or_else(|| item.value.to_string().separate_with_commas());
                 vec![Block::Data(block::Data::new().set_highlighted_text_data(
                     format!("{}\n`{}`", comment, value),
                     &Default::default(),
