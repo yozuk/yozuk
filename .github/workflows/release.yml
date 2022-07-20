@@ -143,6 +143,41 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload ${{ github.ref_name }} *.tar.*
     
+  release-macos-cross:
+    name: Upload Release Asset (macOS)
+    strategy:
+      matrix:
+        toolchain: [aarch64-apple-darwin]
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        continue-on-error: true
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ matrix.toolchain }}-stable-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install toolchain
+        run: rustup target add ${{ matrix.toolchain }}
+      - name: Build project
+        run: cargo b --bin zuk --release --target ${{ matrix.toolchain }}
+      - name: Make archive
+        run: tar -C target/${{ matrix.toolchain }}/release -Jcvf zuk-${{ matrix.toolchain }}.tar.xz zuk
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ github.ref_name }} --generate-notes
+        continue-on-error: true
+      - name: Upload archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} *.tar.*
+
   release-wasm:
     name: Upload Release Asset (WASM)
     runs-on: ubuntu-latest

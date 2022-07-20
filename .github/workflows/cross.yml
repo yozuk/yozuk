@@ -87,7 +87,7 @@ jobs:
   build-macos:
     strategy:
       matrix:
-        toolchain: [aarch64-apple-ios]
+        toolchain: [aarch64-apple-darwin, aarch64-apple-ios]
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
