@@ -52,8 +52,13 @@ impl Command for UnicodeCommand {
             .map(|graph| {
                 let escaped = graph
                     .chars()
-                    .map(char::escape_default)
-                    .map(|c| format!("{c}"))
+                    .map(|c| {
+                        if c == '`' {
+                            format!("\\{c}")
+                        } else {
+                            format!("{}", c.escape_default())
+                        }
+                    })
                     .collect::<Vec<_>>();
                 let codepoints = graph
                     .chars()
@@ -63,7 +68,13 @@ impl Command for UnicodeCommand {
                         CodePoints::from(&mut data).collect::<Vec<_>>()
                     })
                     .filter_map(|c| c.ok())
-                    .map(|c| format!("`{c}` (U+{:04X})", c as u32))
+                    .map(|c| {
+                        if c == '`' {
+                            format!("`\\{c}` (U+{:04X})", c as u32)
+                        } else {
+                            format!("`{c}` (U+{:04X})", c as u32)
+                        }
+                    })
                     .collect::<Vec<_>>();
                 let utf8 = hex::encode(graph.as_bytes());
                 let utf16 = graph
