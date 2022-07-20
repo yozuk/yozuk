@@ -34,8 +34,14 @@ impl Highlighter {
         let mut plain = String::with_capacity(s.len());
         let mut highlights = vec![];
         let mut start: Option<usize> = None;
+        let mut escaped = false;
         for c in s.chars() {
-            if c == self.quotation {
+            if escaped {
+                escaped = false;
+                plain.push(c);
+            } else if c == '\\' {
+                escaped = true;
+            } else if c == self.quotation {
                 if let Some(start) = start.take() {
                     highlights.push(Highlight {
                         kind: HighlightKind::Value,
@@ -58,9 +64,9 @@ mod tests {
 
     #[test]
     fn highlighter() {
-        let text = "`quick brown` 🦊 jumps\nover `the` lazy `dog`.";
+        let text = "`quick brown` 🦊 \\`jumps\\`\nover `the` lazy `dog`.";
         let (plain, highlights) = Highlighter::default().highlight(text);
-        assert_eq!(plain, "quick brown 🦊 jumps\nover the lazy dog.");
+        assert_eq!(plain, "quick brown 🦊 `jumps`\nover the lazy dog.");
         assert_eq!(
             highlights,
             vec![
@@ -70,11 +76,11 @@ mod tests {
                 },
                 Highlight {
                     kind: HighlightKind::Value,
-                    range: 28..31
+                    range: 30..33
                 },
                 Highlight {
                     kind: HighlightKind::Value,
-                    range: 37..40
+                    range: 39..42
                 }
             ]
         );
