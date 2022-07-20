@@ -65,4 +65,5 @@ skills!(
     [time, "yozuk-skill-time"],
     [ip, "yozuk-skill-ip"],
     [msgpack, "yozuk-skill-msgpack"],
+    [unicode, "yozuk-skill-unicode"],
 );

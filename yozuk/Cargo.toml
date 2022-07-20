@@ -59,6 +59,7 @@ default-skills = [
   "yozuk-skill-time",
   "yozuk-skill-ip",
   "yozuk-skill-msgpack",
+  "yozuk-skill-unicode",
 ]
 yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]
 yozuk-skill-calc = ["yozuk-core-skillset/yozuk-skill-calc"]
@@ -86,6 +87,7 @@ yozuk-skill-consts = ["yozuk-core-skillset/yozuk-skill-consts"]
 yozuk-skill-time = ["yozuk-core-skillset/yozuk-skill-time"]
 yozuk-skill-ip = ["yozuk-core-skillset/yozuk-skill-ip"]
 yozuk-skill-msgpack = ["yozuk-core-skillset/yozuk-skill-msgpack"]
+yozuk-skill-unicode = ["yozuk-core-skillset/yozuk-skill-unicode"]
 
 [dev-dependencies]
 once_cell = "1.12.0"

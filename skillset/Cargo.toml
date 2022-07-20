@@ -73,6 +73,7 @@ rmpv = { version = "1.0.0", optional = true, features = ["with-serde"] }
 phf = { version = "0.11.0", features = ["macros"] }
 shell-words = "1.1.0"
 thousands = "0.2.0"
+unicode_reader = { version = "1.0.2", optional = true }
 
 [features]
 default = []
@@ -113,3 +114,4 @@ yozuk-skill-consts = []
 yozuk-skill-time = ["time", "time-tz"]
 yozuk-skill-ip = []
 yozuk-skill-msgpack = ["rmpv"]
+yozuk-skill-unicode = ["unicode_reader"]
