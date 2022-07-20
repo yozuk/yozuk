@@ -1,6 +1,8 @@
 use super::table::*;
 use bigdecimal::BigDecimal;
 use num_bigint::BigInt;
+use std::fmt;
+use thousands::Separable;
 
 #[derive(Debug, Copy, Clone)]
 pub struct UnitEntry {
@@ -25,34 +27,11 @@ impl Unit {
     }
 }
 
-impl ToString for Unit {
-    fn to_string(&self) -> String {
-        let decimal = self.value.to_string();
-        let (int, frac) = if let Some((int, frac)) = decimal.split_once('.') {
-            (int, Some(frac))
-        } else {
-            (decimal.as_str(), None)
-        };
-        let int = String::from_utf8(
-            int.as_bytes()
-                .rchunks(3)
-                .flat_map(|chunks| {
-                    let mut v = chunks.to_vec();
-                    v.reverse();
-                    v.push(b',');
-                    v
-                })
-                .rev()
-                .collect(),
-        )
-        .unwrap();
-        let value = format!(
-            "{}{}{}",
-            int.trim_start_matches(','),
-            frac.map(|_| ".").unwrap_or_default(),
-            frac.unwrap_or_default()
-        );
-        format!(
+impl fmt::Display for Unit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let value = self.value.to_string().separate_with_commas();
+        write!(
+            f,
             "{} {}{}",
             value,
             self.prefix
@@ -98,9 +77,9 @@ impl UnitPrefix {
     }
 }
 
-impl ToString for UnitPrefix {
-    fn to_string(&self) -> String {
-        match self {
+impl fmt::Display for UnitPrefix {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
             Self::Nano => "n",
             Self::Micro => "µ",
             Self::Milli => "m",
@@ -113,7 +92,7 @@ impl ToString for UnitPrefix {
             Self::Gibi => "Gi",
             Self::Mebi => "Mi",
             Self::Tibi => "Ti",
-        }
-        .to_string()
+        };
+        write!(f, "{}", s)
     }
 }

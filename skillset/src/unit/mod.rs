@@ -87,7 +87,7 @@ impl Corpus for UnitCorpus {
                         .map(move |prefix| {
                             tk!([
                                 "1.0"; "input:value",
-                                format!("{}{}", prefix.to_string(), sym); "keyword"
+                                format!("{}{}", prefix, sym); "keyword"
                             ])
                         })
                         .chain(Some(tk!([
@@ -158,13 +158,13 @@ impl Command for UnitCommand {
         let converted = converted
             .into_iter()
             .filter(|unit| unit.base != base_unit.base || unit.prefix != base_unit.prefix)
-            .map(|unit| format!("`{}`", unit.normalized().to_string()))
+            .map(|unit| format!("`{}`", unit.normalized()))
             .collect::<Vec<_>>();
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/unit/")?;
         Ok(Output::new()
             .set_title("Unit Converter")
             .add_block(block::Data::new().set_highlighted_text_data(
-                format!("{} =\n{}", base_unit.to_string(), converted.join("\n")),
+                format!("{} =\n{}", base_unit, converted.join("\n")),
                 &Default::default(),
             ))
             .add_metadata(docs))
