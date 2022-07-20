@@ -183,7 +183,6 @@ impl Command for CalcCommand {
                 Output::new()
                     .set_title("Calculator")
                     .add_block(block::Data::new().set_text_data(format!("{}", result)))
-                    .add_metadata_iter(result.to_f64().map(Metadata::value))
                     .add_metadata(docs.clone())
             })
             .map_err(|err| {
@@ -213,7 +212,6 @@ mod tests {
         let expected = Ok(Output::new()
             .set_title("Calculator")
             .add_block(block::Data::new().set_text_data("-140742.75"))
-            .add_metadata(Metadata::value(-140742.75))
             .add_metadata(Metadata::docs("https://docs.yozuk.com/docs/skills/calc/").unwrap()));
         assert_eq!(result, expected);
 
@@ -241,7 +239,6 @@ mod tests {
         let expected = Ok(Output::new()
             .set_title("Calculator")
             .add_block(block::Data::new().set_text_data("9"))
-            .add_metadata(Metadata::value(9.0))
             .add_metadata(Metadata::docs("https://docs.yozuk.com/docs/skills/calc/").unwrap()));
         assert_eq!(result, expected);
     }

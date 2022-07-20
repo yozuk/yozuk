@@ -95,7 +95,7 @@ impl Command for NumericCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
-        let (blocks, metadata): (Vec<_>, Vec<_>) = args
+        let blocks = args
             .inputs
             .iter()
             .filter_map(|input| parse_int(input))
@@ -105,19 +105,16 @@ impl Command for NumericCommand {
                     .filter(|&r| r != radix)
                     .map(|radix| format!("`{}`", radix.format(num)))
                     .collect::<Vec<_>>();
-                (
-                    block::Data::new().set_highlighted_text_data(
-                        format!("{} =\n{}", original, redixes.join("\n")),
-                        &Default::default(),
-                    ),
-                    Metadata::value(num),
+
+                block::Data::new().set_highlighted_text_data(
+                    format!("{} =\n{}", original, redixes.join("\n")),
+                    &Default::default(),
                 )
             })
-            .unzip();
+            .collect::<Vec<_>>();
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/numeric/")?;
         Ok(Output::new()
             .add_blocks_iter(blocks)
-            .add_metadata_iter(metadata)
             .set_mode(OutputMode::Attachment)
             .add_metadata(docs))
     }

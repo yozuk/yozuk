@@ -273,7 +273,6 @@ mod tests {
                 RunCommandsResponse::Ok(vec![Output::new()
                     .set_title("Calculator")
                     .add_block(block::Data::new().set_text_data("2"))
-                    .add_metadata(Metadata::value(2.0))
                     .add_metadata(
                         Metadata::docs("https://docs.yozuk.com/docs/skills/calc/").unwrap(),
                     )]),
