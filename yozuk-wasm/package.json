@@ -2,7 +2,7 @@
   "name": "@yozuk/yozuk-wasm",
   "version": "0.20.8",
   "description": "Yozuk WebAssembly port",
-  "main": "web.ts",
+  "main": "web.js",
   "author": "picoHz <picoHz@outlook.com>",
   "license": "MIT",
   "scripts": {
