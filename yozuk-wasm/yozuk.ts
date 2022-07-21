@@ -17,8 +17,8 @@ export abstract class YozukBase {
         const result = JSON.parse(await this.exec_impl(command, JSON.stringify(this.i18n())));
         const textDecoder = new TextDecoder('utf-8', { fatal: true });
         if (result.outputs) {
-            result.outputs.forEach((output) => {
-                output.blocks.forEach((block) => {
+            result.outputs.forEach((output: any) => {
+                output.blocks.forEach((block: any) => {
                     const { data } = block;
                     if (data) {
                         const decoded = decode(data);
