@@ -6,7 +6,8 @@
   "author": "picoHz <picoHz@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "node scripts/download.js"
+    "postinstall": "node scripts/download.js",
+    "build": "tsc"
   },
   "sideEffects": false,
   "dependencies": {
@@ -14,6 +15,10 @@
     "decompress": "^4.2.1",
     "download": "^8.0.0"
   },
+  "files": [
+    "*.d.ts",
+    "*.js"
+  ],
   "devDependencies": {
     "typescript": "^4.7.4"
   }
