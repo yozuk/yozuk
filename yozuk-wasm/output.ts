@@ -1,11 +1,11 @@
-type CommentBlock = {
+export type CommentBlock = {
     type: "comment";
     title?: string;
     text: string;
     media_type: string;
 };
 
-type DataBlock = {
+export type DataBlock = {
     type: "data";
     data: string | ArrayBuffer;
     title?: string;
@@ -15,50 +15,50 @@ type DataBlock = {
     highlights?: Highlight[];
 };
 
-type SpoilerBlock = {
+export type SpoilerBlock = {
     type: "spoiler";
     title: string;
     data: string;
 };
 
-type Block =
+export type Block =
     | CommentBlock
     | DataBlock
     | SpoilerBlock;
 
-type LinkMetadata = {
+export type LinkMetadata = {
     type: "link";
     title: string;
     url: string;
 };
 
-type DocsMetadata = {
+export type DocsMetadata = {
     type: "docs";
     url: string;
 };
 
-type ValueMetadata = {
+export type ValueMetadata = {
     type: "value";
     value: any;
 };
 
-type ColorMetadata = {
+export type ColorMetadata = {
     type: "value";
     color: string;
 };
 
-type Metadata =
+export type Metadata =
     | LinkMetadata
     | DocsMetadata
     | ValueMetadata
     | ColorMetadata;
 
-type DisplaySuggestion = {
+export type DisplaySuggestion = {
     binary?: "viewer" | "base64" | "hex";
     image?: "smooth" | "pixelated";
 };
 
-type Highlight = {
+export type Highlight = {
     kind: "value";
     range: [number, number];
 };
@@ -70,17 +70,17 @@ export type Output = {
     mode: "primary" | "attachment";
 };
 
-type ResultOk = {
+export type ResultOk = {
     type: "ok";
     outputs: Output[];
 };
 
-type ResultFail = {
+export type ResultFail = {
     type: "fail";
     outputs: Output[];
 };
 
-type ResultNoCoammnd = {
+export type ResultNoCoammnd = {
     type: "no_command";
 };
 
