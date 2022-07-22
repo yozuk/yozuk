@@ -185,7 +185,7 @@ impl Yozuk {
 
     pub fn suggests(&self, amount: usize, args: &[Token], streams: &[InputStream]) -> Vec<String> {
         let tokens = args.iter().map(|arg| arg.as_str()).collect::<Vec<_>>();
-        let inputs = deunicode::deunicode(&tokens.join(" ")).to_ascii_lowercase();
+        let inputs = deunicode::deunicode(&tokens.join(" "));
 
         #[cfg(feature = "rayon")]
         let iter = self.commands.par_iter();
@@ -193,7 +193,7 @@ impl Yozuk {
         let iter = self.commands.iter();
 
         let labeler = FeatureLabeler::new(&self.labelers);
-        let matcher = SkimMatcherV2::default();
+        let matcher = SkimMatcherV2::default().ignore_case();
 
         let mut suggests = iter
             .filter_map(|cache| cache.as_ref())
@@ -224,29 +224,21 @@ impl Yozuk {
                     .enumerate()
                     .filter_map(|(index, text)| {
                         matcher
-                            .fuzzy_match(&text.to_ascii_lowercase(), &inputs)
-                            .map(|score| (index, score, text))
+                            .fuzzy_match(&text, &inputs)
+                            .map(|score| (index, cache.command.priority(), score, text))
                     })
                     .collect::<Vec<_>>()
             })
             .collect::<Vec<_>>();
 
-        #[cfg(feature = "rayon")]
-        suggests.par_sort_by_key(|(index, _, _)| *index);
-
-        #[cfg(not(feature = "rayon"))]
-        suggests.sort_by_key(|(index, _, _)| *index);
-
-        #[cfg(feature = "rayon")]
-        suggests.par_sort_by_key(|(_, score, _)| -score);
-
-        #[cfg(not(feature = "rayon"))]
-        suggests.sort_by_key(|(_, score, _)| -score);
+        suggests.sort_by_key(|(_, priority, _, _)| -priority);
+        suggests.sort_by_key(|(index, _, _, _)| *index);
+        suggests.sort_by_key(|(_, _, score, _)| -score);
 
         suggests
             .into_iter()
             .take(amount)
-            .map(|(_, _, text)| text)
+            .map(|(_, _, _, text)| text)
             .collect()
     }
 }
