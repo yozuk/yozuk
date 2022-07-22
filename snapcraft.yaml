@@ -1,0 +1,29 @@
+name: yozuk
+version: 0.20.9
+summary: Chatbot for Programmers
+description: |
+ Yozuk is a human-friendly assistant bot designed for helping 
+ programmers with trivial tasks such as UUID generation, 
+ hash calculation and timestamp conversion. 
+ Unlike normal command-line tools, it uses a simple NLP approach to 
+ infer the meaning of your requests, so you don't have to remember 
+ the exact syntax of commands.
+
+icon: images/yozuk.png
+
+confinement: strict
+grade: devel
+base: core20
+
+parts:
+  yozuk:
+    plugin: rust
+    source: ./zuk
+
+build-packages:
+  - cmake
+  - libseccomp-dev
+
+apps:
+  zuk:
+    command: bin/zuk
