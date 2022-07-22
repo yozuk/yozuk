@@ -1,5 +1,5 @@
 import { decode } from 'base64-arraybuffer';
-import { Result } from './output'
+import { Highlight, Result } from './output'
 
 export abstract class YozukBase {
     protected abstract exec_impl(command: string, i18n: string): Promise<string>;
@@ -14,22 +14,36 @@ export abstract class YozukBase {
         for (const stream of streams) {
             await this.push_stream_impl(stream);
         }
-        const result = JSON.parse(await this.exec_impl(command, JSON.stringify(this.i18n())));
+        const result: Result = JSON.parse(await this.exec_impl(command, JSON.stringify(this.i18n())));
         const textDecoder = new TextDecoder('utf-8', { fatal: true });
-        if (result.outputs) {
-            result.outputs.forEach((output: any) => {
-                output.blocks.forEach((block: any) => {
-                    const { data } = block;
-                    if (data) {
-                        const decoded = decode(data);
-                        try {
-                            block.data = textDecoder.decode(decoded);
-                        } catch {
-                            block.data = decoded;
+        if (result.type == "ok" || result.type == "fail") {
+            for (const output of result.outputs) {
+                for (const block of output.blocks) {
+                    if (block.type == "data") {
+                        if (typeof block.data == "string") {
+                            const decoded = decode(block.data);
+                            try {
+                                block.data = textDecoder.decode(decoded);
+                                if (block.highlights) {
+                                    let newHighlights: Highlight[] = [];
+                                    let byteStart = 0;
+                                    let charStart = 0;
+                                    for (const highlight of block.highlights) {
+                                        charStart += textDecoder.decode(decoded.slice(byteStart, highlight.range.start)).length;
+                                        let charEnd = charStart + textDecoder.decode(decoded.slice(highlight.range.start, highlight.range.end)).length;
+                                        newHighlights.push({ ...highlight, range: { start: charStart, end: charEnd } });
+                                        charStart = charEnd;
+                                        byteStart = highlight.range.end;
+                                    }
+                                    block.highlights = newHighlights;
+                                }
+                            } catch {
+                                block.data = decoded;
+                            }
                         }
                     }
-                });
-            });
+                }
+            }
         }
         return result;
     }

@@ -60,7 +60,7 @@ export type DisplaySuggestion = {
 
 export type Highlight = {
     kind: "value";
-    range: [number, number];
+    range: { start: number, end: number };
 };
 
 export type Output = {
