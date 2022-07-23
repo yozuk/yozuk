@@ -43,7 +43,7 @@ export type ValueMetadata = {
 };
 
 export type ColorMetadata = {
-    type: "value";
+    type: "color";
     color: string;
 };
 
