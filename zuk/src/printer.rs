@@ -178,6 +178,12 @@ impl<'a> TerminalPrinter<'a> {
         Ok(())
     }
 
+    pub fn print_suggest_str(&self, msg: &str, suggest: &str) -> Result<()> {
+        let mut stderr = io::stderr();
+        writeln!(&mut stderr, "{}: {}", msg.dimmed(), suggest.bold())?;
+        Ok(())
+    }
+
     fn print_image(&self, data: &block::Data) -> Result<bool> {
         let media_type = &data.media_type;
         if (media_type == media_type!(IMAGE / PNG)
