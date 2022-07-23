@@ -1,6 +1,7 @@
 use crate::term;
 use crate::Args;
 use anyhow::Result;
+use base64::write::EncoderWriter;
 use hexyl::{BorderStyle, Printer};
 use owo_colors::OwoColorize;
 use std::io::{self, Write};
@@ -260,20 +261,38 @@ impl<'a> TerminalPrinter<'a> {
             if self.print_image(data)? {
                 return Ok(());
             }
-            let show_color = true;
-            let show_char_panel = true;
-            let show_position_panel = true;
-            let use_squeezing = false;
-            let border_style = BorderStyle::Unicode;
-            let mut printer = Printer::new(
-                &mut stdout,
-                show_color,
-                show_char_panel,
-                show_position_panel,
-                border_style,
-                use_squeezing,
-            );
-            printer.print_all(&*data.data).unwrap();
+            match data.display.binary {
+                Some(BinaryDisplay::Viewer) => {
+                    let show_color = true;
+                    let show_char_panel = true;
+                    let show_position_panel = true;
+                    let use_squeezing = false;
+                    let border_style = BorderStyle::Unicode;
+                    let mut printer = Printer::new(
+                        &mut stdout,
+                        show_color,
+                        show_char_panel,
+                        show_position_panel,
+                        border_style,
+                        use_squeezing,
+                    );
+                    printer.print_all(&*data.data).unwrap();
+                }
+                Some(BinaryDisplay::Hex) => {
+                    for b in &*data.data {
+                        write!(stdout, "{b:02x}")?;
+                    }
+                    writeln!(stdout)?;
+                }
+                _ => {
+                    {
+                        let mut enc = EncoderWriter::new(&mut stdout, base64::STANDARD);
+                        enc.write_all(&*data.data)?;
+                        enc.finish()?;
+                    }
+                    writeln!(stdout)?;
+                }
+            }
         } else {
             stdout.write_all(&*data.data)?;
         }

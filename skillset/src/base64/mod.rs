@@ -157,7 +157,13 @@ impl Command for Base64Command {
                         .map(|data| {
                             let media_type = yozuk_helper_filetype::guess_media_type(&data);
                             Block::Data(
-                                block::Data::new().set_data(data).set_media_type(media_type),
+                                block::Data::new()
+                                    .set_data(data)
+                                    .set_media_type(media_type)
+                                    .set_display(DisplaySuggestion {
+                                        binary: Some(BinaryDisplay::Viewer),
+                                        ..Default::default()
+                                    }),
                             )
                         })
                         .collect(),
