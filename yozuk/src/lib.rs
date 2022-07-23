@@ -25,7 +25,7 @@ pub use skill::*;
 
 pub const MODEL_DATA: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/model.data"));
 
-const MAX_ARG_BYTES_LEN: usize = 1024;
+const MAX_ARG_BYTES_LEN: usize = 10240;
 
 pub struct Yozuk {
     model: ModelSet,
