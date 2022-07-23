@@ -231,9 +231,9 @@ impl Yozuk {
             })
             .collect::<Vec<_>>();
 
-        suggests.sort_by_key(|(_, priority, _, _)| -priority);
         suggests.sort_by_key(|(index, _, _, _)| *index);
         suggests.sort_by_key(|(_, _, score, _)| -score);
+        suggests.sort_by_key(|(_, priority, _, _)| -priority);
 
         suggests
             .into_iter()
