@@ -185,9 +185,9 @@ impl Yozuk {
 
     pub fn suggestions(
         &self,
-        amount: usize,
         args: &[Token],
         streams: &[InputStream],
+        amount: usize,
     ) -> Vec<String> {
         let tokens = args.iter().map(|arg| arg.as_str()).collect::<Vec<_>>();
         let inputs = deunicode::deunicode(&tokens.join(" "));

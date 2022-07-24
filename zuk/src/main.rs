@@ -84,7 +84,7 @@ impl App {
                 self.zuk.random_suggestions(self.args.suggestions as _)
             } else {
                 self.zuk
-                    .suggestions(self.args.suggestions as _, &tokens, &streams)
+                    .suggestions(&tokens, &streams, self.args.suggestions as _)
             };
             for suggestion in suggestions {
                 println!("{}", suggestion);
@@ -144,7 +144,7 @@ impl App {
 
         if commands.is_empty() {
             printer.print_error_str("Sorry, I can't understand your request.")?;
-            if let [suggestion, ..] = &self.zuk.suggestions(1, tokens, streams)[..] {
+            if let [suggestion, ..] = &self.zuk.suggestions(tokens, streams, 1)[..] {
                 printer.print_suggestion_str("Did you mean", suggestion)?;
             }
         } else {

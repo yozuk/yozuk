@@ -47,7 +47,7 @@ pub fn clear_suggestions_stream() {
 }
 
 #[wasm_bindgen]
-pub fn suggestions(amount: usize, command: &str) -> String {
+pub fn suggestions(command: &str, amount: usize) -> String {
     let tokens = Tokenizer::new().tokenize(command);
     let streams = global_suggestions_streams()
         .lock()
@@ -60,7 +60,7 @@ pub fn suggestions(amount: usize, command: &str) -> String {
             )
         })
         .collect::<Vec<_>>();
-    serde_json::to_string(&global_yozuk().suggestions(amount, &tokens, &streams)).unwrap()
+    serde_json::to_string(&global_yozuk().suggestions(&tokens, &streams, amount)).unwrap()
 }
 
 #[wasm_bindgen]

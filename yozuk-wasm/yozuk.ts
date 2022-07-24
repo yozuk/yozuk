@@ -7,7 +7,7 @@ export abstract class YozukBase {
     protected abstract random_suggestions_impl(amount: number): Promise<string>;
     protected abstract push_suggestions_stream_impl(stream: Uint8Array): Promise<void>;
     protected abstract clear_suggestions_stream_impl(): Promise<void>;
-    protected abstract suggestions_impl(amount: number, command: string): Promise<string>;
+    protected abstract suggestions_impl(command: string, amount: number): Promise<string>;
     protected abstract i18n(): I18n;
 
     async exec(command: string, streams: Uint8Array[] = []): Promise<Result> {
@@ -60,7 +60,7 @@ export abstract class YozukBase {
     }
 
     async suggestions(command: string, amount: number = 5): Promise<String[]> {
-        return JSON.parse(await this.suggestions_impl(amount, command));
+        return JSON.parse(await this.suggestions_impl(command, amount));
     }
 }
 

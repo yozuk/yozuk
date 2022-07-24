@@ -12,7 +12,7 @@ fn test_random_suggestions() {
 fn test_suggestions() {
     assert_eq!(
         yozuk_global()
-            .suggestions(5, &tk!(["Generate", "2", "UUIDs"]), &[])
+            .suggestions(&tk!(["Generate", "2", "UUIDs"]), &[], 5)
             .len(),
         1
     );

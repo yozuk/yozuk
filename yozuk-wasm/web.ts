@@ -31,8 +31,8 @@ export class Yozuk extends YozukBase {
         return init_once().then(() => clear_suggestions_stream());
     }
 
-    suggestions_impl(amount: number, command: string): Promise<string> {
-        return init_once().then(() => suggestions(amount, command));
+    suggestions_impl(command: string, amount: number): Promise<string> {
+        return init_once().then(() => suggestions(command, amount));
     }
 
     i18n(): I18n {
