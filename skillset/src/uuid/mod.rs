@@ -15,7 +15,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_labeler(UuidLabeler)
             .add_corpus(UuidCorpus)
-            .add_suggests(UuidSuggests)
+            .add_suggestions(UuidSuggestions)
             .add_translator(UuidTranslator)
             .set_command(UuidCommand)
             .build()
@@ -81,10 +81,10 @@ impl Corpus for UuidCorpus {
 }
 
 #[derive(Debug)]
-pub struct UuidSuggests;
+pub struct UuidSuggestions;
 
-impl Suggests for UuidSuggests {
-    fn suggests(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for UuidSuggestions {
+    fn suggestions(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")

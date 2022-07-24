@@ -13,7 +13,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"fYemWbybyq3U8v_aB9eWYc",
     init: |_| {
         Skill::builder()
-            .add_suggests(ColorSuggests)
+            .add_suggestions(ColorSuggestions)
             .add_preprocessor(TokenMerger::new(ColorTokenParser))
             .add_labeler(ColorLabeler)
             .add_corpus(ColorCorpus)
@@ -24,10 +24,10 @@ pub const ENTRY: SkillEntry = SkillEntry {
 };
 
 #[derive(Debug)]
-pub struct ColorSuggests;
+pub struct ColorSuggestions;
 
-impl Suggests for ColorSuggests {
-    fn suggests(&self, seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for ColorSuggestions {
+    fn suggestions(&self, seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String> {
         if args.is_empty() && streams.is_empty() {
             let mut rng = StdRng::seed_from_u64(seed);
             let [r, g, b]: [u8; 3] = rng.gen();

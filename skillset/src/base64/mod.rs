@@ -10,7 +10,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_corpus(Base64Corpus)
-            .add_suggests(Base64Suggests)
+            .add_suggestions(Base64Suggestions)
             .add_translator(Base64Translator)
             .set_command(Base64Command)
             .build()
@@ -32,10 +32,10 @@ fn is_like_base64(data: &[u8]) -> bool {
 }
 
 #[derive(Debug)]
-pub struct Base64Suggests;
+pub struct Base64Suggestions;
 
-impl Suggests for Base64Suggests {
-    fn suggests(&self, _seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for Base64Suggestions {
+    fn suggestions(&self, _seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String> {
         let inputs = args
             .iter()
             .filter(|arg| arg.tag == "input:data")

@@ -13,7 +13,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_corpus(NanoIdCorpus)
-            .add_suggests(NanoIdSuggests)
+            .add_suggestions(NanoIdSuggestions)
             .add_translator(NanoIdTranslator)
             .set_command(NanoIdCommand)
             .build()
@@ -62,10 +62,10 @@ impl Corpus for NanoIdCorpus {
 }
 
 #[derive(Debug)]
-pub struct NanoIdSuggests;
+pub struct NanoIdSuggestions;
 
-impl Suggests for NanoIdSuggests {
-    fn suggests(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for NanoIdSuggestions {
+    fn suggestions(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")

@@ -178,9 +178,9 @@ impl<'a> TerminalPrinter<'a> {
         Ok(())
     }
 
-    pub fn print_suggest_str(&self, msg: &str, suggest: &str) -> Result<()> {
+    pub fn print_suggestion_str(&self, msg: &str, suggestion: &str) -> Result<()> {
         let mut stderr = io::stderr();
-        writeln!(&mut stderr, "{}: {}", msg.dimmed(), suggest.bold())?;
+        writeln!(&mut stderr, "{}: {}", msg.dimmed(), suggestion.bold())?;
         Ok(())
     }
 

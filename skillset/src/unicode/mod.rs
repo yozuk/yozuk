@@ -6,7 +6,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"kGNawrrhjv7zXXJ5XDqA9",
     init: |_| {
         Skill::builder()
-            .add_suggests(UnicodeSuggests)
+            .add_suggestions(UnicodeSuggestions)
             .add_translator(UnicodeTranslator)
             .set_command(UnicodeCommand)
             .build()
@@ -14,10 +14,10 @@ pub const ENTRY: SkillEntry = SkillEntry {
 };
 
 #[derive(Debug)]
-pub struct UnicodeSuggests;
+pub struct UnicodeSuggestions;
 
-impl Suggests for UnicodeSuggests {
-    fn suggests(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for UnicodeSuggestions {
+    fn suggestions(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         vec!["🏳️‍⚧️", "🏳️‍🌈"].into_iter().map(Into::into).collect()
     }
 }

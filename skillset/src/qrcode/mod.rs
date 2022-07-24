@@ -9,7 +9,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"bAy_Du64C8aBhMa_VvVrm",
     init: |_| {
         Skill::builder()
-            .add_suggests(QrCodeSuggests)
+            .add_suggestions(QrCodeSuggestions)
             .add_corpus(QrCodeCorpus)
             .add_translator(QrCodeTranslator)
             .set_command(QrCodeCommand)
@@ -18,10 +18,10 @@ pub const ENTRY: SkillEntry = SkillEntry {
 };
 
 #[derive(Debug)]
-pub struct QrCodeSuggests;
+pub struct QrCodeSuggestions;
 
-impl Suggests for QrCodeSuggests {
-    fn suggests(&self, _seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for QrCodeSuggestions {
+    fn suggestions(&self, _seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let inputs = args
             .iter()
             .filter(|arg| arg.tag == "input:data")

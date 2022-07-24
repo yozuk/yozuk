@@ -10,7 +10,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"9Kr7qeDGzvzR8ph-ZyuQm",
     init: |_| {
         Skill::builder()
-            .add_suggests(PunycodeSuggests)
+            .add_suggestions(PunycodeSuggestions)
             .add_translator(PunycodeTranslator)
             .set_command(PunycodeCommand)
             .build()
@@ -18,10 +18,10 @@ pub const ENTRY: SkillEntry = SkillEntry {
 };
 
 #[derive(Debug)]
-pub struct PunycodeSuggests;
+pub struct PunycodeSuggestions;
 
-impl Suggests for PunycodeSuggests {
-    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for PunycodeSuggestions {
+    fn suggestions(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = StdRng::seed_from_u64(seed);
         let emoji = ["🦊", "🐼", "🐰", "🐶", "🐯"].choose(&mut rng).unwrap();
         vec![format!("{emoji}.example.com")]

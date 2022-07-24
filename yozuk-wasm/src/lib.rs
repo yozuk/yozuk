@@ -16,7 +16,7 @@ fn global_streams() -> &'static Mutex<Vec<Box<[u8]>>> {
     INSTANCE.get_or_init(|| Mutex::new(Vec::new()))
 }
 
-fn global_suggests_streams() -> &'static Mutex<Vec<Box<[u8]>>> {
+fn global_suggestions_streams() -> &'static Mutex<Vec<Box<[u8]>>> {
     static INSTANCE: OnceCell<Mutex<Vec<Box<[u8]>>>> = OnceCell::new();
     INSTANCE.get_or_init(|| Mutex::new(Vec::new()))
 }
@@ -32,24 +32,24 @@ pub fn push_stream(buffer: Box<[u8]>) {
 }
 
 #[wasm_bindgen]
-pub fn random_suggests(amount: usize) -> String {
-    serde_json::to_string(&global_yozuk().random_suggests(amount)).unwrap()
+pub fn random_suggestions(amount: usize) -> String {
+    serde_json::to_string(&global_yozuk().random_suggestions(amount)).unwrap()
 }
 
 #[wasm_bindgen]
-pub fn push_suggests_stream(buffer: Box<[u8]>) {
-    global_suggests_streams().lock().unwrap().push(buffer);
+pub fn push_suggestions_stream(buffer: Box<[u8]>) {
+    global_suggestions_streams().lock().unwrap().push(buffer);
 }
 
 #[wasm_bindgen]
-pub fn clear_suggests_stream() {
-    global_suggests_streams().lock().unwrap().clear();
+pub fn clear_suggestions_stream() {
+    global_suggestions_streams().lock().unwrap().clear();
 }
 
 #[wasm_bindgen]
-pub fn suggests(amount: usize, command: &str) -> String {
+pub fn suggestions(amount: usize, command: &str) -> String {
     let tokens = Tokenizer::new().tokenize(command);
-    let streams = global_suggests_streams()
+    let streams = global_suggestions_streams()
         .lock()
         .unwrap()
         .iter()
@@ -60,7 +60,7 @@ pub fn suggests(amount: usize, command: &str) -> String {
             )
         })
         .collect::<Vec<_>>();
-    serde_json::to_string(&global_yozuk().suggests(amount, &tokens, &streams)).unwrap()
+    serde_json::to_string(&global_yozuk().suggestions(amount, &tokens, &streams)).unwrap()
 }
 
 #[wasm_bindgen]

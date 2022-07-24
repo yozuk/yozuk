@@ -10,7 +10,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_corpus(DigestCorpus)
-            .add_suggests(DigestSuggests)
+            .add_suggestions(DigestSuggestions)
             .add_translator(DigestTranslator)
             .set_command(DigestCommand)
             .build()
@@ -59,10 +59,10 @@ impl Corpus for DigestCorpus {
 }
 
 #[derive(Debug)]
-pub struct DigestSuggests;
+pub struct DigestSuggestions;
 
-impl Suggests for DigestSuggests {
-    fn suggests(&self, _seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for DigestSuggestions {
+    fn suggestions(&self, _seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String> {
         let inputs = args
             .iter()
             .filter(|arg| arg.tag == "input:data")

@@ -25,7 +25,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_preprocessor(TokenMerger::new(DiceTokenParser))
             .add_translator(DiceTranslator)
-            .add_suggests(DiceSuggests)
+            .add_suggestions(DiceSuggestions)
             .set_command(DiceCommand)
             .build()
     },
@@ -38,10 +38,10 @@ const MAX_ROLLS: usize = u16::MAX as _;
 const MAX_ROLLS: usize = 256;
 
 #[derive(Debug)]
-pub struct DiceSuggests;
+pub struct DiceSuggestions;
 
-impl Suggests for DiceSuggests {
-    fn suggests(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for DiceSuggestions {
+    fn suggestions(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")

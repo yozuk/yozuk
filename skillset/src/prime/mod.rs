@@ -15,17 +15,17 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_corpus(PrimeCorpus)
             .add_translator(PrimeTranslator)
-            .add_suggests(PrimeSuggests)
+            .add_suggestions(PrimeSuggestions)
             .set_command(PrimeCommand)
             .build()
     },
 };
 
 #[derive(Debug)]
-pub struct PrimeSuggests;
+pub struct PrimeSuggestions;
 
-impl Suggests for PrimeSuggests {
-    fn suggests(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for PrimeSuggestions {
+    fn suggestions(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let number = args
             .iter()
             .filter(|arg| arg.tag == "input:number")

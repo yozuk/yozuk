@@ -4,10 +4,10 @@ import { Highlight, Result } from './output'
 export abstract class YozukBase {
     protected abstract exec_impl(command: string, i18n: string): Promise<string>;
     protected abstract push_stream_impl(stream: Uint8Array): Promise<void>;
-    protected abstract random_suggests_impl(amount: number): Promise<string>;
-    protected abstract push_suggests_stream_impl(stream: Uint8Array): Promise<void>;
-    protected abstract clear_suggests_stream_impl(): Promise<void>;
-    protected abstract suggests_impl(amount: number, command: string): Promise<string>;
+    protected abstract random_suggestions_impl(amount: number): Promise<string>;
+    protected abstract push_suggestions_stream_impl(stream: Uint8Array): Promise<void>;
+    protected abstract clear_suggestions_stream_impl(): Promise<void>;
+    protected abstract suggestions_impl(amount: number, command: string): Promise<string>;
     protected abstract i18n(): I18n;
 
     async exec(command: string, streams: Uint8Array[] = []): Promise<Result> {
@@ -48,19 +48,19 @@ export abstract class YozukBase {
         return result;
     }
 
-    async random_suggests(amount: number = 5): Promise<String[]> {
-        return JSON.parse(await this.random_suggests_impl(amount));
+    async random_suggestions(amount: number = 5): Promise<String[]> {
+        return JSON.parse(await this.random_suggestions_impl(amount));
     }
 
-    async set_suggests_streams(streams: Uint8Array[]): Promise<void> {
-        await this.clear_suggests_stream_impl();
+    async set_suggestions_streams(streams: Uint8Array[]): Promise<void> {
+        await this.clear_suggestions_stream_impl();
         for (const stream of streams) {
-            await this.push_suggests_stream_impl(stream);
+            await this.push_suggestions_stream_impl(stream);
         }
     }
 
-    async suggests(command: string, amount: number = 5): Promise<String[]> {
-        return JSON.parse(await this.suggests_impl(amount, command));
+    async suggestions(command: string, amount: number = 5): Promise<String[]> {
+        return JSON.parse(await this.suggestions_impl(amount, command));
     }
 }
 

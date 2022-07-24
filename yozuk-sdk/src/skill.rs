@@ -25,8 +25,8 @@ pub trait Corpus: fmt::Debug + Send + Sync + 'static {
     }
 }
 
-pub trait Suggests: fmt::Debug + Send + Sync + 'static {
-    fn suggests(&self, seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String>;
+pub trait Suggestions: fmt::Debug + Send + Sync + 'static {
+    fn suggestions(&self, seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String>;
 }
 
 pub trait Preprocessor: fmt::Debug + Send + Sync + 'static {
@@ -52,7 +52,7 @@ pub trait Command: fmt::Debug + Send + Sync + 'static {
 #[derive(Debug, Default)]
 pub struct Skill {
     pub corpora: Vec<Box<dyn Corpus>>,
-    pub suggests: Vec<Box<dyn Suggests>>,
+    pub suggestions: Vec<Box<dyn Suggestions>>,
     pub labelers: Vec<Box<dyn Labeler>>,
     pub preprocessors: Vec<Box<dyn Preprocessor>>,
     pub translators: Vec<Box<dyn Translator>>,
@@ -76,8 +76,8 @@ impl SkillBuilder {
         self
     }
 
-    pub fn add_suggests<T: Suggests>(mut self, item: T) -> Self {
-        self.skill.suggests.push(Box::new(item));
+    pub fn add_suggestions<T: Suggestions>(mut self, item: T) -> Self {
+        self.skill.suggestions.push(Box::new(item));
         self
     }
 

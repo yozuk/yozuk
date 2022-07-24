@@ -19,7 +19,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"Bk4CKgQi8qhO3A0IBqK5t",
     init: |_| {
         Skill::builder()
-            .add_suggests(CalcSuggests)
+            .add_suggestions(CalcSuggestions)
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
             .add_preprocessor(TokenMerger::new(CalcTokenParser))
             .add_translator(CalcTranslator)
@@ -32,10 +32,10 @@ type Decimal = GenericDecimal<u128, u8>;
 const DECIMAL_PRECISION: u8 = 16;
 
 #[derive(Debug)]
-pub struct CalcSuggests;
+pub struct CalcSuggestions;
 
-impl Suggests for CalcSuggests {
-    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for CalcSuggestions {
+    fn suggestions(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = StdRng::seed_from_u64(seed);
         let operands = [
             "atan2(0.5, 0.2)",

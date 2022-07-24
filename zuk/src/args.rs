@@ -30,10 +30,10 @@ pub struct Args {
     #[clap(long)]
     pub rpc: bool,
 
-    /// Show suggests.
+    /// Show suggestions.
     #[cfg(debug_assertions)]
     #[clap(long, default_value = "0", display_order(1000))]
-    pub suggests: u8,
+    pub suggestions: u8,
 
     /// Dump embedded model data.
     #[cfg(debug_assertions)]

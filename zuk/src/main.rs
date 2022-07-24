@@ -79,15 +79,15 @@ impl App {
             .collect::<Vec<_>>();
 
         #[cfg(debug_assertions)]
-        if self.args.suggests > 0 {
-            let suggests = if tokens.is_empty() && streams.is_empty() {
-                self.zuk.random_suggests(self.args.suggests as _)
+        if self.args.suggestions > 0 {
+            let suggestions = if tokens.is_empty() && streams.is_empty() {
+                self.zuk.random_suggestions(self.args.suggestions as _)
             } else {
                 self.zuk
-                    .suggests(self.args.suggests as _, &tokens, &streams)
+                    .suggestions(self.args.suggestions as _, &tokens, &streams)
             };
-            for suggest in suggests {
-                println!("{}", suggest);
+            for suggestion in suggestions {
+                println!("{}", suggestion);
             }
             return Ok(());
         }
@@ -144,8 +144,8 @@ impl App {
 
         if commands.is_empty() {
             printer.print_error_str("Sorry, I can't understand your request.")?;
-            if let [suggest, ..] = &self.zuk.suggests(1, tokens, streams)[..] {
-                printer.print_suggest_str("Did you mean", suggest)?;
+            if let [suggestion, ..] = &self.zuk.suggestions(1, tokens, streams)[..] {
+                printer.print_suggestion_str("Did you mean", suggestion)?;
             }
         } else {
             if self.args.dry_run {

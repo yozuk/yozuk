@@ -25,17 +25,17 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .add_preprocessor(UnitPreprocessor)
             .add_corpus(UnitCorpus)
             .add_translator(UnitTranslator)
-            .add_suggests(UnitSuggests)
+            .add_suggestions(UnitSuggestions)
             .set_command(UnitCommand)
             .build()
     },
 };
 
 #[derive(Debug)]
-pub struct UnitSuggests;
+pub struct UnitSuggestions;
 
-impl Suggests for UnitSuggests {
-    fn suggests(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for UnitSuggestions {
+    fn suggestions(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = StdRng::seed_from_u64(seed);
         let n: u32 = rng.gen_range(10..=1000);
         let unit = ["km", "in", "hPa", "kg", "oz.", "KiB", "mph", "°F"]

@@ -1,4 +1,4 @@
-import init, { exec, random_suggests, push_stream, push_suggests_stream, clear_suggests_stream, suggests } from './wasm-web/yozuk_wasm'
+import init, { exec, random_suggestions, push_stream, push_suggestions_stream, clear_suggestions_stream, suggestions } from './wasm-web/yozuk_wasm'
 import { YozukBase, I18n } from './yozuk'
 
 let initialized: boolean = false;
@@ -19,20 +19,20 @@ export class Yozuk extends YozukBase {
         return init_once().then(() => push_stream(stream));
     }
 
-    random_suggests_impl(amount: number): Promise<string> {
-        return init_once().then(() => random_suggests(amount));
+    random_suggestions_impl(amount: number): Promise<string> {
+        return init_once().then(() => random_suggestions(amount));
     }
 
-    push_suggests_stream_impl(stream: Uint8Array): Promise<void> {
-        return init_once().then(() => push_suggests_stream(stream));
+    push_suggestions_stream_impl(stream: Uint8Array): Promise<void> {
+        return init_once().then(() => push_suggestions_stream(stream));
     }
 
-    clear_suggests_stream_impl(): Promise<void> {
-        return init_once().then(() => clear_suggests_stream());
+    clear_suggestions_stream_impl(): Promise<void> {
+        return init_once().then(() => clear_suggestions_stream());
     }
 
-    suggests_impl(amount: number, command: string): Promise<string> {
-        return init_once().then(() => suggests(amount, command));
+    suggestions_impl(amount: number, command: string): Promise<string> {
+        return init_once().then(() => suggestions(amount, command));
     }
 
     i18n(): I18n {

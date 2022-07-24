@@ -14,16 +14,16 @@ pub const ENTRY: SkillEntry = SkillEntry {
             .add_corpus(LipsumCorpus)
             .add_translator(LipsumTranslator)
             .set_command(LipsumCommand)
-            .add_suggests(LipsumSuggests)
+            .add_suggestions(LipsumSuggestions)
             .build()
     },
 };
 
 #[derive(Debug)]
-pub struct LipsumSuggests;
+pub struct LipsumSuggestions;
 
-impl Suggests for LipsumSuggests {
-    fn suggests(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for LipsumSuggestions {
+    fn suggestions(&self, seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")

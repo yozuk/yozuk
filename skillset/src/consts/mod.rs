@@ -13,17 +13,17 @@ pub const ENTRY: SkillEntry = SkillEntry {
         Skill::builder()
             .add_corpus(ConstCorpus)
             .add_translator(ConstTranslator)
-            .add_suggests(ConstSuggests)
+            .add_suggestions(ConstSuggestions)
             .set_command(ConstCommand)
             .build()
     },
 };
 
 #[derive(Debug)]
-pub struct ConstSuggests;
+pub struct ConstSuggestions;
 
-impl Suggests for ConstSuggests {
-    fn suggests(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+impl Suggestions for ConstSuggestions {
+    fn suggestions(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         vec!["How fast the speed of light?"]
             .into_iter()
             .map(Into::into)

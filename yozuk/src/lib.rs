@@ -162,28 +162,33 @@ impl Yozuk {
         }
     }
 
-    pub fn random_suggests(&self, amount: usize) -> Vec<String> {
-        let mut suggests = Vec::with_capacity(amount);
+    pub fn random_suggestions(&self, amount: usize) -> Vec<String> {
+        let mut suggestions = Vec::with_capacity(amount);
         let mut skills = self
             .commands
             .iter()
             .filter_map(|cache| cache.as_ref())
-            .flat_map(|cache| &cache.suggests)
+            .flat_map(|cache| &cache.suggestions)
             .collect::<Vec<_>>();
         let mut rng = StdRng::seed_from_u64(self.seed);
         skills.shuffle(&mut rng);
         for skill in skills {
-            if suggests.len() >= amount {
+            if suggestions.len() >= amount {
                 break;
             }
-            if let Some(suggest) = skill.suggests(self.seed, &[], &[]).choose_mut(&mut rng) {
-                suggests.push(mem::take(suggest));
+            if let Some(suggestion) = skill.suggestions(self.seed, &[], &[]).choose_mut(&mut rng) {
+                suggestions.push(mem::take(suggestion));
             }
         }
-        suggests
+        suggestions
     }
 
-    pub fn suggests(&self, amount: usize, args: &[Token], streams: &[InputStream]) -> Vec<String> {
+    pub fn suggestions(
+        &self,
+        amount: usize,
+        args: &[Token],
+        streams: &[InputStream],
+    ) -> Vec<String> {
         let tokens = args.iter().map(|arg| arg.as_str()).collect::<Vec<_>>();
         let inputs = deunicode::deunicode(&tokens.join(" "));
 
@@ -195,7 +200,7 @@ impl Yozuk {
         let labeler = FeatureLabeler::new(&self.labelers);
         let matcher = SkimMatcherV2::default().ignore_case();
 
-        let mut suggests = iter
+        let mut suggestions = iter
             .filter_map(|cache| cache.as_ref())
             .map(|cache| {
                 (
@@ -218,9 +223,9 @@ impl Yozuk {
             })
             .flat_map(|(cache, tokens)| {
                 cache
-                    .suggests
+                    .suggestions
                     .iter()
-                    .flat_map(|skill| skill.suggests(self.seed, &tokens, streams))
+                    .flat_map(|skill| skill.suggestions(self.seed, &tokens, streams))
                     .enumerate()
                     .filter_map(|(index, text)| {
                         matcher
@@ -231,11 +236,11 @@ impl Yozuk {
             })
             .collect::<Vec<_>>();
 
-        suggests.sort_by_key(|(index, _, _, _)| *index);
-        suggests.sort_by_key(|(_, _, score, _)| -score);
-        suggests.sort_by_key(|(_, priority, _, _)| -priority);
+        suggestions.sort_by_key(|(index, _, _, _)| *index);
+        suggestions.sort_by_key(|(_, _, score, _)| -score);
+        suggestions.sort_by_key(|(_, priority, _, _)| -priority);
 
-        suggests
+        suggestions
             .into_iter()
             .take(amount)
             .map(|(_, _, _, text)| text)
@@ -318,7 +323,7 @@ impl YozukBuilder {
                         model: model.get(entry.key).map(ModelEntry::new),
                         translators: mem::take(&mut skill.translators),
                         preprocessors: mem::take(&mut skill.preprocessors),
-                        suggests: mem::take(&mut skill.suggests),
+                        suggestions: mem::take(&mut skill.suggestions),
                         command,
                     });
                 }
@@ -341,6 +346,6 @@ struct CommandCache {
     model: Option<ModelEntry>,
     preprocessors: Vec<Box<dyn Preprocessor>>,
     translators: Vec<Box<dyn Translator>>,
-    suggests: Vec<Box<dyn Suggests>>,
+    suggestions: Vec<Box<dyn Suggestions>>,
     command: Box<dyn Command>,
 }
