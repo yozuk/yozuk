@@ -36,12 +36,16 @@ https://docs.yozuk.com
  - Telegram Bot: [![Telegram: YozukBot](https://img.shields.io/badge/Telegram-@YozukBot-blue?logo=telegram)](https://t.me/YozukBot)
  - Discord Bot: [![Discord: Yozuk#6060](https://img.shields.io/badge/Bot-Yozuk%236060-white?color=5865F2&logo=discord&logoColor=white)](https://discord.com/api/oauth2/authorize?client_id=989503720473636914&permissions=100352&scope=bot)
 
-### Pre-built binaries
+### Command-Line App
+
+[![asciicast](https://asciinema.org/a/510703.svg)](https://asciinema.org/a/510703)
+
+#### Pre-built binaries
 
 - Windows x64 [zuk-x86_64-pc-windows-msvc.zip](https://github.com/yozuk/yozuk/releases/latest/download/zuk-x86_64-pc-windows-msvc.zip)
 - Windows ARM64 [zuk-aarch64-pc-windows-msvc.zip](https://github.com/yozuk/yozuk/releases/latest/download/zuk-aarch64-pc-windows-msvc.zip)
 - MacOS Intel [zuk-x86_64-apple-darwin.tar.xz](https://github.com/yozuk/yozuk/releases/latest/download/zuk-x86_64-apple-darwin.tar.xz)
-- MacOS Silicon [zuk-aarch64-apple-darwin.tar.xz](https://github.com/yozuk/yozuk/releases/latest/download/zuk-aarch64-apple-darwin.tar.xz)
+- MacOS Apple Silicon [zuk-aarch64-apple-darwin.tar.xz](https://github.com/yozuk/yozuk/releases/latest/download/zuk-aarch64-apple-darwin.tar.xz)
 - Linux x64 [zuk-x86_64-unknown-linux-gnu.tar.xz](https://github.com/yozuk/yozuk/releases/latest/download/zuk-x86_64-unknown-linux-gnu.tar.xz)
 - Linux ARM64 [zuk-aarch64-unknown-linux-gnu.tar.xz](https://github.com/yozuk/yozuk/releases/latest/download/zuk-aarch64-unknown-linux-gnu.tar.xz)
 
@@ -53,34 +57,35 @@ https://docs.yozuk.com
 
 </details>
 
-### Homebrew
+#### Homebrew
 
 ```bash
 brew tap yozuk/yozuk
 brew install zuk
 ```
 
-### Cargo
+#### Cargo
 
 ```bash
 cargo install zuk
 ```
 
-### WAPM
+#### WAPM
 
 ```bash
 wapm install yozuk/zuk
 ```
 
-### Build from Source
+### Libraries
 
-- [zuk](./zuk) (Command-line interface)
-- [Telegram](https://github.com/yozuk/yozuk-telegram)
+#### Rust
 
-#### Build Requirements
+- [yozuk](https://crates.io/crates/yozuk) [![crates.io](https://img.shields.io/crates/v/yozuk.svg)](https://crates.io/crates/yozuk)
+- [yozuk-sdk](https://crates.io/crates/yozuk-sdk) [![crates.io](https://img.shields.io/crates/v/yozuk-sdk.svg)](https://crates.io/crates/yozuk-sdk)
 
-- **Rust toolchain**: 1.60.0 or later
-- **CMake**: 3.12 or later
+#### TypeScript / JavaScript
+
+- [@yozuk/yozuk-wasm](https://www.npmjs.com/package/@yozuk/yozuk-wasm) [![npm version](https://badge.fury.io/js/@yozuk%2Fyozuk-wasm.svg)](https://badge.fury.io/js/@yozuk%2Fyozuk-wasm)
 
 ## Credits
 
