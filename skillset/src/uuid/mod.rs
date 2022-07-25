@@ -9,7 +9,7 @@ use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"tzUyypo_Lz2T95dun91YX",
+    model_id: b"uJrzxcw12a52vwpLOgnCd",
     init: |_| {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
@@ -38,45 +38,76 @@ pub struct UuidCorpus;
 
 impl Corpus for UuidCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        iproduct!(["generate", "new"], ["uuid", "guid"])
-            .flat_map(|(verb, name)| {
+        iproduct!(
+            ["generate", "new"],
+            ["uuid", "guid"],
+            ["lower", "upper", "lowercase", "uppercase"]
+        )
+        .flat_map(|(verb, name, case)| {
+            vec![
+                tk!([
+                    verb,
+                    name; "command",
+                    case; "input:charset"
+                ]),
+                tk!([
+                    "please",
+                    verb,
+                    name; "command",
+                    case; "input:charset"
+                ]),
+            ]
+        })
+        .chain(
+            iproduct!(["generate", "new"], ["uuid", "guid"], 1..=10).flat_map(
+                |(verb, name, count)| {
+                    vec![
+                        tk!([
+                            verb,
+                            format!("{}", count); "input:count",
+                            name; "command"
+                        ]),
+                        tk!([
+                            "please",
+                            verb,
+                            format!("{}", count); "input:count",
+                            name; "command"
+                        ]),
+                    ]
+                },
+            ),
+        )
+        .chain(
+            iproduct!(
+                ["generate", "new"],
+                ["uuid", "guid"],
+                ["lower", "upper", "lowercase", "uppercase"],
+                1..=10
+            )
+            .flat_map(|(verb, name, case, count)| {
                 vec![
                     tk!([
                         verb,
+                        format!("{}", count); "input:count",
+                        case; "input:charset",
                         name; "command"
                     ]),
                     tk!([
                         "please",
                         verb,
+                        format!("{}", count); "input:count",
+                        case; "input:charset",
                         name; "command"
                     ]),
                 ]
-            })
-            .chain(
-                iproduct!(["generate", "new"], ["uuid", "guid"], 1..=10).flat_map(
-                    |(verb, name, count)| {
-                        vec![
-                            tk!([
-                                verb,
-                                format!("{}", count); "input:count",
-                                name; "command"
-                            ]),
-                            tk!([
-                                "please",
-                                verb,
-                                format!("{}", count); "input:count",
-                                name; "command"
-                            ]),
-                        ]
-                    },
-                ),
-            )
-            .chain(["uuid", "guid"].map(|name| tk!([name; "command"])))
-            .chain(vec![tk!([
-                "generate",
-                format!("{}", Uuid::nil()); "input:uuid"
-            ])])
-            .collect()
+            }),
+        )
+        .chain(["uuid", "guid"].map(|name| tk!([name; "command"])))
+        .chain(vec![tk!([
+            "generate",
+            format!("{}", Uuid::nil()); "input:uuid"
+        ])])
+        .collect()
     }
 }
 
@@ -119,12 +150,23 @@ impl Translator for UuidTranslator {
         {
             return None;
         }
+        let upper = if args.iter().any(|arg| {
+            arg.tag == "input:charset" && normalized_eq(arg.as_str(), &["upper", "uppercase"], 1)
+        }) {
+            Some("--upper")
+        } else {
+            None
+        };
         let count = args
             .iter()
             .find(|arg| arg.tag == "input:count")
             .and_then(|arg| arg.as_str().parse::<usize>().ok())
             .unwrap_or(1);
-        Some(CommandArgs::new().add_args(["-n".to_string(), count.to_string()]))
+        Some(
+            CommandArgs::new()
+                .add_args(["-n".to_string(), count.to_string()])
+                .add_args_iter(upper),
+        )
     }
 }
 
@@ -158,6 +200,13 @@ impl Command for UuidCommand {
         }
         let list = iter::repeat_with(|| format!("{}", Uuid::new_v4()))
             .take(args.n)
+            .map(|id| {
+                if args.upper {
+                    id.to_ascii_uppercase()
+                } else {
+                    id
+                }
+            })
             .collect::<Vec<_>>();
         Ok(Output::new()
             .set_title("UUID Generator")
@@ -177,4 +226,7 @@ impl Command for UuidCommand {
 pub struct Args {
     #[clap(short, default_value_t = 1)]
     pub n: usize,
+
+    #[clap(long)]
+    pub upper: bool,
 }
