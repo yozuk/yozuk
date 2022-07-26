@@ -2766,7 +2766,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-core-skillset"
-version = "0.20.10"
+version = "0.21.0"
 dependencies = [
  "anyhow",
  "base64",
