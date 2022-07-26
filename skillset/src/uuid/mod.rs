@@ -122,7 +122,11 @@ impl Suggestions for UuidSuggestions {
             .and_then(|arg| arg.as_str().parse::<u8>().ok())
             .filter(|&n| n > 0);
         let mut rng = StdRng::seed_from_u64(seed);
-        let n = count.unwrap_or_else(|| rng.gen_range(2..=10));
+        let n = match count {
+            Some(n) => n,
+            None if args.is_empty() => rng.gen_range(2..=10),
+            _ => return vec!["Generate UUID".to_string()],
+        };
         vec![format!("Generate {} UUIDs", n)]
     }
 }

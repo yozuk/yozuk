@@ -30,8 +30,15 @@ impl Suggestions for LipsumSuggestions {
             .and_then(|arg| arg.as_str().parse::<u16>().ok())
             .filter(|&n| n >= 10);
         let mut rng = StdRng::seed_from_u64(seed);
-        let n = count.unwrap_or_else(|| rng.gen_range(5..=10) * 10);
-        vec![format!("{} words dummy text", n)]
+        let n = match count {
+            Some(n) => n,
+            None if args.is_empty() => rng.gen_range(5..=10) * 10,
+            _ => return vec!["dummy text".to_string(), "lorem ipsum".to_string()],
+        };
+        vec![
+            format!("{} words dummy text", n),
+            format!("{} words lorem ipsum", n),
+        ]
     }
 }
 
