@@ -18,7 +18,10 @@ pub struct UnicodeSuggestions;
 
 impl Suggestions for UnicodeSuggestions {
     fn suggestions(&self, _seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
-        vec!["🏳️‍⚧️", "🏳️‍🌈"].into_iter().map(Into::into).collect()
+        vec!["😶‍🌫️", "😵‍💫", "🐈‍⬛", "🐻‍❄️", "👩‍👩‍👦‍👦", "🏳️‍⚧️", "🏳️‍🌈"]
+            .into_iter()
+            .map(Into::into)
+            .collect()
     }
 }
 
