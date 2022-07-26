@@ -2837,7 +2837,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-english"
-version = "0.20.6"
+version = "0.21.0"
 dependencies = [
  "Inflector",
  "deunicode",
