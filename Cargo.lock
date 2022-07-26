@@ -2819,9 +2819,19 @@ dependencies = [
  "unicode_reader",
  "urlencoding",
  "uuid",
+ "yozuk-helper-encoding",
  "yozuk-helper-english",
  "yozuk-helper-filetype",
  "yozuk-helper-platform",
+ "yozuk-sdk",
+]
+
+[[package]]
+name = "yozuk-helper-encoding"
+version = "0.20.10"
+dependencies = [
+ "base64",
+ "hex",
  "yozuk-sdk",
 ]
 

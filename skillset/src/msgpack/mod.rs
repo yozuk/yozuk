@@ -1,10 +1,12 @@
 use clap::Parser;
-use yozuk_sdk::prelude::*;
+use yozuk_helper_encoding::EncodingPreprocessor;
+use yozuk_sdk::{encoding::RawEncoding, prelude::*};
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"3jD5f89FcJbrsvFBB387r",
     init: |_| {
         Skill::builder()
+            .add_preprocessor(EncodingPreprocessor::new(RawEncoding::all()))
             .add_translator(MsgpackTranslator)
             .set_command(MsgpackCommand)
             .build()
@@ -18,13 +20,13 @@ impl Translator for MsgpackTranslator {
     fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let is_msgpack = !args.is_empty()
             && args.iter().all(|arg| {
-                base64::decode(arg.as_str()).ok().map(|data| {
-                    let mut rd = &data[..];
-                    rmpv::decode::read_value_ref(&mut rd).is_ok() && rd.is_empty()
-                }) == Some(true)
+                let mut rd = &arg.data[..];
+                rmpv::decode::read_value_ref(&mut rd).is_ok() && rd.is_empty()
             });
         if is_msgpack {
-            return Some(CommandArgs::new().add_args_iter(args.iter().map(|arg| arg.as_str())));
+            return Some(
+                CommandArgs::new().add_args_iter(args.iter().map(|arg| base64::encode(&arg.data))),
+            );
         }
         None
     }

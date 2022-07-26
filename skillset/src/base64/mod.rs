@@ -1,7 +1,9 @@
 use clap::{ArgEnum, Parser};
 use itertools::iproduct;
 use std::io::Read;
+use yozuk_helper_encoding::EncodingPreprocessor;
 use yozuk_helper_english::normalized_eq;
+use yozuk_sdk::encoding::RawEncoding;
 use yozuk_sdk::prelude::*;
 use yozuk_sdk::Bytes;
 
@@ -10,26 +12,16 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_corpus(Base64Corpus)
+            .add_preprocessor(EncodingPreprocessor::new([
+                RawEncoding::Base64,
+                RawEncoding::Base64Url,
+            ]))
             .add_suggestions(Base64Suggestions)
             .add_translator(Base64Translator)
             .set_command(Base64Command)
             .build()
     },
 };
-
-fn is_like_base64(data: &[u8]) -> bool {
-    if base64::decode(data).is_ok() {
-        let mut score = 0;
-        score += data.iter().any(|c| (b'a'..=b'f').contains(c)) as u8;
-        score += data.iter().any(|c| (b'A'..=b'F').contains(c)) as u8;
-        score += data.iter().any(|c| (b'g'..=b'z').contains(c)) as u8;
-        score += data.iter().any(|c| (b'G'..=b'Z').contains(c)) as u8;
-        score += data.iter().any(|c| (b'0'..=b'9').contains(c)) as u8;
-        score += data.iter().any(|&c| c == b'+' || c == b'/' || c == b'=') as u8;
-        return score >= 4;
-    }
-    false
-}
 
 #[derive(Debug)]
 pub struct Base64Suggestions;
@@ -105,8 +97,12 @@ impl Translator for Base64Translator {
             }
         }
 
-        let inputs = args.iter().map(|arg| arg.data.clone()).collect::<Vec<_>>();
-        let is_base64 = inputs.len() == 1 && inputs.iter().all(|arg| is_like_base64(arg));
+        let inputs = args
+            .iter()
+            .filter(|arg| arg.raw_encoding.is_some())
+            .map(|arg| base64::encode(&arg.data))
+            .collect::<Vec<_>>();
+        let is_base64 = inputs.len() == 1;
         if is_base64
             || (!streams.is_empty()
                 && streams
