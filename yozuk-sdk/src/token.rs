@@ -1,3 +1,4 @@
+use crate::encoding::RawEncoding;
 use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
 use serde_derive::{Deserialize, Serialize};
@@ -52,19 +53,23 @@ pub struct Token {
     )]
     pub data: Bytes,
 
+    #[serde(default = "String::new")]
+    pub tag: String,
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub raw_str: Option<String>,
 
-    #[serde(default = "String::new")]
-    pub tag: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub raw_encoding: Option<RawEncoding>,
 }
 
 impl Default for Token {
     fn default() -> Self {
         Self {
             data: Bytes::new(),
-            raw_str: None,
             tag: String::new(),
+            raw_str: None,
+            raw_encoding: None,
         }
     }
 }

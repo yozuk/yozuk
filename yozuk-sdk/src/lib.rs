@@ -6,6 +6,7 @@ pub use bytes::Bytes;
 pub mod args;
 pub mod block;
 pub mod display;
+pub mod encoding;
 pub mod env;
 pub mod feature;
 pub mod highlight;
