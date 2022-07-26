@@ -4,8 +4,8 @@ use time::OffsetDateTime;
 use time_tz::{timezones, Offset, TimeZone};
 use yozuk_helper_english::normalized_eq;
 use yozuk_helper_platform::time::now_utc;
-use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
+use yozuk_sdk::preprocessor::{TokenMerger, TokenParser};
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"DzNEy_nUaQUFmFGqpZZux",

@@ -4,8 +4,8 @@ use palette::{Hsla, Hsva, Hwba, IntoColor, Srgba};
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use std::str::FromStr;
-use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
+use yozuk_sdk::preprocessor::{TokenMerger, TokenParser};
 
 mod keywords;
 

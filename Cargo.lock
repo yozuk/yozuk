@@ -2822,7 +2822,6 @@ dependencies = [
  "yozuk-helper-english",
  "yozuk-helper-filetype",
  "yozuk-helper-platform",
- "yozuk-helper-preprocessor",
  "yozuk-sdk",
 ]
 
@@ -2836,7 +2835,6 @@ dependencies = [
  "pest",
  "pest_derive",
  "singularize",
- "yozuk-helper-preprocessor",
  "yozuk-sdk",
 ]
 
@@ -2859,13 +2857,6 @@ dependencies = [
  "time",
  "time-tz",
  "wasm-bindgen",
-]
-
-[[package]]
-name = "yozuk-helper-preprocessor"
-version = "0.20.6"
-dependencies = [
- "yozuk-sdk",
 ]
 
 [[package]]

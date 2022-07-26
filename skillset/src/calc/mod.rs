@@ -10,7 +10,7 @@ use rand::rngs::StdRng;
 use rand::SeedableRng;
 use thiserror::Error;
 use yozuk_helper_english::NumeralTokenParser;
-use yozuk_helper_preprocessor::{TokenMerger, TokenParser};
+use yozuk_sdk::preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
 
 mod function;

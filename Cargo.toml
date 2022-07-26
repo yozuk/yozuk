@@ -9,7 +9,6 @@ lto = true
 [patch.crates-io]
 yozuk-sdk = { path = "./yozuk-sdk" }
 yozuk-helper-english = { path = "./helpers/english" }
-yozuk-helper-preprocessor = { path = "./helpers/preprocessor" }
 yozuk-helper-platform = { path = "./helpers/platform" }
 yozuk-helper-filetype = { path = "./helpers/filetype" }
 yozuk-core-skillset = { path = "./skillset" }

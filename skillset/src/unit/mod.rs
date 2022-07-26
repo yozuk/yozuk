@@ -6,8 +6,8 @@ use rand::seq::SliceRandom;
 use rand::{Rng, SeedableRng};
 use std::str::FromStr;
 use yozuk_helper_english::NumeralTokenParser;
-use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
+use yozuk_sdk::preprocessor::TokenMerger;
 
 mod conversion;
 mod entry;

@@ -4,8 +4,8 @@ use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use std::iter;
 use yozuk_helper_english::{normalized_eq, pluralize, NumeralTokenParser};
-use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
+use yozuk_sdk::preprocessor::TokenMerger;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"NfqhgPyWBObz85VWwk1z9",

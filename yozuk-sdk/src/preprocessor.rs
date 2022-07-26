@@ -1,9 +1,10 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
 
+use crate::skill::*;
+use crate::token::*;
 use std::collections::VecDeque;
 use std::fmt;
-use yozuk_sdk::prelude::*;
 
 pub trait TokenParser: Send + Sync {
     fn parse(&self, tokens: &[Token]) -> Option<Token>;

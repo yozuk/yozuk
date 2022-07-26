@@ -3,8 +3,8 @@ use lipsum::lipsum;
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use yozuk_helper_english::{normalized_eq, NumeralTokenParser};
-use yozuk_helper_preprocessor::TokenMerger;
 use yozuk_sdk::prelude::*;
+use yozuk_sdk::preprocessor::TokenMerger;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"WKQjgQTbySg0_NOxuUHBD",

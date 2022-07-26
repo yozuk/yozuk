@@ -1,6 +1,6 @@
 use pest::Parser;
-use yozuk_helper_preprocessor::TokenParser;
 use yozuk_sdk::prelude::*;
+use yozuk_sdk::preprocessor::TokenParser;
 
 #[derive(pest_derive::Parser)]
 #[grammar = "numeral.pest"]

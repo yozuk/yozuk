@@ -14,6 +14,7 @@ pub mod metadata;
 pub mod model;
 pub mod output;
 pub mod prelude;
+pub mod preprocessor;
 pub mod skill;
 pub mod stream;
 pub mod token;
