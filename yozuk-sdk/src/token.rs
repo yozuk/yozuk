@@ -1,6 +1,5 @@
 use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
-use mediatype::{media_type, MediaTypeBuf};
 use serde_derive::{Deserialize, Serialize};
 use std::str;
 
@@ -15,7 +14,6 @@ macro_rules! tk {
     ($data:expr) => {
         $crate::token::Token{
             data: $data.into(),
-            media_type: "text/plain".parse().unwrap(),
             ..Default::default()
         }
     };
@@ -57,15 +55,8 @@ pub struct Token {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub raw_str: Option<String>,
 
-    #[serde(default = "media_type_default")]
-    pub media_type: MediaTypeBuf,
-
     #[serde(default = "String::new")]
     pub tag: String,
-}
-
-fn media_type_default() -> MediaTypeBuf {
-    media_type!(TEXT / PLAIN).into()
 }
 
 impl Default for Token {
@@ -73,7 +64,6 @@ impl Default for Token {
         Self {
             data: Bytes::new(),
             raw_str: None,
-            media_type: media_type_default(),
             tag: String::new(),
         }
     }

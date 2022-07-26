@@ -83,7 +83,6 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
                         token.tag.clone(),
                         Token {
                             data: token.data,
-                            media_type: token.media_type,
                             tag: token.tag,
                             ..Default::default()
                         },
@@ -144,7 +143,6 @@ fn learn(item: TrainingData, labeler: &FeatureLabeler) -> Result<(String, Vec<u8
                         },
                         Token {
                             data: token.data,
-                            media_type: token.media_type,
                             tag: token.tag,
                             ..Default::default()
                         },
@@ -254,7 +252,6 @@ impl From<Token> for WeightedToken {
     fn from(token: Token) -> Self {
         Self {
             data: token.data,
-            media_type: token.media_type,
             tag: token.tag,
             ..Default::default()
         }
