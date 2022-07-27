@@ -1,6 +1,7 @@
 use bigdecimal::{BigDecimal, FromPrimitive, ToPrimitive};
 use clap::Parser;
 use num_bigint::ToBigInt;
+use rand::prelude::SliceRandom;
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use std::str::FromStr;
@@ -21,6 +22,11 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
+const PRIMES: &[u32] = &[
+    756839, 859433, 1257787, 1398269, 2976221, 3021377, 6972593, 13466917, 20996011, 24036583,
+    25964951, 30402457, 32582657, 37156667, 42643801, 43112609, 57885161,
+];
+
 #[derive(Debug)]
 pub struct PrimeSuggestions;
 
@@ -32,7 +38,10 @@ impl Suggestions for PrimeSuggestions {
             .filter_map(|arg| BigDecimal::from_str(arg.as_str()).ok())
             .next();
         let mut rng = StdRng::seed_from_u64(seed);
-        let n = number.unwrap_or_else(|| BigDecimal::from_u32(rng.gen()).unwrap());
+        let n = number.unwrap_or_else(|| {
+            BigDecimal::from_u32(PRIMES.choose(&mut rng).unwrap() + rng.gen_range(0..=5) * 2)
+                .unwrap()
+        });
         vec![format!("Is {} a prime number?", n)]
     }
 }
