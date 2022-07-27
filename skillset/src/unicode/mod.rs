@@ -69,7 +69,7 @@ impl Command for UnicodeCommand {
                         if c == '`' {
                             format!("\\{c}")
                         } else {
-                            format!("{}", c.escape_default())
+                            format!("{}", c.escape_default()).replace("u{", "\\u{")
                         }
                     })
                     .collect::<Vec<_>>();
