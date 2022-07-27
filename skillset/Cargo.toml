@@ -74,6 +74,7 @@ phf = { version = "0.11.0", features = ["macros"] }
 shell-words = "1.1.0"
 thousands = "0.2.0"
 unicode_reader = { version = "1.0.2", optional = true }
+symbolic-demangle = "9.0.0"
 
 [features]
 default = []
