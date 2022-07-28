@@ -80,10 +80,9 @@ impl Command for PunycodeCommand {
                     .collect::<Vec<_>>();
                 Ok(Output::new()
                     .set_title("Punycode Decoder")
-                    .add_blocks_iter(vec![
-                        Block::Comment(block::Comment::new().set_text("Decoding punycode")),
-                        Block::Data(block::Data::new().set_text_data(output.join("\n"))),
-                    ])
+                    .add_blocks_iter(vec![Block::Data(
+                        block::Data::new().set_text_data(output.join("\n")),
+                    )])
                     .add_metadata(docs))
             }
             Mode::Encode => {

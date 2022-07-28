@@ -137,9 +137,7 @@ impl Command for HexCommand {
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/hex/")?;
         match options.mode {
             Mode::Decode => {
-                let mut blocks = vec![Block::Comment(
-                    block::Comment::new().set_text("Decoding Hex string"),
-                )];
+                let mut blocks = vec![];
 
                 blocks.append(
                     &mut args

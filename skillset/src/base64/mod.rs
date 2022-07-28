@@ -140,9 +140,7 @@ impl Command for Base64Command {
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/base64/")?;
         match options.mode {
             Mode::Decode => {
-                let mut blocks = vec![Block::Comment(
-                    block::Comment::new().set_text("Decoding Base64 string"),
-                )];
+                let mut blocks = vec![];
 
                 blocks.append(
                     &mut args

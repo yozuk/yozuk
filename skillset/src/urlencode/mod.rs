@@ -51,7 +51,6 @@ impl Command for UrlEncodeCommand {
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/urlencode/")?;
         Ok(Output::new()
             .set_title("URL Decoder")
-            .add_block(block::Comment::new().set_text("Decoding URL encoding"))
             .add_blocks_iter(blocks)
             .add_metadata(docs))
     }

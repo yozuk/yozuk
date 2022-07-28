@@ -46,7 +46,6 @@ impl Command for JwtCommand {
             .filter_map(|arg| decode_jwt(arg).ok())
             .flat_map(|(header, claims, sig)| {
                 vec![
-                    Block::Comment(block::Comment::new().set_text("Decoding JWT")),
                     Block::Data(
                         block::Data::new()
                             .set_text_data(serde_json::to_string_pretty(&header).unwrap())

@@ -3,7 +3,7 @@ use itertools::iproduct;
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use std::iter;
-use yozuk_helper_english::{normalized_eq, pluralize, NumeralTokenParser};
+use yozuk_helper_english::{normalized_eq, NumeralTokenParser};
 use yozuk_sdk::prelude::*;
 use yozuk_sdk::preprocessor::TokenMerger;
 
@@ -177,14 +177,9 @@ impl Command for NanoIdCommand {
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/nanoid/")?;
         Ok(Output::new()
             .set_title("NanoID Generator")
-            .add_blocks_iter(vec![
-                Block::Comment(block::Comment::new().set_text(format!(
-                    "Generating {} {}",
-                    args.n,
-                    pluralize("NanoID", args.n)
-                ))),
-                Block::Data(block::Data::new().set_text_data(list.join("\n"))),
-            ])
+            .add_blocks_iter(vec![Block::Data(
+                block::Data::new().set_text_data(list.join("\n")),
+            )])
             .add_metadata(docs))
     }
 }
