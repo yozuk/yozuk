@@ -208,6 +208,42 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload ${{ github.ref_name }} *.tar.*
 
+  release-wasi:
+    name: Upload Release Asset (WASI)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v3
+      continue-on-error: true
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-stable-wasi-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Install wasmtime
+      run: curl -sL https://github.com/bytecodealliance/wasmtime/releases/download/v0.37.0/wasmtime-v0.37.0-x86_64-linux.tar.xz | tar Jxv
+    - name: Add PATH
+      run: echo "$PWD/wasmtime-v0.37.0-x86_64-linux" >> $GITHUB_PATH
+    - name: Install cargo-wasi
+      run: cargo install cargo-wasi
+      continue-on-error: true
+    - name: Build project
+      run: cargo wasi build --bin zuk --release
+    - name: Make archive
+      run: tar -C target/wasm32-wasi/release -Jcvf zuk-wasm32-wasi.tar.xz zuk.wasm
+    - name: Create release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release create ${{ github.ref_name }} --generate-notes
+      continue-on-error: true
+    - name: Upload archive
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release upload ${{ github.ref_name }} *.tar.*
+
   release-cross:
     strategy:
       matrix:
