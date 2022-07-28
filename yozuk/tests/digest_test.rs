@@ -7,6 +7,16 @@ use yozuk_sdk::prelude::*;
 #[test]
 fn digest_from_args() {
     assert_eq!(
+        cmd(tk!(["abcdefghijklmnopqrstuvwxyz", "to", "md4"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-digest",
+            "--input",
+            "abcdefghijklmnopqrstuvwxyz",
+            "--algorithm",
+            "md4"
+        ]))
+    );
+    assert_eq!(
         cmd(tk!(["Hello World!", "to", "md5"])),
         Some(CommandArgs::new().add_args([
             "yozuk-skill-digest",

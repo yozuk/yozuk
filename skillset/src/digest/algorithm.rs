@@ -2,6 +2,11 @@ use digest::{Digest, FixedOutputReset};
 
 pub const ENTRIES: &[AlgorithmEntry] = &[
     AlgorithmEntry {
+        name: "MD4",
+        keywords: &["md4"],
+        init: || Box::new(DigestEntry::<md4::Md4>::new()),
+    },
+    AlgorithmEntry {
         name: "MD5",
         keywords: &["md5"],
         init: || Box::new(DigestEntry::<md5::Md5>::new()),

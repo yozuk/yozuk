@@ -74,6 +74,7 @@ phf = { version = "0.11.0", features = ["macros"] }
 shell-words = "1.1.0"
 thousands = "0.2.0"
 unicode_reader = { version = "1.0.2", optional = true }
+md4 = { version = "0.10.1", optional = true }
 
 [features]
 default = []
@@ -85,6 +86,7 @@ yozuk-skill-color = ["css-color", "palette"]
 yozuk-skill-dice = ["rand", "pest", "pest_derive"]
 yozuk-skill-digest = [
   "digest",
+  "md4",
   "md-5",
   "sha1",
   "sha2",

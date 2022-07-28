@@ -1081,6 +1081,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "md4"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "93a5f5240a3fa1cb324a28cb42b1934750a093d7ad200ba052deecf4aff7104b"
+dependencies = [
+ "digest 0.10.3",
+]
+
+[[package]]
 name = "mediatype"
 version = "0.19.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2787,6 +2796,7 @@ dependencies = [
  "lipsum",
  "maplit",
  "md-5",
+ "md4",
  "mediatype",
  "miller_rabin",
  "nanoid",

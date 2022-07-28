@@ -6,7 +6,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"ZHvxjqf7uAilPbetXFrU-",
+    model_id: b"G_60F_6L4j14b9v4_~u2m",
     init: |_| {
         Skill::builder()
             .add_corpus(DigestCorpus)
