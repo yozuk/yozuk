@@ -14,6 +14,10 @@ fn single_calc() {
         cmd(tk!(["(100 + 200) * 5555.234"])),
         Some(CommandArgs::new().add_args(["yozuk-skill-calc", "(100 + 200) * 5555.234"]))
     );
+    assert_eq!(
+        cmd(tk!(["5 << 4 >> 2 << 100"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-calc", "5 << 4 >> 2 << 100"]))
+    );
 }
 
 #[test]

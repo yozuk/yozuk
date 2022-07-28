@@ -1,12 +1,14 @@
 num = @{ int ~ ("." ~ ASCII_DIGIT*)? ~ (^"e" ~ int)? }
     int = { ("+" | "-")? ~ ASCII_DIGIT+ }
 
-operation = _{ power | add | subtract | multiply | divide }
-    add      = { "+" }
-    subtract = { "-" }
-    multiply = { "*" }
-    divide   = { "/" }
-    power    = { "^" | "**" }
+operation = _{ power | add | subtract | multiply | divide | shr | shl }
+    add       = { "+" }
+    subtract  = { "-" }
+    multiply  = { "*" }
+    divide    = { "/" }
+    power     = { "^" | "**" }
+    shr       = { ">>" }
+    shl       = { "<<" }
 
 ident = { ASCII_ALPHA ~ ASCII_ALPHANUMERIC* }
 func = { ident ~ "(" ~ ( expr? ~ ("," ~ expr)* ) ~ ")" }

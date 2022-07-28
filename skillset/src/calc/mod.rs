@@ -10,8 +10,8 @@ use rand::rngs::StdRng;
 use rand::SeedableRng;
 use thiserror::Error;
 use yozuk_helper_english::NumeralTokenParser;
-use yozuk_sdk::preprocessor::{TokenMerger, TokenParser};
 use yozuk_sdk::prelude::*;
+use yozuk_sdk::preprocessor::{TokenMerger, TokenParser};
 
 mod function;
 
@@ -84,6 +84,7 @@ fn eval(expression: Pairs<Rule>) -> Result<Decimal, CalcError> {
     static PREC_CLIMBER: OnceCell<PrecClimber<Rule>> = OnceCell::new();
     let climber = PREC_CLIMBER.get_or_init(|| {
         PrecClimber::new(vec![
+            Operator::new(Rule::shr, Left) | Operator::new(Rule::shl, Left),
             Operator::new(Rule::add, Left) | Operator::new(Rule::subtract, Left),
             Operator::new(Rule::multiply, Left) | Operator::new(Rule::divide, Left),
             Operator::new(Rule::power, Right),
@@ -123,6 +124,18 @@ fn eval(expression: Pairs<Rule>) -> Result<Decimal, CalcError> {
                 Rule::divide if rhs.is_zero() => return Err(CalcError::DivisionByZero),
                 Rule::divide => lhs.checked_div(&rhs).ok_or(CalcError::Overflow)?,
                 Rule::power => (lhs.to_f64().unwrap().powf(rhs.to_f64().unwrap())).into(),
+                Rule::shr => lhs
+                    .to_i128()
+                    .ok_or(CalcError::IntegerOnlyOperation)?
+                    .checked_shr(rhs.to_u32().ok_or(CalcError::IntegerOnlyOperation)?)
+                    .ok_or(CalcError::Overflow)?
+                    .into(),
+                Rule::shl => lhs
+                    .to_i128()
+                    .ok_or(CalcError::IntegerOnlyOperation)?
+                    .checked_shl(rhs.to_u32().ok_or(CalcError::IntegerOnlyOperation)?)
+                    .ok_or(CalcError::Overflow)?
+                    .into(),
                 _ => unreachable!(),
             })
         },
@@ -139,6 +152,9 @@ pub enum CalcError {
 
     #[error("No such method: {0}")]
     NoSuchMethod(String),
+
+    #[error("Operands must be integral")]
+    IntegerOnlyOperation,
 
     #[error("Wrong number of arguments: expected {expected} but given {given}")]
     WrongNumberOfArguments { expected: usize, given: usize },
