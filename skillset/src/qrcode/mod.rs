@@ -75,8 +75,11 @@ impl Translator for QrCodeTranslator {
             let inputs = args
                 .iter()
                 .filter(|arg| arg.tag == "input:data")
-                .map(|arg| arg.as_str());
-            return Some(CommandArgs::new().add_args_iter(inputs));
+                .map(|arg| arg.as_str())
+                .collect::<Vec<_>>();
+            if !inputs.is_empty() {
+                return Some(CommandArgs::new().add_args_iter(inputs));
+            }
         }
 
         None
