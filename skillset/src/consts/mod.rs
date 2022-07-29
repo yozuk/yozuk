@@ -8,7 +8,7 @@ mod definition;
 use definition::DEFINITIONS;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"c0FBNukgxcKvGJ9stDZ8K",
+    model_id: b"sAMlRNhLB1Ww9T21BEDMl",
     init: |_| {
         Skill::builder()
             .add_corpus(ConstCorpus)
@@ -124,7 +124,9 @@ impl Command for ConstCommand {
                 let value = item
                     .unit
                     .map(|unit| format!("{}{} {}", item.value.separate_with_commas(), scale, unit))
-                    .unwrap_or_else(|| item.value.to_string().separate_with_commas());
+                    .unwrap_or_else(|| {
+                        format!("{}{}", item.value.to_string().separate_with_commas(), scale)
+                    });
                 vec![Block::Data(block::Data::new().set_highlighted_text_data(
                     format!("{}\n`{}`", comment, value),
                     &Default::default(),
