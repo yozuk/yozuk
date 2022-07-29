@@ -5,7 +5,7 @@ use yozuk_helper_english::normalize;
 use yozuk_sdk::prelude::*;
 
 mod definition;
-use definition::definitions;
+use definition::DEFINITIONS;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"c0FBNukgxcKvGJ9stDZ8K",
@@ -31,14 +31,26 @@ impl Suggestions for ConstSuggestions {
     }
 }
 
-#[derive(Default)]
 pub struct Constant {
     pub name: &'static str,
-    pub tokens: Vec<Vec<Token>>,
+    pub tokens: fn() -> Vec<Vec<Token>>,
     pub value: &'static str,
     pub scale: i32,
     pub unit: Option<&'static str>,
     pub is_exact: bool,
+}
+
+impl Default for Constant {
+    fn default() -> Self {
+        Self {
+            name: "",
+            tokens: Vec::new,
+            value: "",
+            scale: 0,
+            unit: None,
+            is_exact: false,
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -46,9 +58,9 @@ pub struct ConstCorpus;
 
 impl Corpus for ConstCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        definitions()
+        DEFINITIONS
             .values()
-            .flat_map(|def| def.tokens.clone())
+            .flat_map(|def| (def.tokens)())
             .collect()
     }
 }
@@ -70,9 +82,9 @@ impl Translator for ConstTranslator {
             .map(|tag| tag.trim_start_matches("keyword:").to_string())
             .collect();
         keys.into_iter()
-            .filter_map(|key| definitions().get(key.as_str()).map(|item| (key, item)))
+            .filter_map(|key| DEFINITIONS.get(key.as_str()).map(|item| (key, item)))
             .find(|(_, item)| {
-                item.tokens.iter().any(|tokens| {
+                (item.tokens)().iter().any(|tokens| {
                     tokens
                         .iter()
                         .filter(|arg| arg.tag.starts_with("keyword:"))
@@ -95,7 +107,7 @@ impl Command for ConstCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
-        let blocks = definitions()
+        let blocks = DEFINITIONS
             .get(args.name.as_str())
             .into_iter()
             .flat_map(|item| {
