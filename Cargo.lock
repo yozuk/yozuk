@@ -2794,7 +2794,6 @@ dependencies = [
  "hex",
  "itertools",
  "lipsum",
- "maplit",
  "md-5",
  "md4",
  "mediatype",

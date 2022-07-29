@@ -5,7 +5,7 @@ use yozuk_helper_english::normalize;
 use yozuk_sdk::prelude::*;
 
 mod script;
-use script::scripts;
+use script::SCRIPTS;
 
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"zl9hD8szURy_8p4Q5l21U",
@@ -20,7 +20,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 
 pub struct Script {
     pub title: Option<&'static str>,
-    pub tokens: Vec<Vec<Token>>,
+    pub tokens: fn() -> Vec<Vec<Token>>,
     pub responses: &'static [&'static str],
 }
 
@@ -29,10 +29,7 @@ pub struct SmalltalkCorpus;
 
 impl Corpus for SmalltalkCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        scripts()
-            .values()
-            .flat_map(|def| def.tokens.clone())
-            .collect()
+        SCRIPTS.values().flat_map(|def| (def.tokens)()).collect()
     }
 }
 
@@ -53,9 +50,9 @@ impl Translator for SmalltalkTranslator {
             .map(|tag| tag.trim_start_matches("keyword:").to_string())
             .collect();
         keys.into_iter()
-            .filter_map(|key| scripts().get(key.as_str()).map(|item| (key, item)))
+            .filter_map(|key| SCRIPTS.get(key.as_str()).map(|item| (key, item)))
             .find(|(_, item)| {
-                item.tokens.iter().any(|tokens| {
+                (item.tokens)().iter().any(|tokens| {
                     tokens
                         .iter()
                         .filter(|arg| arg.tag.starts_with("keyword:"))
@@ -78,7 +75,7 @@ impl Command for SmalltalkCommand {
         _i18n: &I18n,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
-        if let Some(item) = scripts().get(args.name.as_str()) {
+        if let Some(item) = SCRIPTS.get(args.name.as_str()) {
             let mut csrng = rand::thread_rng();
             let res = item.responses[csrng.gen_range(0..item.responses.len())];
             Ok(Output::new()
