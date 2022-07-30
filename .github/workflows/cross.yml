@@ -34,7 +34,7 @@ jobs:
       run: cargo install cross --git https://github.com/cross-rs/cross
       continue-on-error: true
     - name: Run test
-      run: cross test --target ${{ matrix.toolchain }} --all-features
+      run: cross test -p yozuk -p zuk --target ${{ matrix.toolchain }} --all-features
 
   test-wasm:
     runs-on: ubuntu-latest
@@ -58,9 +58,9 @@ jobs:
       run: cargo install cargo-wasi
       continue-on-error: true
     - name: Build
-      run: cargo wasi build
+      run: cargo wasi build -p yozuk -p zuk
     - name: Run test
-      run: cargo wasi test
+      run: cargo wasi test -p yozuk -p zuk
 
   build-windows:
     strategy:
@@ -82,7 +82,7 @@ jobs:
     - name: Install toolchain
       run: rustup target add ${{ matrix.toolchain }}
     - name: Build
-      run: cargo build -p yozuk --target=${{ matrix.toolchain }} --all-features
+      run: cargo build -p yozuk -p zuk --target=${{ matrix.toolchain }} --all-features
 
   build-macos:
     strategy:
