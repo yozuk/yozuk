@@ -10,7 +10,7 @@ serde_derive = "1.0.140"
 tokio = { version = "1.20.1", features = ["rt-multi-thread", "macros"] }
 reqwest = { version = "0.11.11", features = ["json", "stream", "multipart"] }
 warp = "0.3.2"
-yozuk = "0.21.1"
+yozuk = "0.21.2"
 yozuk-sdk = "0.21.0"
 anyhow = "1.0.58"
 clap = { version = "3.2.16", features = ["env"] }
