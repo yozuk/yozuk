@@ -4,12 +4,6 @@
 use anyhow::Result;
 use clap::Parser;
 use reqwest::Url;
-use slog::info;
-use sloggers::{
-    terminal::{Destination, TerminalLoggerBuilder},
-    types::Severity,
-    Build,
-};
 
 use teloxide::prelude::*;
 use yozuk::Yozuk;
@@ -35,16 +29,6 @@ pub struct Args {
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::parse();
-    let levels = [Severity::Info, Severity::Debug, Severity::Trace];
-
-    let level = args.verbose.min(levels.len() - 1);
-    let mut builder = TerminalLoggerBuilder::new();
-    builder.level(levels[level]);
-    builder.destination(Destination::Stderr);
-    let logger = builder.build().unwrap();
-
-    info!(logger, "Starting yozuk-telegram...");
-
     let bot = Bot::from_env().auto_send();
 
     if let Some(webhook) = args.webhook {
@@ -55,6 +39,6 @@ async fn main() -> Result<()> {
 
     let yozuk = Yozuk::builder().build();
 
-    server::Server::start(yozuk, logger, bot).await;
+    server::Server::start(yozuk, bot).await;
     Ok(())
 }

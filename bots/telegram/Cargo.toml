@@ -16,8 +16,6 @@ pretty_env_logger = "0.4.0"
 reqwest = "0.11.11"
 serde_json = "1.0.82"
 serde_yaml = "0.9.1"
-slog = "2.7.0"
-sloggers = "2.1.1"
 teloxide = "0.10.1"
 tempfile = "3.3.0"
 tokio = { version = "1.20.1", features = ["rt-multi-thread", "macros"] }
