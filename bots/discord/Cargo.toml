@@ -1,0 +1,17 @@
+[package]
+name = "yozuk-discord"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.58"
+clap = { version = "3.2.16", features = ["env"] }
+futures = "0.3.21"
+lazy-regex = "2.3.0"
+mediatype = "0.19.5"
+serenity = { version = "0.11.5", default-features = false, features = ["client", "gateway", "rustls_backend", "model", "http"] }
+tokio = { version = "1.20.1", features = ["macros", "rt-multi-thread"] }
+yozuk = { version = "0.21.1", features = ["rayon"] }
+yozuk-sdk = "0.21.0"

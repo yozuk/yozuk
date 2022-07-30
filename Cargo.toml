@@ -1,5 +1,5 @@
 [workspace]
-members = ["yozuk", "yozuk-sdk", "yozuk-model", "yozuk-wasm", "skillset", "zuk", "helpers/*"]
+members = ["yozuk", "yozuk-sdk", "yozuk-model", "yozuk-wasm", "skillset", "zuk", "helpers/*", "bots/*"]
 resolver = "2"
 
 [profile.release]
