@@ -5,7 +5,7 @@ set -e
 NEXT_TAG=$1
 LAST_TAG=$(git describe --tags --abbrev=0)
 
-publishCrate() {
+updateCrate() {
     DIFF=$(git diff --name-only dev..$LAST_TAG $1)
     
     if [[ -n "$DIFF" ]]; then
@@ -14,14 +14,29 @@ publishCrate() {
         sed -i -E "s/$2 = \"[.0-9]+\"/$2 = \"${NEXT_TAG#v}\"/" */Cargo.toml */*/Cargo.toml
         sed -i -E "s/$2 = \{ version = \"[.0-9]+\"/$2 = { version = \"${NEXT_TAG#v}\"/" */Cargo.toml */*/Cargo.toml
         taplo fmt $1/Cargo.toml
-        
+    else
+        echo "$1: Unchanged"
+    fi
+}
+
+publishCrate() {
+    updateCrate $1 $2
+    if [[ $(git diff --stat) != '' ]]; then
+        cargo fmt --check
+        cargo clippy --all-features
+        git commit -a -m "publish $2 $NEXT_TAG"
+        for i in {1..3}; do cargo publish -p $2 && break || sleep 10; done
+    fi
+}
+
+publishTestCrate() {
+    updateCrate $1 $2
+    if [[ $(git diff --stat) != '' ]]; then
         cargo fmt --check
         cargo clippy --all-features
         cargo nextest run --all-features
         git commit -a -m "publish $2 $NEXT_TAG"
         for i in {1..3}; do cargo publish -p $2 && break || sleep 10; done
-    else
-        echo "$1: Unchanged"
     fi
 }
 
@@ -32,8 +47,8 @@ publishCrate "helpers/english" "yozuk-helper-english"
 publishCrate "helpers/encoding" "yozuk-helper-encoding"
 publishCrate "yozuk-model" "yozuk-model"
 publishCrate "skillset" "yozuk-core-skillset"
-publishCrate "yozuk" "yozuk"
-publishCrate "zuk" "zuk"
+publishTestCrate "yozuk" "yozuk"
+publishTestCrate "zuk" "zuk"
 
 sed -i -E "0,/version/ s/\"version\": \"[.0-9]+\"/\"version\": \"${NEXT_TAG#v}\"/" yozuk-wasm/package.json
 (cd yozuk-wasm && npm run build && npm publish)
