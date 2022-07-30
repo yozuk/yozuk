@@ -19,6 +19,15 @@ updateCrate() {
     fi
 }
 
+bumpCrate() {
+    updateCrate $1 $2
+    if [[ $(git diff --stat) != '' ]]; then
+        cargo fmt --check
+        cargo clippy --all-features
+        git commit -a -m "bump $2 $NEXT_TAG"
+    fi
+}
+
 publishCrate() {
     updateCrate $1 $2
     if [[ $(git diff --stat) != '' ]]; then
@@ -49,6 +58,9 @@ publishCrate "yozuk-model" "yozuk-model"
 publishCrate "skillset" "yozuk-core-skillset"
 publishTestCrate "yozuk" "yozuk"
 publishTestCrate "zuk" "zuk"
+bumpCrate "bots/discord" "yozuk-discord"
+bumpCrate "bots/slack" "yozuk-slack"
+bumpCrate "bots/telegram" "yozuk-telegram"
 
 sed -i -E "0,/version/ s/\"version\": \"[.0-9]+\"/\"version\": \"${NEXT_TAG#v}\"/" yozuk-wasm/package.json
 (cd yozuk-wasm && npm run build && npm publish)
