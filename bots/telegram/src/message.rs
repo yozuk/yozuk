@@ -57,19 +57,6 @@ async fn render_block(bot: AutoSend<Bot>, msg: &Message, block: Block) -> Result
         Block::Data(data) => {
             render_data(bot, msg, data).await?;
         }
-        Block::Spoiler(spiler) => {
-            bot.send_message(
-                msg.chat.id,
-                format!(
-                    "{}: <tg-spoiler>{}</tg-spoiler>",
-                    spiler.title,
-                    spiler.data.unsecure()
-                ),
-            )
-            .parse_mode(ParseMode::Html)
-            .send()
-            .await?;
-        }
         _ => {
             bot.send_message(msg.chat.id, "[unimplemented]".to_string())
                 .send()

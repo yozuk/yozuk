@@ -2863,16 +2863,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "secstr"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49fa8c1d89e7dc5e2776fbf507d8b088ff61bbaf83bf4da1cc9ed1c061358104"
-dependencies = [
- "libc",
- "serde",
-]
-
-[[package]]
 name = "security-framework"
 version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4291,7 +4281,6 @@ dependencies = [
  "mediatype",
  "pest",
  "pest_derive",
- "secstr",
  "serde",
  "serde_derive",
  "serde_json",

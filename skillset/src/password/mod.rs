@@ -66,8 +66,8 @@ impl Command for PasswordCommand {
 
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/password/")?;
         Ok(Output::new()
-            .set_title("NanoID Generator")
-            .add_block(block::Spoiler::new("Password", password))
+            .set_title("Password Generator")
+            .add_block(block::Data::new().set_text_data(password))
             .add_metadata(docs))
     }
 }

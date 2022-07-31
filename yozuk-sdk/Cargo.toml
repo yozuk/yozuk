@@ -20,7 +20,6 @@ bytes = { version = "1.1.0", features = ["serde"] }
 mediatype = { version = "0.19.5", features = ["serde"] }
 pest = "2.1.3"
 pest_derive = "2.1.0"
-secstr = { version = "0.5.0", features = ["serde"] }
 serde = "1.0.136"
 serde_derive = "1.0.136"
 serde_json = "1.0.79"

@@ -3,7 +3,6 @@ use crate::highlight::*;
 use crate::serde_bytes::{deserialize_bytes, serialize_bytes};
 use bytes::Bytes;
 use mediatype::{media_type, MediaTypeBuf};
-use secstr::SecUtf8;
 use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -12,7 +11,6 @@ use serde_derive::{Deserialize, Serialize};
 pub enum Block {
     Comment(Comment),
     Data(Data),
-    Spoiler(Spoiler),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -191,31 +189,6 @@ impl Default for Data {
             media_type: media_type!(APPLICATION / OCTET_STREAM).into(),
             display: Default::default(),
             highlights: Vec::new(),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-pub struct Spoiler {
-    pub title: String,
-    pub data: SecUtf8,
-}
-
-impl From<Spoiler> for Block {
-    fn from(block: Spoiler) -> Self {
-        Self::Spoiler(block)
-    }
-}
-
-impl Spoiler {
-    pub fn new<T, U>(title: T, data: U) -> Self
-    where
-        T: Into<String>,
-        U: Into<String>,
-    {
-        Self {
-            title: title.into(),
-            data: data.into().into(),
         }
     }
 }

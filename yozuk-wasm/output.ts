@@ -15,16 +15,9 @@ export type DataBlock = {
     highlights?: Highlight[];
 };
 
-export type SpoilerBlock = {
-    type: "spoiler";
-    title: string;
-    data: string;
-};
-
 export type Block =
     | CommentBlock
-    | DataBlock
-    | SpoilerBlock;
+    | DataBlock;
 
 export type LinkMetadata = {
     type: "link";

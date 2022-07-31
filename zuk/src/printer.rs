@@ -102,42 +102,6 @@ impl<'a> TerminalPrinter<'a> {
                         self.print_binary(data)?;
                     }
                 }
-                #[cfg(not(target_arch = "wasm32"))]
-                Block::Spoiler(spoiler) => {
-                    use crossterm::{
-                        cursor::MoveToPreviousLine,
-                        execute,
-                        terminal::{Clear, ClearType},
-                    };
-                    use std::io::BufRead;
-                    let stdin = io::stdin();
-                    write!(
-                        &mut stderr,
-                        "{} Press enter to show {}",
-                        "Spoiler:".bold(),
-                        spoiler.title.on_red()
-                    )?;
-                    stdin.lock().lines().next().unwrap()?;
-                    execute!(
-                        stderr,
-                        MoveToPreviousLine(1),
-                        Clear(ClearType::FromCursorDown)
-                    )?;
-                    writeln!(
-                        &mut stderr,
-                        "{}{} {}",
-                        spoiler.title.on_red(),
-                        ":".on_red(),
-                        spoiler.data.unsecure()
-                    )?;
-                    write!(&mut stderr, "{}", "Press enter to hide".dimmed())?;
-                    stdin.lock().lines().next().unwrap()?;
-                    execute!(
-                        stderr,
-                        MoveToPreviousLine(2),
-                        Clear(ClearType::FromCursorDown)
-                    )?;
-                }
                 _ => {
                     if self.args.verbose > 0 {
                         writeln!(&mut stderr, "{}", "[unimplemented]".dimmed())?
