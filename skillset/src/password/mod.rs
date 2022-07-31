@@ -15,7 +15,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct PasswordCorpus;
 
 impl Corpus for PasswordCorpus {
@@ -32,7 +31,6 @@ impl Corpus for PasswordCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct PasswordTranslator;
 
 impl Translator for PasswordTranslator {
@@ -48,7 +46,6 @@ impl Translator for PasswordTranslator {
 
 const CHARACTERS: &str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*";
 
-#[derive(Debug)]
 pub struct PasswordCommand;
 
 impl Command for PasswordCommand {

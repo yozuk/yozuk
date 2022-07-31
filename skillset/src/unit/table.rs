@@ -5,7 +5,7 @@ use bigdecimal::BigDecimal;
 use std::str::FromStr;
 use strum::Display;
 
-#[derive(Debug, Display, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Display, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum BaseUnit {
     #[strum(serialize = "g")]
     Gram,

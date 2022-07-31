@@ -31,7 +31,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
 type Decimal = GenericDecimal<u128, u8>;
 const DECIMAL_PRECISION: u8 = 16;
 
-#[derive(Debug)]
 pub struct CalcSuggestions;
 
 impl Suggestions for CalcSuggestions {
@@ -160,7 +159,6 @@ pub enum CalcError {
     WrongNumberOfArguments { expected: usize, given: usize },
 }
 
-#[derive(Debug)]
 pub struct CalcTranslator;
 
 impl Translator for CalcTranslator {
@@ -181,7 +179,6 @@ impl Translator for CalcTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct CalcCommand;
 
 impl Command for CalcCommand {

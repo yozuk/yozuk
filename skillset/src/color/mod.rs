@@ -23,7 +23,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct ColorSuggestions;
 
 impl Suggestions for ColorSuggestions {
@@ -64,7 +63,6 @@ impl TokenParser for ColorTokenParser {
     }
 }
 
-#[derive(Debug)]
 pub struct ColorLabeler;
 
 impl Labeler for ColorLabeler {
@@ -85,7 +83,6 @@ impl Labeler for ColorLabeler {
     }
 }
 
-#[derive(Debug)]
 pub struct ColorCorpus;
 
 impl Corpus for ColorCorpus {
@@ -103,7 +100,6 @@ impl Corpus for ColorCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct ColorTranslator;
 
 impl Translator for ColorTranslator {
@@ -127,7 +123,6 @@ impl Translator for ColorTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct ColorCommand;
 
 impl Command for ColorCommand {

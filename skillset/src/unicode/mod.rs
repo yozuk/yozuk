@@ -13,7 +13,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct UnicodeSuggestions;
 
 impl Suggestions for UnicodeSuggestions {
@@ -25,7 +24,6 @@ impl Suggestions for UnicodeSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct UnicodeTranslator;
 
 impl Translator for UnicodeTranslator {
@@ -43,7 +41,6 @@ impl Translator for UnicodeTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct UnicodeCommand;
 
 impl Command for UnicodeCommand {

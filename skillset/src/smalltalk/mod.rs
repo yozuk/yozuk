@@ -24,7 +24,6 @@ pub struct Script {
     pub responses: &'static [&'static str],
 }
 
-#[derive(Debug)]
 pub struct SmalltalkCorpus;
 
 impl Corpus for SmalltalkCorpus {
@@ -33,7 +32,6 @@ impl Corpus for SmalltalkCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct SmalltalkTranslator;
 
 impl Translator for SmalltalkTranslator {
@@ -64,7 +62,6 @@ impl Translator for SmalltalkTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct SmalltalkCommand;
 
 impl Command for SmalltalkCommand {

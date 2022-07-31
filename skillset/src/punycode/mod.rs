@@ -17,7 +17,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct PunycodeSuggestions;
 
 impl Suggestions for PunycodeSuggestions {
@@ -28,7 +27,6 @@ impl Suggestions for PunycodeSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct PunycodeTranslator;
 
 impl Translator for PunycodeTranslator {
@@ -58,7 +56,6 @@ impl Translator for PunycodeTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct PunycodeCommand;
 
 impl Command for PunycodeCommand {

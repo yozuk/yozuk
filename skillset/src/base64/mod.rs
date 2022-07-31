@@ -23,7 +23,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct Base64Suggestions;
 
 impl Suggestions for Base64Suggestions {
@@ -43,7 +42,6 @@ impl Suggestions for Base64Suggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct Base64Corpus;
 
 impl Corpus for Base64Corpus {
@@ -73,7 +71,6 @@ impl Corpus for Base64Corpus {
     }
 }
 
-#[derive(Debug)]
 pub struct Base64Translator;
 
 impl Translator for Base64Translator {
@@ -120,7 +117,6 @@ impl Translator for Base64Translator {
     }
 }
 
-#[derive(Debug)]
 pub struct Base64Command;
 
 impl Command for Base64Command {

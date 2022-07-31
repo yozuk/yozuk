@@ -19,7 +19,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct ConstSuggestions;
 
 impl Suggestions for ConstSuggestions {
@@ -53,7 +52,6 @@ impl Default for Constant {
     }
 }
 
-#[derive(Debug)]
 pub struct ConstCorpus;
 
 impl Corpus for ConstCorpus {
@@ -65,7 +63,6 @@ impl Corpus for ConstCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct ConstTranslator;
 
 impl Translator for ConstTranslator {
@@ -96,7 +93,6 @@ impl Translator for ConstTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct ConstCommand;
 
 impl Command for ConstCommand {

@@ -13,7 +13,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct VersionCorpus;
 
 impl Corpus for VersionCorpus {
@@ -34,7 +33,6 @@ impl Corpus for VersionCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct VersionTranslator;
 
 impl Translator for VersionTranslator {
@@ -56,7 +54,6 @@ impl Translator for VersionTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct VersionCommand(Environment);
 
 impl Command for VersionCommand {

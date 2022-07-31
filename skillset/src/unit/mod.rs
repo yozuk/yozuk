@@ -31,7 +31,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct UnitSuggestions;
 
 impl Suggestions for UnitSuggestions {
@@ -45,7 +44,6 @@ impl Suggestions for UnitSuggestions {
     }
 }
 
-#[derive(Debug)]
 struct UnitPreprocessor;
 
 impl Preprocessor for UnitPreprocessor {
@@ -72,7 +70,6 @@ impl Preprocessor for UnitPreprocessor {
     }
 }
 
-#[derive(Debug)]
 pub struct UnitCorpus;
 
 impl Corpus for UnitCorpus {
@@ -100,7 +97,6 @@ impl Corpus for UnitCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct UnitTranslator;
 
 impl Translator for UnitTranslator {
@@ -132,7 +128,6 @@ impl Translator for UnitTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct UnitCommand;
 
 impl Command for UnitCommand {

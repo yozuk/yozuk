@@ -16,7 +16,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct JwtTranslator;
 
 impl Translator for JwtTranslator {
@@ -29,7 +28,6 @@ impl Translator for JwtTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct JwtCommand;
 
 impl Command for JwtCommand {
@@ -87,7 +85,7 @@ fn decode_jwt(data: &str) -> anyhow::Result<(Header, Claims, Vec<u8>)> {
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 struct Header {
     #[serde(skip_serializing_if = "Option::is_none")]
     alg: Option<String>,
@@ -102,7 +100,7 @@ struct Header {
     extra: HashMap<String, Value>,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 struct Claims {
     #[serde(skip_serializing_if = "Option::is_none")]
     iss: Option<String>,

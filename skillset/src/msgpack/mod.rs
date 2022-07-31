@@ -13,7 +13,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct MsgpackTranslator;
 
 impl Translator for MsgpackTranslator {
@@ -32,7 +31,6 @@ impl Translator for MsgpackTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct MsgpackCommand;
 
 impl Command for MsgpackCommand {

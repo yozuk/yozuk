@@ -5,7 +5,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| Skill::builder().add_labeler(CoreLabeler).build(),
 };
 
-#[derive(Debug)]
 pub struct CoreLabeler;
 
 impl Labeler for CoreLabeler {

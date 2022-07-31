@@ -19,7 +19,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct LipsumSuggestions;
 
 impl Suggestions for LipsumSuggestions {
@@ -42,7 +41,6 @@ impl Suggestions for LipsumSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct LipsumCorpus;
 
 impl Corpus for LipsumCorpus {
@@ -130,7 +128,6 @@ impl Corpus for LipsumCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct LipsumTranslator;
 
 impl Translator for LipsumTranslator {
@@ -178,7 +175,6 @@ const MAX_COUNT: usize = u16::MAX as _;
 #[cfg(not(feature = "wild"))]
 const MAX_COUNT: usize = 320;
 
-#[derive(Debug)]
 pub struct LipsumCommand;
 
 impl Command for LipsumCommand {

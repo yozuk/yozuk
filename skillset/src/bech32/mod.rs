@@ -12,7 +12,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct Bech32Translator;
 
 impl Translator for Bech32Translator {
@@ -26,7 +25,6 @@ impl Translator for Bech32Translator {
     }
 }
 
-#[derive(Debug)]
 pub struct Bech32Command;
 
 impl Command for Bech32Command {

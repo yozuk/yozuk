@@ -20,7 +20,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct NanoIdCorpus;
 
 impl Corpus for NanoIdCorpus {
@@ -61,7 +60,6 @@ impl Corpus for NanoIdCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct NanoIdSuggestions;
 
 impl Suggestions for NanoIdSuggestions {
@@ -81,7 +79,6 @@ impl Suggestions for NanoIdSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct NanoIdTranslator;
 
 impl Translator for NanoIdTranslator {
@@ -147,7 +144,6 @@ const MAX_COUNT: usize = u16::MAX as _;
 #[cfg(not(feature = "wild"))]
 const MAX_COUNT: usize = 32;
 
-#[derive(Debug)]
 pub struct NanoIdCommand;
 
 impl Command for NanoIdCommand {

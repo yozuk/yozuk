@@ -4,7 +4,6 @@
 use crate::skill::*;
 use crate::token::*;
 use std::collections::VecDeque;
-use std::fmt;
 
 pub trait TokenParser: Send + Sync {
     fn parse(&self, tokens: &[Token]) -> Option<Token>;
@@ -12,12 +11,6 @@ pub trait TokenParser: Send + Sync {
 
 pub struct TokenMerger<P> {
     parser: P,
-}
-
-impl<P> fmt::Debug for TokenMerger<P> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("TokenMerger").finish()
-    }
 }
 
 impl<P> TokenMerger<P> {

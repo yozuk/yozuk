@@ -17,7 +17,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct QrCodeSuggestions;
 
 impl Suggestions for QrCodeSuggestions {
@@ -35,7 +34,6 @@ impl Suggestions for QrCodeSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct QrCodeCorpus;
 
 impl Corpus for QrCodeCorpus {
@@ -62,7 +60,6 @@ impl Corpus for QrCodeCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct QrCodeTranslator;
 
 impl Translator for QrCodeTranslator {
@@ -89,7 +86,6 @@ impl Translator for QrCodeTranslator {
 const IMAGE_MARGIN: usize = 4;
 const IMAGE_SCALE: usize = 4;
 
-#[derive(Debug)]
 pub struct QrCodeCommand;
 
 impl Command for QrCodeCommand {

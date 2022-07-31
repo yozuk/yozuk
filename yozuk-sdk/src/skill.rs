@@ -1,6 +1,5 @@
 use crate::prelude::*;
 use anyhow::Result;
-use std::fmt;
 
 #[derive(Clone, Copy)]
 pub struct SkillEntry {
@@ -14,30 +13,30 @@ pub struct NamedSkillEntry {
     pub entry: SkillEntry,
 }
 
-pub trait Labeler: fmt::Debug + Send + Sync + 'static {
+pub trait Labeler: Send + Sync + 'static {
     fn label_features(&self, input: &[Token]) -> Vec<Vec<Feature>>;
 }
 
-pub trait Corpus: fmt::Debug + Send + Sync + 'static {
+pub trait Corpus: Send + Sync + 'static {
     fn training_data(&self) -> Vec<Vec<Token>>;
     fn weight(&self) -> f64 {
         1.0
     }
 }
 
-pub trait Suggestions: fmt::Debug + Send + Sync + 'static {
+pub trait Suggestions: Send + Sync + 'static {
     fn suggestions(&self, seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String>;
 }
 
-pub trait Preprocessor: fmt::Debug + Send + Sync + 'static {
+pub trait Preprocessor: Send + Sync + 'static {
     fn preprocess(&self, input: Vec<Token>) -> Vec<Token>;
 }
 
-pub trait Translator: fmt::Debug + Send + Sync + 'static {
+pub trait Translator: Send + Sync + 'static {
     fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs>;
 }
 
-pub trait Command: fmt::Debug + Send + Sync + 'static {
+pub trait Command: Send + Sync + 'static {
     fn run(
         &self,
         args: CommandArgs,
@@ -49,7 +48,7 @@ pub trait Command: fmt::Debug + Send + Sync + 'static {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Skill {
     pub corpora: Vec<Box<dyn Corpus>>,
     pub suggestions: Vec<Box<dyn Suggestions>>,

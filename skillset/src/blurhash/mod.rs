@@ -15,7 +15,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct BlurHashTranslator;
 
 impl Translator for BlurHashTranslator {
@@ -31,7 +30,6 @@ impl Translator for BlurHashTranslator {
 
 const IMAGE_SIZE: u32 = 64;
 
-#[derive(Debug)]
 pub struct BlurHashCommand;
 
 impl Command for BlurHashCommand {

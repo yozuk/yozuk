@@ -33,7 +33,6 @@ fn label_uuid(token: &Token) -> impl Iterator<Item = Feature> {
         .into_iter()
 }
 
-#[derive(Debug)]
 pub struct UuidCorpus;
 
 impl Corpus for UuidCorpus {
@@ -111,7 +110,6 @@ impl Corpus for UuidCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct UuidSuggestions;
 
 impl Suggestions for UuidSuggestions {
@@ -131,7 +129,6 @@ impl Suggestions for UuidSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct UuidLabeler;
 
 impl Labeler for UuidLabeler {
@@ -143,7 +140,6 @@ impl Labeler for UuidLabeler {
     }
 }
 
-#[derive(Debug)]
 pub struct UuidTranslator;
 
 impl Translator for UuidTranslator {
@@ -180,7 +176,6 @@ const MAX_COUNT: usize = u16::MAX as _;
 #[cfg(not(feature = "wild"))]
 const MAX_COUNT: usize = 32;
 
-#[derive(Debug)]
 pub struct UuidCommand;
 
 impl Command for UuidCommand {

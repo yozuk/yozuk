@@ -56,7 +56,6 @@ fn label_numeric(token: &Token) -> impl Iterator<Item = Feature> {
     features.into_iter()
 }
 
-#[derive(Debug)]
 pub struct NumericLabeler;
 
 impl Labeler for NumericLabeler {
@@ -68,7 +67,6 @@ impl Labeler for NumericLabeler {
     }
 }
 
-#[derive(Debug)]
 pub struct NumericTranslator;
 
 impl Translator for NumericTranslator {
@@ -84,7 +82,6 @@ impl Translator for NumericTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct NumericCommand;
 
 impl Command for NumericCommand {
@@ -143,7 +140,7 @@ fn parse_int(s: &str) -> Option<(Radix, u64)> {
     })
 }
 
-#[derive(EnumIter, Debug, Clone, Copy, PartialEq)]
+#[derive(EnumIter, Clone, Copy, PartialEq)]
 enum Radix {
     Binary = 2,
     Octal = 8,

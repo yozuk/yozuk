@@ -4,14 +4,14 @@ use num_bigint::BigInt;
 use std::fmt;
 use thousands::Separable;
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Copy, Clone)]
 pub struct UnitEntry {
     pub symbols: &'static [&'static str],
     pub base: BaseUnit,
     pub prefixes: &'static [UnitPrefix],
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq)]
 pub struct Unit {
     pub value: BigDecimal,
     pub base: BaseUnit,
@@ -42,7 +42,7 @@ impl fmt::Display for Unit {
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum UnitPrefix {
     Nano,
     Micro,

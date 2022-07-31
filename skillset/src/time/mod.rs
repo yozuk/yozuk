@@ -19,7 +19,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct TimeCorpus;
 
 impl Corpus for TimeCorpus {
@@ -63,7 +62,6 @@ impl TokenParser for TimeTokenParser {
 
 const TIMESTAMP_TOLERANCE_DAYS: i64 = 365 * 10;
 
-#[derive(Debug)]
 pub struct TimeTranslator;
 
 impl Translator for TimeTranslator {
@@ -110,7 +108,6 @@ impl Translator for TimeTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct TimeCommand;
 
 impl Command for TimeCommand {

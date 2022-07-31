@@ -20,7 +20,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct HexSuggestions;
 
 impl Suggestions for HexSuggestions {
@@ -40,7 +39,6 @@ impl Suggestions for HexSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct HexCorpus;
 
 impl Corpus for HexCorpus {
@@ -70,7 +68,6 @@ impl Corpus for HexCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct HexTranslator;
 
 impl Translator for HexTranslator {
@@ -117,7 +114,6 @@ impl Translator for HexTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct HexCommand;
 
 impl Command for HexCommand {

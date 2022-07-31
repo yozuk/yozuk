@@ -27,7 +27,6 @@ const PRIMES: &[u32] = &[
     25964951, 30402457, 32582657, 37156667, 42643801, 43112609, 57885161,
 ];
 
-#[derive(Debug)]
 pub struct PrimeSuggestions;
 
 impl Suggestions for PrimeSuggestions {
@@ -46,7 +45,6 @@ impl Suggestions for PrimeSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct PrimeCorpus;
 
 impl Corpus for PrimeCorpus {
@@ -82,7 +80,6 @@ impl Corpus for PrimeCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct PrimeTranslator;
 
 impl Translator for PrimeTranslator {
@@ -106,7 +103,6 @@ impl Translator for PrimeTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct PrimeCommand;
 
 impl Command for PrimeCommand {

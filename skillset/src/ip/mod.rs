@@ -13,7 +13,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 pub struct IpTranslator;
 
 impl Translator for IpTranslator {
@@ -29,7 +28,6 @@ impl Translator for IpTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct IpCommand;
 
 impl Command for IpCommand {

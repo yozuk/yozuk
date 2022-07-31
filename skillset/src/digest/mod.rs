@@ -20,7 +20,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
 mod algorithm;
 use algorithm::*;
 
-#[derive(Debug)]
 pub struct DigestCorpus;
 
 impl Corpus for DigestCorpus {
@@ -58,7 +57,6 @@ impl Corpus for DigestCorpus {
     }
 }
 
-#[derive(Debug)]
 pub struct DigestSuggestions;
 
 impl Suggestions for DigestSuggestions {
@@ -87,7 +85,6 @@ impl Suggestions for DigestSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct DigestTranslator;
 
 impl Translator for DigestTranslator {
@@ -122,7 +119,6 @@ impl Translator for DigestTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct DigestCommand;
 
 impl Command for DigestCommand {

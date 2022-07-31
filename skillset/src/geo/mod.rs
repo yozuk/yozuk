@@ -14,7 +14,6 @@ pub const ENTRY: SkillEntry = SkillEntry {
     },
 };
 
-#[derive(Debug)]
 struct GeoPreprocessor;
 
 impl Preprocessor for GeoPreprocessor {
@@ -33,7 +32,6 @@ impl Preprocessor for GeoPreprocessor {
     }
 }
 
-#[derive(Debug)]
 pub struct GeoTranslator;
 
 impl Translator for GeoTranslator {
@@ -51,7 +49,6 @@ impl Translator for GeoTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct GeoCommand;
 
 impl Command for GeoCommand {

@@ -19,7 +19,6 @@ fn is_urlencoded(s: &str) -> bool {
     }
 }
 
-#[derive(Debug)]
 pub struct UrlEncodeTranslator;
 
 impl Translator for UrlEncodeTranslator {
@@ -32,7 +31,6 @@ impl Translator for UrlEncodeTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct UrlEncodeCommand;
 
 impl Command for UrlEncodeCommand {

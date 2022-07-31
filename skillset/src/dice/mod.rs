@@ -37,7 +37,6 @@ const MAX_ROLLS: usize = u16::MAX as _;
 #[cfg(not(feature = "wild"))]
 const MAX_ROLLS: usize = 256;
 
-#[derive(Debug)]
 pub struct DiceSuggestions;
 
 impl Suggestions for DiceSuggestions {
@@ -57,7 +56,6 @@ impl Suggestions for DiceSuggestions {
     }
 }
 
-#[derive(Debug)]
 pub struct DiceCorpus;
 
 impl Corpus for DiceCorpus {
@@ -162,7 +160,7 @@ fn eval(expression: Pairs<Rule>) -> Result<Value, DiceError> {
     )
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 enum Value {
     Dice(Vec<Decimal>),
     Sum(Decimal),
@@ -199,7 +197,7 @@ impl ToString for Value {
     }
 }
 
-#[derive(Error, Debug, Clone)]
+#[derive(Debug, Error, Clone)]
 pub enum DiceError {
     #[error("Division by zero")]
     DivisionByZero,
@@ -211,7 +209,6 @@ pub enum DiceError {
     Overflow,
 }
 
-#[derive(Debug)]
 pub struct DiceTranslator;
 
 impl Translator for DiceTranslator {
@@ -249,7 +246,6 @@ impl Translator for DiceTranslator {
     }
 }
 
-#[derive(Debug)]
 pub struct DiceCommand;
 
 impl Command for DiceCommand {
