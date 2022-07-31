@@ -31,7 +31,6 @@ const API_URL_AUTH_TEST: &str = "https://slack.com/api/auth.test";
 const API_URL_POST_MESSAGE: &str = "https://slack.com/api/chat.postMessage";
 const API_URL_VIEWS_PUBLISH: &str = "https://slack.com/api/views.publish";
 const API_URL_USERS_INFO: &str = "https://slack.com/api/users.info";
-const API_URL_POST_EPHEMERAL: &str = "https://slack.com/api/chat.postEphemeral";
 const API_URL_FILES_UPLOAD: &str = "https://slack.com/api/files.upload";
 
 #[tokio::main]
