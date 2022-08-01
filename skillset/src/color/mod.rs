@@ -145,7 +145,7 @@ impl Command for ColorCommand {
 
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/color/")?;
         Ok(Output::new()
-            .set_title("Color")
+            .set_title("Color Converter")
             .add_blocks_iter(colors.into_iter().flat_map(|color| render_color(&color)))
             .add_metadata_iter(
                 metadata

@@ -151,6 +151,7 @@ impl Command for TimeCommand {
         }
 
         Ok(Output::new()
+            .set_title("Timestamp Converter")
             .add_block(
                 block::Data::new()
                     .set_highlighted_text_data(formats.join("\n"), &Default::default()),

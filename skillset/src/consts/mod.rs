@@ -129,7 +129,10 @@ impl Command for ConstCommand {
                 ))]
             });
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/consts/")?;
-        Ok(Output::new().add_blocks_iter(blocks).add_metadata(docs))
+        Ok(Output::new()
+            .set_title("Constants")
+            .add_blocks_iter(blocks)
+            .add_metadata(docs))
     }
 }
 

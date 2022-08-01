@@ -76,7 +76,7 @@ impl Command for SmalltalkCommand {
             let mut csrng = rand::thread_rng();
             let res = item.responses[csrng.gen_range(0..item.responses.len())];
             Ok(Output::new()
-                .set_title(item.title.unwrap_or("Yozuk"))
+                .set_title(item.title.unwrap_or("Smalltalk"))
                 .add_block(block::Comment::new().set_text(res)))
         } else {
             Ok(Output::new()

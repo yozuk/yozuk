@@ -111,6 +111,7 @@ impl Command for NumericCommand {
             .collect::<Vec<_>>();
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/numeric/")?;
         Ok(Output::new()
+            .set_title("Base Converter")
             .add_blocks_iter(blocks)
             .set_mode(OutputMode::Attachment)
             .add_metadata(docs))
