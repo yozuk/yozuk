@@ -36,13 +36,22 @@ impl<'a> FeatureLabeler<'a> {
                     && token.as_str().len() <= MAXIMUM_TOKEN_LENGTH
                 {
                     if let Ok(text) = punycode::encode(&normalize(token.as_str())) {
-                        return vec![Feature {
-                            name: format!("token:{}", text),
-                            ..Default::default()
-                        }];
+                        return vec![
+                            Feature {
+                                name: format!("token:{}", text),
+                                ..Default::default()
+                            },
+                            Feature {
+                                name: "dummy".to_string(),
+                                ..Default::default()
+                            },
+                        ];
                     }
                 }
-                vec![]
+                vec![Feature {
+                    name: "dummy".to_string(),
+                    ..Default::default()
+                }]
             })
             .collect::<Vec<_>>();
 

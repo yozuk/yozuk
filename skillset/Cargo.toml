@@ -96,7 +96,6 @@ yozuk-skill-digest = [
 ]
 yozuk-skill-geo = ["open-location-code"]
 yozuk-skill-lipsum = ["lipsum"]
-yozuk-skill-mediatype = []
 yozuk-skill-nanoid = ["nanoid"]
 yozuk-skill-numeric = []
 yozuk-skill-password = ["rand"]

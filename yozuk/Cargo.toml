@@ -33,7 +33,6 @@ default = ["default-skills"]
 wild = ["yozuk-core-skillset/wild"]
 rayon = ["dep:rayon", "yozuk-model/rayon", "yozuk-core-skillset/rayon"]
 default-skills = [
-  "yozuk-skill-mediatype",
   "yozuk-skill-version",
   "yozuk-skill-base64",
   "yozuk-skill-smalltalk",
@@ -69,7 +68,6 @@ yozuk-skill-dice = ["yozuk-core-skillset/yozuk-skill-dice"]
 yozuk-skill-digest = ["yozuk-core-skillset/yozuk-skill-digest"]
 yozuk-skill-geo = ["yozuk-core-skillset/yozuk-skill-geo"]
 yozuk-skill-lipsum = ["yozuk-core-skillset/yozuk-skill-lipsum"]
-yozuk-skill-mediatype = ["yozuk-core-skillset/yozuk-skill-mediatype"]
 yozuk-skill-nanoid = ["yozuk-core-skillset/yozuk-skill-nanoid"]
 yozuk-skill-numeric = ["yozuk-core-skillset/yozuk-skill-numeric"]
 yozuk-skill-password = ["yozuk-core-skillset/yozuk-skill-password"]

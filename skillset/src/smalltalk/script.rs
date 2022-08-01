@@ -7,6 +7,11 @@ pub static SCRIPTS: phf::Map<&'static str, Script> = phf_map! {
     title: Some("Deep Thought"),
     tokens: || vec![
         tk!([
+            "life"; "keyword:42",
+            "universe"; "keyword:42",
+            "everything"; "keyword:42"
+        ]),
+        tk!([
             "Life"; "keyword:42",
             "universe"; "keyword:42",
             "everything"; "keyword:42"
