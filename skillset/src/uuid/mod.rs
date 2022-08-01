@@ -9,7 +9,7 @@ use yozuk_sdk::prelude::*;
 use yozuk_sdk::preprocessor::TokenMerger;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"uJrzxcw12a52vwpLOgnCd",
+    model_id: b"mDJn48cOMqZM2PcWN~RQn",
     init: |_| {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
@@ -80,7 +80,7 @@ impl Corpus for UuidCorpus {
             iproduct!(
                 ["generate", "new"],
                 ["uuid", "guid"],
-                ["lower", "upper", "lowercase", "uppercase"],
+                ["lower", "upper", "lowercase", "uppercase",],
                 1..=10
             )
             .flat_map(|(verb, name, case, count)| {
@@ -88,15 +88,15 @@ impl Corpus for UuidCorpus {
                     tk!([
                         verb,
                         format!("{}", count); "input:count",
-                        case; "input:charset",
-                        name; "command"
+                        name; "command",
+                        case; "input:charset"
                     ]),
                     tk!([
                         "please",
                         verb,
                         format!("{}", count); "input:count",
-                        case; "input:charset",
-                        name; "command"
+                        name; "command",
+                        case; "input:charset"
                     ]),
                 ]
             }),

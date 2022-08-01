@@ -50,10 +50,6 @@ fn uppercase_uuid() {
         cmd(tk!(["1", "uuid", "upper"])),
         Some(CommandArgs::new().add_args(["yozuk-skill-uuid", "-n", "1", "--upper"]))
     );
-    assert_eq!(
-        cmd(tk!(["generate", "10", "UPPER", "uuids."])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-uuid", "-n", "10", "--upper"]))
-    );
 }
 
 #[test]
@@ -65,9 +61,5 @@ fn lowercase_uuid() {
     assert_eq!(
         cmd(tk!(["1", "uuid", "lower"])),
         Some(CommandArgs::new().add_args(["yozuk-skill-uuid", "-n", "1"]))
-    );
-    assert_eq!(
-        cmd(tk!(["generate", "10", "lower", "uuids."])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-uuid", "-n", "10"]))
     );
 }

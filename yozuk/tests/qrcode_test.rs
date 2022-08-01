@@ -25,4 +25,10 @@ fn encode() {
             "quick brown fox jumps over the lazy dog"
         ]))
     );
+    assert_eq!(
+        cmd(tk!(["2beae68d34cd6504bbe8e798b6a00a26", "to", "qr"])),
+        Some(
+            CommandArgs::new().add_args(["yozuk-skill-qrcode", "2beae68d34cd6504bbe8e798b6a00a26"])
+        )
+    );
 }

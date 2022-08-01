@@ -6,7 +6,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"bAy_Du64C8aBhMa_VvVrm",
+    model_id: b"ReS7P~L0c45If7OxLEPob",
     init: |_| {
         Skill::builder()
             .add_suggestions(QrCodeSuggestions)
@@ -43,6 +43,7 @@ impl Corpus for QrCodeCorpus {
             "😍😗😋",
             "quick brown fox jumps over the lazy dog",
             "Veterinarian",
+            "2beae68d34cd6504bbe8e798b6a00a26",
         ];
         iproduct!(
             inputs.clone(),
