@@ -20,5 +20,8 @@ serenity = { version = "0.11.5", default-features = false, features = [
   "http",
 ] }
 tokio = { version = "1.20.1", features = ["macros", "rt-multi-thread"] }
-yozuk = { version = "0.21.3", features = ["rayon"] }
+yozuk = "0.21.3"
 yozuk-sdk = "0.21.3"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+yozuk = { version = "0.21.3", features = ["rayon"] }

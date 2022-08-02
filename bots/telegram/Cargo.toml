@@ -26,3 +26,6 @@ tree_magic = "0.2.3"
 warp = "0.3.2"
 yozuk = "0.21.3"
 yozuk-sdk = "0.21.3"
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+yozuk = { version = "0.21.3", features = ["rayon"] }
