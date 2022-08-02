@@ -66,4 +66,5 @@ skills!(
     [msgpack, "yozuk-skill-msgpack"],
     [unicode, "yozuk-skill-unicode"],
     [hex, "yozuk-skill-hex"],
+    [kdf, "yozuk-skill-kdf"],
 );
