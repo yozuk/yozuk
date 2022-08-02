@@ -4353,7 +4353,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-model"
-version = "0.21.0"
+version = "0.21.3"
 dependencies = [
  "anyhow",
  "base64",
