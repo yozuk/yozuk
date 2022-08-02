@@ -4409,7 +4409,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-telegram"
-version = "0.21.2"
+version = "0.21.3"
 dependencies = [
  "anyhow",
  "clap",
