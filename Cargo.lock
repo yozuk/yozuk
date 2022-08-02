@@ -4210,7 +4210,7 @@ checksum = "d2d7d3948613f75c98fd9328cfdcc45acc4d360655289d0a7d4ec931392200a3"
 
 [[package]]
 name = "yozuk"
-version = "0.21.2"
+version = "0.21.3"
 dependencies = [
  "anyhow",
  "bytes",
