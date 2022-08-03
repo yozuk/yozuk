@@ -1,17 +1,31 @@
 use rand::rngs::ThreadRng;
 use rand::Rng;
-use scrypt::password_hash::{PasswordHasher, SaltString};
 
 pub const ENTRIES: &[AlgorithmEntry] = &[
     AlgorithmEntry {
-        name: "bcrypt",
+        name: "Bcrypt",
         keywords: &["bcrypt"],
         init: || Box::new(Bcrypt),
     },
     AlgorithmEntry {
-        name: "scrypt",
+        name: "Scrypt",
         keywords: &["scrypt"],
         init: || Box::new(Scrypt),
+    },
+    AlgorithmEntry {
+        name: "Argon2id",
+        keywords: &["argon2", "argon2id"],
+        init: || Box::new(Argon2id),
+    },
+    AlgorithmEntry {
+        name: "Argon2i",
+        keywords: &["argon2i"],
+        init: || Box::new(Argon2i),
+    },
+    AlgorithmEntry {
+        name: "Argon2d",
+        keywords: &["argon2d"],
+        init: || Box::new(Argon2d),
     },
 ];
 
@@ -29,11 +43,63 @@ struct Scrypt;
 
 impl Algorithm for Scrypt {
     fn hash_default(&self, password: &[u8], rng: &mut ThreadRng) -> String {
+        use scrypt::password_hash::{PasswordHasher, SaltString};
         let salt = SaltString::generate(rng);
         scrypt::Scrypt
             .hash_password(password, &salt)
             .map(|hash| hash.to_string())
             .unwrap_or_default()
+    }
+}
+
+struct Argon2i;
+
+impl Algorithm for Argon2i {
+    fn hash_default(&self, password: &[u8], rng: &mut ThreadRng) -> String {
+        use argon2::password_hash::{PasswordHasher, SaltString};
+        let salt = SaltString::generate(rng);
+        argon2::Argon2::new(
+            argon2::Algorithm::Argon2i,
+            Default::default(),
+            Default::default(),
+        )
+        .hash_password(password, &salt)
+        .map(|hash| hash.to_string())
+        .unwrap_or_default()
+    }
+}
+
+struct Argon2d;
+
+impl Algorithm for Argon2d {
+    fn hash_default(&self, password: &[u8], rng: &mut ThreadRng) -> String {
+        use argon2::password_hash::{PasswordHasher, SaltString};
+        let salt = SaltString::generate(rng);
+        argon2::Argon2::new(
+            argon2::Algorithm::Argon2d,
+            Default::default(),
+            Default::default(),
+        )
+        .hash_password(password, &salt)
+        .map(|hash| hash.to_string())
+        .unwrap_or_default()
+    }
+}
+
+struct Argon2id;
+
+impl Algorithm for Argon2id {
+    fn hash_default(&self, password: &[u8], rng: &mut ThreadRng) -> String {
+        use argon2::password_hash::{PasswordHasher, SaltString};
+        let salt = SaltString::generate(rng);
+        argon2::Argon2::new(
+            argon2::Algorithm::Argon2id,
+            Default::default(),
+            Default::default(),
+        )
+        .hash_password(password, &salt)
+        .map(|hash| hash.to_string())
+        .unwrap_or_default()
     }
 }
 

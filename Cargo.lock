@@ -71,6 +71,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "argon2"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "db4ce4441f99dbd377ca8a8f57b698c44d0d6e712d8329b5040da5a64aa1ce73"
+dependencies = [
+ "base64ct",
+ "blake2",
+ "password-hash",
+]
+
+[[package]]
 name = "array-init"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4234,6 +4245,7 @@ name = "yozuk-core-skillset"
 version = "0.21.3"
 dependencies = [
  "anyhow",
+ "argon2",
  "base64",
  "bcrypt",
  "bech32",

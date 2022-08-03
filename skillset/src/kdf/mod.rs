@@ -8,7 +8,7 @@ mod algorithm;
 use algorithm::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"G_60F_6L4j14b9v4_cu2f",
+    model_id: b"DuT4buJcrfG4L~T6ThxYz",
     init: |_| {
         Skill::builder()
             .add_corpus(KdfCorpus)

@@ -75,7 +75,8 @@ thousands = "0.2.0"
 unicode_reader = { version = "1.0.2", optional = true }
 md4 = { version = "0.10.1", optional = true }
 bcrypt = { version = "0.13.0", optional = true }
-scrypt = "0.10.0"
+scrypt = { version = "0.10.0", optional = true }
+argon2 = { version = "0.4.1", optional = true, default-features = false, features = ["alloc", "password-hash"] }
 
 [features]
 default = []
@@ -118,4 +119,4 @@ yozuk-skill-ip = []
 yozuk-skill-msgpack = ["rmpv"]
 yozuk-skill-unicode = ["unicode_reader"]
 yozuk-skill-hex = []
-yozuk-skill-kdf = ["bcrypt"]
+yozuk-skill-kdf = ["bcrypt", "scrypt", "argon2"]
