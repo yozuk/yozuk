@@ -12,11 +12,34 @@ pub const ENTRY: SkillEntry = SkillEntry {
     init: |_| {
         Skill::builder()
             .add_corpus(KdfCorpus)
+            .add_suggestions(KdfSuggestions)
             .add_translator(KdfTranslator)
             .set_command(KdfCommand)
             .build()
     },
 };
+
+pub struct KdfSuggestions;
+
+impl Suggestions for KdfSuggestions {
+    fn suggestions(&self, _seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
+        let inputs = args
+            .iter()
+            .filter(|arg| arg.tag == "input:data")
+            .map(|arg| arg.as_str())
+            .collect::<Vec<_>>();
+        if !inputs.is_empty() {
+            let joined = shell_words::join(inputs);
+            ENTRIES
+                .iter()
+                .filter_map(|entry| entry.keywords.iter().next())
+                .map(|s| format!("{joined} to {s}"))
+                .collect()
+        } else {
+            vec![]
+        }
+    }
+}
 
 pub struct KdfCorpus;
 
