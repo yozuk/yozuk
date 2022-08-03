@@ -1,6 +1,6 @@
 [package]
 name = "yozuk"
-version = "0.21.3"
+version = "0.22.0"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Chatbot for Programmers"
