@@ -4355,7 +4355,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-helper-encoding"
-version = "0.21.1"
+version = "0.22.0"
 dependencies = [
  "base64",
  "hex",
