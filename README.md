@@ -24,6 +24,51 @@
 
 <img alt="Yozuk CLI demo animation" src="https://github.com/yozuk/yozuk/blob/main/images/zuk.gif?raw=true" width="520" />
 
+## What can Yozuk do?
+
+For example...
+
+- UUID generation
+
+  ```
+  >>> generate 3 uuids
+  7a4ef819-c6b1-4e12-a446-d108db66bd9d
+  b4c3ae2d-601b-416f-bf06-ef4540206d2f
+  dce35c4e-974f-4bc7-8a5f-7e2f0d0820ba
+  ```
+
+- Calculation
+
+  ```
+  >>> (12345 + 43) * sqrt(5)
+  27700.41010526739852
+  ```
+
+- Dummy text generation
+
+  ```
+  >>> 25 words lorem ipsum
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis.
+  ```
+
+- Digest calculation
+
+  ```
+  >>> "Sphinx of black quartz, judge my vow!" to sha384
+  0dd8b5542f71641b2bfe5b55c8f3e1e092777b7f8b6b0eae14089f7af3a67d57093a7c19c21d003c11e8cceae6b9e29e
+  ```
+
+- Base64 decoding
+
+  ```
+  >>> 8J+MuPCfjLzwn42E8J+Mvw==
+  🌸🌼🍄🌿
+  ```
+
+- And so on!
+
+  The comprehensive [skill list is here](https://docs.yozuk.com/docs/skills/).
+
 ## Getting Started
 
 ### Documentation
