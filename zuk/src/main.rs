@@ -5,7 +5,6 @@ use anyhow::Result;
 use clap::Parser;
 use std::fs::File;
 use std::io;
-use std::iter;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
@@ -37,7 +36,8 @@ impl App {
             .add_redirection(tk!(["exit"]), vec!["exit"])
             .add_redirection(tk!(["bye"]), vec!["exit"])
             .set_user_context(UserContext {
-                username: iter::once(whoami::username()).find(|name| name != "anonymous"),
+                #[cfg(not(target_os = "wasi"))]
+                username: std::iter::once(whoami::username()).find(|name| name != "anonymous"),
                 ..Default::default()
             })
             .build();
