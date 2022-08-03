@@ -62,7 +62,7 @@ time = { version = "0.3.9", features = [
 time-tz = { version = "1.0.2", features = ["db"], optional = true }
 urlencoding = { version = "2.1.0", optional = true }
 uuid = { version = "1.0.0", features = ["v4"], optional = true }
-yozuk-helper-english = "0.21.0"
+yozuk-helper-english = "0.22.0"
 yozuk-helper-platform = "0.20.2"
 yozuk-helper-filetype = "0.20.6"
 yozuk-helper-encoding = "0.21.1"

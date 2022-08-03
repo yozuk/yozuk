@@ -20,7 +20,7 @@ crfs = "0.2.0"
 mediatype = "0.19.5"
 rayon = { version = "1.5.1", optional = true }
 yozuk-core-skillset = "0.21.3"
-yozuk-helper-english = "0.21.0"
+yozuk-helper-english = "0.22.0"
 yozuk-helper-platform = "0.20.2"
 yozuk-sdk = "0.22.0"
 yozuk-model = "0.21.3"
