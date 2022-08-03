@@ -4273,7 +4273,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-core-skillset"
-version = "0.21.3"
+version = "0.22.0"
 dependencies = [
  "anyhow",
  "argon2",
