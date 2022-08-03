@@ -253,7 +253,7 @@ impl Command for DiceCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _i18n: &I18n,
+        _user: &UserContext,
     ) -> Result<Output, CommandError> {
         let rule = DiceParser::parse(Rule::calculation, &args.args[1])?;
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/dice/")?;

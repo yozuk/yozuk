@@ -2,19 +2,19 @@ import { decode } from 'base64-arraybuffer';
 import { Highlight, Result } from './output'
 
 export abstract class YozukBase {
-    protected abstract exec_impl(command: string, i18n: string): Promise<string>;
+    protected abstract exec_impl(command: string, user_context: string): Promise<string>;
     protected abstract push_stream_impl(stream: Uint8Array): Promise<void>;
     protected abstract random_suggestions_impl(amount: number): Promise<string>;
     protected abstract push_suggestions_stream_impl(stream: Uint8Array): Promise<void>;
     protected abstract clear_suggestions_stream_impl(): Promise<void>;
     protected abstract suggestions_impl(command: string, amount: number): Promise<string>;
-    protected abstract i18n(): I18n;
+    protected abstract user_context(): UserContext;
 
     async exec(command: string, streams: Uint8Array[] = []): Promise<Result> {
         for (const stream of streams) {
             await this.push_stream_impl(stream);
         }
-        const result: Result = JSON.parse(await this.exec_impl(command, JSON.stringify(this.i18n())));
+        const result: Result = JSON.parse(await this.exec_impl(command, JSON.stringify(this.user_context())));
         const textDecoder = new TextDecoder('utf-8', { fatal: true });
         if (result.type == "ok" || result.type == "fail") {
             for (const output of result.outputs) {
@@ -64,7 +64,7 @@ export abstract class YozukBase {
     }
 }
 
-export type I18n = {
+export type UserContext = {
     locale?: string;
     timezone?: string;
 };

@@ -51,7 +51,7 @@ impl Service for ServiceHandler {
                 let mut streams = self.streams.lock().unwrap();
                 let req: RunCommandsRequest = request.deserialize()?;
                 let result: RunCommandsResponse = zuk
-                    .run_commands(req.commands, &mut streams, Some(&req.i18n))
+                    .run_commands(req.commands, &mut streams, Some(&req.user))
                     .into();
                 streams.clear();
                 Some((request, serde_json::to_value(result).unwrap()).into())
@@ -113,7 +113,7 @@ pub struct GetCommandsResponse {
 pub struct RunCommandsRequest {
     pub commands: Vec<CommandArgs>,
     #[serde(default)]
-    pub i18n: I18n,
+    pub user: UserContext,
 }
 
 #[derive(Serialize, Deserialize)]

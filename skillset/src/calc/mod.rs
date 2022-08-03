@@ -186,7 +186,7 @@ impl Command for CalcCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _i18n: &I18n,
+        _user: &UserContext,
     ) -> Result<Output, CommandError> {
         let rule = CalcParser::parse(Rule::calculation, &args.args[1])?;
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/calc/")?;
