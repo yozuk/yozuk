@@ -1,5 +1,9 @@
+use crypto_bigint::ArrayDecoding;
+use digest::generic_array::GenericArray;
+use digest::{Digest, FixedOutputReset};
 use rand::rngs::ThreadRng;
 use rand::Rng;
+use std::marker::PhantomData;
 
 pub const ENTRIES: &[AlgorithmEntry] = &[
     AlgorithmEntry {
@@ -26,6 +30,36 @@ pub const ENTRIES: &[AlgorithmEntry] = &[
         name: "Argon2d",
         keywords: &["argon2d"],
         init: || Box::new(Argon2d),
+    },
+    AlgorithmEntry {
+        name: "Balloon-SHA256",
+        keywords: &["balloon-sha256"],
+        init: || Box::new(Balloon::<sha2::Sha256>::default()),
+    },
+    AlgorithmEntry {
+        name: "Balloon-SHA384",
+        keywords: &["balloon-sha384"],
+        init: || Box::new(Balloon::<sha2::Sha384>::default()),
+    },
+    AlgorithmEntry {
+        name: "Balloon-SHA512",
+        keywords: &["balloon-sha512"],
+        init: || Box::new(Balloon::<sha2::Sha512>::default()),
+    },
+    AlgorithmEntry {
+        name: "Balloon-SHA3-256",
+        keywords: &["balloon-sha3-256"],
+        init: || Box::new(Balloon::<sha3::Sha3_256>::default()),
+    },
+    AlgorithmEntry {
+        name: "Balloon-SHA3-384",
+        keywords: &["balloon-sha3-384"],
+        init: || Box::new(Balloon::<sha3::Sha3_384>::default()),
+    },
+    AlgorithmEntry {
+        name: "Balloon-SHA3-512",
+        keywords: &["balloon-sha3-512"],
+        init: || Box::new(Balloon::<sha3::Sha3_512>::default()),
     },
 ];
 
@@ -100,6 +134,25 @@ impl Algorithm for Argon2id {
         .hash_password(password, &salt)
         .map(|hash| hash.to_string())
         .unwrap_or_default()
+    }
+}
+
+#[derive(Default)]
+struct Balloon<D>(PhantomData<D>);
+
+impl<D> Algorithm for Balloon<D>
+where
+    D: Digest + FixedOutputReset + Default,
+    GenericArray<u8, D::OutputSize>: ArrayDecoding,
+{
+    fn hash_default(&self, password: &[u8], rng: &mut ThreadRng) -> String {
+        use balloon_hash::password_hash::{PasswordHasher, SaltString};
+        let salt = SaltString::generate(rng);
+        let balloon = balloon_hash::Balloon::<D>::default();
+        balloon
+            .hash_password(password, &salt)
+            .map(|hash| hash.to_string())
+            .unwrap_or_default()
     }
 }
 

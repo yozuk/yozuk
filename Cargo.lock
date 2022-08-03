@@ -144,6 +144,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
+name = "balloon-hash"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1fdbafd8c776e0a7c250b5dfaf4723477e0d92b42c5a91ce4e50bd9bb2dcc9a1"
+dependencies = [
+ "crypto-bigint",
+ "digest 0.10.3",
+ "password-hash",
+]
+
+[[package]]
 name = "base64"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -667,6 +678,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2ae1b35a484aa10e07fe0638d02301c5ad24de82d310ccbd2f3693da5f09bf1c"
 dependencies = [
  "winapi",
+]
+
+[[package]]
+name = "crypto-bigint"
+version = "0.4.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9f2b443d17d49dad5ef0ede301c3179cc923b8822f3393b4d2c28c269dd4a122"
+dependencies = [
+ "generic-array",
+ "subtle",
 ]
 
 [[package]]
@@ -4246,6 +4267,7 @@ version = "0.21.3"
 dependencies = [
  "anyhow",
  "argon2",
+ "balloon-hash",
  "base64",
  "bcrypt",
  "bech32",
@@ -4256,6 +4278,7 @@ dependencies = [
  "clap",
  "const-sha1",
  "crc_all",
+ "crypto-bigint",
  "css-color",
  "digest 0.10.3",
  "fraction",
