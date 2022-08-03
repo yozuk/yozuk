@@ -4109,6 +4109,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9193164d4de03a926d909d3bc7c30543cecb35400c02114792c2cae20d5e2dbb"
 
 [[package]]
+name = "whoami"
+version = "1.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "524b58fa5a20a2fb3014dd6358b70e6579692a56ef6fce928834e488f42f65e8"
+dependencies = [
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "winapi"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4517,6 +4527,7 @@ dependencies = [
  "tempfile",
  "time-tz",
  "wasi",
+ "whoami",
  "yozuk",
  "yozuk-helper-filetype",
  "yozuk-helper-platform",

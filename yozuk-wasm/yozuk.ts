@@ -65,6 +65,7 @@ export abstract class YozukBase {
 }
 
 export type UserContext = {
+    username?: string;
     locale?: string;
     timezone?: string;
 };

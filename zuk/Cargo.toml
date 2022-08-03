@@ -32,6 +32,7 @@ yozuk-sdk = "0.21.3"
 yozuk-helper-platform = "0.20.2"
 yozuk-helper-filetype = "0.20.6"
 semver = "1.0.12"
+whoami = "1.2.1"
 
 [target.'cfg(all(target_os = "linux", target_arch = "x86_64"))'.dependencies]
 extrasafe = { version = "0.1.2", optional = true }
