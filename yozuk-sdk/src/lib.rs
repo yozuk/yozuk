@@ -10,7 +10,6 @@ pub mod encoding;
 pub mod env;
 pub mod feature;
 pub mod highlight;
-pub mod i18n;
 pub mod metadata;
 pub mod model;
 pub mod output;
@@ -20,5 +19,6 @@ pub mod skill;
 pub mod stream;
 pub mod token;
 pub mod tokenizer;
+pub mod user;
 
 mod serde_bytes;

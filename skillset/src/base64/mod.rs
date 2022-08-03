@@ -124,7 +124,7 @@ impl Command for Base64Command {
         &self,
         args: CommandArgs,
         streams: &mut [InputStream],
-        _i18n: &I18n,
+        _user: &UserContext,
     ) -> Result<Output, CommandError> {
         let streams = streams.iter_mut().map(|stream| {
             stream

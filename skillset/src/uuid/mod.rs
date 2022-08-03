@@ -183,7 +183,7 @@ impl Command for UuidCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _i18n: &I18n,
+        _user: &UserContext,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/uuid/")?;

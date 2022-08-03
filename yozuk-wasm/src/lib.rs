@@ -64,11 +64,11 @@ pub fn suggestions(command: &str, amount: usize) -> String {
 }
 
 #[wasm_bindgen]
-pub fn exec(command: &str, i18n: &str) -> Result<String, JsValue> {
+pub fn exec(command: &str, user: &str) -> Result<String, JsValue> {
     let streams = mem::take(global_streams().lock().unwrap().deref_mut());
     let input = JsonInput {
         tokens: Tokenizer::new().tokenize(command),
-        i18n: serde_json::from_str(i18n).unwrap_or_default(),
+        user: serde_json::from_str(user).unwrap_or_default(),
     };
     let result = run(input, streams);
     Ok(serde_json::to_string(&result).unwrap())
@@ -85,7 +85,7 @@ fn run(input: JsonInput, buffer: Vec<Box<[u8]>>) -> JsonResult {
         return JsonResult::NoCommand;
     }
 
-    match global_yozuk().run_commands(commands, &mut streams, Some(&input.i18n)) {
+    match global_yozuk().run_commands(commands, &mut streams, Some(&input.user)) {
         Ok(outputs) => JsonResult::Ok { outputs },
         Err(outputs) => JsonResult::Fail { outputs },
     }
@@ -103,5 +103,5 @@ pub enum JsonResult {
 pub struct JsonInput {
     pub tokens: Vec<Token>,
     #[serde(default)]
-    pub i18n: I18n,
+    pub user: UserContext,
 }

@@ -130,7 +130,7 @@ impl Command for ColorCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _i18n: &I18n,
+        _user: &UserContext,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         let (metadata, colors): (Vec<_>, Vec<_>) = args

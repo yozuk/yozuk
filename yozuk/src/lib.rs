@@ -29,7 +29,7 @@ const MAX_ARG_BYTES_LEN: usize = 10240;
 
 pub struct Yozuk {
     model: ModelSet,
-    i18n: I18n,
+    user_context: UserContext,
     labelers: Vec<Box<dyn Labeler>>,
     commands: Vec<Option<CommandCache>>,
     redirections: Vec<(Vec<Token>, Vec<String>)>,
@@ -118,7 +118,7 @@ impl Yozuk {
         &self,
         commands: Vec<CommandArgs>,
         streams: &mut [InputStream],
-        i18n: Option<&I18n>,
+        user: Option<&UserContext>,
     ) -> Result<Vec<Output>, Vec<Output>> {
         if commands
             .iter()
@@ -141,7 +141,7 @@ impl Yozuk {
         let mut errors = Vec::new();
         for (args, command) in commands {
             let name = args.args[0].clone();
-            match command.run(args, streams, i18n.unwrap_or(&self.i18n)) {
+            match command.run(args, streams, user.unwrap_or(&self.user_context)) {
                 Ok(result) => {
                     if result.mode == OutputMode::Primary {
                         if primary.is_none() {
@@ -249,14 +249,14 @@ impl Yozuk {
 }
 
 pub struct YozukBuilder {
-    i18n: I18n,
+    user_context: UserContext,
     redirections: Vec<(Vec<Token>, Vec<String>)>,
 }
 
 impl Default for YozukBuilder {
     fn default() -> Self {
         Self {
-            i18n: I18n {
+            user_context: UserContext {
                 locale: yozuk_helper_platform::locale::locale(),
                 timezone: yozuk_helper_platform::time::timezone(),
                 ..Default::default()
@@ -267,8 +267,8 @@ impl Default for YozukBuilder {
 }
 
 impl YozukBuilder {
-    pub fn set_i18n(mut self, i18n: I18n) -> Self {
-        self.i18n = i18n;
+    pub fn set_user_context(mut self, user_context: UserContext) -> Self {
+        self.user_context = user_context;
         self
     }
 
@@ -332,7 +332,7 @@ impl YozukBuilder {
 
         Yozuk {
             model,
-            i18n: self.i18n,
+            user_context: self.user_context,
             labelers,
             commands,
             redirections: self.redirections,

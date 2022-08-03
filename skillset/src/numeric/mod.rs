@@ -89,7 +89,7 @@ impl Command for NumericCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _i18n: &I18n,
+        _user: &UserContext,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         let blocks = args

@@ -146,7 +146,7 @@ async fn handle_request(msg: Message, zuk: Arc<Yozuk>, client: reqwest::Client) 
     let mut streams = futures_util::future::try_join_all(msg.files.iter().map(file_stream)).await?;
 
     let tokens = Tokenizer::new().tokenize(&text);
-    let i18n = I18n {
+    let user = UserContext {
         timezone: user.tz,
         ..Default::default()
     };
@@ -166,7 +166,7 @@ async fn handle_request(msg: Message, zuk: Arc<Yozuk>, client: reqwest::Client) 
         return Ok(());
     }
 
-    let result = zuk.run_commands(commands, &mut streams, Some(&i18n));
+    let result = zuk.run_commands(commands, &mut streams, Some(&user));
     let outputs = match result {
         Ok(outputs) => outputs,
         Err(outputs) => outputs,

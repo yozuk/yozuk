@@ -1,5 +1,5 @@
 import init, { exec, random_suggestions, push_stream, push_suggestions_stream, clear_suggestions_stream, suggestions } from './wasm-web/yozuk_wasm'
-import { YozukBase, I18n } from './yozuk'
+import { YozukBase, UserContext } from './yozuk'
 
 let initialized: boolean = false;
 
@@ -11,8 +11,8 @@ async function init_once() {
 }
 
 export class Yozuk extends YozukBase {
-    protected exec_impl(command: string, i18n: string): Promise<string> {
-        return init_once().then(() => exec(command, i18n));
+    protected exec_impl(command: string, user_context: string): Promise<string> {
+        return init_once().then(() => exec(command, user_context));
     }
 
     protected push_stream_impl(stream: Uint8Array): Promise<void> {
@@ -35,7 +35,7 @@ export class Yozuk extends YozukBase {
         return init_once().then(() => suggestions(command, amount));
     }
 
-    i18n(): I18n {
+    user_context(): UserContext {
         return {
             locale: navigator.language,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone

@@ -115,11 +115,11 @@ impl Command for TimeCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        i18n: &I18n,
+        user: &UserContext,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
 
-        let tz = i18n
+        let tz = user
             .timezone
             .as_ref()
             .and_then(|tz| timezones::get_by_name(tz))

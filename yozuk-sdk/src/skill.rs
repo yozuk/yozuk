@@ -41,7 +41,7 @@ pub trait Command: Send + Sync + 'static {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _i18n: &I18n,
+        _user: &UserContext,
     ) -> Result<Output, CommandError>;
     fn priority(&self) -> i32 {
         0
