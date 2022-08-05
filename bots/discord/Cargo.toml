@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-discord"
-version = "0.22.0"
+version = "0.22.1"
 edition = "2021"
 license = "MIT"
 
