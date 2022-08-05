@@ -66,21 +66,23 @@ impl Suggestions for DigestSuggestions {
             .filter(|arg| arg.tag == "input:data")
             .map(|arg| arg.as_str())
             .collect::<Vec<_>>();
-        if !inputs.is_empty() {
-            let joined = shell_words::join(inputs);
-            ENTRIES
-                .iter()
-                .filter_map(|entry| entry.keywords.iter().next())
-                .map(|s| format!("{joined} to {s}"))
-                .collect()
-        } else if !streams.is_empty() {
+        if !streams.is_empty() {
             ENTRIES
                 .iter()
                 .filter_map(|entry| entry.keywords.iter().next())
                 .map(|s| s.to_string())
                 .collect()
         } else {
-            vec![]
+            let joined = shell_words::join(if inputs.is_empty() {
+                vec!["Hello World!"]
+            } else {
+                inputs
+            });
+            ENTRIES
+                .iter()
+                .filter_map(|entry| entry.keywords.iter().next())
+                .map(|s| format!("{joined} to {s}"))
+                .collect()
         }
     }
 }
