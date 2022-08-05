@@ -261,12 +261,6 @@ mod tests {
                 GetCommandsResponse {
                     commands: vec![
                         CommandArgs::new().add_args(["yozuk-skill-calc", "1+1"]),
-                        CommandArgs::new().add_args([
-                            "yozuk-skill-msgpack",
-                            "MQ==",
-                            "Kw==",
-                            "MQ==",
-                        ]),
                         CommandArgs::new().add_args(["yozuk-skill-unicode", "1", "+", "1"]),
                     ],
                 },
@@ -276,12 +270,6 @@ mod tests {
                 GetCommandsResponse {
                     commands: vec![
                         CommandArgs::new().add_args(["yozuk-skill-calc", "2*3"]),
-                        CommandArgs::new().add_args([
-                            "yozuk-skill-msgpack",
-                            "Mg==",
-                            "Kg==",
-                            "Mw==",
-                        ]),
                         CommandArgs::new().add_args(["yozuk-skill-unicode", "2", "*", "3"]),
                     ],
                 },

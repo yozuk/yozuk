@@ -20,7 +20,9 @@ impl Translator for MsgpackTranslator {
         let is_msgpack = !args.is_empty()
             && args.iter().all(|arg| {
                 let mut rd = &arg.data[..];
-                rmpv::decode::read_value_ref(&mut rd).is_ok() && rd.is_empty()
+                arg.raw_encoding.is_some()
+                    && rmpv::decode::read_value_ref(&mut rd).is_ok()
+                    && rd.is_empty()
             });
         if is_msgpack {
             return Some(
