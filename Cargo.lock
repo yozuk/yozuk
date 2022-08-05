@@ -4434,7 +4434,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-slack"
-version = "0.22.0"
+version = "0.22.1"
 dependencies = [
  "anyhow",
  "clap",
