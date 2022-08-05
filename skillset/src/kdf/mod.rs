@@ -28,16 +28,16 @@ impl Suggestions for KdfSuggestions {
             .filter(|arg| arg.tag == "input:data")
             .map(|arg| arg.as_str())
             .collect::<Vec<_>>();
-        if !inputs.is_empty() {
-            let joined = shell_words::join(inputs);
-            ENTRIES
-                .iter()
-                .filter_map(|entry| entry.keywords.iter().next())
-                .map(|s| format!("{joined} to {s}"))
-                .collect()
+        let joined = shell_words::join(if inputs.is_empty() {
+            vec!["Hello World!"]
         } else {
-            vec![]
-        }
+            inputs
+        });
+        ENTRIES
+            .iter()
+            .filter_map(|entry| entry.keywords.iter().next())
+            .map(|s| format!("{joined} to {s}"))
+            .collect()
     }
 }
 
