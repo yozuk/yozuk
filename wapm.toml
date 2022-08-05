@@ -1,6 +1,6 @@
 [package]
 name = "yozuk/zuk"
-version = "0.20.6"
+version = "0.22.1"
 description = "Yozuk command-line interface"
 license = "MIT"
 readme = "README.md"
