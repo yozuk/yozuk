@@ -32,12 +32,15 @@ impl Suggestions for Base64Suggestions {
             .filter(|arg| arg.tag == "input:data")
             .map(|arg| arg.as_str())
             .collect::<Vec<_>>();
-        if !inputs.is_empty() {
-            vec![format!("{} to Base64", shell_words::join(inputs))]
-        } else if !streams.is_empty() {
+        if !streams.is_empty() {
             vec!["Base64".to_string()]
         } else {
-            vec![]
+            let joined = shell_words::join(if inputs.is_empty() {
+                vec!["Hello World!"]
+            } else {
+                inputs
+            });
+            vec![format!("{joined} to Base64")]
         }
     }
 }
