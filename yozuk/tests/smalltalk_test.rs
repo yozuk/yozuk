@@ -48,3 +48,15 @@ fn help() {
         Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "help"]))
     );
 }
+
+#[test]
+fn thanks() {
+    assert_eq!(
+        cmd(tk!(["thanks"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "thanks"]))
+    );
+    assert_eq!(
+        cmd(tk!(["Thank", "you!"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "thanks"]))
+    );
+}
