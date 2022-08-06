@@ -36,3 +36,15 @@ fn early_bird() {
         Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "early-bird"]))
     );
 }
+
+#[test]
+fn help() {
+    assert_eq!(
+        cmd(tk!(["Help"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "help"]))
+    );
+    assert_eq!(
+        cmd(tk!(["docs"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "help"]))
+    );
+}

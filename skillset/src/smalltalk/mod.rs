@@ -8,7 +8,7 @@ mod script;
 use script::SCRIPTS;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"zl9hD8szURy_8p4Q5l21N",
+    model_id: b"83IXW4AKzUuBHWLGz9onw",
     init: |_| {
         Skill::builder()
             .add_corpus(SmalltalkCorpus)

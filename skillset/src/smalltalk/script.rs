@@ -68,5 +68,20 @@ pub static SCRIPTS: phf::Map<&'static str, Script> = phf_map! {
         ]),
     ],
     responses: &["As you see, I'm a night owl."],
+},
+"help" => Script {
+    title: Some("Help"),
+    tokens: || vec![
+        tk!([
+            "help"; "keyword:help"
+        ]),
+        tk!([
+            "documentation"; "keyword:help"
+        ]),
+        tk!([
+            "docs"; "keyword:help"
+        ]),
+    ],
+    responses: &["See https://docs.yozuk.com/ for documentation."],
 }
 };
