@@ -3,8 +3,8 @@ use bigdecimal::Signed;
 use clap::Parser;
 use std::str::FromStr;
 use std::u64;
-use strum::EnumIter;
 use strum::IntoEnumIterator;
+use strum_macros::EnumIter;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {

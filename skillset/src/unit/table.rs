@@ -3,7 +3,7 @@ use super::entry::UnitPrefix::*;
 use super::entry::*;
 use bigdecimal::BigDecimal;
 use std::str::FromStr;
-use strum::Display;
+use strum_macros::Display;
 
 #[derive(Display, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum BaseUnit {
