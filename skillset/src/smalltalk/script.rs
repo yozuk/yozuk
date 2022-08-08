@@ -100,5 +100,22 @@ pub static SCRIPTS: phf::Map<&'static str, Script> = phf_map! {
         "I'm happy to help.".into(),
         "No worries. Don't forget to leave a star on https://github.com/yozuk/yozuk !".into()
     ],
+},
+"hello" => Script {
+    title: None,
+    tokens: || vec![
+        tk!([
+            "Hello"; "keyword:hello"
+        ]),
+        tk!([
+            "Hi"; "keyword:hello"
+        ]),
+    ],
+    responses: |user| vec![
+        "Hi there!".into(),
+        "Hello! How may I help you?".into()
+    ].into_iter().chain(
+        user.username.as_ref().map(|name| format!("Hi {name}!"))
+    ).collect(),
 }
 };
