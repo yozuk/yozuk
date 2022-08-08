@@ -46,8 +46,8 @@ pub static SCRIPTS: phf::Map<&'static str, Script> = phf_map! {
             "everything"; "keyword:42"
         ]),
     ],
-    responses: &["Computing the answer to your question will take a little while. Please ask me \
-        again seven and a half million years later."],
+    responses: |_| vec!["Computing the answer to your question will take a little while. Please ask me \
+        again seven and a half million years later.".into()],
 },
 "early-bird" => Script {
     title: None,
@@ -67,7 +67,7 @@ pub static SCRIPTS: phf::Map<&'static str, Script> = phf_map! {
             "bird"; "keyword:early-bird"
         ]),
     ],
-    responses: &["As you see, I'm a night owl."],
+    responses: |_| vec!["As you see, I'm a night owl.".into()],
 },
 "help" => Script {
     title: Some("Help"),
@@ -82,7 +82,7 @@ pub static SCRIPTS: phf::Map<&'static str, Script> = phf_map! {
             "docs"; "keyword:help"
         ]),
     ],
-    responses: &["See https://docs.yozuk.com/ for documentation."],
+    responses: |_| vec!["See https://docs.yozuk.com/ for documentation.".into()],
 },
 "thanks" => Script {
     title: None,
@@ -95,10 +95,10 @@ pub static SCRIPTS: phf::Map<&'static str, Script> = phf_map! {
             "you"
         ]),
     ],
-    responses: &[
-        "Glad to help!",
-        "I'm happy to help.",
-        "No worries. Don't forget to leave a star on https://github.com/yozuk/yozuk !"
+    responses: |_| vec![
+        "Glad to help!".into(),
+        "I'm happy to help.".into(),
+        "No worries. Don't forget to leave a star on https://github.com/yozuk/yozuk !".into()
     ],
 }
 };

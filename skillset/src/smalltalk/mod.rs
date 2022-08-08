@@ -1,5 +1,5 @@
 use clap::Parser;
-use rand::Rng;
+use rand::seq::SliceRandom;
 use std::collections::HashSet;
 use yozuk_helper_english::normalize;
 use yozuk_sdk::prelude::*;
@@ -21,7 +21,7 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct Script {
     pub title: Option<&'static str>,
     pub tokens: fn() -> Vec<Vec<Token>>,
-    pub responses: &'static [&'static str],
+    pub responses: fn(&UserContext) -> Vec<String>,
 }
 
 pub struct SmalltalkCorpus;
@@ -69,20 +69,20 @@ impl Command for SmalltalkCommand {
         &self,
         args: CommandArgs,
         _streams: &mut [InputStream],
-        _user: &UserContext,
+        user: &UserContext,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
         if let Some(item) = SCRIPTS.get(args.name.as_str()) {
             let mut csrng = rand::thread_rng();
-            let res = item.responses[csrng.gen_range(0..item.responses.len())];
-            Ok(Output::new()
-                .set_title(item.title.unwrap_or("Yozuk"))
-                .add_block(block::Comment::new().set_text(res)))
-        } else {
-            Ok(Output::new()
-                .set_title("Yozuk")
-                .add_block(block::Comment::new().set_text("Hi. I'm Yozuk.")))
+            if let Some(res) = (item.responses)(user).choose(&mut csrng) {
+                return Ok(Output::new()
+                    .set_title(item.title.unwrap_or("Yozuk"))
+                    .add_block(block::Comment::new().set_text(res)));
+            }
         }
+        Ok(Output::new()
+            .set_title("Yozuk")
+            .add_block(block::Comment::new().set_text("Hi. I'm Yozuk.")))
     }
 
     fn priority(&self) -> i32 {
