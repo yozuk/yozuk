@@ -14,13 +14,13 @@
 
 ## Overview
 
-**Yozuk** is a chatbot designed for helping programmers with trivial tasks such as UUID generation, digest calculation and timestamp conversion.
+**Yozuk** is a bot designed for helping programmers with trivial tasks such as UUID generation, digest calculation and timestamp conversion.
 
-- **Knows what you want**: With a combination of machine-learning and pattern-matching NLP, Yozuk infers the meaning of your requests so you don't have to remember the exact syntax of commands.
+- **Human-friendly**: With a combination of machine-learning and pattern-matching NLP, Yozuk infers the meaning of your requests so you don't have to remember the exact syntax of commands.
 
-- **Provides full transparency:** Fully open-source, no external dependency, no internet access and no tracking. Your data is completely under your control.
+- **Transparent:** Fully open-source, no external dependency, no internet access and no tracking. Your data is completely under your control.
 
-- **Runs everywhere:** Not to mention WebAssembly support (Web browser and [WASI](https://wasi.dev/)), Yozuk runs natively on Windows, macOS, Linux, Android and iOS.
+- **Cross-platform:** In addition to WebAssembly support (Web browser and [WASI](https://wasi.dev/)), Yozuk runs natively on Windows, macOS, Linux, Android and iOS.
 
 ## What can Yozuk do?
 
@@ -63,7 +63,7 @@ For example...
   🌸🌼🍄🌿
   ```
 
-- And so on!
+- ...and so on!
 
   The comprehensive [skill list is here](https://docs.yozuk.com/docs/skills/).
 
@@ -81,7 +81,7 @@ https://docs.yozuk.com
 
 ### Command-Line App
 
-Yozuk also perfectly works as a standalone single executable called `zuk`.
+Yozuk works as a standalone single executable called `zuk`.
 
 [![asciicast](https://asciinema.org/a/510703.svg)](https://asciinema.org/a/510703)
 
