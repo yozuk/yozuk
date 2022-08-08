@@ -24,8 +24,8 @@ tokio-stream = "0.1.9"
 toml = "0.5.9"
 tree_magic = "0.2.3"
 warp = "0.3.2"
-yozuk = "0.22.2"
+yozuk = "0.22.3"
 yozuk-sdk = "0.22.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-yozuk = { version = "0.22.2", features = ["rayon"] }
+yozuk = { version = "0.22.3", features = ["rayon"] }
