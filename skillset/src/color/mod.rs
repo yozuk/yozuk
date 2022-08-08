@@ -2,6 +2,7 @@ use clap::Parser;
 use itertools::iproduct;
 use palette::{Hsla, Hsva, Hwba, IntoColor, Srgba};
 use rand::rngs::StdRng;
+use rand::seq::SliceRandom;
 use rand::{Rng, SeedableRng};
 use std::str::FromStr;
 use yozuk_sdk::prelude::*;
@@ -10,7 +11,7 @@ use yozuk_sdk::preprocessor::{TokenMerger, TokenParser};
 mod keywords;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"fYemWbybyq3U8v_aB9eWYc",
+    model_id: b"Aiz9EnzXBdZcghXc9pwf~",
     init: |_| {
         Skill::builder()
             .add_suggestions(ColorSuggestions)
@@ -33,7 +34,11 @@ impl Suggestions for ColorSuggestions {
             let h = rng.gen_range(0..360);
             let s = rng.gen_range(0..=100);
             let l = rng.gen_range(0..=100);
-            vec![format!("rgb({r}, {g}, {b})"), format!("hsl({h} {s}% {l}%)")]
+            let space = ["hsv", "hwb", "hsl", "hsla"].choose(&mut rng).unwrap();
+            vec![
+                format!("#{:02x}{:02x}{:02x} to {space}", r, g, b),
+                format!("hsl({h} {s}% {l}%) to rgba"),
+            ]
         } else {
             vec![]
         }
@@ -87,16 +92,33 @@ pub struct ColorCorpus;
 
 impl Corpus for ColorCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        iproduct!([
+        let inputs = vec![
             "#0f0",
             "rgb(0 255 0)",
             "rgb(0% 100% 0%)",
             "hsl(120deg 100% 50% / 100%)",
             "hwb(120 0% 0% / 1)",
-            "lime"
-        ])
-        .flat_map(|color| vec![tk!([color; "input:data"])])
-        .collect()
+            "lime",
+        ];
+        inputs
+            .clone()
+            .into_iter()
+            .flat_map(|color| vec![tk!([color; "input:data"])])
+            .chain(
+                iproduct!(
+                    inputs.clone(),
+                    ["as", "to", "in", "into"],
+                    ["rgb", "rgba", "hsl", "hsla", "hwb", "hwba"]
+                )
+                .map(|(data, prep, space)| {
+                    tk!([
+                        data; "input:data",
+                        prep,
+                        space; "input:space"
+                    ])
+                }),
+            )
+            .collect()
     }
 }
 
@@ -108,6 +130,22 @@ impl Translator for ColorTranslator {
             .iter()
             .filter(|arg| arg.tag == "input:data")
             .collect::<Vec<_>>();
+
+        let spaces = args
+            .iter()
+            .filter(|arg| arg.tag == "input:space")
+            .filter(|arg| COLOR_SPACES.contains_key(&arg.as_str().to_ascii_lowercase()))
+            .collect::<Vec<_>>();
+
+        if let [input] = &inputs[..] {
+            if let [space] = &spaces[..] {
+                return Some(
+                    CommandArgs::new()
+                        .add_args(["--space", space.as_str()])
+                        .add_args([input.as_str()]),
+                );
+            }
+        }
 
         if !inputs.is_empty()
             && inputs
@@ -133,6 +171,7 @@ impl Command for ColorCommand {
         _user: &UserContext,
     ) -> Result<Output, CommandError> {
         let args = Args::try_parse_from(args.args)?;
+
         let (metadata, colors): (Vec<_>, Vec<_>) = args
             .inputs
             .iter()
@@ -143,10 +182,27 @@ impl Command for ColorCommand {
             })
             .unzip();
 
+        let space = args
+            .space
+            .and_then(|space| COLOR_SPACES.get(&space.to_ascii_lowercase()));
+
+        let blocks: Vec<Block> = if let Some(space) = space {
+            colors
+                .iter()
+                .map(space)
+                .map(|s| Block::Data(block::Data::new().set_text_data(s)))
+                .collect()
+        } else {
+            colors
+                .into_iter()
+                .flat_map(|color| render_color(&color))
+                .collect()
+        };
+
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/color/")?;
         Ok(Output::new()
             .set_title("Color Converter")
-            .add_blocks_iter(colors.into_iter().flat_map(|color| render_color(&color)))
+            .add_blocks_iter(blocks)
             .add_metadata_iter(
                 metadata
                     .into_iter()
@@ -155,6 +211,82 @@ impl Command for ColorCommand {
             .add_metadata(docs))
     }
 }
+
+pub static COLOR_SPACES: phf::Map<&'static str, fn(&Srgba) -> String> = phf::phf_map! {
+    "rgb" => |color| {
+        let rgba_u8: Srgba<u8> = (*color).into_format();
+        format!(
+            "#{:02x}{:02x}{:02x}\nrgb({} {} {})",
+            rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue,
+            rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue
+        )
+    },
+    "rgba" => |color| {
+        let rgba_u8: Srgba<u8> = (*color).into_format();
+        format!(
+            "#{:02x}{:02x}{:02x}{:02x}\nrgb({} {} {} / {})",
+            rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue, rgba_u8.alpha,
+            rgba_u8.color.red, rgba_u8.color.green, rgba_u8.color.blue, rgba_u8.alpha
+        )
+    },
+    "hsl" => |color| {
+        let hsla: Hsla = (*color).into_color();
+        format!(
+            "hsl({:.0} {:.0}% {:.0}%)",
+            hsla.color.hue.to_positive_degrees(),
+            hsla.color.saturation * 100.0,
+            hsla.color.lightness * 100.0,
+        )
+    },
+    "hsla" => |color| {
+        let hsla: Hsla = (*color).into_color();
+        format!(
+            "hsl({:.0} {:.0}% {:.0}% / {})",
+            hsla.color.hue.to_positive_degrees(),
+            hsla.color.saturation * 100.0,
+            hsla.color.lightness * 100.0,
+            hsla.alpha
+        )
+    },
+    "hwb" => |color| {
+        let hwba: Hwba = (*color).into_color();
+        format!(
+            "hwb({:.0} {:.0}% {:.0}%)",
+            hwba.color.hue.to_positive_degrees(),
+            hwba.color.whiteness * 100.0,
+            hwba.color.blackness * 100.0
+        )
+    },
+    "hwba" => |color| {
+        let hwba: Hwba = (*color).into_color();
+        format!(
+            "hwb({:.0} {:.0}% {:.0}% / {})",
+            hwba.color.hue.to_positive_degrees(),
+            hwba.color.whiteness * 100.0,
+            hwba.color.blackness * 100.0,
+            hwba.alpha
+        )
+    },
+    "hsv" => |color| {
+        let hsva: Hsva = (*color).into_color();
+        format!(
+            "hsv({:.0} {:.0}% {:.0}%)",
+            hsva.color.hue.to_positive_degrees(),
+            hsva.color.saturation * 100.0,
+            hsva.color.value * 100.0,
+        )
+    },
+    "hsva" => |color| {
+        let hsva: Hsva = (*color).into_color();
+        format!(
+            "hsv({:.0} {:.0}% {:.0}% / {})",
+            hsva.color.hue.to_positive_degrees(),
+            hsva.color.saturation * 100.0,
+            hsva.color.value * 100.0,
+            hsva.alpha
+        )
+    }
+};
 
 fn hex_color(color: &Srgba) -> String {
     let rgba_u8: Srgba<u8> = (*color).into_format();
@@ -259,4 +391,7 @@ fn render_color(color: &Srgba) -> Vec<Block> {
 struct Args {
     #[clap(multiple_occurrences(true))]
     pub inputs: Vec<String>,
+
+    #[clap(long)]
+    pub space: Option<String>,
 }
