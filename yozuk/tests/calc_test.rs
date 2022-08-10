@@ -18,6 +18,10 @@ fn single_calc() {
         cmd(tk!(["5 << 4 >> 2 << 100"])),
         Some(CommandArgs::new().add_args(["yozuk-skill-calc", "5 << 4 >> 2 << 100"]))
     );
+    assert_eq!(
+        cmd(tk!(["45666-77665544"])),
+        Some(CommandArgs::new().add_args(["yozuk-skill-calc", "45666-77665544"]))
+    );
 }
 
 #[test]

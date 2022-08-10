@@ -75,7 +75,7 @@ impl Command for BlurHashCommand {
     }
 
     fn priority(&self) -> i32 {
-        -50
+        -100
     }
 }
 
