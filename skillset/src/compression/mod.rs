@@ -11,7 +11,7 @@ mod algorithm;
 use algorithm::ENTRIES;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"2s6Mbyyd74_slAdw_DHdS",
+    model_id: b"2s6Mbyyd74_slAdw_DHdN",
     init: |_| {
         Skill::builder()
             .add_corpus(CompressionCorpus)
@@ -55,64 +55,49 @@ impl Corpus for CompressionCorpus {
             "quick brown fox jumps over the lazy dog",
             "Veterinarian",
         ];
-        iproduct!(inputs.clone(), ["as", "to", "in", "into"])
-            .map(|(data, prefix)| {
-                tk!([
-                    data; "input:data",
-                    prefix,
-                    "hex"; "command"
-                ])
-            })
-            .chain(iproduct!(inputs, ["of"]).map(|(data, suffix)| {
-                tk!([
-                    "hex"; "command",
-                    suffix,
-                    data; "input:data"
-                ])
-            }))
-            .collect()
+        iproduct!(
+            inputs.clone(),
+            ["as", "to", "in", "into"],
+            ENTRIES.iter().flat_map(|entry| entry.keywords)
+        )
+        .map(|(data, prefix, alg)| {
+            tk!([
+                data; "input:data",
+                prefix,
+                *alg; "input:alg"
+            ])
+        })
+        .collect()
     }
 }
 
 pub struct CompressionTranslator;
 
 impl Translator for CompressionTranslator {
-    fn generate_command(&self, args: &[Token], streams: &[InputStream]) -> Option<CommandArgs> {
-        if args
+    fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
+        let input = args
             .iter()
-            .any(|arg| arg.tag == "command" && normalized_eq(arg.as_str(), &["hex"], 0))
-        {
-            let input = args
-                .iter()
-                .filter(|arg| arg.tag == "input:data")
-                .map(|arg| arg.data.clone())
-                .collect::<Vec<_>>();
+            .filter(|arg| arg.tag == "input:data")
+            .flat_map(|arg| ["--input", arg.as_str()]);
 
-            if !input.is_empty() || !streams.is_empty() {
-                return Some(
-                    CommandArgs::new()
-                        .add_args(["--mode", "compression"])
-                        .add_data_iter(input),
-                );
-            }
-        }
-
-        let inputs = args
+        let keywords = args
             .iter()
-            .filter(|arg| arg.raw_encoding.is_some())
-            .map(|arg| hex::encode(&arg.data))
+            .filter(|arg| arg.tag == "input:alg")
             .collect::<Vec<_>>();
-        let is_hex = inputs.len() == 1;
-        if is_hex
-            || (!streams.is_empty()
-                && streams
+
+        if !keywords.is_empty()
+            && keywords.iter().all(|arg| {
+                ENTRIES
                     .iter()
-                    .all(|stream| !stream.header().is_empty() && stream.header().is_ascii()))
+                    .any(|entry| normalized_eq(arg.as_str(), entry.keywords, 0))
+            })
         {
             return Some(
-                CommandArgs::new()
-                    .add_args(["--mode", "decompression"])
-                    .add_data_iter(inputs),
+                CommandArgs::new().add_args_iter(input).add_args_iter(
+                    keywords
+                        .iter()
+                        .flat_map(|arg| ["--algorithm", arg.as_str()]),
+                ),
             );
         }
 
