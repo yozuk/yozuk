@@ -4288,6 +4288,7 @@ dependencies = [
  "crypto-bigint",
  "css-color",
  "digest 0.10.3",
+ "flate2",
  "fraction",
  "getrandom",
  "hex",
