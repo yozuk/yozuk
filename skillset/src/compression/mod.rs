@@ -7,6 +7,9 @@ use yozuk_sdk::encoding::RawEncoding;
 use yozuk_sdk::prelude::*;
 use yozuk_sdk::Bytes;
 
+mod algorithm;
+use algorithm::ENTRIES;
+
 pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"2s6Mbyyd74_slAdw_DHdS",
     init: |_| {
@@ -23,22 +26,22 @@ pub const ENTRY: SkillEntry = SkillEntry {
 pub struct CompressionSuggestions;
 
 impl Suggestions for CompressionSuggestions {
-    fn suggestions(&self, _seed: u64, args: &[Token], streams: &[InputStream]) -> Vec<String> {
+    fn suggestions(&self, _seed: u64, args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let inputs = args
             .iter()
             .filter(|arg| arg.tag == "input:data")
             .map(|arg| arg.as_str())
             .collect::<Vec<_>>();
-        if !streams.is_empty() {
-            vec!["hex".to_string()]
+        let joined = shell_words::join(if inputs.is_empty() {
+            vec!["Hello World!"]
         } else {
-            let joined = shell_words::join(if inputs.is_empty() {
-                vec!["Hello World!"]
-            } else {
-                inputs
-            });
-            vec![format!("{joined} to hex")]
-        }
+            inputs
+        });
+        ENTRIES
+            .iter()
+            .filter_map(|entry| entry.keywords.iter().next())
+            .map(|s| format!("{joined} to {s}"))
+            .collect()
     }
 }
 
