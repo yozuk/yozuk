@@ -15,6 +15,8 @@ use std::sync::Arc;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
+const MAX_FILE_SIZE: usize = 10485760;
+
 struct Handler {
     user_id: UserId,
     yozuk: Arc<Yozuk>,
@@ -43,6 +45,13 @@ async fn handle_message(handler: &Handler, ctx: Context, msg: Message) -> Result
             & msg.content,
             |_| String::new(),
         );
+
+        let filesize = msg.attachments.iter().fold(0, |acc, x| acc + x.size);
+        if filesize as usize > MAX_FILE_SIZE {
+            msg.reply(&ctx.http, "Too large file input (10MiB max.)")
+                .await?;
+            return Ok(());
+        }
 
         let attachments = join_all(msg.attachments.iter().map(|att| att.download())).await;
         let mut attachments = attachments
