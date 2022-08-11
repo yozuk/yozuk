@@ -4339,7 +4339,7 @@ dependencies = [
 
 [[package]]
 name = "yozuk-discord"
-version = "0.22.3"
+version = "0.22.4"
 dependencies = [
  "anyhow",
  "clap",
