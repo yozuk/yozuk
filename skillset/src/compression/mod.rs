@@ -114,54 +114,40 @@ impl Command for CompressionCommand {
         streams: &mut [InputStream],
         _user: &UserContext,
     ) -> Result<Output, CommandError> {
-        let streams = streams.iter_mut().map(|stream| {
-            stream
-                .bytes()
-                .map(|b| b.unwrap_or_default())
-                .collect::<Bytes>()
-        });
-        let options = Options::try_parse_from(args.args)?;
+        let args = Args::try_parse_from(args.args)?;
+
+        let matched = ENTRIES
+            .iter()
+            .find(|entry| normalized_eq(&args.algorithm, entry.keywords, 0));
+
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/compression/")?;
-        match options.mode {
-            Mode::Decompression => {
-                let mut blocks = vec![];
-
-                blocks.append(
-                    &mut args
-                        .data
-                        .into_iter()
-                        .chain(streams)
-                        .filter_map(|data| hex::decode(&data).ok())
-                        .map(|data| {
-                            let media_type = yozuk_helper_filetype::guess_media_type(&data);
-                            Block::Data(
-                                block::Data::new()
-                                    .set_data(data)
-                                    .set_media_type(media_type)
-                                    .set_display(DisplaySuggestion {
-                                        binary: Some(BinaryDisplay::Viewer),
-                                        ..Default::default()
-                                    }),
-                            )
-                        })
-                        .collect(),
-                );
-
-                Ok(Output::new()
-                    .set_title("Decompressor")
-                    .add_blocks_iter(blocks)
-                    .add_metadata(docs))
+        /*
+        if let Some(alg) = matched {
+            if let [input, ..] = &args.input[..] {
+                if let Ok(output) = compressed {
+                    return Ok(Output::new()
+                        .set_title("Compression")
+                        .add_block(block::Data::new().set_data(output))
+                        .add_metadata(docs));
+                }
+            } else if let [stream, ..] = streams {
+                if let Ok(output) = (alg.compress)(&mut stream) {
+                    return Ok(Output::new()
+                        .set_title("Compression")
+                        .add_block(block::Data::new().set_data(output))
+                        .add_metadata(docs));
+                }
             }
-            Mode::Compression => Ok(Output::new()
-                .set_title("Compressor")
-                .add_blocks_iter(
-                    args.data
-                        .into_iter()
-                        .chain(streams)
-                        .map(|data| block::Data::new().set_text_data(hex::encode(data))),
-                )
-                .add_metadata(docs)),
         }
+        */
+
+        Err(Output::new()
+            .set_title("Compression")
+            .add_metadata(docs)
+            .add_block(
+                block::Comment::new().set_text(format!("Unsupprted algorithm: {}", args.algorithm)),
+            )
+            .into())
     }
 
     fn priority(&self) -> i32 {
@@ -171,13 +157,10 @@ impl Command for CompressionCommand {
 
 #[derive(Parser)]
 #[clap(trailing_var_arg = true)]
-struct Options {
-    #[clap(arg_enum, short, long)]
-    pub mode: Mode,
-}
+pub struct Args {
+    #[clap(long)]
+    pub algorithm: String,
 
-#[derive(ArgEnum, Clone)]
-enum Mode {
-    Decompression,
-    Compression,
+    #[clap(short, long, multiple_occurrences(true))]
+    pub input: Vec<String>,
 }
