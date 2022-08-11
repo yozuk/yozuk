@@ -1,4 +1,5 @@
 use crate::message;
+use anyhow::bail;
 use futures::future::try_join_all;
 use mediatype::media_type;
 use reqwest::StatusCode;
@@ -21,6 +22,8 @@ use tokio_stream::wrappers::UnboundedReceiverStream;
 use warp::Filter;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
+
+const MAX_FILE_SIZE: usize = 10485760;
 
 pub struct Server {}
 
@@ -96,18 +99,20 @@ async fn get_streams_from_message(
                         .iter()
                         .find(|image| image.width * image.height >= 100_000)
                         .or_else(|| photos.last())
-                        .map(|image| file_stream(bot, &image.file_id)),
+                        .map(|image| file_stream(bot, msg, &image.file_id)),
                 )
                 .await;
             }
             MediaKind::Audio(audio) => {
-                return Ok(vec![file_stream(bot, &audio.audio.file_id).await?]);
+                return Ok(vec![file_stream(bot, msg, &audio.audio.file_id).await?]);
             }
             MediaKind::Video(video) => {
-                return Ok(vec![file_stream(bot, &video.video.file_id).await?]);
+                return Ok(vec![file_stream(bot, msg, &video.video.file_id).await?]);
             }
             MediaKind::Document(document) => {
-                return Ok(vec![file_stream(bot, &document.document.file_id).await?]);
+                return Ok(vec![
+                    file_stream(bot, msg, &document.document.file_id).await?,
+                ]);
             }
             _ => (),
         }
@@ -115,8 +120,18 @@ async fn get_streams_from_message(
     Ok(vec![])
 }
 
-async fn file_stream(bot: &AutoSend<Bot>, file_id: &str) -> anyhow::Result<InputStream> {
+async fn file_stream(
+    bot: &AutoSend<Bot>,
+    msg: &Message,
+    file_id: &str,
+) -> anyhow::Result<InputStream> {
     let file = bot.get_file(file_id).send().await?;
+    if file.file_size as usize > MAX_FILE_SIZE {
+        bot.send_message(msg.chat.id, "Too large file input (10MiB max.)")
+            .await?;
+        bail!("Too large file input");
+    }
+
     let tmpfile = NamedTempFile::new()?;
     let filepath = tmpfile.into_temp_path();
     let mut tmpfile = tokio::fs::File::create(&filepath).await?;
