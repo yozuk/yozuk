@@ -32,12 +32,6 @@ jobs:
         run: cargo b --release
       - name: Make archive
         run: tar -C target/release -Jcvf zuk-x86_64-unknown-linux-gnu.tar.xz zuk
-      - name: Make archive
-        run: tar -C target/release -Jcvf yozuk-discord-x86_64-unknown-linux-gnu.tar.xz yozuk-discord
-      - name: Make archive
-        run: tar -C target/release -Jcvf yozuk-slack-x86_64-unknown-linux-gnu.tar.xz yozuk-slack
-      - name: Make archive
-        run: tar -C target/release -Jcvf yozuk-telegram-x86_64-unknown-linux-gnu.tar.xz yozuk-telegram
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -58,9 +58,6 @@ publishCrate "yozuk-model" "yozuk-model"
 publishCrate "skillset" "yozuk-core-skillset"
 publishTestCrate "yozuk" "yozuk"
 publishTestCrate "zuk" "zuk"
-bumpCrate "bots/discord" "yozuk-discord"
-bumpCrate "bots/slack" "yozuk-slack"
-bumpCrate "bots/telegram" "yozuk-telegram"
 
 sed -i -E "0,/version/ s/version = \"[.0-9]+\"/version = \"${NEXT_TAG#v}\"/" wapm.toml
 git commit -a -m "publish zuk-wasi $NEXT_TAG"
