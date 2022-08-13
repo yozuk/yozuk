@@ -3074,9 +3074,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.82"
+version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "82c2c1fdcd807d1098552c5b9a36e425e42e9fbd7c6a37a8425f390f781f7fa7"
+checksum = "38dd04e3c8279e75b31ef29dbdceebfe5ad89f4d0937213c53f7d49d01b3d5a7"
 dependencies = [
  "itoa",
  "ryu",
@@ -3174,6 +3174,15 @@ dependencies = [
 
 [[package]]
 name = "sha1"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1da05c97445caa12d05e848c4a4fcbbea29e748ac28f7e80e9b010392063770"
+dependencies = [
+ "sha1_smol",
+]
+
+[[package]]
+name = "sha1"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c77f4e7f65455545c2153c1253d25056825e77ee2533f0e41deb65a93a34852f"
@@ -3182,6 +3191,12 @@ dependencies = [
  "cpufeatures",
  "digest 0.10.3",
 ]
+
+[[package]]
+name = "sha1_smol"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae1a47186c03a32177042e55dbc5fd5aee900b8e0069a8d70fba96a9375cd012"
 
 [[package]]
 name = "sha2"
@@ -4100,6 +4115,39 @@ dependencies = [
 ]
 
 [[package]]
+name = "websocket-codec"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2108c9c18a6e746addc085c18cedb66b672e8ffea6a993712decc295b0d8ae55"
+dependencies = [
+ "base64",
+ "byteorder",
+ "bytes",
+ "httparse",
+ "rand 0.8.5",
+ "sha1 0.6.1",
+ "tokio-util 0.7.3",
+]
+
+[[package]]
+name = "websocket-lite"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1d6cae39139c6e837afebd915935e7adc8af5c28425935de606d0e8c9d3268f6"
+dependencies = [
+ "base64",
+ "bytes",
+ "futures",
+ "native-tls",
+ "rand 0.8.5",
+ "tokio",
+ "tokio-native-tls",
+ "tokio-util 0.7.3",
+ "url",
+ "websocket-codec",
+]
+
+[[package]]
 name = "weezl"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4317,7 +4365,7 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
- "sha1",
+ "sha1 0.10.1",
  "sha2",
  "sha3",
  "shell-words",
@@ -4437,16 +4485,18 @@ version = "0.22.4"
 dependencies = [
  "anyhow",
  "clap",
- "futures-util",
+ "futures",
  "gh-emoji",
  "lazy-regex",
  "mediatype",
  "reqwest",
  "serde",
  "serde_derive",
+ "serde_json",
  "tempfile",
  "tokio",
  "warp",
+ "websocket-lite",
  "yozuk",
  "yozuk-sdk",
 ]

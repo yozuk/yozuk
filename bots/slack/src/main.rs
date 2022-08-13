@@ -1,9 +1,11 @@
 use anyhow::Result;
 use clap::Parser;
-use futures_util::StreamExt;
+use futures::sink::SinkExt;
+use futures::stream::StreamExt;
 use lazy_regex::regex_replace_all;
 use mediatype::MediaTypeBuf;
-use reqwest::{header, multipart};
+use reqwest::{header, multipart, Url};
+use serde_derive::Deserialize;
 use std::convert::Infallible;
 use std::net::SocketAddrV4;
 use std::str;
@@ -12,6 +14,7 @@ use std::sync::Arc;
 use tempfile::NamedTempFile;
 use tokio::io::AsyncWriteExt;
 use warp::Filter;
+use websocket_lite::Opcode;
 use yozuk::Yozuk;
 use yozuk_sdk::prelude::*;
 
@@ -32,36 +35,106 @@ const API_URL_POST_MESSAGE: &str = "https://slack.com/api/chat.postMessage";
 const API_URL_VIEWS_PUBLISH: &str = "https://slack.com/api/views.publish";
 const API_URL_USERS_INFO: &str = "https://slack.com/api/users.info";
 const API_URL_FILES_UPLOAD: &str = "https://slack.com/api/files.upload";
+const API_URL_CONNECTIONS_OPEN: &str = "https://slack.com/api/apps.connections.open";
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::try_parse()?;
+    let yozuk = Arc::new(Yozuk::builder().build());
 
     let mut headers = header::HeaderMap::new();
-    let mut auth_value = header::HeaderValue::from_str(&format!("Bearer {}", args.token)).unwrap();
+    let mut auth_value =
+        header::HeaderValue::from_str(&format!("Bearer {}", args.bot_token)).unwrap();
     auth_value.set_sensitive(true);
     headers.insert(header::AUTHORIZATION, auth_value);
 
-    let client = reqwest::Client::builder()
+    let bot_client = reqwest::Client::builder()
         .default_headers(headers)
         .build()?;
 
-    let yozuk = Arc::new(Yozuk::builder().build());
-
-    let identity = client
+    let identity = bot_client
         .post(API_URL_AUTH_TEST)
         .send()
         .await?
         .json::<Identity>()
         .await?;
 
-    let route = warp::any().and(warp::body::json()).and_then(move |event| {
-        handle_message(event, yozuk.clone(), client.clone(), identity.clone())
-    });
+    if let Some(app_token) = &args.app_token {
+        let mut headers = header::HeaderMap::new();
+        let mut auth_value =
+            header::HeaderValue::from_str(&format!("Bearer {}", app_token)).unwrap();
+        auth_value.set_sensitive(true);
+        headers.insert(header::AUTHORIZATION, auth_value);
 
-    warp::serve(route)
-        .run(SocketAddrV4::new(args.addr, args.port))
-        .await;
+        let app_client = reqwest::Client::builder()
+            .default_headers(headers)
+            .build()?;
+
+        let connection = app_client
+            .post(API_URL_CONNECTIONS_OPEN)
+            .send()
+            .await?
+            .json::<Connection>()
+            .await?;
+
+        let builder = websocket_lite::ClientBuilder::new(connection.url.as_str())?;
+        let mut ws_stream = builder.async_connect().await.unwrap();
+
+        while let Some(msg) = ws_stream.next().await {
+            let msg = if let Ok(msg) = msg {
+                msg
+            } else {
+                let _ = ws_stream.send(websocket_lite::Message::close(None)).await;
+                break;
+            };
+
+            match msg.opcode() {
+                Opcode::Text => {
+                    let envelope: Result<Envelope, _> =
+                        serde_json::from_str(msg.as_text().unwrap());
+                    if let Ok(envelope) = envelope {
+                        ws_stream
+                            .send(websocket_lite::Message::text(
+                                serde_json::to_string(&EnvelopeAck {
+                                    envelope_id: envelope.envelope_id,
+                                })
+                                .unwrap(),
+                            ))
+                            .await
+                            .unwrap();
+                        let EnvelopeData::EventsApi(api) = envelope.data;
+                        handle_message(
+                            api.payload,
+                            yozuk.clone(),
+                            bot_client.clone(),
+                            identity.clone(),
+                        )
+                        .await?;
+                    }
+                }
+                Opcode::Binary => {
+                    println!("{:?}", msg);
+                }
+                Opcode::Ping => ws_stream
+                    .send(websocket_lite::Message::pong(msg.into_data()))
+                    .await
+                    .unwrap(),
+                Opcode::Close => {
+                    let _ = ws_stream.send(websocket_lite::Message::close(None)).await;
+                    break;
+                }
+                Opcode::Pong => {}
+            }
+        }
+    } else {
+        let route = warp::any().and(warp::body::json()).and_then(move |event| {
+            handle_message(event, yozuk.clone(), bot_client.clone(), identity.clone())
+        });
+
+        warp::serve(route)
+            .run(SocketAddrV4::new(args.addr, args.port))
+            .await;
+    }
 
     Ok(())
 }
@@ -143,7 +216,7 @@ async fn handle_request(msg: Message, zuk: Arc<Yozuk>, client: reqwest::Client) 
     );
     let text = gh_emoji::Replacer::new().replace_all(&text);
 
-    let mut streams = futures_util::future::try_join_all(msg.files.iter().map(file_stream)).await?;
+    let mut streams = futures::future::try_join_all(msg.files.iter().map(file_stream)).await?;
 
     let tokens = Tokenizer::new().tokenize(&text);
     let user = UserContext {
@@ -241,4 +314,9 @@ async fn file_stream(file: &File) -> anyhow::Result<InputStream> {
         std::fs::File::open(filepath)?,
         MediaTypeBuf::from_str(&file.mimetype).unwrap(),
     ))
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct Connection {
+    pub url: Url,
 }
