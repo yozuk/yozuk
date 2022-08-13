@@ -89,6 +89,8 @@ crypto-bigint = { version = "0.4.8", optional = true, default-features = false, 
 ] }
 strum_macros = "0.24.3"
 flate2 = { version = "1.0.24", optional = true }
+snap = { version = "1.0.5", optional = true }
+
 
 [features]
 default = []
@@ -140,4 +142,4 @@ yozuk-skill-kdf = [
   "sha2",
   "sha3",
 ]
-yozuk-skill-compression = ["flate2"]
+yozuk-skill-compression = ["flate2", "snap"]

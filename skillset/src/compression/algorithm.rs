@@ -24,6 +24,11 @@ pub const ENTRIES: &[Algorithm] = &[
         keywords: &["deflate"],
         compressor: || Box::new(DeflateCompressor::new()),
     },
+    Algorithm {
+        name: "Snappy",
+        keywords: &["snappy"],
+        compressor: || Box::new(SnappyCompressor::new()),
+    },
 ];
 
 pub trait Compressor {
@@ -96,6 +101,29 @@ impl Compressor for DeflateCompressor {
         self.0
             .take()
             .and_then(|inner| inner.finish().ok())
+            .unwrap_or_default()
+    }
+}
+
+struct SnappyCompressor(Option<snap::write::FrameEncoder<Vec<u8>>>);
+
+impl SnappyCompressor {
+    fn new() -> Self {
+        Self(Some(snap::write::FrameEncoder::new(Vec::new())))
+    }
+}
+
+impl Compressor for SnappyCompressor {
+    fn update(&mut self, data: &[u8]) {
+        if let Some(inner) = &mut self.0 {
+            inner.write_all(data).unwrap();
+        }
+    }
+
+    fn finalize(&mut self) -> Vec<u8> {
+        self.0
+            .take()
+            .and_then(|inner| inner.into_inner().ok())
             .unwrap_or_default()
     }
 }
