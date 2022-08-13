@@ -1,8 +1,8 @@
 use crate::message;
-use anyhow::bail;
+use anyhow::{bail, Result};
 use futures::future::try_join_all;
 use mediatype::media_type;
-use reqwest::StatusCode;
+use reqwest::{StatusCode, Url};
 use std::convert::Infallible;
 use std::env;
 use std::net::SocketAddr;
@@ -28,60 +28,65 @@ const MAX_FILE_SIZE: usize = 10485760;
 pub struct Server {}
 
 impl Server {
-    pub async fn start(yozuk: Yozuk, bot: AutoSend<Bot>) {
+    pub async fn start(yozuk: Yozuk, bot: AutoSend<Bot>, endpoint: Option<Url>) -> Result<()> {
         let yozuk = Arc::new(yozuk);
 
-        teloxide::repl_with_listener(
-            bot.clone(),
-            move |msg: Message, bot: AutoSend<Bot>| {
-                let zuk = yozuk.clone();
-                let tokenizer = Tokenizer::new();
-                async move {
-                    if let MessageKind::Common(common) = &msg.kind {
-                        let mut streams = get_streams_from_message(&bot, &msg).await?;
-                        match &common.media_kind {
-                            MediaKind::Text(text) if text.text == "/start" => {
-                                send_hello(bot, msg).await?;
-                            }
-                            MediaKind::Text(text) => {
-                                let mut merged_streams = vec![];
-                                if let Some(reply) = &common.reply_to_message {
-                                    merged_streams
-                                        .append(&mut get_streams_from_message(&bot, reply).await?);
-                                }
-                                merged_streams.append(&mut streams);
-                                let tokens = tokenizer.tokenize(&text.text);
-                                send_output(bot, msg, &zuk, tokens, merged_streams).await?;
-                            }
-                            MediaKind::Photo(photo) => {
-                                let tokens =
-                                    tokenizer.tokenize(&photo.caption.clone().unwrap_or_default());
-                                send_output(bot, msg, &zuk, tokens, streams).await?;
-                            }
-                            MediaKind::Audio(audio) => {
-                                let tokens =
-                                    tokenizer.tokenize(&audio.caption.clone().unwrap_or_default());
-                                send_output(bot, msg, &zuk, tokens, streams).await?;
-                            }
-                            MediaKind::Video(video) => {
-                                let tokens =
-                                    tokenizer.tokenize(&video.caption.clone().unwrap_or_default());
-                                send_output(bot, msg, &zuk, tokens, streams).await?;
-                            }
-                            MediaKind::Document(document) => {
-                                let tokens = tokenizer
-                                    .tokenize(&document.caption.clone().unwrap_or_default());
-                                send_output(bot, msg, &zuk, tokens, streams).await?;
-                            }
-                            _ => (),
+        let handler = move |msg: Message, bot: AutoSend<Bot>| {
+            let zuk = yozuk.clone();
+            let tokenizer = Tokenizer::new();
+            async move {
+                if let MessageKind::Common(common) = &msg.kind {
+                    let mut streams = get_streams_from_message(&bot, &msg).await?;
+                    match &common.media_kind {
+                        MediaKind::Text(text) if text.text == "/start" => {
+                            send_hello(bot, msg).await?;
                         }
+                        MediaKind::Text(text) => {
+                            let mut merged_streams = vec![];
+                            if let Some(reply) = &common.reply_to_message {
+                                merged_streams
+                                    .append(&mut get_streams_from_message(&bot, reply).await?);
+                            }
+                            merged_streams.append(&mut streams);
+                            let tokens = tokenizer.tokenize(&text.text);
+                            send_output(bot, msg, &zuk, tokens, merged_streams).await?;
+                        }
+                        MediaKind::Photo(photo) => {
+                            let tokens =
+                                tokenizer.tokenize(&photo.caption.clone().unwrap_or_default());
+                            send_output(bot, msg, &zuk, tokens, streams).await?;
+                        }
+                        MediaKind::Audio(audio) => {
+                            let tokens =
+                                tokenizer.tokenize(&audio.caption.clone().unwrap_or_default());
+                            send_output(bot, msg, &zuk, tokens, streams).await?;
+                        }
+                        MediaKind::Video(video) => {
+                            let tokens =
+                                tokenizer.tokenize(&video.caption.clone().unwrap_or_default());
+                            send_output(bot, msg, &zuk, tokens, streams).await?;
+                        }
+                        MediaKind::Document(document) => {
+                            let tokens =
+                                tokenizer.tokenize(&document.caption.clone().unwrap_or_default());
+                            send_output(bot, msg, &zuk, tokens, streams).await?;
+                        }
+                        _ => (),
                     }
-                    respond(()).map_err(anyhow::Error::from)
                 }
-            },
-            webhook(bot).await,
-        )
-        .await;
+                respond(()).map_err(anyhow::Error::from)
+            }
+        };
+
+        if let Some(endpoint) = endpoint {
+            bot.set_webhook(endpoint).await?;
+            teloxide::repl_with_listener(bot.clone(), handler, webhook(bot).await).await;
+        } else {
+            bot.delete_webhook().await?;
+            teloxide::repl(bot.clone(), handler).await;
+        }
+
+        Ok(())
     }
 }
 

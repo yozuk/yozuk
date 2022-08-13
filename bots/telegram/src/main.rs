@@ -30,15 +30,6 @@ pub struct Args {
 async fn main() -> Result<()> {
     let args = Args::parse();
     let bot = Bot::from_env().auto_send();
-
-    if let Some(webhook) = args.webhook {
-        bot.set_webhook(webhook)
-            .await
-            .expect("Cannot setup a webhook");
-    }
-
     let yozuk = Yozuk::builder().build();
-
-    server::Server::start(yozuk, bot).await;
-    Ok(())
+    server::Server::start(yozuk, bot, args.webhook).await
 }
