@@ -63,3 +63,37 @@ fn rfc2822() {
         ]))
     );
 }
+
+#[test]
+fn conversion() {
+    assert_eq!(
+        cmd(tk!(["Sat, 12 Jun 1993 13:25:19 GMT", "to", "unix"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-time",
+            "--timestamp",
+            "739891519000000000",
+            "--format",
+            "unix"
+        ]))
+    );
+    assert_eq!(
+        cmd(tk!(["1640000000", "to", "3339"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-time",
+            "--timestamp",
+            "1640000000000000000",
+            "--format",
+            "3339"
+        ]))
+    );
+    assert_eq!(
+        cmd(tk!(["2019-07-14T00:00:00+00:00", "to", "TAI-64"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-time",
+            "--timestamp",
+            "1563062400000000000",
+            "--format",
+            "TAI-64"
+        ]))
+    );
+}

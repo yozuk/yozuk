@@ -1,4 +1,5 @@
 use clap::Parser;
+use itertools::iproduct;
 use time::format_description::well_known::{Rfc2822, Rfc3339};
 use time::OffsetDateTime;
 use time_tz::{timezones, Offset, TimeZone};
@@ -7,8 +8,11 @@ use yozuk_helper_platform::time::now_utc;
 use yozuk_sdk::prelude::*;
 use yozuk_sdk::preprocessor::{TokenMerger, TokenParser};
 
+mod format;
+use format::ENTRIES;
+
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"DzNEy_nUaQUFmFGqpZZux",
+    model_id: b"0YGXydP31~VzDB5ccos2c",
     init: |_| {
         Skill::builder()
             .add_corpus(TimeCorpus)
@@ -23,18 +27,65 @@ pub struct TimeCorpus;
 
 impl Corpus for TimeCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
+        let inputs = [
+            "1660440000",
+            "3869428800",
+            "Sun, 14 Aug 2022 02:00:00 +0000",
+            "2022-08-14T02:00:00+00:00",
+            "@4000000062f7d8b5",
+        ];
         vec![
             tk!(["now"; "keyword"]),
             tk!(["What", "time"; "keyword", "is", "it"]),
             tk!(["What's", "the", "time"; "keyword"]),
+            tk!(["What's", "the", "time"; "keyword"]),
             tk!(["current", "time"; "keyword"]),
             tk!(["time"; "keyword"]),
-            tk!(["1640000000"; "input:unix"]),
-            tk!(["1640000000000"; "input:unix"]),
-            tk!(["1640000000000000000"; "input:unix"]),
         ]
         .into_iter()
+        .chain(
+            iproduct!(
+                inputs,
+                ["as", "to", "in", "into"],
+                ENTRIES.iter().flat_map(|entry| entry.keywords)
+            )
+            .map(|(data, prefix, alg)| {
+                tk!([
+                    data; "input:data",
+                    prefix,
+                    *alg; "input:alg"
+                ])
+            }),
+        )
         .collect()
+    }
+}
+
+const TIMESTAMP_TOLERANCE_DAYS: i64 = 365 * 10;
+
+fn parse_datetime(exp: &str) -> Option<OffsetDateTime> {
+    if let Ok(ts) = exp.parse::<i64>() {
+        let ts = if let Ok(ts) = OffsetDateTime::from_unix_timestamp(ts) {
+            Some(ts)
+        } else if let Ok(ts) = OffsetDateTime::from_unix_timestamp_nanos(ts as i128 * 1000000) {
+            Some(ts)
+        } else if let Ok(ts) = OffsetDateTime::from_unix_timestamp_nanos(ts as i128 * 1000) {
+            Some(ts)
+        } else if let Ok(ts) = OffsetDateTime::from_unix_timestamp_nanos(ts as i128) {
+            Some(ts)
+        } else {
+            None
+        };
+        match ts {
+            Some(ts) if (now_utc() - ts).whole_days().abs() <= TIMESTAMP_TOLERANCE_DAYS => Some(ts),
+            _ => None,
+        }
+    } else if let Ok(time) = OffsetDateTime::parse(exp, &Rfc3339) {
+        Some(time)
+    } else if let Ok(time) = OffsetDateTime::parse(exp, &Rfc2822) {
+        Some(time)
+    } else {
+        None
     }
 }
 
@@ -52,15 +103,13 @@ impl TokenParser for TimeTokenParser {
             .map(|token| token.tag.clone())
             .find(|tag| !tag.is_empty())
             .unwrap_or_default();
-        OffsetDateTime::parse(&exp, &Rfc2822).ok().map(|_| Token {
+        parse_datetime(&exp).map(|_| Token {
             data: exp.into(),
             tag,
             ..Default::default()
         })
     }
 }
-
-const TIMESTAMP_TOLERANCE_DAYS: i64 = 365 * 10;
 
 pub struct TimeTranslator;
 
@@ -79,29 +128,29 @@ impl Translator for TimeTranslator {
 
         let timestamps = args
             .iter()
-            .filter(|arg| arg.tag == "input:unix")
-            .filter_map(|arg| arg.as_str().parse::<i64>().ok())
-            .flat_map(|ts| {
-                OffsetDateTime::from_unix_timestamp(ts)
-                    .ok()
-                    .into_iter()
-                    .chain(OffsetDateTime::from_unix_timestamp_nanos(ts as i128 * 1000000).ok())
-                    .chain(OffsetDateTime::from_unix_timestamp_nanos(ts as i128).ok())
-            })
-            .filter(|&ts| (now_utc() - ts).whole_days().abs() <= TIMESTAMP_TOLERANCE_DAYS)
-            .chain(
-                args.iter()
-                    .filter_map(|arg| OffsetDateTime::parse(arg.as_str(), &Rfc3339).ok()),
-            )
-            .chain(
-                args.iter()
-                    .filter_map(|arg| OffsetDateTime::parse(arg.as_str(), &Rfc2822).ok()),
-            )
+            .filter_map(|arg| parse_datetime(arg.as_str()))
+            .collect::<Vec<_>>();
+
+        let algs = args
+            .iter()
+            .filter(|arg| arg.tag == "input:alg")
             .collect::<Vec<_>>();
 
         if let [ts] = timestamps[..] {
             let ts = ts.unix_timestamp_nanos().to_string();
-            return Some(CommandArgs::new().add_args(["--timestamp", &ts]));
+            if algs.iter().all(|arg| {
+                ENTRIES
+                    .iter()
+                    .any(|entry| normalized_eq(arg.as_str(), entry.keywords, 0))
+            }) {
+                return Some(
+                    CommandArgs::new()
+                        .add_args(["--timestamp", &ts])
+                        .add_args_iter(algs.iter().flat_map(|arg| ["--format", arg.as_str()])),
+                );
+            } else {
+                return Some(CommandArgs::new().add_args(["--timestamp", &ts]));
+            }
         }
 
         None
@@ -136,19 +185,40 @@ impl Command for TimeCommand {
             now.to_offset(offset.to_utc())
         };
 
-        let unix = ts.unix_timestamp();
-        let mut formats = vec![
-            format!("unix: `{}`", unix),
-            format!("ntp: `{}`", unix + NTP_OFFSET),
-            format!("rfc2822: `{}`", ts.format(&Rfc2822)?),
-            format!("rfc3339: `{}`", ts.format(&Rfc3339)?),
-        ];
-        if let Some(tai64) = unix_to_tai64(unix) {
-            formats.push(format!(
-                "tai64: `@{}`",
-                hex::encode((tai64 + TAI64_LABEL_OFFSET).to_be_bytes())
-            ));
+        let mut entries = Vec::new();
+        for name in &args.format {
+            let matched = ENTRIES
+                .iter()
+                .filter(|entry| normalized_eq(name, entry.keywords, 0))
+                .collect::<Vec<_>>();
+
+            if matched.is_empty() {
+                return Err(Output::new()
+                    .set_title("Timestamp Converter")
+                    .add_block(
+                        block::Comment::new().set_text(format!("Unsupprted format: {}", name)),
+                    )
+                    .into());
+            }
+
+            for entry in matched {
+                entries.push(entry);
+            }
         }
+
+        let formats = if entries.is_empty() {
+            let unix = ts.unix_timestamp();
+            vec![unix.to_string()]
+                .into_iter()
+                .chain(ts.format(&Rfc2822).ok())
+                .chain(ts.format(&Rfc3339).ok())
+                .collect::<Vec<_>>()
+        } else {
+            entries
+                .into_iter()
+                .flat_map(|entry| (entry.format)(&ts))
+                .collect::<Vec<_>>()
+        };
 
         Ok(Output::new()
             .set_title("Timestamp Converter")
@@ -162,51 +232,8 @@ impl Command for TimeCommand {
 
 #[derive(Parser)]
 pub struct Args {
+    #[clap(short, long, multiple_occurrences(true))]
+    pub format: Vec<String>,
     #[clap(short, long, allow_hyphen_values = true)]
     pub timestamp: Option<i128>,
 }
-
-const NTP_OFFSET: i64 = 2208988800;
-const TAI64_LABEL_OFFSET: u64 = 0x4000000000000000 - NTP_OFFSET as u64;
-
-fn unix_to_tai64(unix: i64) -> Option<u64> {
-    let ntp = (unix + NTP_OFFSET) as u64;
-    let index = match TAI64_LEAP_SECONDS.binary_search_by_key(&ntp, |(ts, _)| *ts) {
-        Ok(n) => n,
-        Err(n) => n,
-    };
-    TAI64_LEAP_SECONDS.get(index).map(|(_, leap)| ntp + leap)
-}
-
-// https://www.ietf.org/timezones/data/leap-seconds.list
-const TAI64_LEAP_SECONDS: &[(u64, u64)] = &[
-    (2272060800, 10),
-    (2287785600, 11),
-    (2303683200, 12),
-    (2335219200, 13),
-    (2366755200, 14),
-    (2398291200, 15),
-    (2429913600, 16),
-    (2461449600, 17),
-    (2492985600, 18),
-    (2524521600, 19),
-    (2571782400, 20),
-    (2603318400, 21),
-    (2634854400, 22),
-    (2698012800, 23),
-    (2776982400, 24),
-    (2840140800, 25),
-    (2871676800, 26),
-    (2918937600, 27),
-    (2950473600, 28),
-    (2982009600, 29),
-    (3029443200, 30),
-    (3076704000, 31),
-    (3124137600, 32),
-    (3345062400, 33),
-    (3439756800, 34),
-    (3550089600, 35),
-    (3644697600, 36),
-    (3692217600, 37),
-    (3881174400 - 1, 37),
-];
