@@ -62,6 +62,7 @@ default-skills = [
   "yozuk-skill-hex",
   "yozuk-skill-kdf",
   "yozuk-skill-compression",
+  "yozuk-skill-username",
 ]
 yozuk-skill-base64 = ["yozuk-core-skillset/yozuk-skill-base64"]
 yozuk-skill-calc = ["yozuk-core-skillset/yozuk-skill-calc"]
@@ -92,6 +93,7 @@ yozuk-skill-unicode = ["yozuk-core-skillset/yozuk-skill-unicode"]
 yozuk-skill-hex = ["yozuk-core-skillset/yozuk-skill-hex"]
 yozuk-skill-kdf = ["yozuk-core-skillset/yozuk-skill-kdf"]
 yozuk-skill-compression = ["yozuk-core-skillset/yozuk-skill-compression"]
+yozuk-skill-username = ["yozuk-core-skillset/yozuk-skill-username"]
 
 [dev-dependencies]
 once_cell = "1.12.0"

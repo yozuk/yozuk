@@ -68,4 +68,5 @@ skills!(
     [hex, "yozuk-skill-hex"],
     [kdf, "yozuk-skill-kdf"],
     [compression, "yozuk-skill-compression"],
+    [username, "yozuk-skill-username"],
 );

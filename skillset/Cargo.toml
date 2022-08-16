@@ -143,3 +143,4 @@ yozuk-skill-kdf = [
   "sha3",
 ]
 yozuk-skill-compression = ["flate2", "snap"]
+yozuk-skill-username = []
