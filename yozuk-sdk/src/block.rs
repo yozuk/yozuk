@@ -5,7 +5,7 @@ use bytes::Bytes;
 use mediatype::{media_type, MediaTypeBuf};
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(tag = "type", rename_all = "snake_case")]
 #[non_exhaustive]
 pub enum Block {
@@ -13,7 +13,7 @@ pub enum Block {
     Data(Data),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Comment {
     #[serde(skip_serializing_if = "String::is_empty")]
     pub title: String,
@@ -68,7 +68,7 @@ impl Default for Comment {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Data {
     #[serde(
         serialize_with = "serialize_bytes",

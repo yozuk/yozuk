@@ -1,6 +1,6 @@
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DisplaySuggestion {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub binary: Option<BinaryDisplay>,
@@ -15,7 +15,7 @@ impl DisplaySuggestion {
     }
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
 pub enum BinaryDisplay {
@@ -24,7 +24,7 @@ pub enum BinaryDisplay {
     Hex,
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
 pub enum ImageDisplay {

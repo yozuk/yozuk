@@ -1,14 +1,14 @@
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Range;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub struct Highlight {
     pub kind: HighlightKind,
     pub range: Range<usize>,
 }
 
-#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
 pub enum HighlightKind {

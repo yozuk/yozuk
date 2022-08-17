@@ -3,7 +3,7 @@ use crate::metadata::Metadata;
 use serde_derive::{Deserialize, Serialize};
 use std::str;
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Output {
     pub title: String,
     pub blocks: Vec<Block>,
