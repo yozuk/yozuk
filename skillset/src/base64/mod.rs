@@ -1,7 +1,7 @@
 use clap::{ArgEnum, Parser};
 use itertools::iproduct;
 use std::io::Read;
-use yozuk_helper_encoding::EncodingPreprocessor;
+use yozuk_helper_encoding::{is_like_base64, EncodingPreprocessor};
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::encoding::RawEncoding;
 use yozuk_sdk::prelude::*;
@@ -104,10 +104,7 @@ impl Translator for Base64Translator {
             .collect::<Vec<_>>();
         let is_base64 = inputs.len() == 1;
         if is_base64
-            || (!streams.is_empty()
-                && streams
-                    .iter()
-                    .all(|stream| !stream.header().is_empty() && stream.header().is_ascii()))
+            || (!streams.is_empty() && streams.iter().all(|stream| is_like_base64(stream.header())))
         {
             return Some(
                 CommandArgs::new()
@@ -115,7 +112,6 @@ impl Translator for Base64Translator {
                     .add_data_iter(inputs),
             );
         }
-
         None
     }
 }

@@ -1,7 +1,7 @@
 use clap::{ArgEnum, Parser};
 use itertools::iproduct;
 use std::io::Read;
-use yozuk_helper_encoding::EncodingPreprocessor;
+use yozuk_helper_encoding::{is_like_hex, EncodingPreprocessor};
 use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::encoding::RawEncoding;
 use yozuk_sdk::prelude::*;
@@ -101,10 +101,7 @@ impl Translator for HexTranslator {
             .collect::<Vec<_>>();
         let is_hex = inputs.len() == 1;
         if is_hex
-            || (!streams.is_empty()
-                && streams
-                    .iter()
-                    .all(|stream| !stream.header().is_empty() && stream.header().is_ascii()))
+            || (!streams.is_empty() && streams.iter().all(|stream| is_like_hex(stream.header())))
         {
             return Some(
                 CommandArgs::new()

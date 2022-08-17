@@ -56,7 +56,20 @@ impl Preprocessor for EncodingPreprocessor {
     }
 }
 
-fn is_like_base64(data: &[u8]) -> bool {
+pub fn is_like_base64(data: &[u8]) -> bool {
+    let invalid = data.iter().any(|&c| {
+        !(b'a'..=b'z').contains(&c)
+            && !(b'A'..=b'Z').contains(&c)
+            && !(b'0'..=b'9').contains(&c)
+            && c != b'+'
+            && c != b'/'
+            && c != b'-'
+            && c != b'_'
+            && c != b'='
+    });
+    if invalid {
+        return false;
+    }
     let mut score = 0;
     score += data.iter().any(|c| (b'a'..=b'f').contains(c)) as u8;
     score += data.iter().any(|c| (b'A'..=b'F').contains(c)) as u8;
@@ -69,7 +82,7 @@ fn is_like_base64(data: &[u8]) -> bool {
     score >= 4
 }
 
-fn is_like_hex(data: &[u8]) -> bool {
+pub fn is_like_hex(data: &[u8]) -> bool {
     if data.len() < 16 {
         return false;
     }
