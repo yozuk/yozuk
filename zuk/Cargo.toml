@@ -28,7 +28,7 @@ serde_derive = { version = "1.0.137", optional = true }
 serde_json = { version = "1.0.81", optional = true }
 shell-words = "1.1.0"
 yozuk = "0.22.6"
-yozuk-sdk = "0.22.0"
+yozuk-sdk = "0.22.7"
 yozuk-helper-platform = "0.20.2"
 yozuk-helper-filetype = "0.20.6"
 semver = "1.0.12"
