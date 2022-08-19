@@ -1,6 +1,6 @@
 use chardetng::EncodingDetector;
 use file_format::FileFormat;
-use mediatype::{media_type, MediaType, MediaTypeBuf};
+use mediatype::{media_type, MediaTypeBuf};
 
 pub fn is_utf8_text<T>(data: T) -> bool
 where
@@ -23,6 +23,9 @@ where
     }
 }
 
-pub fn get_file_extension<T>(media_type: &MediaType) -> Option<&'static str> {
-    mime2ext::mime2ext(media_type.to_string())
+pub fn get_file_extension<T>(media_type: T) -> &'static str
+where
+    T: AsRef<str>,
+{
+    mime2ext::mime2ext(media_type).unwrap_or("bin")
 }
