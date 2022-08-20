@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-helper-filetype"
-version = "0.20.6"
+version = "0.22.8"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "Filetype detection for Yozuk"

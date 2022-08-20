@@ -30,7 +30,7 @@ shell-words = "1.1.0"
 yozuk = "0.22.7"
 yozuk-sdk = "0.22.7"
 yozuk-helper-platform = "0.20.2"
-yozuk-helper-filetype = "0.20.6"
+yozuk-helper-filetype = "0.22.8"
 semver = "1.0.12"
 
 [target.'cfg(all(target_os = "linux", target_arch = "x86_64"))'.dependencies]
