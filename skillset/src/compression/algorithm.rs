@@ -1,6 +1,6 @@
 use flate2::write::{DeflateEncoder, GzEncoder, ZlibEncoder};
 use flate2::Compression;
-use std::io::Write;
+use std::io::{Read, Result, Write};
 
 pub struct Algorithm {
     pub name: &'static str,
@@ -39,6 +39,11 @@ pub const ENTRIES: &[Algorithm] = &[
 pub trait Compressor {
     fn update(&mut self, data: &[u8]);
     fn finalize(&mut self) -> Vec<u8>;
+}
+
+pub trait Decompressor {
+    fn update(&mut self, data: &[u8]);
+    fn finalize(&mut self) -> Result<Vec<u8>>;
 }
 
 struct ZlibCompressor(Option<ZlibEncoder<Vec<u8>>>);
@@ -130,5 +135,27 @@ impl Compressor for SnappyCompressor {
             .take()
             .and_then(|inner| inner.into_inner().ok())
             .unwrap_or_default()
+    }
+}
+
+struct SnappyDecompressor(Vec<u8>);
+
+impl SnappyDecompressor {
+    fn new() -> Self {
+        Self(Vec::new())
+    }
+}
+
+impl Decompressor for SnappyDecompressor {
+    fn update(&mut self, data: &[u8]) {
+        self.0.extend_from_slice(data);
+    }
+
+    fn finalize(&mut self) -> Result<Vec<u8>> {
+        let data: &[u8] = &self.0;
+        let mut buf = Vec::new();
+        let mut decoder = snap::read::FrameDecoder::new(data);
+        let _ = decoder.read_to_end(&mut buf)?;
+        Ok(buf)
     }
 }
