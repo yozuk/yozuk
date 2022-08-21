@@ -6,6 +6,7 @@ pub struct Algorithm {
     pub name: &'static str,
     pub keywords: &'static [&'static str],
     pub compressor: fn() -> Box<dyn Compressor>,
+    pub test_header: fn(&[u8]) -> bool,
 }
 
 pub const ENTRIES: &[Algorithm] = &[
@@ -13,21 +14,25 @@ pub const ENTRIES: &[Algorithm] = &[
         name: "Zlib",
         keywords: &["zlib"],
         compressor: || Box::new(ZlibCompressor::new()),
+        test_header: |_| false,
     },
     Algorithm {
         name: "Gzip",
         keywords: &["gzip", "gz"],
         compressor: || Box::new(GzipCompressor::new()),
+        test_header: |header| header.starts_with(&[0x1f, 0x8b, 0x08]),
     },
     Algorithm {
         name: "Deflate",
         keywords: &["deflate"],
         compressor: || Box::new(DeflateCompressor::new()),
+        test_header: |_| false,
     },
     Algorithm {
         name: "Snappy",
         keywords: &["snappy"],
         compressor: || Box::new(SnappyCompressor::new()),
+        test_header: |_| false,
     },
 ];
 
