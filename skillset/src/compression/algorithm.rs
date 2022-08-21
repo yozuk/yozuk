@@ -17,7 +17,7 @@ pub const ENTRIES: &[Algorithm] = &[
         name: "Zlib",
         keywords: &["zlib"],
         compressor: || Box::new(ZlibCompressor::new()),
-        test_header: |_| false,
+        test_header: check_zlib_header,
         decompressor: || Box::new(ZlibDecompressor::new()),
     },
     Algorithm {
@@ -74,6 +74,18 @@ impl Compressor for ZlibCompressor {
             .and_then(|inner| inner.finish().ok())
             .unwrap_or_default()
     }
+}
+
+fn check_zlib_header(header: &[u8]) -> bool {
+    if let &[cmf, flg, ..] = header {
+        let cm = cmf >> 4;
+        let cinfo = cmf & 0b1111;
+        if cm == 0x8 && cinfo <= 7 {
+            let check = cmf as u16 * 256 + flg as u16;
+            return check % 31 == 0;
+        }
+    }
+    false
 }
 
 struct ZlibDecompressor(Option<ZlibDecoder<Vec<u8>>>);
