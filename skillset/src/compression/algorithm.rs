@@ -49,7 +49,7 @@ pub trait Compressor {
 }
 
 pub trait Decompressor {
-    fn update(&mut self, data: &[u8]);
+    fn update(&mut self, data: &[u8]) -> Result<()>;
     fn finalize(&mut self) -> Result<Vec<u8>>;
 }
 
@@ -85,10 +85,11 @@ impl ZlibDecompressor {
 }
 
 impl Decompressor for ZlibDecompressor {
-    fn update(&mut self, data: &[u8]) {
+    fn update(&mut self, data: &[u8]) -> Result<()> {
         if let Some(inner) = &mut self.0 {
-            inner.write_all(data).unwrap();
+            inner.write_all(data)?;
         }
+        Ok(())
     }
 
     fn finalize(&mut self) -> Result<Vec<u8>> {
@@ -129,10 +130,11 @@ impl GzipDecompressor {
 }
 
 impl Decompressor for GzipDecompressor {
-    fn update(&mut self, data: &[u8]) {
+    fn update(&mut self, data: &[u8]) -> Result<()> {
         if let Some(inner) = &mut self.0 {
-            inner.write_all(data).unwrap();
+            inner.write_all(data)?;
         }
+        Ok(())
     }
 
     fn finalize(&mut self) -> Result<Vec<u8>> {
@@ -173,10 +175,11 @@ impl DeflateDecompressor {
 }
 
 impl Decompressor for DeflateDecompressor {
-    fn update(&mut self, data: &[u8]) {
+    fn update(&mut self, data: &[u8]) -> Result<()> {
         if let Some(inner) = &mut self.0 {
-            inner.write_all(data).unwrap();
+            inner.write_all(data)?;
         }
+        Ok(())
     }
 
     fn finalize(&mut self) -> Result<Vec<u8>> {
@@ -217,8 +220,9 @@ impl SnappyDecompressor {
 }
 
 impl Decompressor for SnappyDecompressor {
-    fn update(&mut self, data: &[u8]) {
+    fn update(&mut self, data: &[u8]) -> Result<()> {
         self.0.extend_from_slice(data);
+        Ok(())
     }
 
     fn finalize(&mut self) -> Result<Vec<u8>> {
