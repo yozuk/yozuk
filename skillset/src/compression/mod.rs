@@ -109,7 +109,7 @@ impl Translator for CompressionTranslator {
         let input = args
             .iter()
             .filter(|arg| arg.tag == "input:data")
-            .flat_map(|arg| ["--input", arg.as_str()]);
+            .flat_map(|arg| ["--input".to_string(), base64::encode(&arg.data)]);
 
         let decomp = args
             .iter()
@@ -164,7 +164,7 @@ impl Command for CompressionCommand {
             if args.mode == Mode::Compress {
                 let mut compressor = (alg.compressor)();
                 if let [input, ..] = &args.input[..] {
-                    compressor.update(input.as_bytes());
+                    compressor.update(&base64::decode(input).unwrap_or_default());
                 } else if let [stream, ..] = streams {
                     let mut data = vec![0; 1024];
                     while let Ok(len) = stream.read(&mut data) {
@@ -209,7 +209,7 @@ impl Command for CompressionCommand {
     }
 
     fn priority(&self) -> i32 {
-        -120
+        -100
     }
 }
 
@@ -220,7 +220,7 @@ fn decompress(
 ) -> std::io::Result<Vec<u8>> {
     let mut decompressor = (alg.decompressor)();
     if let [input, ..] = &args.input[..] {
-        decompressor.update(input.as_bytes())?;
+        decompressor.update(&base64::decode(input).unwrap_or_default())?;
     } else if let [stream, ..] = streams {
         let mut data = vec![0; 1024];
         while let Ok(len) = stream.read(&mut data) {
