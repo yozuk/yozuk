@@ -10,7 +10,7 @@ mod algorithm;
 use algorithm::{Algorithm, ENTRIES};
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"qX7I8WU4ACvSBdY1zgiRa0",
+    model_id: b"eFMyoR1Zoq5fF8XLpmfCc",
     init: |_| {
         Skill::builder()
             .add_corpus(CompressionCorpus)

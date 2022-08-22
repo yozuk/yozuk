@@ -41,6 +41,13 @@ pub const ENTRIES: &[Algorithm] = &[
         test_header: |_| false,
         decompressor: || Box::new(SnappyDecompressor::new()),
     },
+    Algorithm {
+        name: "LZ4",
+        keywords: &["lz4"],
+        compressor: || Box::new(Lz4Compressor::new()),
+        test_header: |_| false,
+        decompressor: || Box::new(Lz4Decompressor::new()),
+    },
 ];
 
 pub trait Compressor {
@@ -241,6 +248,52 @@ impl Decompressor for SnappyDecompressor {
         let data: &[u8] = &self.0;
         let mut buf = Vec::new();
         let mut decoder = snap::read::FrameDecoder::new(data);
+        let _ = decoder.read_to_end(&mut buf)?;
+        Ok(buf)
+    }
+}
+
+struct Lz4Compressor(Option<lz4_flex::frame::FrameEncoder<Vec<u8>>>);
+
+impl Lz4Compressor {
+    fn new() -> Self {
+        Self(Some(lz4_flex::frame::FrameEncoder::new(Vec::new())))
+    }
+}
+
+impl Compressor for Lz4Compressor {
+    fn update(&mut self, data: &[u8]) {
+        if let Some(inner) = &mut self.0 {
+            inner.write_all(data).unwrap();
+        }
+    }
+
+    fn finalize(&mut self) -> Vec<u8> {
+        self.0
+            .take()
+            .and_then(|inner| inner.finish().ok())
+            .unwrap_or_default()
+    }
+}
+
+struct Lz4Decompressor(Vec<u8>);
+
+impl Lz4Decompressor {
+    fn new() -> Self {
+        Self(Vec::new())
+    }
+}
+
+impl Decompressor for Lz4Decompressor {
+    fn update(&mut self, data: &[u8]) -> Result<()> {
+        self.0.extend_from_slice(data);
+        Ok(())
+    }
+
+    fn finalize(&mut self) -> Result<Vec<u8>> {
+        let data: &[u8] = &self.0;
+        let mut buf = Vec::new();
+        let mut decoder = lz4_flex::frame::FrameDecoder::new(data);
         let _ = decoder.read_to_end(&mut buf)?;
         Ok(buf)
     }
