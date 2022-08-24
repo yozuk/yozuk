@@ -183,16 +183,24 @@ pub const ENTRIES: &[UnitEntry] = &[
 pub const TABLES: &[ConversionTable] = &[
     ConversionTable {
         base_unit: BaseUnit::Gram,
-        base_prefixes: &[Nano, Micro, Milli, Kilo],
+        base_filter: UnitFilter::MaximumScale(5),
+        base_prefixes: &[
+            (Nano, UnitFilter::MaximumScale(5)),
+            (Micro, UnitFilter::MaximumScale(5)),
+            (Milli, UnitFilter::MaximumScale(5)),
+            (Kilo, UnitFilter::MaximumScale(5)),
+        ],
         entries: &[
             ConversionEntry {
                 base_unit: BaseUnit::Ounce,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("28.349523125").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("28.349523125").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Pound,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("453.59237").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("453.59237").unwrap(),
@@ -201,28 +209,38 @@ pub const TABLES: &[ConversionTable] = &[
     },
     ConversionTable {
         base_unit: BaseUnit::Meter,
-        base_prefixes: &[Nano, Micro, Milli, Kilo],
+        base_filter: UnitFilter::MaximumScale(5),
+        base_prefixes: &[
+            (Nano, UnitFilter::MaximumScale(5)),
+            (Micro, UnitFilter::MaximumScale(5)),
+            (Milli, UnitFilter::MaximumScale(5)),
+            (Kilo, UnitFilter::MaximumScale(5)),
+        ],
         entries: &[
             ConversionEntry {
                 base_unit: BaseUnit::Inch,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("0.0254").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("0.0254").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Foot,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("0.3048").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("0.3048").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Yard,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("0.9144").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("0.9144").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Mile,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("1609.344").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("1609.344").unwrap(),
@@ -231,21 +249,34 @@ pub const TABLES: &[ConversionTable] = &[
     },
     ConversionTable {
         base_unit: BaseUnit::Byte,
-        base_prefixes: &[Kilo, Mega, Giga, Tera, Kibi, Mebi, Gibi, Tibi],
+        base_filter: UnitFilter::Always,
+        base_prefixes: &[
+            (Kilo, UnitFilter::MaximumScale(5)),
+            (Mega, UnitFilter::MaximumScale(5)),
+            (Giga, UnitFilter::MaximumScale(5)),
+            (Tera, UnitFilter::MaximumScale(5)),
+            (Kibi, UnitFilter::MaximumScale(5)),
+            (Mebi, UnitFilter::MaximumScale(5)),
+            (Gibi, UnitFilter::MaximumScale(5)),
+            (Tibi, UnitFilter::MaximumScale(5)),
+        ],
         entries: &[],
     },
     ConversionTable {
         base_unit: BaseUnit::Kelvin,
+        base_filter: UnitFilter::Always,
         base_prefixes: &[],
         entries: &[
             ConversionEntry {
                 base_unit: BaseUnit::Celsius,
+                base_filter: UnitFilter::Always,
                 base_prefixes: &[],
                 convert_to_base: |value| value + BigDecimal::from_str("273.15").unwrap(),
                 convert_from_base: |value| value - BigDecimal::from_str("273.15").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Fahrenheit,
+                base_filter: UnitFilter::Always,
                 base_prefixes: &[],
                 convert_to_base: |value| {
                     (value + BigDecimal::from_str("459.67").unwrap())
@@ -260,22 +291,26 @@ pub const TABLES: &[ConversionTable] = &[
     },
     ConversionTable {
         base_unit: BaseUnit::KmsPerHour,
+        base_filter: UnitFilter::MaximumScale(5),
         base_prefixes: &[],
         entries: &[
             ConversionEntry {
                 base_unit: BaseUnit::MsPerSec,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("3.6").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("3.6").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::MilesPerHour,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("1.609344").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("1.609344").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Knot,
+                base_filter: UnitFilter::Optional,
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("1.852").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("1.852").unwrap(),
@@ -284,22 +319,26 @@ pub const TABLES: &[ConversionTable] = &[
     },
     ConversionTable {
         base_unit: BaseUnit::Pascal,
-        base_prefixes: &[Hecto],
+        base_filter: UnitFilter::MaximumScale(5),
+        base_prefixes: &[(Hecto, UnitFilter::MaximumScale(5))],
         entries: &[
             ConversionEntry {
                 base_unit: BaseUnit::Bar,
+                base_filter: UnitFilter::Optional,
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("100000").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("100000").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::Atmosphere,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("101325").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("101325").unwrap(),
             },
             ConversionEntry {
                 base_unit: BaseUnit::MmHg,
+                base_filter: UnitFilter::MaximumScale(5),
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("133.322387415").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("133.322387415").unwrap(),
@@ -308,15 +347,23 @@ pub const TABLES: &[ConversionTable] = &[
     },
     ConversionTable {
         base_unit: BaseUnit::Hertz,
-        base_prefixes: &[Kilo, Mega, Giga],
+        base_filter: UnitFilter::MaximumScale(5),
+        base_prefixes: &[
+            (Kilo, UnitFilter::MaximumScale(5)),
+            (Mega, UnitFilter::MaximumScale(5)),
+            (Giga, UnitFilter::MaximumScale(5)),
+            (Tera, UnitFilter::MaximumScale(5)),
+        ],
         entries: &[],
     },
     ConversionTable {
         base_unit: BaseUnit::Joule,
-        base_prefixes: &[Kilo],
+        base_filter: UnitFilter::MaximumScale(5),
+        base_prefixes: &[(Kilo, UnitFilter::MaximumScale(5))],
         entries: &[ConversionEntry {
             base_unit: BaseUnit::Calorie,
-            base_prefixes: &[Kilo],
+            base_filter: UnitFilter::MaximumScale(5),
+            base_prefixes: &[(Kilo, UnitFilter::MaximumScale(5))],
             convert_to_base: |value| value * BigDecimal::from_str("4.1868").unwrap(),
             convert_from_base: |value| value / BigDecimal::from_str("4.1868").unwrap(),
         }],

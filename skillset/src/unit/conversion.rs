@@ -13,30 +13,35 @@ pub fn convert(value: BigDecimal, base: BaseUnit) -> Vec<Unit> {
 fn convert_prefixes(
     value: BigDecimal,
     base: BaseUnit,
-    prefixes: &[UnitPrefix],
+    base_filter: UnitFilter,
+    prefixes: &[(UnitPrefix, UnitFilter)],
 ) -> impl Iterator<Item = Unit> + '_ {
     let base_value = value.clone();
     prefixes
         .iter()
-        .map(move |prefix| {
+        .map(move |(prefix, filter)| {
             let value = value.clone();
             let scale = prefix.scale();
+            let value = value / scale;
             Unit {
                 prefix: Some(*prefix),
-                value: (value / scale),
+                value,
                 base,
+                filter: *filter,
             }
         })
         .chain(iter::once(Unit {
             value: base_value,
             base,
             prefix: None,
+            filter: base_filter,
         }))
 }
 
 pub struct ConversionTable {
     pub base_unit: BaseUnit,
-    pub base_prefixes: &'static [UnitPrefix],
+    pub base_filter: UnitFilter,
+    pub base_prefixes: &'static [(UnitPrefix, UnitFilter)],
     pub entries: &'static [ConversionEntry],
 }
 
@@ -59,16 +64,27 @@ impl ConversionTable {
             .iter()
             .flat_map(|entry| {
                 let value = (entry.convert_from_base)(base_value.clone());
-                convert_prefixes(value, entry.base_unit, entry.base_prefixes)
+                convert_prefixes(
+                    value,
+                    entry.base_unit,
+                    entry.base_filter,
+                    entry.base_prefixes,
+                )
             })
-            .chain(convert_prefixes(value, self.base_unit, self.base_prefixes))
+            .chain(convert_prefixes(
+                value,
+                self.base_unit,
+                self.base_filter,
+                self.base_prefixes,
+            ))
             .collect()
     }
 }
 
 pub struct ConversionEntry {
     pub base_unit: BaseUnit,
-    pub base_prefixes: &'static [UnitPrefix],
+    pub base_filter: UnitFilter,
+    pub base_prefixes: &'static [(UnitPrefix, UnitFilter)],
     pub convert_to_base: fn(BigDecimal) -> BigDecimal,
     pub convert_from_base: fn(BigDecimal) -> BigDecimal,
 }

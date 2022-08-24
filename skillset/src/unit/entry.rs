@@ -16,6 +16,7 @@ pub struct Unit {
     pub value: BigDecimal,
     pub base: BaseUnit,
     pub prefix: Option<UnitPrefix>,
+    pub filter: UnitFilter,
 }
 
 impl Unit {
@@ -95,4 +96,12 @@ impl fmt::Display for UnitPrefix {
         };
         write!(f, "{}", s)
     }
+}
+
+#[derive(Copy, Clone, Default, PartialEq, Eq, PartialOrd, Ord)]
+pub enum UnitFilter {
+    #[default]
+    Always,
+    MaximumScale(u8),
+    Optional,
 }

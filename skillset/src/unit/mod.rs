@@ -1,5 +1,4 @@
-use bigdecimal::BigDecimal;
-use bigdecimal::One;
+use bigdecimal::{BigDecimal, One, ToPrimitive};
 use clap::Parser;
 use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
@@ -144,15 +143,40 @@ impl Command for UnitCommand {
             value: value.clone(),
             base,
             prefix,
+            filter: UnitFilter::Always,
         };
         let scale = prefix
             .map(|prefix| prefix.scale())
             .unwrap_or_else(BigDecimal::one);
         let mut converted = conversion::convert(value * scale, base);
         converted.sort_unstable_by_key(|unit| (unit.base, unit.prefix));
-        let converted = converted
+        let mut converted = converted
             .into_iter()
             .filter(|unit| unit.base != base_unit.base || unit.prefix != base_unit.prefix)
+            .collect::<Vec<_>>();
+        let mut filtered = converted
+            .iter()
+            .cloned()
+            .filter(|unit| match unit.filter {
+                UnitFilter::Optional => false,
+                UnitFilter::MaximumScale(scale) => {
+                    if let Some(value) = unit.value.to_f64() {
+                        value.log10().abs() <= scale as f64
+                    } else {
+                        false
+                    }
+                }
+                _ => true,
+            })
+            .collect::<Vec<_>>();
+        if filtered.is_empty() {
+            converted.sort_by_key(|unit| unit.filter);
+            converted
+                .sort_by_key(|unit| unit.value.to_f64().unwrap_or(f64::MAX).log10().abs() as u64);
+            filtered = converted.into_iter().take(1).collect::<Vec<_>>();
+        }
+        let converted = filtered
+            .into_iter()
             .map(|unit| format!("`{}`", unit.normalized()))
             .collect::<Vec<_>>();
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/unit/")?;
