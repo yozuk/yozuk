@@ -67,26 +67,6 @@ pub const ENTRIES: &[AlgorithmEntry] = &[
         init: || Box::new(DigestEntry::<sha3::Sha3_512>::new()),
     },
     AlgorithmEntry {
-        name: "Keccak-224",
-        keywords: &["keccak-224", "sha3", "sha-3"],
-        init: || Box::new(DigestEntry::<sha3::Keccak224>::new()),
-    },
-    AlgorithmEntry {
-        name: "Keccak-256",
-        keywords: &["keccak-256", "sha3", "sha-3"],
-        init: || Box::new(DigestEntry::<sha3::Keccak256>::new()),
-    },
-    AlgorithmEntry {
-        name: "Keccak-384",
-        keywords: &["keccak-384", "sha3", "sha-3"],
-        init: || Box::new(DigestEntry::<sha3::Keccak384>::new()),
-    },
-    AlgorithmEntry {
-        name: "Keccak-512",
-        keywords: &["keccak-512", "sha3", "sha-3"],
-        init: || Box::new(DigestEntry::<sha3::Keccak512>::new()),
-    },
-    AlgorithmEntry {
         name: "CRC-32/ISO-HDLC",
         keywords: &[
             "crc32",
