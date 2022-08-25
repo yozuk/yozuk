@@ -11,9 +11,9 @@ pub const ENTRY: SkillEntry = SkillEntry {
     model_id: b"4ZcWVM5U83bXGf4zfIzUv",
     init: |_| {
         Skill::builder()
-            .add_corpus(SmalltalkCorpus)
-            .add_translator(SmalltalkTranslator)
-            .set_command(SmalltalkCommand)
+            .add_corpus(ChitchatCorpus)
+            .add_translator(ChitchatTranslator)
+            .set_command(ChitchatCommand)
             .build()
     },
 };
@@ -24,17 +24,17 @@ pub struct Script {
     pub responses: fn(&UserContext) -> Vec<String>,
 }
 
-pub struct SmalltalkCorpus;
+pub struct ChitchatCorpus;
 
-impl Corpus for SmalltalkCorpus {
+impl Corpus for ChitchatCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
         SCRIPTS.values().flat_map(|def| (def.tokens)()).collect()
     }
 }
 
-pub struct SmalltalkTranslator;
+pub struct ChitchatTranslator;
 
-impl Translator for SmalltalkTranslator {
+impl Translator for ChitchatTranslator {
     fn generate_command(&self, args: &[Token], _streams: &[InputStream]) -> Option<CommandArgs> {
         let keywords = args
             .iter()
@@ -62,9 +62,9 @@ impl Translator for SmalltalkTranslator {
     }
 }
 
-pub struct SmalltalkCommand;
+pub struct ChitchatCommand;
 
-impl Command for SmalltalkCommand {
+impl Command for ChitchatCommand {
     fn run(
         &self,
         args: CommandArgs,

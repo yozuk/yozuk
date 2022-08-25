@@ -46,7 +46,7 @@ skills!(
     [lipsum, "yozuk-skill-lipsum"],
     [nanoid, "yozuk-skill-nanoid"],
     [numeric, "yozuk-skill-numeric"],
-    [smalltalk, "yozuk-skill-smalltalk"],
+    [chitchat, "yozuk-skill-chitchat"],
     [punycode, "yozuk-skill-punycode"],
     [uuid, "yozuk-skill-uuid"],
     [version, "yozuk-skill-version"],

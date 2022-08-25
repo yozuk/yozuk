@@ -1,4 +1,4 @@
-#![cfg(feature = "yozuk-skill-smalltalk")]
+#![cfg(feature = "yozuk-skill-chitchat")]
 
 mod common;
 use common::cmd;
@@ -8,7 +8,7 @@ use yozuk_sdk::prelude::*;
 fn deep_thought() {
     assert_eq!(
         cmd(tk!(["life", "universe", "everything"])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "42"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-chitchat", "--name", "42"]))
     );
     assert_eq!(
         cmd(tk!([
@@ -21,7 +21,7 @@ fn deep_thought() {
             "and",
             "everything"
         ])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "42"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-chitchat", "--name", "42"]))
     );
 }
 
@@ -29,11 +29,11 @@ fn deep_thought() {
 fn early_bird() {
     assert_eq!(
         cmd(tk!(["Do", "you", "wake", "up", "early?"])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "early-bird"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-chitchat", "--name", "early-bird"]))
     );
     assert_eq!(
         cmd(tk!(["are", "you", "an", "early", "bird"])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "early-bird"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-chitchat", "--name", "early-bird"]))
     );
 }
 
@@ -41,11 +41,11 @@ fn early_bird() {
 fn help() {
     assert_eq!(
         cmd(tk!(["Help"])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "help"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-chitchat", "--name", "help"]))
     );
     assert_eq!(
         cmd(tk!(["docs"])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "help"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-chitchat", "--name", "help"]))
     );
 }
 
@@ -53,10 +53,10 @@ fn help() {
 fn thanks() {
     assert_eq!(
         cmd(tk!(["thanks"])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "thanks"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-chitchat", "--name", "thanks"]))
     );
     assert_eq!(
         cmd(tk!(["Thank", "you!"])),
-        Some(CommandArgs::new().add_args(["yozuk-skill-smalltalk", "--name", "thanks"]))
+        Some(CommandArgs::new().add_args(["yozuk-skill-chitchat", "--name", "thanks"]))
     );
 }
