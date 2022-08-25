@@ -18,7 +18,7 @@ use entry::*;
 use table::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"nACaqlhN8hEJzBUozcE3U",
+    model_id: b"bgYiqkawdecM620KUrbeq",
     init: |_| {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
@@ -83,38 +83,6 @@ pub struct UnitCorpus;
 
 impl Corpus for UnitCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
-        let conversions = ENTRIES.iter().flat_map(|unit| {
-            iproduct!(["as", "to", "in", "into"], unit.symbols, unit.prefixes).flat_map(
-                |(prep, sym, prefix)| {
-                    vec![
-                        tk!([
-                            "1.0"; "input:value",
-                            format!("{}{}", prefix, sym); "keyword",
-                            prep,
-                            format!("{}{}", prefix, sym); "keyword"
-                        ]),
-                        tk!([
-                            "1.0"; "input:value",
-                            format!("{}", sym); "keyword",
-                            prep,
-                            format!("{}", sym); "keyword"
-                        ]),
-                        tk!([
-                            "1.0"; "input:value",
-                            format!("{}", sym); "keyword",
-                            prep,
-                            format!("{}{}", prefix, sym); "keyword"
-                        ]),
-                        tk!([
-                            "1.0"; "input:value",
-                            format!("{}{}", prefix, sym); "keyword",
-                            prep,
-                            format!("{}", sym); "keyword"
-                        ]),
-                    ]
-                },
-            )
-        });
         ENTRIES
             .iter()
             .flat_map(|entry| {
@@ -134,7 +102,18 @@ impl Corpus for UnitCorpus {
                         ])))
                 })
             })
-            .chain(conversions)
+            .chain(
+                iproduct!(["as", "to", "in", "into"], ENTRIES).flat_map(|(prep, unit)| {
+                    unit.symbols.iter().map(|sym| {
+                        tk!([
+                            "1.0"; "input:value",
+                            format!("{}", sym); "keyword",
+                            prep,
+                            format!("{}", sym); "keyword"
+                        ])
+                    })
+                }),
+            )
             .collect()
     }
 }
