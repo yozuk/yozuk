@@ -27,8 +27,32 @@ fn units() {
         ]))
     );
     assert_eq!(
+        cmd(tk!(["0.00001kg", "to", "oz"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-unit",
+            "--value",
+            " 0.00001",
+            "--unit",
+            "kg",
+            "--to",
+            "oz"
+        ]))
+    );
+    assert_eq!(
         cmd(tk!(["500", "g"])),
         Some(CommandArgs::new().add_args(["yozuk-skill-unit", "--value", " 500", "--unit", "g"]))
+    );
+    assert_eq!(
+        cmd(tk!(["500", "g", "to", "mg"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-unit",
+            "--value",
+            " 500",
+            "--unit",
+            "g",
+            "--to",
+            "mg"
+        ]))
     );
     assert_eq!(
         cmd(tk!(["500g"])),
@@ -73,6 +97,18 @@ fn units() {
         Some(CommandArgs::new().add_args(["yozuk-skill-unit", "--value", " 2.5", "--unit", "ft"]))
     );
     assert_eq!(
+        cmd(tk!(["2.5ft", "to", "nm"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-unit",
+            "--value",
+            " 2.5",
+            "--unit",
+            "ft",
+            "--to",
+            "nm"
+        ]))
+    );
+    assert_eq!(
         cmd(tk!(["10KiB"])),
         Some(CommandArgs::new().add_args(["yozuk-skill-unit", "--value", " 10", "--unit", "KiB"]))
     );
@@ -98,6 +134,18 @@ fn units() {
             " 1000",
             "--unit",
             "mmHg"
+        ]))
+    );
+    assert_eq!(
+        cmd(tk!(["1000mmHg", "to", "bar"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-unit",
+            "--value",
+            " 1000",
+            "--unit",
+            "mmHg",
+            "--to",
+            "bar"
         ]))
     );
 }

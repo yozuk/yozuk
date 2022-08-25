@@ -1,5 +1,6 @@
 use bigdecimal::{BigDecimal, One, ToPrimitive};
 use clap::Parser;
+use itertools::iproduct;
 use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
 use rand::{Rng, SeedableRng};
@@ -17,7 +18,7 @@ use entry::*;
 use table::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"FiANsDlUf9OI5fc3LTFA_",
+    model_id: b"nACaqlhN8hEJzBUozcE3U",
     init: |_| {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
@@ -36,10 +37,19 @@ impl Suggestions for UnitSuggestions {
     fn suggestions(&self, seed: u64, _args: &[Token], _streams: &[InputStream]) -> Vec<String> {
         let mut rng = StdRng::seed_from_u64(seed);
         let n: u32 = rng.gen_range(10..=1000);
-        let unit = ["km", "in", "hPa", "kg", "oz.", "KiB", "mph", "°F"]
-            .choose(&mut rng)
-            .unwrap();
-        vec![format!("Convert {}{}", n, unit)]
+        let unit = [
+            ("km", "mi"),
+            ("in", "mm"),
+            ("hPa", "mmHg"),
+            ("kg", "oz."),
+            ("oz.", "mg"),
+            ("KiB", "B"),
+            ("mph", "km/h"),
+            ("°F", "K"),
+        ]
+        .choose(&mut rng)
+        .unwrap();
+        vec![format!("{}{} to {}", n, unit.0, unit.1)]
     }
 }
 
@@ -73,6 +83,38 @@ pub struct UnitCorpus;
 
 impl Corpus for UnitCorpus {
     fn training_data(&self) -> Vec<Vec<Token>> {
+        let conversions = ENTRIES.iter().flat_map(|unit| {
+            iproduct!(["as", "to", "in", "into"], unit.symbols, unit.prefixes).flat_map(
+                |(prep, sym, prefix)| {
+                    vec![
+                        tk!([
+                            "1.0"; "input:value",
+                            format!("{}{}", prefix, sym); "keyword",
+                            prep,
+                            format!("{}{}", prefix, sym); "keyword"
+                        ]),
+                        tk!([
+                            "1.0"; "input:value",
+                            format!("{}", sym); "keyword",
+                            prep,
+                            format!("{}", sym); "keyword"
+                        ]),
+                        tk!([
+                            "1.0"; "input:value",
+                            format!("{}", sym); "keyword",
+                            prep,
+                            format!("{}{}", prefix, sym); "keyword"
+                        ]),
+                        tk!([
+                            "1.0"; "input:value",
+                            format!("{}{}", prefix, sym); "keyword",
+                            prep,
+                            format!("{}", sym); "keyword"
+                        ]),
+                    ]
+                },
+            )
+        });
         ENTRIES
             .iter()
             .flat_map(|entry| {
@@ -92,6 +134,7 @@ impl Corpus for UnitCorpus {
                         ])))
                 })
             })
+            .chain(conversions)
             .collect()
     }
 }
@@ -113,7 +156,16 @@ impl Translator for UnitTranslator {
             .collect::<Vec<_>>();
 
         if let [value] = &values[..] {
-            if let [unit] = units[..] {
+            if let [unit, to] = units[..] {
+                return Some(CommandArgs::new().add_args([
+                    "--value".to_string(),
+                    format!(" {}", value),
+                    "--unit".to_string(),
+                    unit.as_str().to_string(),
+                    "--to".to_string(),
+                    to.as_str().to_string(),
+                ]));
+            } else if let [unit] = units[..] {
                 return Some(CommandArgs::new().add_args([
                     "--value".to_string(),
                     format!(" {}", value),
@@ -145,6 +197,7 @@ impl Command for UnitCommand {
             prefix,
             filter: UnitFilter::Always,
         };
+        let output_unit = args.to.and_then(|to| symbol::parse_symbol(&to));
         let scale = prefix
             .map(|prefix| prefix.scale())
             .unwrap_or_else(BigDecimal::one);
@@ -154,21 +207,29 @@ impl Command for UnitCommand {
             .into_iter()
             .filter(|unit| unit.base != base_unit.base || unit.prefix != base_unit.prefix)
             .collect::<Vec<_>>();
-        let mut filtered = converted
-            .iter()
-            .cloned()
-            .filter(|unit| match unit.filter {
-                UnitFilter::Optional => false,
-                UnitFilter::MaximumScale(scale) => {
-                    if let Some(value) = unit.value.to_f64() {
-                        value.log10().abs() <= scale as f64
-                    } else {
-                        false
+        let mut filtered = if let Some((prefix, base)) = output_unit {
+            converted
+                .iter()
+                .cloned()
+                .filter(|item| item.base == base && item.prefix == prefix)
+                .collect::<Vec<_>>()
+        } else {
+            converted
+                .iter()
+                .cloned()
+                .filter(|unit| match unit.filter {
+                    UnitFilter::Optional => false,
+                    UnitFilter::MaximumScale(scale) => {
+                        if let Some(value) = unit.value.to_f64() {
+                            value.log10().abs() <= scale as f64
+                        } else {
+                            false
+                        }
                     }
-                }
-                _ => true,
-            })
-            .collect::<Vec<_>>();
+                    _ => true,
+                })
+                .collect::<Vec<_>>()
+        };
         if filtered.is_empty() {
             converted.sort_by_key(|unit| unit.filter);
             converted
@@ -201,4 +262,7 @@ pub struct Args {
 
     #[clap(short, long)]
     pub unit: String,
+
+    #[clap(short, long)]
+    pub to: Option<String>,
 }
