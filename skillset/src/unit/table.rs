@@ -81,7 +81,7 @@ pub const ENTRIES: &[UnitEntry] = &[
     UnitEntry {
         symbols: &["m"],
         base: BaseUnit::Meter,
-        prefixes: &[Nano, Micro, Milli, Kilo],
+        prefixes: &[Nano, Micro, Milli, Centi, Kilo],
     },
     UnitEntry {
         symbols: &["in"],
@@ -214,6 +214,7 @@ pub const TABLES: &[ConversionTable] = &[
             (Nano, UnitFilter::MaximumScale(5)),
             (Micro, UnitFilter::MaximumScale(5)),
             (Milli, UnitFilter::MaximumScale(5)),
+            (Centi, UnitFilter::MaximumScale(5)),
             (Kilo, UnitFilter::MaximumScale(5)),
         ],
         entries: &[
