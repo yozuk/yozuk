@@ -18,7 +18,7 @@ use entry::*;
 use table::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"bgYiqkawdecM620KUrbeq",
+    model_id: b"08NzFmyGfYJiKatm7XWGm",
     init: |_| {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))

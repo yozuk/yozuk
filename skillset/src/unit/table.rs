@@ -64,7 +64,7 @@ pub enum BaseUnit {
 
 pub const ENTRIES: &[UnitEntry] = &[
     UnitEntry {
-        symbols: &["g"],
+        symbols: &["g", "gram"],
         base: BaseUnit::Gram,
         prefixes: &[Nano, Micro, Milli, Kilo],
     },
@@ -74,32 +74,32 @@ pub const ENTRIES: &[UnitEntry] = &[
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["lb"],
+        symbols: &["lb", "lbs", "pound", "pounds"],
         base: BaseUnit::Pound,
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["m"],
+        symbols: &["m", "meter"],
         base: BaseUnit::Meter,
         prefixes: &[Nano, Micro, Milli, Centi, Kilo],
     },
     UnitEntry {
-        symbols: &["in"],
+        symbols: &["in", "inch"],
         base: BaseUnit::Inch,
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["ft"],
+        symbols: &["ft", "feet", "foot"],
         base: BaseUnit::Foot,
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["yd"],
+        symbols: &["yd", "yard"],
         base: BaseUnit::Yard,
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["mi.", "mi"],
+        symbols: &["mi.", "mi", "mile"],
         base: BaseUnit::Mile,
         prefixes: &[],
     },
@@ -109,17 +109,17 @@ pub const ENTRIES: &[UnitEntry] = &[
         prefixes: &[Kilo, Mega, Giga, Tera, Kibi, Mebi, Gibi, Tibi],
     },
     UnitEntry {
-        symbols: &["°C"],
+        symbols: &["°C", "c", "celcius"],
         base: BaseUnit::Celsius,
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["°F"],
+        symbols: &["°F", "f", "fahrenheit"],
         base: BaseUnit::Fahrenheit,
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["K"],
+        symbols: &["K", "Kelvin"],
         base: BaseUnit::Kelvin,
         prefixes: &[],
     },
@@ -139,12 +139,12 @@ pub const ENTRIES: &[UnitEntry] = &[
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["kn.", "kn", "kt"],
+        symbols: &["kn.", "kn", "kt", "knot"],
         base: BaseUnit::Knot,
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["Pa"],
+        symbols: &["Pa", "pascal"],
         base: BaseUnit::Pascal,
         prefixes: &[Hecto],
     },
@@ -154,7 +154,7 @@ pub const ENTRIES: &[UnitEntry] = &[
         prefixes: &[Milli],
     },
     UnitEntry {
-        symbols: &["atm"],
+        symbols: &["atm", "atmosphere"],
         base: BaseUnit::Atmosphere,
         prefixes: &[],
     },
@@ -164,17 +164,17 @@ pub const ENTRIES: &[UnitEntry] = &[
         prefixes: &[],
     },
     UnitEntry {
-        symbols: &["Hz", "hz"],
+        symbols: &["Hz", "hz", "heartz"],
         base: BaseUnit::Hertz,
         prefixes: &[Kilo, Mega, Giga, Tera],
     },
     UnitEntry {
-        symbols: &["J"],
+        symbols: &["J", "joule"],
         base: BaseUnit::Joule,
         prefixes: &[Kilo],
     },
     UnitEntry {
-        symbols: &["Cal", "cal"],
+        symbols: &["Cal", "cal", "calorie"],
         base: BaseUnit::Calorie,
         prefixes: &[Kilo],
     },
@@ -326,7 +326,7 @@ pub const TABLES: &[ConversionTable] = &[
             ConversionEntry {
                 base_unit: BaseUnit::Bar,
                 base_filter: UnitFilter::Optional,
-                base_prefixes: &[],
+                base_prefixes: &[(Milli, UnitFilter::Optional)],
                 convert_to_base: |value| value * BigDecimal::from_str("100000").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("100000").unwrap(),
             },
