@@ -26,7 +26,7 @@ fn symbols() -> impl Iterator<Item = (Option<UnitPrefix>, BaseUnit, String)> {
 
 pub fn parse_symbol(s: &str) -> Option<(Option<UnitPrefix>, BaseUnit)> {
     symbols()
-        .find(|(_, _, sym)| sym == s)
+        .find(|(_, _, sym)| sym.eq_ignore_ascii_case(s))
         .map(|(prefix, base, _)| (prefix, base))
 }
 
