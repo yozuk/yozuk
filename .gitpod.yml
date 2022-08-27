@@ -7,7 +7,7 @@ image:
 tasks:
   - init: branch
     command: git checkout dev
-  - init: cargo build
-    command: cargo watch -x run
+  - init: just
+    command: just c
 
 
