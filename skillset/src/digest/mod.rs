@@ -6,7 +6,7 @@ use yozuk_helper_english::normalized_eq;
 use yozuk_sdk::prelude::*;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"G_60F_6L4j14b9v4_~u2m",
+    model_id: b"Ka~1J717wlgdpZJpKMWks",
     init: |_| {
         Skill::builder()
             .add_corpus(DigestCorpus)
@@ -35,12 +35,35 @@ impl Corpus for DigestCorpus {
             ["as", "to", "in", "into"],
             ENTRIES.iter().flat_map(|entry| entry.keywords)
         )
-        .map(|(data, prefix, alg)| {
-            tk!([
-                data; "input:data",
-                prefix,
-                *alg; "keyword"
-            ])
+        .flat_map(|(data, prefix, alg)| {
+            vec![
+                tk!([
+                    data; "input:data",
+                    prefix,
+                    *alg; "keyword"
+                ]),
+                tk!([
+                    data; "input:data",
+                    prefix,
+                    *alg; "keyword",
+                    "multi"; "multihash"
+                ]),
+                tk!([
+                    data; "input:data",
+                    prefix,
+                    *alg; "keyword",
+                    "with",
+                    "multihash"; "multihash"
+                ]),
+                tk!([
+                    data; "input:data",
+                    prefix,
+                    *alg; "keyword",
+                    "with",
+                    "multihash"; "multihash",
+                    "prefix"
+                ]),
+            ]
         })
         .chain(
             ENTRIES
@@ -101,6 +124,13 @@ impl Translator for DigestTranslator {
             .filter(|arg| arg.tag == "keyword")
             .collect::<Vec<_>>();
 
+        let multihash = args
+            .iter()
+            .find(|arg| {
+                arg.tag == "multihash" && normalized_eq(arg.as_str(), &["multi", "multihash"], 1)
+            })
+            .map(|_| "--multihash");
+
         if !keywords.is_empty()
             && keywords.iter().all(|arg| {
                 ENTRIES
@@ -109,11 +139,14 @@ impl Translator for DigestTranslator {
             })
         {
             return Some(
-                CommandArgs::new().add_args_iter(input).add_args_iter(
-                    keywords
-                        .iter()
-                        .flat_map(|arg| ["--algorithm", arg.as_str()]),
-                ),
+                CommandArgs::new()
+                    .add_args_iter(input)
+                    .add_args_iter(
+                        keywords
+                            .iter()
+                            .flat_map(|arg| ["--algorithm", arg.as_str()]),
+                    )
+                    .add_args_iter(multihash),
             );
         }
 
@@ -149,19 +182,21 @@ impl Command for DigestCommand {
             }
 
             for entry in matched {
-                entries.entry(entry.name).or_insert_with(|| (entry.init)());
+                entries
+                    .entry(entry.name)
+                    .or_insert_with(|| (entry.multihash_prefix, (entry.init)()));
             }
         }
 
         let docs = Metadata::docs("https://docs.yozuk.com/docs/skills/digest/")?;
         if let [input, ..] = &args.input[..] {
             let mut input = input.as_bytes();
-            if let Some(output) = compute_hash(&mut input, entries) {
+            if let Some(output) = compute_hash(&mut input, entries, args.multihash) {
                 return Ok(output.add_metadata(docs));
             }
         } else if let [stream, ..] = streams {
             let mut reader = BufReader::new(stream);
-            if let Some(output) = compute_hash(&mut reader, entries) {
+            if let Some(output) = compute_hash(&mut reader, entries, args.multihash) {
                 return Ok(output.add_metadata(docs));
             }
         }
@@ -174,24 +209,37 @@ impl Command for DigestCommand {
     }
 }
 
-fn compute_hash(
-    reader: &mut dyn Read,
-    mut entries: BTreeMap<&'static str, Box<dyn Algorithm>>,
-) -> Option<Output> {
+type EntryMap = BTreeMap<&'static str, (Option<&'static [u8]>, Box<dyn Algorithm>)>;
+
+fn compute_hash(reader: &mut dyn Read, mut entries: EntryMap, multihash: bool) -> Option<Output> {
     let mut data = vec![0; 1024];
     while let Ok(len) = reader.read(&mut data) {
         if len > 0 {
-            for hash in entries.values_mut() {
+            for (_, hash) in entries.values_mut() {
                 hash.update(&data[..len]);
             }
         } else {
             let mut entries = entries.into_iter().collect::<Vec<_>>();
             let result = if entries.len() == 1 {
-                vec![hex::encode(entries[0].1.finalize())]
+                let prefix = match entries[0].1 .0 {
+                    Some(prefix) if multihash => hex::encode(prefix),
+                    _ => String::new(),
+                };
+                vec![format!(
+                    "{}{}",
+                    prefix,
+                    hex::encode(entries[0].1 .1.finalize())
+                )]
             } else {
                 entries
                     .into_iter()
-                    .map(|(name, mut hash)| format!("{}: `{}`", name, hex::encode(hash.finalize())))
+                    .map(|(name, (prefix, mut hash))| {
+                        let prefix = match prefix {
+                            Some(prefix) if multihash => hex::encode(prefix),
+                            _ => String::new(),
+                        };
+                        format!("{}: `{}{}`", name, prefix, hex::encode(hash.finalize()))
+                    })
                     .collect::<Vec<_>>()
             };
 
@@ -212,4 +260,6 @@ pub struct Args {
     pub algorithm: Vec<String>,
     #[clap(short, long, multiple_occurrences(true))]
     pub input: Vec<String>,
+    #[clap(short, long)]
+    pub multihash: bool,
 }

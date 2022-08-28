@@ -50,6 +50,40 @@ fn digest_from_args() {
             "sha3-256"
         ]))
     );
+    assert_eq!(
+        cmd(tk!([
+            "Hello World!",
+            "to",
+            "md5",
+            "with",
+            "multihash",
+            "prefix"
+        ])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-digest",
+            "--input",
+            "Hello World!",
+            "--algorithm",
+            "md5",
+            "--multihash"
+        ]))
+    );
+    assert_eq!(
+        cmd(tk!([
+            "quick brown fox jumps over the lazy dog",
+            "to",
+            "sha3-256",
+            "multi"
+        ])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-digest",
+            "--input",
+            "quick brown fox jumps over the lazy dog",
+            "--algorithm",
+            "sha3-256",
+            "--multihash"
+        ]))
+    );
 }
 
 #[test]
