@@ -8,7 +8,7 @@ mod script;
 use script::SCRIPTS;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"4ZcWVM5U83bXGf4zfIzUv",
+    model_id: b"vun91APowetSJO3KeWXk1",
     init: |_| {
         Skill::builder()
             .add_corpus(ChitchatCorpus)
