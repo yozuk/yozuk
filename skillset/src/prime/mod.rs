@@ -10,7 +10,7 @@ use yozuk_sdk::prelude::*;
 use yozuk_sdk::preprocessor::TokenMerger;
 
 pub const ENTRY: SkillEntry = SkillEntry {
-    model_id: b"XCgzZKk_EgpTRQnDAvpwA",
+    model_id: b"L75ldGqiqKrWzRjR_z2GE",
     init: |_| {
         Skill::builder()
             .add_preprocessor(TokenMerger::new(NumeralTokenParser))
@@ -73,6 +73,11 @@ impl Corpus for PrimeCorpus {
                 "a",
                 "prime"; "keyword",
                 "number"
+            ]),
+            tk!([
+                "is",
+                "37975227936943673922808872755449"; "input:number",
+                "prime"; "keyword"
             ]),
         ]
         .into_iter()
