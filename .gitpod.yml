@@ -5,9 +5,4 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: branch
-    command: git checkout dev
-  - init: just
-    command: just c
-
-
+  - command: cargo run
