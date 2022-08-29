@@ -109,8 +109,32 @@ fn units() {
         ]))
     );
     assert_eq!(
+        cmd(tk!(["10in", "to", "centimeter"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-unit",
+            "--value",
+            " 10",
+            "--unit",
+            "in",
+            "--to",
+            "centimeter"
+        ]))
+    );
+    assert_eq!(
         cmd(tk!(["10KiB"])),
         Some(CommandArgs::new().add_args(["yozuk-skill-unit", "--value", " 10", "--unit", "KiB"]))
+    );
+    assert_eq!(
+        cmd(tk!(["100bytes", "to", "tibibyte"])),
+        Some(CommandArgs::new().add_args([
+            "yozuk-skill-unit",
+            "--value",
+            " 100",
+            "--unit",
+            "bytes",
+            "--to",
+            "tibibyte"
+        ]))
     );
     assert_eq!(
         cmd(tk!(["-100", "°F"])),

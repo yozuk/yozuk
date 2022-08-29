@@ -78,6 +78,24 @@ impl UnitPrefix {
             Self::Tibi => Self::Gibi.scale() * Self::Kibi.scale(),
         }
     }
+
+    pub fn keywords(&self) -> &'static [&'static str] {
+        match self {
+            Self::Nano => &["n", "nano"],
+            Self::Micro => &["µ", "u", "micro"],
+            Self::Milli => &["m", "milli"],
+            Self::Centi => &["c", "centi"],
+            Self::Hecto => &["h", "hecto"],
+            Self::Kilo => &["k", "kilo"],
+            Self::Mega => &["M", "mega"],
+            Self::Giga => &["G", "giga"],
+            Self::Tera => &["T", "tera"],
+            Self::Kibi => &["Ki", "kibi"],
+            Self::Gibi => &["Gi", "gibi"],
+            Self::Mebi => &["Mi", "mebi"],
+            Self::Tibi => &["Ti", "tibi"],
+        }
+    }
 }
 
 impl fmt::Display for UnitPrefix {
