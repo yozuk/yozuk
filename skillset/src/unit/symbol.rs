@@ -6,20 +6,18 @@ use std::str::FromStr;
 
 fn symbols() -> impl Iterator<Item = (Option<UnitPrefix>, BaseUnit, String)> {
     ENTRIES.iter().flat_map(|entry| {
-        iter::once(None)
-            .chain(entry.prefixes.iter().map(|prefix| Some(*prefix)))
-            .flat_map(move |prefix| {
-                entry.symbols.iter().map(move |sym| {
-                    (
-                        prefix,
-                        entry.base,
-                        format!(
-                            "{}{}",
-                            prefix.map(|p| p.to_string()).unwrap_or_default(),
-                            sym
-                        ),
-                    )
-                })
+        iter::once((None, ""))
+            .chain(entry.prefixes.iter().flat_map(|prefix| {
+                prefix
+                    .keywords()
+                    .iter()
+                    .map(|keyword| (Some(*prefix), *keyword))
+            }))
+            .flat_map(move |(prefix, psym)| {
+                entry
+                    .symbols
+                    .iter()
+                    .map(move |sym| (prefix, entry.base, format!("{}{}", psym, sym)))
             })
     })
 }

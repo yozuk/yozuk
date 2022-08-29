@@ -1,6 +1,6 @@
 [package]
 name = "yozuk-model"
-version = "0.22.7"
+version = "0.22.11"
 edition = "2021"
 authors = ["picoHz <picoHz@outlook.com>"]
 description = "NLP model generator for Yozuk"
@@ -19,8 +19,8 @@ crfsuite = { version = "0.3.1", optional = true }
 itertools = { version = "0.10.3", optional = true }
 nanoid = { version = "0.4.0", optional = true }
 rayon = { version = "1.5.2", optional = true }
-yozuk-sdk = "0.22.7"
-yozuk-helper-english = "0.22.7"
+yozuk-sdk = "0.22.11"
+yozuk-helper-english = "0.22.11"
 punycode = "0.4.1"
 entropy = "0.4.1"
 crfs = "0.2.0"
