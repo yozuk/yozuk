@@ -85,6 +85,10 @@ Yozuk works as a standalone single executable called `zuk`.
 
 [![asciicast](https://asciinema.org/a/510703.svg)](https://asciinema.org/a/510703)
 
+#### Gitpod
+
+ [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/yozuk/yozuk)
+
 #### Pre-built binaries
 
 - Windows x64 [zuk-x86_64-pc-windows-msvc.zip](https://github.com/yozuk/yozuk/releases/latest/download/zuk-x86_64-pc-windows-msvc.zip)
