@@ -24,6 +24,10 @@ pub enum BaseUnit {
     Yard,
     #[strum(serialize = "mi.")]
     Mile,
+    #[strum(serialize = "ly")]
+    LightYear,
+    #[strum(serialize = "pc")]
+    Parsec,
 
     #[strum(serialize = "B")]
     Byte,
@@ -102,6 +106,16 @@ pub const ENTRIES: &[UnitEntry] = &[
         symbols: &["mi.", "mi", "mile"],
         base: BaseUnit::Mile,
         prefixes: &[],
+    },
+    UnitEntry {
+        symbols: &["ly", "light-year", "lightyear"],
+        base: BaseUnit::LightYear,
+        prefixes: &[Kilo, Mega, Giga],
+    },
+    UnitEntry {
+        symbols: &["pc", "parsec"],
+        base: BaseUnit::Parsec,
+        prefixes: &[Kilo, Mega, Giga],
     },
     UnitEntry {
         symbols: &["B", "byte", "bytes"],
@@ -245,6 +259,32 @@ pub const TABLES: &[ConversionTable] = &[
                 base_prefixes: &[],
                 convert_to_base: |value| value * BigDecimal::from_str("1609.344").unwrap(),
                 convert_from_base: |value| value / BigDecimal::from_str("1609.344").unwrap(),
+            },
+            ConversionEntry {
+                base_unit: BaseUnit::LightYear,
+                base_filter: UnitFilter::MaximumScale(5),
+                base_prefixes: &[
+                    (Kilo, UnitFilter::MaximumScale(5)),
+                    (Mega, UnitFilter::MaximumScale(5)),
+                    (Giga, UnitFilter::MaximumScale(5)),
+                ],
+                convert_to_base: |value| value * BigDecimal::from_str("9460730472580800").unwrap(),
+                convert_from_base: |value| {
+                    value / BigDecimal::from_str("9460730472580800").unwrap()
+                },
+            },
+            ConversionEntry {
+                base_unit: BaseUnit::Parsec,
+                base_filter: UnitFilter::MaximumScale(5),
+                base_prefixes: &[
+                    (Kilo, UnitFilter::MaximumScale(5)),
+                    (Mega, UnitFilter::MaximumScale(5)),
+                    (Giga, UnitFilter::MaximumScale(5)),
+                ],
+                convert_to_base: |value| value * BigDecimal::from_str("30856775814913673").unwrap(),
+                convert_from_base: |value| {
+                    value / BigDecimal::from_str("30856775814913673").unwrap()
+                },
             },
         ],
     },
